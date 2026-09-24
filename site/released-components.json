@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sidecar": {
+    "version": "v0.4.3",
+    "image_digest": "sha256:7c50198c6625e3a25f1c0dfc5b4dd902d58c23a2bcbd79c0b1c5bc9c9b65f6d4",
+    "bundle_digest": "sha256:182a6a4824dcf6f805bea496dfc24e41704b97a24905eb5f89daa55029c11c89",
+    "url": "https://hub.docker.com/r/cascadeauth/aac-sidecar/"
+  },
+  "packages": {
+    "aac-cli": {
+      "version": "0.2.2",
+      "url": "https://pypi.org/project/aac-cli/"
+    },
+    "aac-invoke-auth": {
+      "version": "0.1.2",
+      "url": "https://pypi.org/project/aac-invoke-auth/"
+    },
+    "aac-trust-anchor-publisher": {
+      "version": "0.2.3",
+      "url": "https://pypi.org/project/aac-trust-anchor-publisher/"
+    }
+  }
+}

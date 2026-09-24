@@ -1,0 +1,141 @@
+AAC Sidecar Developer Beta Binary License 1.0
+
+Effective date: September 2, 2026
+
+Copyright (c) 2026 CascadeAuth Inc. All rights reserved.
+
+This License is a proprietary binary-use license between CascadeAuth Inc.
+("CascadeAuth") and the individual or entity accepting it ("you"). It applies
+only to an official compiled AAC Sidecar binary or OCI image distributed by
+CascadeAuth with this License and verifiable CascadeAuth release evidence (the
+"Software"). It does not license source code.
+
+1. Acceptance
+
+By downloading, copying, installing, or using the Software, you accept this
+License. If you accept for an organization, you represent that you have
+authority to bind it. If you do not accept this License, do not download,
+install, copy, or use the Software.
+
+2. Limited developer-beta license
+
+Subject to this License, CascadeAuth grants you a limited, non-exclusive,
+non-transferable, non-sublicensable, royalty-free license during the Term to:
+
+  a. download the Software from a CascadeAuth-authorized public channel;
+  b. make a reasonable number of internal copies needed to install, back up,
+     and evaluate it; and
+  c. execute the unmodified Software solely to evaluate AAC and to develop and
+     test integrations with the AAC-hosted developer-beta stage service.
+
+This License does not authorize production use or use to provide a service to
+third parties.
+
+3. Restrictions
+
+Except to the extent a restriction is prohibited by applicable law, you must
+not, and must not permit another person to:
+
+  a. modify, adapt, translate, or create derivative works of the Software;
+  b. reverse engineer, decompile, disassemble, or otherwise attempt to derive
+     source code, confidential algorithms, or non-public interfaces from it;
+  c. sell, rent, lease, sublicense, publish, externally redistribute, host for
+     third-party use, or commercially exploit the Software;
+  d. remove or alter proprietary, copyright, attribution, or license notices;
+  e. bypass access, security, rate-limit, signing, or verification controls;
+  f. use the Software unlawfully, to interfere with AAC or another system, or
+     in a safety-critical system where failure could cause death, personal
+     injury, or severe physical or environmental damage; or
+  g. use the Software after this License terminates.
+
+4. Ownership and source-code reservation
+
+CascadeAuth and its licensors retain all right, title, and interest in the
+Software, its source code, and all associated intellectual property. No source-
+code, patent, trademark, branding, control-plane, Python-reference, or other
+right is granted by implication, estoppel, or otherwise. The private repository
+and any source files visible to an authorized contributor are proprietary and
+confidential and receive no license under this document.
+
+The separately distributed `aac-cli`, `aac-invoke-auth`, and
+`aac-trust-anchor-publisher` artifacts remain governed by their Apache License
+2.0 terms. Third-party components included in the Software remain governed by
+their applicable third-party terms; this License does not restrict rights those
+terms grant directly.
+
+5. Developer-beta service and support
+
+The Software is prerelease developer-beta software. It may be incomplete,
+contain defects, change incompatibly, or be suspended or discontinued. It is
+not generally available software and carries no uptime, support, maintenance,
+security-response, compatibility, data-retention, or service-level commitment.
+Use of the AAC-hosted stage service is also subject to the then-current service,
+privacy, and acceptable-use terms presented for that service.
+
+Questions may be sent to support@cascadeauth.com. Security concerns should not
+include tenant secrets, private keys, credentials, or confidential payloads.
+
+6. Term and termination
+
+This License begins when you first accept it. CascadeAuth may terminate it if
+you breach its terms or misuse the Software or AAC service. Upon termination,
+you must stop using the Software and delete copies under your control, except
+for one archival copy retained solely where law or an internal compliance duty
+requires it. Sections 3, 4, 7, 8, 9, and 10 survive termination.
+
+7. Disclaimer
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE AND DEVELOPER-
+BETA SERVICE ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITH ALL FAULTS AND
+WITHOUT WARRANTIES, REPRESENTATIONS, OR CONDITIONS OF ANY KIND, WHETHER
+EXPRESS, IMPLIED, STATUTORY, OR COLLATERAL, INCLUDING MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY, SECURITY,
+RELIABILITY, AVAILABILITY, OR ERROR-FREE OPERATION. YOU USE THEM AT YOUR OWN
+DISCRETION AND RISK.
+
+8. Limitation of liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, CASCADEAUTH AND ITS
+DIRECTORS, OFFICERS, EMPLOYEES, CONTRACTORS, AFFILIATES, AND LICENSORS WILL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR
+PUNITIVE DAMAGES, OR FOR LOSS OF PROFITS, REVENUE, BUSINESS, OPPORTUNITY,
+GOODWILL, USE, OR DATA, ARISING OUT OF OR RELATING TO THE SOFTWARE, THE
+DEVELOPER-BETA SERVICE, OR THIS LICENSE, REGARDLESS OF THE THEORY OF LIABILITY
+AND EVEN IF ADVISED THAT THE DAMAGE WAS POSSIBLE.
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, CASCADEAUTH'S TOTAL
+AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THE SOFTWARE, THE DEVELOPER-
+BETA SERVICE, OR THIS LICENSE WILL NOT EXCEED THE GREATER OF (A) THE AMOUNTS
+YOU PAID CASCADEAUTH FOR THE SOFTWARE DURING THE TWELVE MONTHS BEFORE THE EVENT
+GIVING RISE TO LIABILITY AND (B) CAD $100.
+
+THE DISCLAIMERS AND LIMITATIONS IN SECTIONS 7 AND 8 DO NOT EXCLUDE OR LIMIT
+LIABILITY, WARRANTIES, CONDITIONS, RIGHTS, OR REMEDIES THAT APPLICABLE LAW DOES
+NOT PERMIT TO BE EXCLUDED OR LIMITED.
+
+9. Governing law and forum
+
+This License is governed by the laws of the Province of British Columbia and
+the federal laws of Canada applicable there, without regard to conflict-of-law
+rules. Subject to mandatory rights under applicable law, the parties submit to
+the courts of British Columbia, Canada. Nothing in this License waives a right,
+benefit, protection, remedy, forum, or procedure that applicable law does not
+permit a person to waive.
+
+10. General
+
+You must comply with applicable export, sanctions, and trade-control laws. You
+may not assign this License without CascadeAuth's written consent. CascadeAuth
+may assign it in connection with a merger, reorganization, or transfer of the
+Software or substantially all relevant business assets. If any provision is
+unenforceable, it will be enforced to the maximum lawful extent and the
+remaining provisions continue in effect. A waiver must be written and applies
+only to the stated instance. This License is the complete agreement about the
+Software binary-use rights it grants; separately accepted service terms govern
+the AAC-hosted service. Terms shipped with a later Software version do not
+retroactively change the terms shipped with an earlier immutable version.
+
+Legal notices to CascadeAuth under this License must be sent to
+legal@cascadeauth.com. A notice is effective only when it is capable of being
+retrieved and processed by the receiving party. Keep evidence of transmission
+and receipt.

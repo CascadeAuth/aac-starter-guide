@@ -1,0 +1,287 @@
+# v0.4.0: both native chain-start aliases require the existing pairing
+# secret, even in dev mode. Authorized originators keep it inside the same
+# trusted application boundary and gain callback-signing capability too.
+# Per-request obligations use strict conflict refusal against class predicates.
+# Native request valid_until is reserved: remove it and configure valid_for.
+# Prefer per-request task_ref obligations; a static class value shares one key.
+# AAC Sidecar configuration template
+# Replace the example tenant/workload IDs, endpoints and file paths with your
+# own provisioned values. Copy this file to /etc/aac/sidecar-config.yaml, or
+# select another path with `aac-sidecar -config <path>`.
+# Configuration and setup guide: https://cascadeauth.github.io/aac-sidecar-go/
+#
+# Configuration is validated at startup. Unknown or duplicate keys, quoted
+# boolean values, empty or incorrectly typed paths, out-of-range ports and
+# unusable TLS material prevent startup. Use true/false without quotes.
+#
+# Relative paths resolve against THIS FILE's directory, not the
+# process working directory.
+
+schema_version: "1.0"
+
+# Basic: bounded process-local replay protection, valid with dev_mode: false.
+# History is lost on restart and replicas do not coordinate. Select Shared
+# durable below when those limits are unacceptable. No automatic fallback.
+replay_protection:
+  backend: "memory"
+  deployment_profile: "basic"
+  memory_max_entries: 100000
+# Shared durable alternative: replace the entire block above. Requires operator
+# qualification, retained-write-safe authority and authenticated TLS. Protect
+# workload-scoped credentials in this file and percent-encode URL userinfo.
+# replay_protection:
+#   backend: "valkey"
+#   deployment_profile: "ha-retained-write-safe"
+#   url: "valkeys://workload-user:REPLACE_ME@replay-authority.internal:6379/0"
+#   connect_timeout_ms: 100
+#   operation_timeout_ms: 50
+#   max_connections: 32
+#   cold_start_quarantine_seconds: 120
+# Bare memory without deployment_profile keeps its old development-only meaning.
+
+# A2A 1.0 unary requests: receive peer messages and send from your paired agent.
+# Presence enables the external `POST /a2a/v1`, public Agent Card, and the
+# loopback-only paired-agent `POST /v1/agent/a2a/dispatch`. The local handler
+# receives the unchanged verified body at its standard A2A path. Every bound is
+# explicit: there is no body-size default or unlimited mode. The example limits
+# below must be sized and tested for your deployment before use.
+# The deadline begins at external ingress admission and also caps each claimed
+# proactive egress operation; every selectable destination timeout must fit it.
+# Local or remote redirects are never followed; URLs must name final endpoints.
+a2a:
+  public_base_url: "https://agent.example.com"
+  local_handler_url: "http://127.0.0.1:8000/a2a/v1"
+  max_request_body_bytes: 262144
+  deadline_seconds: 60
+  max_concurrent_requests: 20
+  max_json_nesting_depth: 32
+  max_json_nodes: 10000
+  # Verified inbound authority remains deliberately ephemeral and is scoped by
+  # exact pair/task/presenter. It can only be shortened by this required cap.
+  continuation_authority:
+    retention_seconds: 600
+  # The bbolt file is opened and validated before either listener binds. Mount
+  # this absolute path on storage that survives the claimed container/process
+  # restart. Missing parents, corrupt/insecure files, or concurrent ownership
+  # fail startup; there is no memory or central-service fallback.
+  # retention_seconds controls how long dispatch results support safe retries.
+  # Size max_entries_per_pair for peak new dispatches/second * retention_seconds.
+  # Reserve that entry count * max_cached_response_body_bytes, then add measured
+  # storage overhead and headroom. The example values below are for a small
+  # test: 20 new dispatches/second retained for 24 hours would need 1,728,000
+  # entries, exceeding these limits. Measure your workload before deployment.
+  egress_idempotency:
+    state_file: "/var/lib/aac/a2a-egress.db"
+    retention_seconds: 86400
+    max_entries_per_pair: 4096
+    max_cached_response_body_bytes: 4096
+    max_reserved_cached_bytes_per_pair: 16777216
+
+sidecar:
+  loopback_port: 8080
+  external_port: 9443
+
+  # Use TLS on the external port unless a
+  # TLS-terminating proxy (e.g. Envoy) fronts the port; a plaintext
+  # external port without dev_mode logs a boot WARNING. Both-or-neither
+  # pair; boot error if only one is set. tls_ca_file is the OUTBOUND
+  # trust root for control-plane, replay-authority and peer-sidecar
+  # clients (omit to use the system CA bundle). When set, include every CA
+  # those outbound services require.
+  # tls_cert_file: "/etc/aac/tls/server.crt"
+  # tls_key_file: "/etc/aac/tls/server.key"
+  # tls_ca_file: "/etc/aac/tls/ca.crt"
+
+  # Where the sidecar sends authenticated /invoke calls to its paired agent.
+  agent_invoke_url: "http://127.0.0.1:8000/invoke"
+
+  # Pairing secret for HMAC-signing every
+  # /invoke push plus native A2A ingress/egress calls to/from the local agent.
+  # REQUIRED when `a2a` is present even in dev mode; otherwise required unless
+  # `dev_mode`.
+  # Generate once with:
+  #   openssl rand -hex 32 > /etc/aac/invoke-auth/invoke-auth.secret
+  # and point the agent's AAC_INVOKE_AUTH_SECRET_FILE env var at the
+  # SAME file. One secret per sidecar-agent pair.
+  agent_invoke_auth:
+    secret_file: "/etc/aac/invoke-auth/invoke-auth.secret"
+
+  # Development mode
+  # `dev_mode: true` is ONE explicit switch acknowledging DEV-ONLY
+  # relaxations. It gates:
+  #   1. A loopback_bind_address other than 127.0.0.1 is allowed ONLY
+  #      with dev_mode. Production sidecar/agent pairs share one network
+  #      namespace and communicate over 127.0.0.1.
+  #   2. agent_invoke_auth.secret_file may be omitted ONLY with dev_mode
+  #      and without A2A. A2A always requires pairing authentication.
+  #   3. Static workload projection: an operator-supplied
+  #      SPIFFE-to-tenant map is allowed ONLY with dev_mode.
+  #   4. Bare memory replay without deployment_profile requires dev_mode.
+  #      Explicit memory/basic works independently of dev_mode and grants none
+  #      of these other relaxations. Shared durable never falls back to Basic.
+  # Any of these relaxations without `dev_mode: true` REFUSES TO START at
+  # config load; the error names the exact fix. No runtime toggle.
+  loopback_bind_address: "127.0.0.1"
+  # external_bind_address: "0.0.0.0"
+  dev_mode: false
+
+  log_level: "info"
+  telemetry:
+    # "stdout", "none", or an absolute file path (one JSON object per
+    # line). For a file path the parent directory must exist and be
+    # writable at boot.
+    sink: "stdout"
+    # OPTIONAL central forwarding, in addition to `sink` (the
+    # tenant-local stream keeps flowing either way). Both fields
+    # required when the block is present.
+    # central_forward:
+    #   control_plane_url: "https://aac-cloud.example"
+    #   api_key_file: "/etc/aac/keys/telemetry-api-key"
+    # The bounded background worker exchanges this file-backed API key at
+    # /v1/sts/token for aud=telemetry-ingest; raw keys never authenticate ingest.
+    # Replacing the key file takes effect on the next exchange without restart.
+    # Only eligible redacted chain metadata is forwarded. Network failure,
+    # saturation or shutdown can drop central events while local audit and
+    # authorization continue. `sink: none` does not disable central forwarding.
+
+tenant:
+  # Use the tnt-<uuid> identifier returned by tenant registration.
+  id: "tnt-00000000-0000-4000-8000-000000000a01"
+  key_id: "acme-ed25519-2026-q2"
+  # Omit on middle / receiver agents that never mint roots. When present,
+  # the key is loaded before binding; it must be an unencrypted PEM
+  # Ed25519 or P-256 key matching signing_key_algorithm and must NOT reuse the
+  # workload DPoP/SVID key below.
+  signing_key_file: "/etc/aac/keys/acme-tenant.private.pem"
+  signing_key_algorithm: "ed25519"
+
+agent:
+  # The workload identity holding the chain; one exact concrete SPIFFE ID.
+  # Wildcards are forbidden here and remain available only on holder/
+  # attenuation predicates such as classes_of_action.*.audience_self.
+  spiffe_id: "spiffe://acme.com/treasury-agent/v1"
+  svid_key_file: "/etc/aac/keys/acme-agent.private.pem"
+  # Mint/originate startup verifies that this certificate carries the
+  # public key matching svid_key_file. Terminal-attestation material is a
+  # distinct signing purpose and may not reuse this key or the tenant root.
+  svid_cert_file: "/etc/aac/keys/acme-agent.svid.pem"
+  # Distinct terminal-attestation key/certificate. Configure both on workloads
+  # that may return AgentDecision(action="settle"); they must match this exact
+  # spiffe_id and may not reuse the tenant-root or workload DPoP/SVID key.
+  attestation_key_file: "/etc/aac/keys/acme-agent.attestation.private.pem"
+  attestation_cert_file: "/etc/aac/keys/acme-agent.attestation.svid.pem"
+
+# OPTIONAL non-exportable signing through Azure Key Vault.
+# Configure each signing purpose here OR its
+# file key above, never both; startup fails instead of falling back. The exact
+# versioned URI pins the public key at boot. Only managed identity is used.
+# The adapter reads optional AZURE_CLIENT_ID for one user-assigned identity;
+# absence selects the environment's system-assigned identity. The current
+# adapter accepts only Key Vault Standard software-protected ES256 keys, so
+# tenant.signing_key_algorithm must be "es256". Terminal signing still
+# requires agent.attestation_cert_file to bind the remote public key to the
+# workload identity. Workload DPoP/SVID signing always remains local at
+# agent.svid_key_file and has no remote-provider setting.
+# signers:
+#   tenant:
+#     provider: "azure-key-vault"
+#     key_uri: "https://your-vault.vault.azure.net/keys/aac-root/EXACT_VERSION"
+#   attestation:
+#     provider: "azure-key-vault"
+#     key_uri: "https://your-vault.vault.azure.net/keys/aac-terminal/EXACT_VERSION"
+
+# Where the sidecar finds OTHER tenants' root signing public keys
+# for chain-root verification. Two sources:
+#   filesystem    - directory of <tenant_id>.<key_id>.pub.pem files.
+#   control_plane - poll the control plane's public
+#                   .well-known/aac-root-keys/{tenant_id} for each
+#                   tenant in tenant_ids (explicit operator allowlist,
+#                   never auto-discovery) every refresh_interval
+#                   (default 5m for control_plane, 1h for filesystem):
+#     trust_anchors:
+#       source: "control_plane"
+#       control_plane_url: "https://aac-cloud.example"
+#       tenant_ids:
+#         - "tnt-00000000-0000-4000-8000-000000000a01"
+#         - "tnt-00000000-0000-4000-8000-000000000a02"
+trust_anchors:
+  source: "filesystem"
+  directory: "/etc/aac/trust-anchors"
+
+# Production receive requires one usable SPIFFE-bundle source before bind;
+# omitting it would expose a permanently dark receive route. A configured
+# source may be temporarily empty/unavailable at initial refresh: the process
+# stays up and verification fails closed until material arrives. Development
+# mode may omit the source for intentionally negative testing.
+# Filesystem verification uses <trust-domain>.ca.pem, for example acme.com.ca.pem.
+# For multiple CAs, <trust-domain>.<number>.ca.pem is also accepted, for example
+# acme.com.2.ca.pem. Each file contains one public CA certificate. These names
+# select the verifier's trust domain; they differ from the publisher input's
+# <anchor_id>.ca.pem convention.
+spiffe_bundles:
+  source: "filesystem"
+  directory: "/etc/aac/spiffe-bundles"
+# Control-plane form uses SPIFFE trust domains, not AAC tenant ids:
+# Control-plane alternative:
+# spiffe_bundles:
+#   source: "control_plane"
+#   control_plane_url: "https://aac-cloud.example"
+#   trust_domains: ["acme.com", "shared.example"]
+
+# OPTIONAL: resolve concrete workload SPIFFE IDs to canonical
+# tenant ids. Production uses an authenticated exact control-plane lookup.
+# workload_projection:
+#   source: "control_plane"
+#   control_plane_url: "https://aac-cloud.example"
+#   api_key_file: "/etc/aac/keys/projection-api-key"
+# Development-only alternative (requires sidecar.dev_mode: true):
+# workload_projection:
+#   source: "static"
+#   static_workloads:
+#     "spiffe://acme.com/treasury-agent/v1": "tnt-00000000-0000-4000-8000-000000000a01"
+
+# OPTIONAL: state store and request timeouts.
+# Defaults: in-process hot tier, no cold tier, 5-second timeout budgets.
+# Any state_store.cold block is unsupported and refuses startup. The arrival
+# buffer is lost on restart and arrivals become eligible for eviction after
+# ten minutes. Replay and retained A2A retry state are separate stores.
+# state_store:
+#   hot:
+#     source: "in-process"
+# timeouts:
+#   agent_invoke_timeout_seconds: 5.0
+#   cross_org_dispatch_timeout_seconds: 5.0
+# Timeout values are finite positive YAML numbers, not strings/booleans/null.
+# An omitted destination.timeout_ms inherits the global dispatch seconds times
+# 1000, truncated to whole milliseconds; explicit destination milliseconds win.
+# Each native retry gets that budget; retry backoff is separate. Use an exact
+# timeout_ms override when fractional binary rounding matters (1.001s -> 1000ms).
+
+# Authority profiles the originator application can select by class_of_action
+# when calling /v1/agent/mint-root.
+# Do not configure predicates.valid_until in classes or destinations; use
+# valid_for. Signed deadlines and ordinary business payload dates are separate.
+classes_of_action:
+  release_payment:
+    predicates:
+      action: "release_payment"
+      amount_max: 5000000
+      beneficiary_class: "approved_vendors"
+    valid_for: "+1h"
+    audience_self: "spiffe://acme.com/treasury-agent/*"
+
+# Outbound dispatch profiles. The URL scheme
+# must match the peer's TLS posture; it is signed into the DPoP htu
+# claim, so a scheme mismatch fails receive. When A2A egress is enabled,
+# timeout_ms must be positive and no greater than a2a.deadline_seconds * 1000.
+# Explicit task_ref predicates must match workflow correlation before dispatch.
+destinations:
+  dev_destination:
+    url: "http://127.0.0.1:9443/v1/agent/receive"
+    # Final recipients are exact workload identities. Wildcards remain legal
+    # only on attenuation/holder audience predicates, not destination profiles.
+    audience_pattern: "spiffe://acme.com/treasury-agent/v1"
+    predicates:
+      action: "dev_noop"
+    valid_for: "+10m"
+    timeout_ms: 3000

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Release note</title><meta name="description" content="Upgrade guidance grouped by sidecar release.">
+<link rel="canonical" href="https://cascadeauth.github.io/aac-starter-guide/release-notes.html"><style>
+:root { color-scheme: light; --ink:#19313b; --muted:#526770; --line:#dce6e8; --accent:#087e83; }
+* { box-sizing:border-box } html { scroll-behavior:smooth; scroll-padding-top:90px }
+body { margin:0; color:var(--ink); background:#f9fbfc; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
+a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; overflow-wrap:anywhere }
+a:hover { color:#045154 } a:focus-visible,button:focus-visible { outline:3px solid #dba52c; outline-offset:3px }
+header { position:sticky; top:0; z-index:2; background:#fff; border-bottom:1px solid var(--line); padding:15px 5%; display:flex; align-items:center; justify-content:space-between; gap:16px }
+header .brand { font-weight:750; font-size:18px; color:var(--ink); text-decoration:none }
+header .badge { font-size:12px; padding:4px 10px; background:#e0f3f0; color:#125b59; border-radius:20px; white-space:nowrap }
+header .pages { display:flex; flex-wrap:wrap; gap:6px 18px; margin-right:auto; font-size:14px }
+header .pages a { color:var(--muted); text-decoration:none; font-weight:600; padding:2px 0; border-bottom:2px solid transparent }
+header .pages a:hover { color:var(--accent) }
+header .pages a[aria-current="page"] { color:var(--ink); border-bottom-color:var(--accent) }
+.layout { max-width:1400px; margin:auto; display:grid; grid-template-columns:250px minmax(0,1fr); gap:42px; padding:32px 5% 64px }
+aside { position:sticky; top:90px; align-self:start; max-height:calc(100vh - 115px); overflow:auto; padding-right:10px; font-size:13px }
+aside p { margin:0 0 12px; color:var(--muted); font-weight:650; text-transform:uppercase; letter-spacing:.08em }
+aside a { display:block; padding:6px 0; text-decoration:none; color:var(--muted) }
+aside a:hover { color:var(--accent) }
+.mobile-toc { display:none; margin-bottom:22px; padding:12px; background:#edf5f5; border-radius:6px }
+.mobile-toc summary { cursor:pointer; font-weight:650 } .mobile-toc a { display:block; padding:6px 0 }
+main { min-width:0; max-width:950px; background:#fff; padding:30px 36px; border:1px solid var(--line); border-radius:12px }
+h1,h2,h3 { line-height:1.25; letter-spacing:-.025em } h1 { font-size:32px; margin-top:0 } h2 { font-size:24px; margin-top:44px; padding-top:16px; border-top:1px solid var(--line) } h3 { font-size:19px; margin-top:28px }
+p,li { max-width:85ch } code { font: .87em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace; background:#eef3f5; padding:2px 4px; border-radius:4px; overflow-wrap:anywhere }
+pre { overflow-x:auto; background:#102830; color:#ecf4f7; padding:20px; border-radius:8px; line-height:1.6 } pre code { background:none; color:inherit; padding:0; overflow-wrap:normal }
+table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:14px; margin:20px 0 }
+th,td { border:1px solid var(--line); padding:11px 13px; text-align:left; vertical-align:top; min-width:125px } th { background:#edf5f5; font-weight:650 }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px } .actions a { border:1px solid #b6d4d4; border-radius:6px; padding:8px 12px; text-decoration:none; font-size:14px; font-weight:600 }
+.code-box { position:relative } .code-box pre { padding-top:44px } .copy { position:absolute; top:8px; right:8px; border:1px solid #66858c; background:#24424b; color:white; border-radius:4px; padding:4px 8px; cursor:pointer }
+footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px } footer summary { cursor:pointer } footer code { word-break:break-all }
+.skip { position:absolute; left:-10000px } .skip:focus { left:12px; top:12px; z-index:5; background:white; padding:10px }
+@media(max-width:900px) { .layout { display:block; padding:20px 4% } aside { display:none } .mobile-toc { display:block } main { max-width:none; padding:24px } }
+@media(max-width:550px) { body { font-size:15px } header { padding:12px 4%; flex-wrap:wrap } header .brand { font-size:16px } header .pages { order:3; flex-basis:100%; margin-right:0 } aside { columns:1 } main { padding:20px 16px } h1 { font-size:27px } .actions a { flex:1 0 100% } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } }
+</style></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><a class="brand" href="./">AAC developer documentation</a>
+<nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html" aria-current="page">Release note</a></nav></header>
+<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a></aside>
+<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a></nav></details><nav class="actions" aria-label="Downloads"><a href="RELEASE_NOTES.md" download>Download release notes</a></nav><h1 id="release-note">Release note</h1>
+<h2 id="040">0.4.0</h2>
+<p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
+in earlier releases.</p>
+<h3 id="configuration-upgrade-note">Configuration upgrade note</h3>
+<p>For <code>sidecar.dev_mode</code> and
+<code>sidecar.agent_invoke_context.include_full_prior_payloads</code>, use unquoted
+<code>true</code> or <code>false</code>. Mixed-case spellings such as <code>yEs</code> now fail configuration
+loading; check hand-edited configurations before upgrading. CLI-generated
+configurations already use canonical booleans.</p>
+<h3 id="native-forwarding-upgrade-note">Native forwarding upgrade note</h3>
+<p>Remove <code>valid_until</code> from every native
+<code>forward</code> or <code>forward_composite</code> decision's <code>additional_predicates</code>, including
+<code>additional_forwards</code> entries. Even equal or shorter supplied deadlines are
+refused. Use the destination's configured <code>valid_for</code>; continuation expiry is
+bounded by inherited authority and the 24-hour root limit. Dates inside your
+business payload remain ordinary data. A2A's separate shorter-expiry contract
+and the library's absolute expiry cap are preserved.</p>
+<p>Native candidates are checked before outgoing proof signing or send. For
+example, <code>amount_max:8000</code> cannot continue as <code>amount_max:9500</code>. The receiving
+sidecar independently enforces this rule, including against a deliberately
+constructed widened chain. Ordinary narrowing and fresh authority under a
+still-valid original approval remain possible through the normal authorization
+path; an existing narrow chain is not widened.</p>
+<p>The native callback's <code>200</code> / <code>dispatched</code> acknowledgement precedes background
+completion. Observe the later local outcome: a refused <code>forward</code> emits a
+<code>dispatch</code> failure with <code>ERR_CHAIN_INVALID</code>; a refused reactive
+<code>forward_composite</code> emits <code>composite_mint</code> with that code. Valid sibling branches
+continue. Composite candidates are checked against their own fresh-root and
+attestation chain. Proactive composite candidate rejection is a synchronous
+403; reserved expiry input is an invalid-decision response before dispatch.</p>
+<h2 id="041">0.4.1</h2>
+<p>Upgrade guidance: remove any <code>state_store.cold</code> block, including empty or
+null blocks, and replace configured class/destination <code>predicates.valid_until</code>
+with <code>valid_for</code>. An omitted destination timeout now inherits the global
+5-second default instead of the former independent 3-second default. Set an
+explicit <code>timeout_ms</code> to retain a deliberate destination override. Conflicting
+explicit task references refuse native decisions before any branch signs or
+sends; already-committed roots retain their provenance in a 207 response.
+With A2A enabled and <code>deadline_seconds</code> below 5, the unchanged global default
+is too large: set an explicit destination <code>timeout_ms</code> no greater than that
+deadline (for example, 3000ms for 3 seconds), or lower the global dispatch budget.
+CLI-generated configurations already supply explicit destination timeouts.</p>
+<h2 id="042">0.4.2</h2>
+<p>This release documents the native two-tenant reservation demo and links its public
+setup, receipt/refusal and certificate-lifecycle exercises. This release carries
+the updated guide and overview; runtime authorization, configuration and wire
+behavior are unchanged from v0.4.1. Existing v0.4.1 artifacts remain available unchanged.</p>
+<h2 id="043">0.4.3</h2>
+<p>Distribution update: the runnable image is published after its matching
+signed bundle. Runtime behavior and configuration remain the same as v0.4.2.</p>
+
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="LICENSE">License</a> · <a href="THIRD_PARTY_NOTICES.md">Third-party notices</a></p>
+<details><summary>Release identity and document checksum</summary><pre><code>{
+  &quot;version&quot;: &quot;v0.4.3&quot;,
+  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:7c50198c6625e3a25f1c0dfc5b4dd902d58c23a2bcbd79c0b1c5bc9c9b65f6d4&quot;,
+  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:182a6a4824dcf6f805bea496dfc24e41704b97a24905eb5f89daa55029c11c89&quot;,
+  &quot;guide_sha256&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
+  &quot;template_sha256&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
+  &quot;document_sha256&quot;: {
+    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
+    &quot;KEYS_AND_CERTIFICATES.md&quot;: &quot;a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4&quot;,
+    &quot;LICENSE&quot;: &quot;40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376&quot;,
+    &quot;THIRD_PARTY_NOTICES.md&quot;: &quot;073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116&quot;,
+    &quot;sidecar-config.template.yaml&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
+    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;b35a1f6eaabdee1faff43a922b2c03bab46b48ff57980743e5b1bf886ad92808&quot;,
+    &quot;RELEASE_NOTES.md&quot;: &quot;cda692cd21552cfe03ab54e096e6d43834081b3900e70392c4cea1ededd84790&quot;
+  },
+  &quot;documentation_revision&quot;: &quot;f4bb661c4a7d4a08b789bfdf193d374f184626ce&quot;,
+  &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
+  &quot;components_sha256&quot;: &quot;8931cd59e6ece2d108d76c7f41e38a534c03453a830dfae8d6c7bbcec20e8a02&quot;
+}</code></pre><a href="release.json">Download release record</a></details></footer>
+</main></div><script>
+document.querySelectorAll('pre').forEach(pre => {
+  const box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  const button = document.createElement('button'); button.className = 'copy';
+  button.type = 'button'; button.textContent = 'Copy'; button.setAttribute('aria-label', 'Copy code');
+  button.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(pre.querySelector('code').textContent); button.textContent = 'Copied'; }
+    catch { button.textContent = 'Select and copy'; }
+    setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+  }); box.appendChild(button);
+});
+</script></body></html>
