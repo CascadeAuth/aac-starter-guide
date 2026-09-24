@@ -184,7 +184,7 @@ start with the <a href="#pairing-authentication-for-any-language">pairing protoc
 <h2 id="quick-installation-and-run-guide">Quick installation and run guide</h2>
 <p>For a 5–10 minute Docker install with your tenant configuration and paired
 agent ready, follow the <a href="https://hub.docker.com/r/cascadeauth/aac-sidecar/">public quick installation and run guide</a>.
-It starts with <code>docker pull cascadeauth/aac-sidecar:v0.4.3</code>, identifies
+It starts with <code>docker pull cascadeauth/aac-sidecar:v0.4.4</code>, identifies
 the required configuration and starts the container using the version tag.
 The detailed verification and deployment instructions below are the advanced
 path. Tenant onboarding and credential provisioning come before either path.</p>
@@ -260,7 +260,7 @@ binaries and the SPDX/provenance/OCI files used by the optional deep audit.
 The <code>-bundle</code> artifact is downloaded with ORAS; it is not a second container
 to run beside the sidecar.</p>
 <h3 id="versions-used-in-this-guide">Versions used in this guide</h3>
-<p>Current installation examples select AAC Sidecar <strong><code>v0.4.3</code></strong> from the
+<p>Current installation examples select AAC Sidecar <strong><code>v0.4.4</code></strong> from the
 <a href="https://cascadeauth.github.io/aac-starter-guide/released-components.json">released-component record</a>. The image and the
 <code>-bundle</code> artifact use that same sidecar version. The site records its document
 revision separately, so guide corrections do not require a new sidecar release.</p>
@@ -727,7 +727,7 @@ revocation and recovery. License questions go to <code>legal@cascadeauth.com</co
 <p>Install Docker and Cosign 3.1.3 or a compatible later verifier. Verify the
 published digest against CascadeAuth's GitHub Actions keyless identity:</p>
 <pre><code class="language-bash">set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.4.3
+export AAC_SIDECAR_VERSION=v0.4.4
 export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
 export AAC_SIDECAR_DIGEST=&quot;$(
   docker buildx imagetools inspect &quot;${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}&quot; |
@@ -745,7 +745,7 @@ docker image inspect &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot; \
   --format '{{index .Config.Labels &quot;org.opencontainers.image.version&quot;}} {{index .Config.Labels &quot;org.opencontainers.image.licenses&quot;}}'
 </code></pre>
 <p>The final line must print:</p>
-<pre><code class="language-text">v0.4.3 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+<pre><code class="language-text">v0.4.4 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
 </code></pre>
 <h3 id="2-place-the-sidecar-beside-the-workload">2. Place the sidecar beside the workload</h3>
 <p>The image already contains the compiled <code>/aac-sidecar</code> entrypoint and runs as
@@ -1499,7 +1499,7 @@ print('Created container configuration and sample application build directory')
 <pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
 python configure_container.py
 docker build --tag aac-demo-agent &quot;$AAC_DEMO_DIR/container/agent&quot;
-docker pull docker.io/cascadeauth/aac-sidecar:v0.4.3
+docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
 </code></pre>
 <p>Run from a non-root host account. This local demonstration runs both containers
 with your numeric UID/GID so their staged private files can remain mode 0600;
@@ -1517,7 +1517,7 @@ docker run --detach --name aac-demo-sidecar --user &quot;$(id -u):$(id -g)&quot;
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly&quot; \
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly&quot; \
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac&quot; \
-  docker.io/cascadeauth/aac-sidecar:v0.4.3 -config /etc/aac/sidecar-config.yaml
+  docker.io/cascadeauth/aac-sidecar:v0.4.4 -config /etc/aac/sidecar-config.yaml
 docker logs --tail 30 aac-demo-agent
 docker logs --tail 30 aac-demo-sidecar
 docker exec aac-demo-agent python -c 'import urllib.request; print(urllib.request.urlopen(&quot;http://127.0.0.1:8080/readyz&quot;).read().decode())'
@@ -2372,9 +2372,9 @@ or macOS development machine. Container users can also download the bundle
 for the guide, template or deep audit without installing its standalone binary. ORAS is only the registry client used to pull
 the signed generic bundle; it is not linked into or required by the sidecar at
 runtime.</p>
-<pre><code class="language-bash">mkdir aac-sidecar-v0.4.3
-cd aac-sidecar-v0.4.3
-bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.3-bundle
+<pre><code class="language-bash">mkdir aac-sidecar-v0.4.4
+cd aac-sidecar-v0.4.4
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
 bundle_digest=&quot;$(oras resolve &quot;${bundle_ref}&quot;)&quot;
 [[ &quot;${bundle_digest}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
 
@@ -2391,7 +2391,7 @@ cosign verify-blob \
   --bundle checksums.txt.bundle \
   checksums.txt
 
-bash ./verify-developer-beta.sh . v0.4.3
+bash ./verify-developer-beta.sh . v0.4.4
 </code></pre>
 <h3 id="optional-deep-artifact-audit">Optional deep artifact audit</h3>
 <p>For a reproducible audit beyond signature/checksum verification, install
@@ -2399,7 +2399,7 @@ Python 3.10+ and Go 1.26.6 (or a compatible later Go metadata reader), then run
 this <strong>after</strong> the Cosign verification above:</p>
 <pre><code class="language-bash">python3 --version
 go version
-bash ./verify-developer-beta.sh . v0.4.3 --deep-audit
+bash ./verify-developer-beta.sh . v0.4.4 --deep-audit
 </code></pre>
 <p>Go reads embedded build metadata from each binary; it does not execute foreign-platform
 binaries. The verifier's final version check executes only your host's binary.
@@ -2423,7 +2423,7 @@ The audit verifies the signed build metadata and artifact contents; it does
 not reproduce the build. A green audit does not replace
 Cosign identity verification, runtime readiness, or your tenant's qualification.</p>
 <p>Select only the archive for the current platform. Default developer install:</p>
-<pre><code class="language-bash">version=v0.4.3
+<pre><code class="language-bash">version=v0.4.4
 platform=linux_amd64  # or linux_arm64, darwin_amd64, darwin_arm64
 install_root=&quot;${HOME}/.local/lib/aac-sidecar/releases/${version}&quot;
 
@@ -2457,7 +2457,7 @@ cannot be recalled.</li>
 </ul>
 <p>Developer-binary uninstall:</p>
 <pre><code class="language-bash">rm &quot;${HOME}/.local/bin/aac-sidecar&quot;
-rm -rf &quot;${HOME}/.local/lib/aac-sidecar/releases/v0.4.3&quot;
+rm -rf &quot;${HOME}/.local/lib/aac-sidecar/releases/v0.4.4&quot;
 </code></pre>
 <p>Do not use those commands for an operator-owned production directory or state
 volume. Follow the tenant's change, retention, and secure-deletion procedures.</p>
@@ -2513,23 +2513,23 @@ Use the included license for permitted use and redistribution terms.</p>
 
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="LICENSE">License</a> · <a href="THIRD_PARTY_NOTICES.md">Third-party notices</a></p>
 <details><summary>Release identity and document checksum</summary><pre><code>{
-  &quot;version&quot;: &quot;v0.4.3&quot;,
-  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:7c50198c6625e3a25f1c0dfc5b4dd902d58c23a2bcbd79c0b1c5bc9c9b65f6d4&quot;,
-  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:182a6a4824dcf6f805bea496dfc24e41704b97a24905eb5f89daa55029c11c89&quot;,
-  &quot;guide_sha256&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
-  &quot;template_sha256&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
+  &quot;version&quot;: &quot;v0.4.4&quot;,
+  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1&quot;,
+  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
+  &quot;guide_sha256&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
+  &quot;template_sha256&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
   &quot;document_sha256&quot;: {
-    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
+    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
     &quot;KEYS_AND_CERTIFICATES.md&quot;: &quot;a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4&quot;,
     &quot;LICENSE&quot;: &quot;40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376&quot;,
     &quot;THIRD_PARTY_NOTICES.md&quot;: &quot;073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116&quot;,
-    &quot;sidecar-config.template.yaml&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
-    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;b35a1f6eaabdee1faff43a922b2c03bab46b48ff57980743e5b1bf886ad92808&quot;,
-    &quot;RELEASE_NOTES.md&quot;: &quot;cda692cd21552cfe03ab54e096e6d43834081b3900e70392c4cea1ededd84790&quot;
+    &quot;sidecar-config.template.yaml&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
+    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d&quot;,
+    &quot;RELEASE_NOTES.md&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;
   },
-  &quot;documentation_revision&quot;: &quot;f4bb661c4a7d4a08b789bfdf193d374f184626ce&quot;,
+  &quot;documentation_revision&quot;: &quot;bd198211ac31f2b785175b5d97ff4472cdf88794&quot;,
   &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
-  &quot;components_sha256&quot;: &quot;8931cd59e6ece2d108d76c7f41e38a534c03453a830dfae8d6c7bbcec20e8a02&quot;
+  &quot;components_sha256&quot;: &quot;4ef4f9522a181b6dfbc3d211f408776b21a1594d87b19a56c11cbc1fb26fccc7&quot;
 }</code></pre><a href="release.json">Download release record</a></details></footer>
 </main></div><script>
 document.querySelectorAll('pre').forEach(pre => {

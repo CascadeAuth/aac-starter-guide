@@ -38,8 +38,8 @@ footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); co
 <body><a class="skip" href="#content">Skip to content</a>
 <header><a class="brand" href="./">AAC developer documentation</a>
 <nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html" aria-current="page">Release note</a></nav></header>
-<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a></aside>
-<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a></nav></details><nav class="actions" aria-label="Downloads"><a href="RELEASE_NOTES.md" download>Download release notes</a></nav><h1 id="release-note">Release note</h1>
+<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a><a href="#044">0.4.4</a></aside>
+<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a><a href="#044">0.4.4</a></nav></details><nav class="actions" aria-label="Downloads"><a href="RELEASE_NOTES.md" download>Download release notes</a></nav><h1 id="release-note">Release note</h1>
 <h2 id="040">0.4.0</h2>
 <p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
 in earlier releases.</p>
@@ -90,26 +90,30 @@ behavior are unchanged from v0.4.1. Existing v0.4.1 artifacts remain available u
 <h2 id="043">0.4.3</h2>
 <p>Distribution update: the runnable image is published after its matching
 signed bundle. Runtime behavior and configuration remain the same as v0.4.2.</p>
+<h2 id="044">0.4.4</h2>
+<p>The configuration template links to the standalone AAC developer documentation
+site. Current guide corrections can publish independently of sidecar releases.
+Runtime behavior, configuration and authorization remain unchanged from v0.4.3.</p>
 
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="LICENSE">License</a> · <a href="THIRD_PARTY_NOTICES.md">Third-party notices</a></p>
 <details><summary>Release identity and document checksum</summary><pre><code>{
-  &quot;version&quot;: &quot;v0.4.3&quot;,
-  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:7c50198c6625e3a25f1c0dfc5b4dd902d58c23a2bcbd79c0b1c5bc9c9b65f6d4&quot;,
-  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:182a6a4824dcf6f805bea496dfc24e41704b97a24905eb5f89daa55029c11c89&quot;,
-  &quot;guide_sha256&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
-  &quot;template_sha256&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
+  &quot;version&quot;: &quot;v0.4.4&quot;,
+  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1&quot;,
+  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
+  &quot;guide_sha256&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
+  &quot;template_sha256&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
   &quot;document_sha256&quot;: {
-    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;706b852e8809abaf2d305ace3ac21e21cd4585aeb1ad4588a49ae74d96cb182e&quot;,
+    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
     &quot;KEYS_AND_CERTIFICATES.md&quot;: &quot;a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4&quot;,
     &quot;LICENSE&quot;: &quot;40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376&quot;,
     &quot;THIRD_PARTY_NOTICES.md&quot;: &quot;073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116&quot;,
-    &quot;sidecar-config.template.yaml&quot;: &quot;2ccf99dc9d82884965137bfb76c4a2f11474b5bd5c33c3860671f63ecd09e232&quot;,
-    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;b35a1f6eaabdee1faff43a922b2c03bab46b48ff57980743e5b1bf886ad92808&quot;,
-    &quot;RELEASE_NOTES.md&quot;: &quot;cda692cd21552cfe03ab54e096e6d43834081b3900e70392c4cea1ededd84790&quot;
+    &quot;sidecar-config.template.yaml&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
+    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d&quot;,
+    &quot;RELEASE_NOTES.md&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;
   },
-  &quot;documentation_revision&quot;: &quot;f4bb661c4a7d4a08b789bfdf193d374f184626ce&quot;,
+  &quot;documentation_revision&quot;: &quot;bd198211ac31f2b785175b5d97ff4472cdf88794&quot;,
   &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
-  &quot;components_sha256&quot;: &quot;8931cd59e6ece2d108d76c7f41e38a534c03453a830dfae8d6c7bbcec20e8a02&quot;
+  &quot;components_sha256&quot;: &quot;4ef4f9522a181b6dfbc3d211f408776b21a1594d87b19a56c11cbc1fb26fccc7&quot;
 }</code></pre><a href="release.json">Download release record</a></details></footer>
 </main></div><script>
 document.querySelectorAll('pre').forEach(pre => {

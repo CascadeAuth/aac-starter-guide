@@ -5,7 +5,7 @@ delegated authority before delivering work to it. This repository provides
 the **sidecar image** and an alternative **standalone-binary bundle** for
 installation on a VM or macOS.
 
-Current version: **`v0.4.3`**. Linux containers support AMD64 and ARM64;
+Current version: **`v0.4.4`**. Linux containers support AMD64 and ARM64;
 the bundle also contains Linux/macOS standalone binaries for both architectures.
 Artifacts are immutable. There is no `latest` tag.
 
@@ -44,7 +44,7 @@ Kubernetes or standalone binaries, see the Advanced installation guide below.
 ### 1. Pull the sidecar
 
 ```bash
-docker pull cascadeauth/aac-sidecar:v0.4.3
+docker pull cascadeauth/aac-sidecar:v0.4.4
 ```
 
 ### 2. Configure your tenant and agent
@@ -84,14 +84,14 @@ docker run --detach --name aac-sidecar \
   --read-only --cap-drop ALL --security-opt no-new-privileges \
   --mount "type=bind,src=${AAC_CONFIG_DIR},dst=/etc/aac,readonly" \
   --mount "type=bind,src=${AAC_STATE_DIR},dst=/var/lib/aac" \
-  cascadeauth/aac-sidecar:v0.4.3 \
+  cascadeauth/aac-sidecar:v0.4.4 \
   -config /etc/aac/sidecar-config.yaml
 
 docker logs --tail 50 aac-sidecar
 docker exec aac-sidecar /aac-sidecar -version
 ```
 
-The version command prints `aac-sidecar v0.4.3`. If your agent image
+The version command prints `aac-sidecar v0.4.4`. If your agent image
 includes `curl`, check health and readiness from that container:
 
 ```bash
@@ -126,7 +126,7 @@ command; it does not require a tenant or any keys:
 
 ```bash
 set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.4.3
+export AAC_SIDECAR_VERSION=v0.4.4
 export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
 export AAC_SIDECAR_DIGEST="$(
   docker buildx imagetools inspect "${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}" |
@@ -144,7 +144,7 @@ docker run --rm --network none \
   "${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}" -version
 ```
 
-The final command prints `aac-sidecar v0.4.3` and its build identity.
+The final command prints `aac-sidecar v0.4.4` and its build identity.
 Docker selects the image matching your Linux architecture. The image contains
 the `/aac-sidecar` entrypoint and runs as user/group `65532:65532`.
 
@@ -217,7 +217,7 @@ standalone installation.
 
 ```bash
 set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.4.3
+export AAC_SIDECAR_VERSION=v0.4.4
 export AAC_BUNDLE_REF="docker.io/cascadeauth/aac-sidecar:${AAC_SIDECAR_VERSION}-bundle"
 export AAC_BUNDLE_DIGEST="$(oras resolve "${AAC_BUNDLE_REF}")"
 [[ "${AAC_BUNDLE_DIGEST}" =~ ^sha256:[0-9a-f]{64}$ ]]

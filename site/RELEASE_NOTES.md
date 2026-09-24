@@ -63,3 +63,9 @@ behavior are unchanged from v0.4.1. Existing v0.4.1 artifacts remain available u
 
 Distribution update: the runnable image is published after its matching
 signed bundle. Runtime behavior and configuration remain the same as v0.4.2.
+
+## 0.4.4
+
+The configuration template links to the standalone AAC developer documentation
+site. Current guide corrections can publish independently of sidecar releases.
+Runtime behavior, configuration and authorization remain unchanged from v0.4.3.

@@ -8,7 +8,7 @@
 # Replace the example tenant/workload IDs, endpoints and file paths with your
 # own provisioned values. Copy this file to /etc/aac/sidecar-config.yaml, or
 # select another path with `aac-sidecar -config <path>`.
-# Configuration and setup guide: https://cascadeauth.github.io/aac-sidecar-go/
+# Configuration and setup guide: https://cascadeauth.github.io/aac-starter-guide/
 #
 # Configuration is validated at startup. Unknown or duplicate keys, quoted
 # boolean values, empty or incorrectly typed paths, out-of-range ports and

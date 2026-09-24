@@ -137,7 +137,7 @@ start with the [pairing protocol](#pairing-authentication-for-any-language).
 
 For a 5–10 minute Docker install with your tenant configuration and paired
 agent ready, follow the [public quick installation and run guide](https://hub.docker.com/r/cascadeauth/aac-sidecar/).
-It starts with `docker pull cascadeauth/aac-sidecar:v0.4.3`, identifies
+It starts with `docker pull cascadeauth/aac-sidecar:v0.4.4`, identifies
 the required configuration and starts the container using the version tag.
 The detailed verification and deployment instructions below are the advanced
 path. Tenant onboarding and credential provisioning come before either path.
@@ -180,7 +180,7 @@ to run beside the sidecar.
 
 ### Versions used in this guide
 
-Current installation examples select AAC Sidecar **`v0.4.3`** from the
+Current installation examples select AAC Sidecar **`v0.4.4`** from the
 [released-component record](https://cascadeauth.github.io/aac-starter-guide/released-components.json). The image and the
 `-bundle` artifact use that same sidecar version. The site records its document
 revision separately, so guide corrections do not require a new sidecar release.
@@ -522,7 +522,7 @@ published digest against CascadeAuth's GitHub Actions keyless identity:
 
 ```bash
 set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.4.3
+export AAC_SIDECAR_VERSION=v0.4.4
 export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
 export AAC_SIDECAR_DIGEST="$(
   docker buildx imagetools inspect "${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}" |
@@ -543,7 +543,7 @@ docker image inspect "${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}" \
 The final line must print:
 
 ```text
-v0.4.3 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+v0.4.4 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
 ```
 
 ### 2. Place the sidecar beside the workload
@@ -1416,7 +1416,7 @@ Build the sample **application** image locally and pull the published sidecar:
 cd "$AAC_DEMO_DIR"
 python configure_container.py
 docker build --tag aac-demo-agent "$AAC_DEMO_DIR/container/agent"
-docker pull docker.io/cascadeauth/aac-sidecar:v0.4.3
+docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
 ```
 
 Run from a non-root host account. This local demonstration runs both containers
@@ -1437,7 +1437,7 @@ docker run --detach --name aac-demo-sidecar --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac" \
-  docker.io/cascadeauth/aac-sidecar:v0.4.3 -config /etc/aac/sidecar-config.yaml
+  docker.io/cascadeauth/aac-sidecar:v0.4.4 -config /etc/aac/sidecar-config.yaml
 docker logs --tail 30 aac-demo-agent
 docker logs --tail 30 aac-demo-sidecar
 docker exec aac-demo-agent python -c 'import urllib.request; print(urllib.request.urlopen("http://127.0.0.1:8080/readyz").read().decode())'
@@ -2070,9 +2070,9 @@ the signed generic bundle; it is not linked into or required by the sidecar at
 runtime.
 
 ```bash
-mkdir aac-sidecar-v0.4.3
-cd aac-sidecar-v0.4.3
-bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.3-bundle
+mkdir aac-sidecar-v0.4.4
+cd aac-sidecar-v0.4.4
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
 bundle_digest="$(oras resolve "${bundle_ref}")"
 [[ "${bundle_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
 
@@ -2089,7 +2089,7 @@ cosign verify-blob \
   --bundle checksums.txt.bundle \
   checksums.txt
 
-bash ./verify-developer-beta.sh . v0.4.3
+bash ./verify-developer-beta.sh . v0.4.4
 ```
 
 ### Optional deep artifact audit
@@ -2101,7 +2101,7 @@ this **after** the Cosign verification above:
 ```bash
 python3 --version
 go version
-bash ./verify-developer-beta.sh . v0.4.3 --deep-audit
+bash ./verify-developer-beta.sh . v0.4.4 --deep-audit
 ```
 
 Go reads embedded build metadata from each binary; it does not execute foreign-platform
@@ -2129,7 +2129,7 @@ Cosign identity verification, runtime readiness, or your tenant's qualification.
 Select only the archive for the current platform. Default developer install:
 
 ```bash
-version=v0.4.3
+version=v0.4.4
 platform=linux_amd64  # or linux_arm64, darwin_amd64, darwin_arm64
 install_root="${HOME}/.local/lib/aac-sidecar/releases/${version}"
 
@@ -2168,7 +2168,7 @@ Developer-binary uninstall:
 
 ```bash
 rm "${HOME}/.local/bin/aac-sidecar"
-rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.4.3"
+rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.4.4"
 ```
 
 Do not use those commands for an operator-owned production directory or state
