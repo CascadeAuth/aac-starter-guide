@@ -32,7 +32,7 @@ th,td { border:1px solid var(--line); padding:11px 13px; text-align:left; vertic
 footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px } footer summary { cursor:pointer } footer code { word-break:break-all }
 .skip { position:absolute; left:-10000px } .skip:focus { left:12px; top:12px; z-index:5; background:white; padding:10px }
 @media(max-width:900px) { .layout { display:block; padding:20px 4% } aside { display:none } .mobile-toc { display:block } main { max-width:none; padding:24px } }
-@media(max-width:550px) { body { font-size:15px } header { padding:12px 4%; flex-wrap:wrap } header .brand { font-size:16px } header .pages { order:3; flex-basis:100%; margin-right:0 } aside { columns:1 } main { padding:20px 16px } h1 { font-size:27px } .actions a { flex:1 0 100% } }
+@media(max-width:550px) { html { scroll-padding-top:150px } body { font-size:15px } header { padding:12px 4%; flex-wrap:wrap } header .brand { font-size:16px } header .pages { order:3; flex-basis:100%; margin-right:0 } aside { columns:1 } main { padding:20px 16px } h1 { font-size:27px } .actions a { flex:1 0 100% } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } }
 </style></head>
 <body><a class="skip" href="#content">Skip to content</a>
@@ -100,10 +100,10 @@ Runtime behavior, configuration and authorization remain unchanged from v0.4.3.<
   &quot;version&quot;: &quot;v0.4.4&quot;,
   &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1&quot;,
   &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
-  &quot;guide_sha256&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
+  &quot;guide_sha256&quot;: &quot;f8645cec6564d91b6585afe67ef7717961f3f4cdfb001d564407b59d82ed3d4a&quot;,
   &quot;template_sha256&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
   &quot;document_sha256&quot;: {
-    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;26ba7e069209f45b94d5ea0b53be8a504e82bd0435fc6ccc8335d49b75fa98eb&quot;,
+    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;f8645cec6564d91b6585afe67ef7717961f3f4cdfb001d564407b59d82ed3d4a&quot;,
     &quot;KEYS_AND_CERTIFICATES.md&quot;: &quot;a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4&quot;,
     &quot;LICENSE&quot;: &quot;40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376&quot;,
     &quot;THIRD_PARTY_NOTICES.md&quot;: &quot;073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116&quot;,
@@ -111,7 +111,7 @@ Runtime behavior, configuration and authorization remain unchanged from v0.4.3.<
     &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d&quot;,
     &quot;RELEASE_NOTES.md&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;
   },
-  &quot;documentation_revision&quot;: &quot;bd198211ac31f2b785175b5d97ff4472cdf88794&quot;,
+  &quot;documentation_revision&quot;: &quot;7238e61332edd8d038c54664ec6019297639fbdd&quot;,
   &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
   &quot;components_sha256&quot;: &quot;4ef4f9522a181b6dfbc3d211f408776b21a1594d87b19a56c11cbc1fb26fccc7&quot;
 }</code></pre><a href="release.json">Download release record</a></details></footer>

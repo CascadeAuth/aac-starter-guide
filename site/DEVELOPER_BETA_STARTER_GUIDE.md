@@ -184,6 +184,7 @@ Current installation examples select AAC Sidecar **`v0.4.4`** from the
 [released-component record](https://cascadeauth.github.io/aac-starter-guide/released-components.json). The image and the
 `-bundle` artifact use that same sidecar version. The site records its document
 revision separately, so guide corrections do not require a new sidecar release.
+The record also lists the exact sidecar image and bundle digests for these examples.
 
 The sidecar has no `latest` tag, so an untagged pull will fail and every sidecar
 command here names the version. Its companion packages are different: install
