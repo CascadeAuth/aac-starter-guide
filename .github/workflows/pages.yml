@@ -1,0 +1,37 @@
+name: publish starter guide
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: starter-guide-pages
+  cancel-in-progress: false
+jobs:
+  pages:
+    if: github.repository == 'CascadeAuth/aac-starter-guide' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: require public site and provenance
+        run: |
+          test -f site/index.html
+          test -f site/release.json
+          test -f site/released-components.json
+          test -f site/release-notes.html
+          test -z "$(find site -type l -print)"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
+        id: deployment
