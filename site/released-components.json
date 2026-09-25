@@ -7,6 +7,10 @@
     "url": "https://hub.docker.com/r/cascadeauth/aac-sidecar/"
   },
   "packages": {
+    "aac-aeg": {
+      "version": "0.1.0",
+      "url": "https://pypi.org/project/aac-aeg/"
+    },
     "aac-cli": {
       "version": "0.2.3",
       "url": "https://pypi.org/project/aac-cli/"

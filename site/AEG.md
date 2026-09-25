@@ -15,10 +15,19 @@ python -m pip install aac-aeg
 python -m pip install 'aac-aeg[online]'
 ```
 
-The online extra supplies `aac-cli>=0.2.3`. Online rendering invokes
-`aac chain show --profile PROFILE --token-id ROOT --output json` with an argument
-list. It uses the CLI's existing credentials; it keeps no second credential
-store. Offline rendering never invokes `aac`, even with an ambient profile.
+`[online]` is Python's syntax for an optional dependency set. It asks the
+installer to also install the separate `aac-cli>=0.2.3` package in the same
+environment. AEG does not bundle the CLI inside its own package. The installed
+commands remain `aac-aeg` and `aac`; the brackets are used only during installation.
+
+For an online render, pass `--profile PROFILE` to `aac-aeg`. It starts
+`aac chain show --profile PROFILE --token-id ROOT --output json` as a subprocess
+and consumes the returned JSON. The CLI reads the existing profile and its tenant
+API key, then makes the authenticated trace request. This query uses the API key,
+not the browser/SSO administration session. AEG keeps no second credential store
+and does not read the key itself. Installation does not create a tenant or its
+credentials; configure the CLI profile first. Offline rendering never invokes
+`aac`, even with an ambient profile.
 
 ## Find an execution and render it
 

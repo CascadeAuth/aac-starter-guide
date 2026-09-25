@@ -12,13 +12,13 @@
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d",
     "DOCKER_HUB_OVERVIEW.md": "e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d",
     "RELEASE_NOTES.md": "abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef",
-    "AEG.md": "4119d42b1159d1ee8a5b94bb85a73bc87e54e0557e1ba7bfd4814f7bbb4a380e",
+    "AEG.md": "07e69f0ff403a5826c0ad862e915e0496714b8f021d34970e2f89c8d2f54b805",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37"
   },
   "aeg_documentation_source": "reviewed-source",
-  "documentation_revision": "2e65dae9673c409f42db75da82cfb4dc6490ec9e",
+  "documentation_revision": "3c4f2adeca59c849084f31b23de89589517c3862",
   "documentation_source": "reviewed-source",
-  "components_sha256": "8e1cb4a84665f53e0de71dc142e90c3eb4542d7f128c700f07d1d32dfef2e71a"
+  "components_sha256": "b336805f34430c75a70bd83bde5efc6e56945de07cb6f7dcdc92b45f1247f1ce"
 }

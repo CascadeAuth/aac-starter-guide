@@ -50,10 +50,18 @@ output stay on the operator's machine. The renderer never uploads local files.</
 # To query an existing AAC CLI profile, also install the compatible public CLI:
 python -m pip install 'aac-aeg[online]'
 </code></pre>
-<p>The online extra supplies <code>aac-cli&gt;=0.2.3</code>. Online rendering invokes
-<code>aac chain show --profile PROFILE --token-id ROOT --output json</code> with an argument
-list. It uses the CLI's existing credentials; it keeps no second credential
-store. Offline rendering never invokes <code>aac</code>, even with an ambient profile.</p>
+<p><code>[online]</code> is Python's syntax for an optional dependency set. It asks the
+installer to also install the separate <code>aac-cli&gt;=0.2.3</code> package in the same
+environment. AEG does not bundle the CLI inside its own package. The installed
+commands remain <code>aac-aeg</code> and <code>aac</code>; the brackets are used only during installation.</p>
+<p>For an online render, pass <code>--profile PROFILE</code> to <code>aac-aeg</code>. It starts
+<code>aac chain show --profile PROFILE --token-id ROOT --output json</code> as a subprocess
+and consumes the returned JSON. The CLI reads the existing profile and its tenant
+API key, then makes the authenticated trace request. This query uses the API key,
+not the browser/SSO administration session. AEG keeps no second credential store
+and does not read the key itself. Installation does not create a tenant or its
+credentials; configure the CLI profile first. Offline rendering never invokes
+<code>aac</code>, even with an ambient profile.</p>
 <h2 id="find-an-execution-and-render-it">Find an execution and render it</h2>
 <p>Sidecars write their configured local telemetry sink. In the CLI-generated
 Compose layout, <code>aac agent status --agent NAME</code> identifies the agent directory;
@@ -167,15 +175,15 @@ local graph was written. These codes are not business outcomes.</p>
     &quot;sidecar-config.template.yaml&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
     &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d&quot;,
     &quot;RELEASE_NOTES.md&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;,
-    &quot;AEG.md&quot;: &quot;4119d42b1159d1ee8a5b94bb85a73bc87e54e0557e1ba7bfd4814f7bbb4a380e&quot;,
+    &quot;AEG.md&quot;: &quot;07e69f0ff403a5826c0ad862e915e0496714b8f021d34970e2f89c8d2f54b805&quot;,
     &quot;action-taken-v1.json&quot;: &quot;d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf&quot;,
     &quot;AEG_LICENSE&quot;: &quot;0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594&quot;,
     &quot;AEG_NOTICE&quot;: &quot;19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37&quot;
   },
   &quot;aeg_documentation_source&quot;: &quot;reviewed-source&quot;,
-  &quot;documentation_revision&quot;: &quot;2e65dae9673c409f42db75da82cfb4dc6490ec9e&quot;,
+  &quot;documentation_revision&quot;: &quot;3c4f2adeca59c849084f31b23de89589517c3862&quot;,
   &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
-  &quot;components_sha256&quot;: &quot;8e1cb4a84665f53e0de71dc142e90c3eb4542d7f128c700f07d1d32dfef2e71a&quot;
+  &quot;components_sha256&quot;: &quot;b336805f34430c75a70bd83bde5efc6e56945de07cb6f7dcdc92b45f1247f1ce&quot;
 }</code></pre><a href="release.json">Download release record</a></details></footer>
 </main></div><script>
 document.querySelectorAll('pre').forEach(pre => {
