@@ -1,0 +1,6 @@
+aac-aeg
+Copyright 2026 CascadeAuth contributors.
+
+Interactive output includes vis-network assets provided by pyvis. Their embedded
+license notices are retained in generated HTML. pyvis and its dependencies are
+distributed separately under their own licenses.

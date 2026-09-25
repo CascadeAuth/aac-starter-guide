@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cascadeauth.github.io/aac-starter-guide/action-taken-v1.json",
+  "title": "AAC local action_taken record v1",
+  "description": "An application report, not proof of business truth or receipt verification. One object per JSONL line.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timestamp_unix_seconds",
+    "event_type",
+    "tenant_id",
+    "tenant_short",
+    "token_id",
+    "actor_spiffe_id",
+    "action_summary",
+    "action_payload"
+  ],
+  "properties": {
+    "timestamp_unix_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "event_type": {
+      "const": "action_taken"
+    },
+    "tenant_id": {
+      "type": "string",
+      "pattern": "^tnt-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "tenant_short": {
+      "type": "string",
+      "minLength": 1
+    },
+    "token_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "actor_spiffe_id": {
+      "type": "string",
+      "pattern": "^spiffe://[^/\\s]+/[^\\s]+$"
+    },
+    "action_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_payload": {
+      "type": "object",
+      "properties": {
+        "task_ref": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_ref"
+      ]
+    }
+  }
+}

@@ -2218,6 +2218,14 @@ Use the included license for permitted use and redistribution terms.
 - Usage and integration questions: `support@cascadeauth.com`
 - Legal notices: `legal@cascadeauth.com`
 
+## Execution graphs
+
+Use the [Agent Execution Graph guide](https://cascadeauth.github.io/aac-starter-guide/aeg.html)
+to install `aac-aeg`, list local runs, and render local and authorized central
+evidence into self-contained HTML. The public reservation demo prints actual
+input paths and the render command for each attempt. Application records stay
+local; central metadata cannot supply private business results.
+
 ## Release notes
 
 [Read release notes and upgrade guidance](release-notes.html).

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Execution Graph</title><meta name="description" content="Render local authority and business evidence; discover runs and inspect partial graphs.">
+<link rel="canonical" href="https://cascadeauth.github.io/aac-starter-guide/aeg.html"><style>
+:root { color-scheme: light; --ink:#19313b; --muted:#526770; --line:#dce6e8; --accent:#087e83; }
+* { box-sizing:border-box } html { scroll-behavior:smooth; scroll-padding-top:90px }
+body { margin:0; color:var(--ink); background:#f9fbfc; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
+a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; overflow-wrap:anywhere }
+a:hover { color:#045154 } a:focus-visible,button:focus-visible { outline:3px solid #dba52c; outline-offset:3px }
+header { position:sticky; top:0; z-index:2; background:#fff; border-bottom:1px solid var(--line); padding:15px 5%; display:flex; align-items:center; justify-content:space-between; gap:16px }
+header .brand { font-weight:750; font-size:18px; color:var(--ink); text-decoration:none }
+header .badge { font-size:12px; padding:4px 10px; background:#e0f3f0; color:#125b59; border-radius:20px; white-space:nowrap }
+header .pages { display:flex; flex-wrap:wrap; gap:6px 18px; margin-right:auto; font-size:14px }
+header .pages a { color:var(--muted); text-decoration:none; font-weight:600; padding:2px 0; border-bottom:2px solid transparent }
+header .pages a:hover { color:var(--accent) }
+header .pages a[aria-current="page"] { color:var(--ink); border-bottom-color:var(--accent) }
+.layout { max-width:1400px; margin:auto; display:grid; grid-template-columns:250px minmax(0,1fr); gap:42px; padding:32px 5% 64px }
+aside { position:sticky; top:90px; align-self:start; max-height:calc(100vh - 115px); overflow:auto; padding-right:10px; font-size:13px }
+aside p { margin:0 0 12px; color:var(--muted); font-weight:650; text-transform:uppercase; letter-spacing:.08em }
+aside a { display:block; padding:6px 0; text-decoration:none; color:var(--muted) }
+aside a:hover { color:var(--accent) }
+.mobile-toc { display:none; margin-bottom:22px; padding:12px; background:#edf5f5; border-radius:6px }
+.mobile-toc summary { cursor:pointer; font-weight:650 } .mobile-toc a { display:block; padding:6px 0 }
+main { min-width:0; max-width:950px; background:#fff; padding:30px 36px; border:1px solid var(--line); border-radius:12px }
+h1,h2,h3 { line-height:1.25; letter-spacing:-.025em } h1 { font-size:32px; margin-top:0 } h2 { font-size:24px; margin-top:44px; padding-top:16px; border-top:1px solid var(--line) } h3 { font-size:19px; margin-top:28px }
+p,li { max-width:85ch } code { font: .87em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace; background:#eef3f5; padding:2px 4px; border-radius:4px; overflow-wrap:anywhere }
+pre { overflow-x:auto; background:#102830; color:#ecf4f7; padding:20px; border-radius:8px; line-height:1.6 } pre code { background:none; color:inherit; padding:0; overflow-wrap:normal }
+table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:14px; margin:20px 0 }
+th,td { border:1px solid var(--line); padding:11px 13px; text-align:left; vertical-align:top; min-width:125px } th { background:#edf5f5; font-weight:650 }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px } .actions a { border:1px solid #b6d4d4; border-radius:6px; padding:8px 12px; text-decoration:none; font-size:14px; font-weight:600 }
+.code-box { position:relative } .code-box pre { padding-top:44px } .copy { position:absolute; top:8px; right:8px; border:1px solid #66858c; background:#24424b; color:white; border-radius:4px; padding:4px 8px; cursor:pointer }
+footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px } footer summary { cursor:pointer } footer code { word-break:break-all }
+.skip { position:absolute; left:-10000px } .skip:focus { left:12px; top:12px; z-index:5; background:white; padding:10px }
+@media(max-width:900px) { .layout { display:block; padding:20px 4% } aside { display:none } .mobile-toc { display:block } main { max-width:none; padding:24px } }
+@media(max-width:550px) { html { scroll-padding-top:150px } body { font-size:15px } header { padding:12px 4%; flex-wrap:wrap } header .brand { font-size:16px } header .pages { order:3; flex-basis:100%; margin-right:0 } aside { columns:1 } main { padding:20px 16px } h1 { font-size:27px } .actions a { flex:1 0 100% } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } }
+</style></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><a class="brand" href="./">AAC developer documentation</a>
+<nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html">Release note</a><a href="aeg.html" aria-current="page">Execution graphs</a></nav></header>
+<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#find-an-execution-and-render-it">Find an execution and render it</a><a href="#read-the-graph">Read the graph</a><a href="#application-record-contract">Application record contract</a><a href="#boundaries">Boundaries</a></aside>
+<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#find-an-execution-and-render-it">Find an execution and render it</a><a href="#read-the-graph">Read the graph</a><a href="#application-record-contract">Application record contract</a><a href="#boundaries">Boundaries</a></nav></details><nav class="actions" aria-label="Downloads"><a href="AEG.md" download>Download AEG guide</a><a href="action-taken-v1.json" download>Download action schema</a></nav><h1 id="agent-execution-graph">Agent Execution Graph</h1>
+<p>Version: <code>aac-aeg 0.1.0</code>.</p>
+<p><code>aac-aeg</code> reconstructs observed authority and application activity from local
+sidecar logs, application records and authorized central trace metadata. It
+writes an interactive HTML file; no server is needed to view it. Records and
+output stay on the operator's machine. The renderer never uploads local files.</p>
+<p>Requires Python 3.10 or later:</p>
+<pre><code class="language-sh">python -m pip install aac-aeg
+# To query an existing AAC CLI profile, also install the compatible public CLI:
+python -m pip install 'aac-aeg[online]'
+</code></pre>
+<p>The online extra supplies <code>aac-cli&gt;=0.2.3</code>. Online rendering invokes
+<code>aac chain show --profile PROFILE --token-id ROOT --output json</code> with an argument
+list. It uses the CLI's existing credentials; it keeps no second credential
+store. Offline rendering never invokes <code>aac</code>, even with an ambient profile.</p>
+<h2 id="find-an-execution-and-render-it">Find an execution and render it</h2>
+<p>Sidecars write their configured local telemetry sink. In the CLI-generated
+Compose layout, <code>aac agent status --agent NAME</code> identifies the agent directory;
+<code>compose.env</code> names <code>AAC_AGENT_STATE_DIR</code>. The file is normally
+<code>&lt;agent-directory&gt;/state/telemetry.jsonl</code> on the setup host, mounted at
+<code>/var/lib/aac/telemetry.jsonl</code>. A path on that host is not automatically available
+on another laptop. Use a retained file sink and explicitly obtain any partner
+files you are authorized to hold.</p>
+<pre><code class="language-sh">aac-aeg list --events ./planner-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --since 24h --output table
+
+aac-aeg render --mint-response ./start-response.json \
+  --events ./planner-telemetry.jsonl --events ./booking-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --actions ./booking-actions.jsonl \
+  --output ./graphs/reservation.html
+</code></pre>
+<p>Use <code>--root-token-id ID</code> instead of <code>--mint-response FILE</code> for a root returned
+by local list. Both selectors are mutually exclusive. With exactly one root in
+supplied evidence, the selector may be omitted and the chosen root is printed.
+Ambiguous inputs require a selector; the tool never picks the latest run. Each
+attempt keeps its own root, even when several attempts concern the same order.
+Only actual composite links join independent roots.</p>
+<p>Add <code>--profile PROFILE</code> to query permitted central metadata in the same render
+command. Alternatively, <code>--trace-json FILE</code> reads an earlier <code>aac chain show --output json</code> export offline. These source options are mutually exclusive.
+A selector or profile does not identify the tenant of local files. Repeat
+<code>--events</code> and <code>--actions</code> for ordinary distinct files from multiple agents.</p>
+<p><code>list</code> supports local files, <code>--task-ref</code> (exact match), <code>--since 30m|24h|7d</code>,
+<code>--from TIME</code>, <code>--to TIME</code>, and <code>--output table|json</code>. Explicit times require a
+timezone; the UTC interval includes its start and excludes its end. <code>--since</code>
+and <code>--from</code> are mutually exclusive. Times are observed activity, not guaranteed
+chain start or business completion. Roots, task references and file/line sources
+are included in JSON output. Profile/hybrid listing is not available in this
+release. Actions without a sidecar token-to-root mapping remain diagnostics;
+the tool never joins by purchase-order label or timestamp alone.</p>
+<h2 id="read-the-graph">Read the graph</h2>
+<p>Double-click nodes and edges for details. Token details retain all supplied
+business actions, including intermediate actions, source locations, receipt
+verdicts and available full terminal responses. Application reports are not
+verified business truth. Receipt verdicts are the sidecar's recorded observations;
+this tool does not verify signatures again. A <code>verified</code> verdict alone does not
+supply a reservation ID, amount, payment status or full receipt.</p>
+<p>Partial graphs are normal. Missing ancestors appear as <strong>not observed</strong> references
+only where explicit IDs establish them. The graph does not invent intermediate
+edges, actors, amounts or outcomes. Receiver reporting identity is distinct from
+token creator identity. Conflicting fields show <strong>sources disagree</strong>, with the
+value left uncertain. Sparse central metadata cannot erase richer local records.
+No exactly-once count is implied by the number of records; these formats have no
+universal unique event identifier.</p>
+<p>Central telemetry deliberately omits business payloads, authority caps, exact
+caveat expiry and full receipts. Missing/delayed events from best-effort forwarding
+are a separate limitation. A failed query is reported explicitly; any recoverable
+local HTML remains marked partial and the command exits 4. An opaque 404 is not
+proof of another tenant's chain's existence or nonexistence. Local <code>success</code>
+events do not prove completion of the business task.</p>
+<p>Amounts are shown as raw/grouped numeric values. Currency and unit context must
+come from supplied records; the renderer does not assume USD. Registered business
+labels such as <code>originator_reference</code> are distinguished from sidecar-enforced
+amount/time constraints. The renderer itself enforces no authorization policy.</p>
+<h2 id="application-record-contract">Application record contract</h2>
+<p>The versioned <a href="https://cascadeauth.github.io/aac-starter-guide/action-taken-v1.json">action-taken-v1 JSON Schema</a>
+is also installed as <code>aac_aeg/data/action-taken-v1.json</code>. Any standard JSON Schema
+2020-12 validator can check it. <code>render</code> and <code>list</code> validate while reading and
+report the source file and line. A separate <code>validate</code> command is not supplied.</p>
+<p>Write one UTF-8 JSON object per line with exactly these eight fields:</p>
+<pre><code class="language-json">{&quot;timestamp_unix_seconds&quot;:1789992000,&quot;event_type&quot;:&quot;action_taken&quot;,&quot;tenant_id&quot;:&quot;tnt-11111111-1111-4111-8111-111111111111&quot;,&quot;tenant_short&quot;:&quot;Example tenant&quot;,&quot;token_id&quot;:&quot;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&quot;,&quot;actor_spiffe_id&quot;:&quot;spiffe://tenant.example/booking&quot;,&quot;action_summary&quot;:&quot;Synthetic unpaid reservation created&quot;,&quot;action_payload&quot;:{&quot;task_ref&quot;:&quot;attempt-1&quot;,&quot;reservation_id&quot;:&quot;synthetic-attempt-1&quot;,&quot;amount&quot;:8000,&quot;currency&quot;:&quot;USD&quot;,&quot;payment_status&quot;:&quot;unpaid&quot;}}
+</code></pre>
+<p><code>tenant_id</code> is the canonical registered <code>tnt-&lt;UUIDv4&gt;</code> identity. <code>tenant_short</code>
+is a display label, never identity or authority. Obtain <code>token_id</code> from the
+verified invocation context, not an untrusted business payload. The workload's
+SPIFFE ID supplies <code>actor_spiffe_id</code>. Use the action's wall-clock epoch seconds.
+<code>action_payload.task_ref</code> is required; other payload fields are tenant-defined.
+Convergence records use the triggering arrival's token and a labeled <code>branches</code>
+map of branch token references. Do not add a ninth required root field. The
+sidecar record provides root mapping.</p>
+<p>Language-neutral producer steps: construct the eight-field object after the
+business decision; encode it with the language's JSON encoder; append the encoded
+object and one newline to the application's own retained file. Standard-library
+Python writing example (no AAC SDK dependency):</p>
+<pre><code class="language-python">import json
+with open(&quot;business-actions.jsonl&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as stream:
+    stream.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + &quot;\n&quot;)
+</code></pre>
+<p>Emit forwarded/refused/settled business decisions; do not turn a protocol failure
+or an <code>await</code> hold into completed work. Existing log systems can export this same
+format. A filename is a convention and does not establish tenant identity.</p>
+<h2 id="boundaries">Boundaries</h2>
+<p>Designed for tens of displayed nodes in a presentation, roughly 100–200 for
+investigation with pan/zoom; this is planning guidance, not a certified cap.
+Ordinary repeated attempts in current files are supported. Rotated/copied-file
+qualification, detailed competing-source presentation and standalone validation
+are separate future work. No remote log collector or central business-data search
+is included. Self-contained HTML retains the embedded dependency license notices.</p>
+<p>Exit codes: 0 means the requested local operation completed, 2 means input,
+selection or output failure, and 4 means a central query failed but a partial
+local graph was written. These codes are not business outcomes.</p>
+<p>The Python library imports as <code>aac_aeg</code>. Default library output is
+<code>./aeg-out</code>, never the installed package directory; the CLI requires <code>--output</code>.</p>
+
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="AEG_LICENSE">License</a> · <a href="AEG_NOTICE">Third-party notices</a></p>
+<details><summary>Release identity and document checksum</summary><pre><code>{
+  &quot;version&quot;: &quot;v0.4.4&quot;,
+  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1&quot;,
+  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
+  &quot;guide_sha256&quot;: &quot;34d57d46ea789ab2e5cbe14f7b765070ad621140ec760cbfadca8a333a337613&quot;,
+  &quot;template_sha256&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
+  &quot;document_sha256&quot;: {
+    &quot;DEVELOPER_BETA_STARTER_GUIDE.md&quot;: &quot;34d57d46ea789ab2e5cbe14f7b765070ad621140ec760cbfadca8a333a337613&quot;,
+    &quot;KEYS_AND_CERTIFICATES.md&quot;: &quot;a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4&quot;,
+    &quot;LICENSE&quot;: &quot;40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376&quot;,
+    &quot;THIRD_PARTY_NOTICES.md&quot;: &quot;073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116&quot;,
+    &quot;sidecar-config.template.yaml&quot;: &quot;5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d&quot;,
+    &quot;DOCKER_HUB_OVERVIEW.md&quot;: &quot;e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d&quot;,
+    &quot;RELEASE_NOTES.md&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;,
+    &quot;AEG.md&quot;: &quot;4119d42b1159d1ee8a5b94bb85a73bc87e54e0557e1ba7bfd4814f7bbb4a380e&quot;,
+    &quot;action-taken-v1.json&quot;: &quot;d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf&quot;,
+    &quot;AEG_LICENSE&quot;: &quot;0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594&quot;,
+    &quot;AEG_NOTICE&quot;: &quot;19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37&quot;
+  },
+  &quot;aeg_documentation_source&quot;: &quot;reviewed-source&quot;,
+  &quot;documentation_revision&quot;: &quot;2e65dae9673c409f42db75da82cfb4dc6490ec9e&quot;,
+  &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
+  &quot;components_sha256&quot;: &quot;8e1cb4a84665f53e0de71dc142e90c3eb4542d7f128c700f07d1d32dfef2e71a&quot;
+}</code></pre><a href="release.json">Download release record</a></details></footer>
+</main></div><script>
+document.querySelectorAll('pre').forEach(pre => {
+  const box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  const button = document.createElement('button'); button.className = 'copy';
+  button.type = 'button'; button.textContent = 'Copy'; button.setAttribute('aria-label', 'Copy code');
+  button.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(pre.querySelector('code').textContent); button.textContent = 'Copied'; }
+    catch { button.textContent = 'Select and copy'; }
+    setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+  }); box.appendChild(button);
+});
+</script></body></html>
