@@ -8,7 +8,7 @@
   },
   "packages": {
     "aac-cli": {
-      "version": "0.2.2",
+      "version": "0.2.3",
       "url": "https://pypi.org/project/aac-cli/"
     },
     "aac-invoke-auth": {
