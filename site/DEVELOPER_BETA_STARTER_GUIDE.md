@@ -105,15 +105,14 @@ trust domain, so there is no DNS propagation wait unless you choose to bring a
 domain of your own. The 5–10 minute Quick path applies once your tenant
 configuration, credentials and agent are ready. Start with the path you need:
 
-The commands use a Bash-compatible shell and are tested with Python 3.12.
-The AAC Python packages support Python 3.10 or later; use your supported
-interpreter executable in place of `python3.12` when creating the environment.
+The commands use a Bash-compatible shell. The AAC Python packages require
+Python 3.10 or later; `python3` below must refer to a supported interpreter.
 New to AAC terminology? Start with
 the [workflow overview and glossary](#how-a-delegated-workflow-works).
 
 | Path | Have these ready |
 |---|---|
-| Register a developer tenant | A GitHub or Google account; Python 3.10+ with `venv` (examples use 3.12); a protected directory or secret manager for credentials. AAC assigns your trust domain, so no DNS record is required |
+| Register a developer tenant | A GitHub or Google account; Python 3.10+ with `venv`; a protected directory or secret manager for credentials. AAC assigns your trust domain, so no DNS record is required |
 | Run the local Python example | The registered tenant and trust domain; Python environment with the companion libraries; OpenSSL 3.x; an installed sidecar; free local ports 8000, 8080 and 9443. The development PKI recipe below supplies the certificates. |
 | Run the container | Docker and your running agent container, plus prepared configuration/key and writable state directories |
 | Install a standalone binary | ORAS and Cosign for the signed bundle; choose the archive matching Linux/macOS and AMD64/ARM64 |
@@ -162,29 +161,34 @@ existing publisher where available: a tenant with a single trust domain needs
 one process, and a tenant that keeps its assigned domain and adds its own runs
 two, with root-key publishing enabled in exactly one of them.
 
+The package pages and downloads below are public. Installing these artifacts
+does not require a GitHub, Docker Hub or PyPI account. Registering and managing
+your AAC tenant does require the sign-in described later in this guide.
+
 | Artifact | Package or registry location | Type | When to install |
 |---|---|---|---|
 | AAC CLI | [aac-cli](https://pypi.org/project/aac-cli/) on PyPI | Command-line administration tool | Used by the tenant operator for this guide's onboarding, credentials, public trust and trace commands. The running sidecar does not depend on the CLI. |
 | AAC Sidecar container (default) | [docker.io/cascadeauth/aac-sidecar](https://hub.docker.com/r/cascadeauth/aac-sidecar) | Ready-made Linux container image | Choose this for Docker/Kubernetes. This and the standalone binary below are alternative installations of the same sidecar. |
 | Trust-anchor publisher Docker container | [ghcr.io/cascadeauth/aac-trust-anchor-publisher](https://github.com/orgs/CascadeAuth/packages/container/package/aac-trust-anchor-publisher) | Containerized public-trust publisher | Choose this for a container host or orchestrator to publish/manage the tenant's public root keys and SPIFFE CA bundle. Docker or the orchestrator manages its lifecycle. |
 | Trust-anchor publisher Python package (alternative) | [aac-trust-anchor-publisher](https://pypi.org/project/aac-trust-anchor-publisher/) on PyPI | Python wheel that installs the publisher daemon command | Choose this for installation in a host/VM's Python virtual environment; use systemd on a managed Linux host where applicable. It requires Python, unlike the sidecar's compiled standalone binary. |
-| AAC Sidecar standalone bundle (alternative) | `docker.io/cascadeauth/aac-sidecar`, using a `<version>-bundle` tag with ORAS | Download bundle containing standalone binaries, guide/template and audit evidence | Choose a standalone binary if you are not using the sidecar container. Container users can read the guide and download its template on the public documentation site. Use the bundle for standalone installation, offline copies or deeper audit; no second sidecar installation is needed. |
+| AAC Sidecar standalone bundle (alternative) | `oras pull --output ./aac-sidecar-bundle docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle` | Download containing standalone binaries, guide/template and audit evidence | Choose this if you are not using the container. [Install ORAS](https://oras.land/docs/installation/), then follow the [standalone installation steps](#alternative-standalone-binary-installation-with-oras). Container users can download the template directly from this site. |
 | Invoke authentication | [aac-invoke-auth](https://pypi.org/project/aac-invoke-auth/) on PyPI; optional `[fastapi]` extra | Framework-independent Python signing/verification library, with an optional FastAPI/Starlette adapter | Install it in a Python workload that uses these helpers. Use `[fastapi]` for the supplied middleware/dependency integration or this guide's Python example. Other stacks need compatible pairing authentication; they do not need to install this Python package. |
 
 **Image verification does not require the standalone bundle.** The container
 signature is attached to its registry image and can be checked directly with
 Cosign, followed by a pull of the verified digest. The bundle adds standalone
 binaries and the SPDX/provenance/OCI files used by the optional deep audit.
-The `-bundle` artifact is downloaded with ORAS; it is not a second container
-to run beside the sidecar.
+ORAS is a command-line tool for downloading files stored in a container
+registry. The command above saves the bundle's files in `./aac-sidecar-bundle`;
+use a new, empty directory. Use `oras pull` for these files and `docker pull`
+for the runnable sidecar image. ORAS is not needed to run the sidecar.
 
-### Versions used in this guide
+### Installing current releases
 
-Current installation examples select AAC Sidecar **`v0.4.4`** from the
-[released-component record](https://cascadeauth.github.io/aac-starter-guide/released-components.json). The image and the
-`-bundle` artifact use that same sidecar version. The site records its document
-revision separately, so guide corrections do not require a new sidecar release.
-The record also lists the exact sidecar image and bundle digests for these examples.
+Use the current release of each AAC artifact. The sidecar installation commands
+below use the current published version. The image and standalone bundle use
+the same version. Exact versions
+and digests are available in the [release record](https://cascadeauth.github.io/aac-starter-guide/released-components.json).
 
 The sidecar has no `latest` tag, so an untagged pull will fail and every sidecar
 command here names the version. Its companion packages are different: install
@@ -195,12 +199,8 @@ it —
 - [`aac-trust-anchor-publisher`](https://pypi.org/project/aac-trust-anchor-publisher/) — publishes the tenant's public trust material
 - [`aac-invoke-auth`](https://pypi.org/project/aac-invoke-auth/) — verifies sidecar pairing signatures in a Python application
 
-This guide's commands and examples were executed against `aac-cli` 0.2.2 and
-`aac-invoke-auth` 0.1.2. That is a record of what was tested, not a requirement:
-install the current release of each, and if a command here is not recognised by
-the version you installed, install the versions named above. Pin a companion
-version only if your own deployment needs a fixed one; this guide does not
-require any.
+Upgrade an existing companion installation before following this guide. Pin a
+version only when your own deployment needs a fixed one.
 
 For the advanced verification path, reject a tag that does not resolve to a
 SHA-256 digest or an artifact whose signature or digest fails.
@@ -266,9 +266,8 @@ Check HTTPS reachability without credentials or tenant creation:
 curl --fail --silent --show-error https://api.stage.cascadeauth.dev/healthz
 ```
 
-The response includes `status: ok` and `control_plane_version`; the current stage
-qualification uses control-plane `0.1.4`. This is a liveness
-check, not proof that your tenant, trust material, or sidecar is ready.
+The response includes `status: ok` and `control_plane_version`. This is a
+liveness check, not proof that your tenant, trust material, or sidecar is ready.
 
 ## Supported deployments and endpoint allowlist
 
@@ -312,11 +311,10 @@ uses only loopback peer endpoints and the explicit stage trust/data hosts.
 
 ## Configuration and workflow state
 
-Only `state_store.hot.source: in-process` is supported for native convergence
-arrivals. Any `state_store.cold` block refuses startup with a removal remedy.
-Buffered arrivals are lost on process restart and become eligible for eviction
-at ten minutes. Durable replay protection and retained A2A retry results are
-separate stores; neither preserves these arrivals or the application's reports.
+Keep business progress and reports in your application's storage. Messages
+waiting for other branches of a workflow are buffered temporarily and can be
+lost when the sidecar restarts. Replay protection and retry-result storage do
+not replace an application database.
 
 For work spanning days or weeks, the tenant application must retain its own
 business evidence and progress, then obtain independently authorized fresh
@@ -324,28 +322,28 @@ chains at checkpoints. It may explicitly reuse a `task_ref` for correlation.
 Stored evidence does not renew expired authority; AAC does not supply a workflow
 database or automatic long-running orchestration.
 
-Timeouts are top-level configuration. An explicit `destinations.<name>.timeout_ms`
-wins; otherwise it inherits `timeouts.cross_org_dispatch_timeout_seconds`,
-defaulting to 5 seconds (5000ms). Each native retry receives that timeout, with
-backoff outside the per-attempt budget. A2A additionally keeps its own total
-operation deadline. Invoke and global dispatch budgets must be numeric YAML
-scalars, finite and positive; booleans, quoted numbers and null refuse. The
-invoke minimum is one nanosecond and the dispatch minimum one millisecond;
-the upper representation bound is 9223372036 seconds. Destination milliseconds
-must be positive and no greater than 9223372036000, or the smaller A2A deadline
-when enabled. Seconds-to-milliseconds conversion truncates binary floating-point
-values: `1.001` can become 1000ms; use explicit `timeout_ms: 1001` for exactness.
+You can configure request timeouts in your sidecar YAML when an agent or peer
+needs more or less time to respond:
 
-Configured class/destination `predicates.valid_until` refuses startup. Use
-`valid_for` for generated authority deadlines. Signed-token expiry, business
-payload dates, library expiry caps and A2A request expiry remain separate.
+| Tenant setting | Use it to |
+|---|---|
+| `timeouts.agent_invoke_timeout_seconds` | Limit how long the sidecar waits for your local agent |
+| `timeouts.cross_org_dispatch_timeout_seconds` | Set the default timeout for a request to another sidecar |
+| `destinations.<name>.timeout_ms` | Override that default for one destination, in milliseconds |
+
+Use positive, unquoted numbers. A destination override takes precedence over
+the dispatch default. For A2A, keep it within the configured overall operation
+deadline. Leave these settings at their defaults unless your application needs
+an adjustment.
+
+Set authority duration with `valid_for` on the class or destination. Business
+dates in the payload do not extend that authority or the request timeout.
 
 ## Authority, predicates and A2A integration
 
 Native originators call `POST /v1/agent/mint-root` or `/v1/agent/delegations`
-on the sidecar's external TLS listener. **Starting with v0.4.0, both aliases
-require the existing pair's AAC1-HMAC-SHA256 signature, including in dev mode.**
-Upgrade each actual chain-start caller to sign before upgrading the sidecar.
+on the sidecar's external TLS listener. **Both aliases require the pair's
+AAC1-HMAC-SHA256 signature, including in dev mode.** Sign every chain-start request.
 Receiving or forwarding applications are not automatically chain-start callers.
 The example client below signs its native request with the published helper.
 
@@ -367,23 +365,21 @@ ceiling intersection: a dynamic amount normally has one source, the request.
 Names must be in the registry below. Values are nonempty strings without comma
 or colon; enforced `amount_max`, `amount_min` and `valid_from` also accept JSON
 integers and normalize to canonical decimal strings. Booleans, fractions,
-malformed integer text and out-of-range values refuse before mint. The merged
-business-predicate budget is 7,900 UTF-8 bytes. `applied_predicates` reports the
-T1 map: static values retain their existing JSON types, obligation values are
+malformed integer text and out-of-range values refuse before mint. Keep
+predicates compact; put full business reports in your application's storage.
+`applied_predicates` reports the accepted limits: static values retain their existing JSON types, obligation values are
 strings, and generated `valid_until` is an integer; audience is a separate field.
 
 A top-level request `valid_until` or obligation named `valid_until` always
 refuses, even when equal or shorter. Remove it and use the class's configured
-`valid_for`. Payload dates remain business data. Root lifetime bounds, generated
-signed expiry, A2A shortening and library absolute caps are unchanged.
+`valid_for`. Payload dates remain business data.
 
 Sign uppercase POST, the **exact alias used**, timestamp, exact transmitted raw
 body and covered X-AAC headers using the pairing protocol below. Serialize once
 and send those bytes; a signature made for the other alias fails. Each auth
-header appears exactly once; duplicate covered headers also fail. Admission
-order is declared size (413), media type (415), streamed size (413), pairing,
-UTF-8/JSON/schema, authority input, class/configuration, merge/correlation, mint.
-The existing inclusive 1,000,000-byte/512-depth/256-digit JSON bounds remain.
+header appears exactly once; duplicate covered headers also fail. Send a compact
+JSON request with the correct content type. Oversized or malformed requests
+are rejected without creating authority.
 Missing pairing configuration is 503 `ERR_CONFIG_ERROR`; failed pairing is 401
 `ERR_PAIRING_AUTH_FAILED`; invalid native predicates, conflicts or reserved
 expiry are 422 `ERR_INVALID_MINT_INPUT`. An invalid issuer retains
@@ -447,7 +443,7 @@ valid_from, valid_until
 
 Use nonempty scalar values without comma or colon (reserved encoding
 separators). `amount_max`, `amount_min`, `valid_from` and `valid_until` use
-canonical nonnegative decimal integers from 0 through 9223372036854775807;
+nonnegative decimal integers;
 time values are Unix seconds. A later amount cap cannot increase, an amount
 floor or not-before time cannot decrease, and the effective expiry is the
 minimum expiry in the chain. External chains require an expiry and have a
@@ -486,11 +482,11 @@ sanitized receipts in your own tenant record; never send keys to AAC.
 | Managed identity | Selected system/user-assigned identity and least-privilege key `get`/`sign`; local workload DPoP stays local |
 | Failures | Disabled key, removed grant, auth failure, throttling, timeout, malformed/wrong-key response: no minted artifact and no fallback |
 | Persistent storage | Provider/SKU/class/mount options; private ownership; remount and replacement retain bbolt; missing/corrupt/insecure/locked files fail closed |
-| Capacity | Measure storage and project 1,728,000 live dispatch IDs at 20 claims/second for 86,400 seconds; multiply by the selected per-response reservation, then add measured storage overhead and headroom. Qualify restart/scale-to-zero; sample capacities are insufficient for that projection. |
-| A2A bounds and load | In an agreed test window: 5 requests/second for 15 minutes, then 20/second for 60 seconds, at most 20 concurrent (5,700 total); require zero failures and record p95, saturation and retry/conflict outcomes. Verify configured body/depth/node/deadline/cache bounds. |
+| Capacity | Allocate storage for your expected traffic and retention period, including saved responses. Confirm records survive replacement and that capacity limits produce a clear, recoverable failure. |
+| A2A requests | Check that your normal request sizes and response times fit your configured limits. Confirm retries do not repeat a completed business action. |
 | Connectivity | Public trust polling, exact workload projection, central metadata delivery and local terminal evidence |
 | Lifecycle | Credential rotation/revocation, upgrade, rollback, rejected-beta handling, local cleanup and retained-state custody |
-| Cost/support | Measured quantities, currency/pricing timestamp and estimate assumptions; responsible operator and escalation contact |
+| Cost/support | Your expected cloud costs, responsible operator and escalation contact |
 
 When using `signers`, configure each purpose with `provider: azure-key-vault`
 and an exact versioned `key_uri`; omit that purpose's file-backed private-key
@@ -518,7 +514,7 @@ revocation and recovery. License questions go to `legal@cascadeauth.com`.
 
 ### 1. Verify and pull the image
 
-Install Docker and Cosign 3.1.3 or a compatible later verifier. Verify the
+Install Docker and Cosign. Verify the
 published digest against CascadeAuth's GitHub Actions keyless identity:
 
 ```bash
@@ -659,9 +655,9 @@ Install the AAC CLI on the operator's machine in a dedicated virtual
 environment:
 
 ```bash
-python3.12 -m venv .aac-tools
+python3 -m venv .aac-tools
 . .aac-tools/bin/activate
-python -m pip install aac-cli
+python -m pip install --upgrade aac-cli
 
 aac --version
 aac profile --help
@@ -675,7 +671,7 @@ Skip this wheel install if you use its container deployment or an existing
 tenant-operated publisher:
 
 ```bash
-python -m pip install aac-trust-anchor-publisher
+python -m pip install --upgrade aac-trust-anchor-publisher
 aac-trust-anchor-publisher --help
 ```
 
@@ -684,7 +680,7 @@ optional FastAPI example or your own FastAPI/Starlette integration. It can use
 the same environment for the local example:
 
 ```bash
-python -m pip install 'aac-invoke-auth[fastapi]'
+python -m pip install --upgrade 'aac-invoke-auth[fastapi]'
 python -c 'import aac_invoke_auth; print(aac_invoke_auth.__file__)'
 ```
 
@@ -694,13 +690,13 @@ without the `[fastapi]` extra. Other workload stacks must provide equivalent
 pairing authentication before trusting sidecar requests. Installing this Python
 package is conditional; authenticating the paired calls is not.
 
-For publisher 0.2.2 deployments with separate ingest and public trust hosts, set
+For deployments with separate ingest and public trust hosts, set
 `AAC_TAP_SPIFFE_BUNDLE_READ_URL` to the full public SPIFFE bundle URL supplied
 for the trust domain. For stage that is
 `https://trust.stage.cascadeauth.dev/.well-known/spiffe-bundle/<trust-domain>`.
 Signed uploads continue to use the supplied API-host ingest URL.
 
-Create a local stage profile after installing the exact CLI above:
+Create a local stage profile after installing the CLI:
 
 ```bash
 aac profile create stage \
@@ -1052,7 +1048,7 @@ agent, integrate pairing authentication into its existing handler and server.
 In the same virtual environment used for the companion tools:
 
 ```bash
-python -m pip install 'uvicorn==0.52.4' 'httpx==0.28.1' 'PyYAML==6.0.3'
+python -m pip install --upgrade uvicorn httpx PyYAML
 ```
 
 Uvicorn serves the example FastAPI application over local HTTP; HTTPX sends the
@@ -1072,37 +1068,26 @@ profile remains development-only and is reported as `development-memory`.
 | Basic | Bounded process-local memory; one atomic claim per running history. Restart loses history; replicas do not coordinate |
 | Shared durable | `backend: valkey`, `deployment_profile: ha-retained-write-safe`; existing qualified retained-write-safe authority, authenticated TLS and workload-scoped credentials. Retained claims coordinate replicas of the exact receiver SPIFFE identity |
 
-Shared durable failures never select Basic. Go still refuses the Python-only
-development/reference `standalone-reference` runtime. Profile support does not
-change this release's developer-beta license, qualification or SLA terms.
+Shared durable failures never fall back to Basic. Choose one of the supported
+profiles above; neither changes the developer-beta license or support terms.
 
-Basic retains claims until `max(accepted_at + 120 seconds, proof_exp)` and never
-evicts unexpired records for new traffic. Duplicate proofs return 403
-`ERR_DPOP_REPLAY`; capacity returns 503 `ERR_REPLAY_AUTHORITY_SATURATED`; a
-closed/unavailable replay component returns 503 `ERR_REPLAY_AUTHORITY_UNAVAILABLE`.
-Basic has no shared epoch/quarantine or Valkey timeout. Capacity returns as old
-claims expire, possibly one second after a refusal, rather than after a fresh
-120-second outage. `/readyz` reports `replay_backend` and `replay_profile`;
-Basic readiness means the component is open, not that another claim has room.
-One INFO startup record states the selected guarantees without identifiers or
-credentials. Development memory is never labelled supported Basic.
+Basic keeps replay records until they expire; it does not discard them to make
+room for new traffic. Duplicate proofs return 403 `ERR_DPOP_REPLAY`. Full
+storage returns 503 `ERR_REPLAY_AUTHORITY_SATURATED`; reduce admitted traffic
+or wait for records to expire. An unavailable replay store returns 503
+`ERR_REPLAY_AUTHORITY_UNAVAILABLE`. Check `/readyz` for the selected
+`replay_backend` and `replay_profile` when diagnosing the deployment.
 
-Size `memory_max_entries` (default 100,000; maximum 1,000,000) for peak new
-claims/second × 120 seconds, plus bursts and measured headroom. At 20 new
-claims/second, 2,400 entries is the starting point before headroom. Include the
-expiry index and other sidecar memory. Claims are recorded after cryptographic,
-method/URL/token and time checks but before final presenter/recipient checks,
-so size for claims from requests rejected later as well as successful requests.
+For Basic, `replay_protection.memory_max_entries` controls capacity. Size it for
+your expected concurrent replay records, including traffic bursts and requests
+that later fail authorization. A capacity refusal means you should reduce
+admitted traffic or increase capacity within your host's available memory.
 
 A still-valid proof can pass replay checking again after a Basic restart or on
-another replica. Its declared lifetime is at most 60 seconds, but the existing
-30-second future-iat allowance permits **90 seconds remaining validity** at
-first admission (`now=1000`, `iat=1030`, `exp=1090`); `exp == now` remains valid.
-N uninterrupted histories may each claim once; restarts create more histories,
-so N replicas is not an overall N-acceptance bound. Replay admission is separate
-from later authorization and business success. Fresh proofs do not promise
-business exactly-once execution. Retained A2A retry results remain separate.
-Elapsed-time bounds assume synchronized, non-regressing clocks.
+another replica. Choose Shared durable when replay history must survive
+replacement or coordinate replicas. Your application must still prevent repeat
+business actions; a fresh proof does not make an operation safe to repeat.
+Keep clocks synchronized.
 
 #### Operator-led cutover to Shared durable
 
@@ -1399,7 +1384,7 @@ config['a2a']['egress_idempotency']['state_file']='/var/lib/aac/a2a-egress.db'
 (stage/'sidecar/sidecar-config.yaml').write_text(yaml.safe_dump(config,sort_keys=False))
 for name in ('agent.py','demo_client.py'):shutil.copyfile(base/name,stage/'agent'/name)
 (stage/'agent/Dockerfile').write_text('''FROM python:3.12-slim
-RUN python -m pip install --no-cache-dir aac-invoke-auth[fastapi] uvicorn==0.52.4 httpx==0.28.1
+RUN python -m pip install --no-cache-dir aac-invoke-auth[fastapi] uvicorn httpx
 WORKDIR /app
 COPY agent.py demo_client.py /app/
 RUN chmod 0444 /app/*.py
@@ -1518,7 +1503,7 @@ Register the second workload, then install the helper's local dependencies:
 ```bash
 aac tenant add-workload --profile "$AAC_PROFILE" \
   --spiffe-id "spiffe://${AAC_TRUST_DOMAIN}/demo/peer" --display-name 'Synthetic peer agent'
-python -m pip install 'cryptography==50.0.1' 'PyYAML==6.0.3'
+python -m pip install --upgrade cryptography PyYAML
 ```
 
 Save the following as `configure_peer.py` in `AAC_DEMO_DIR`. It creates fresh,
@@ -1758,7 +1743,7 @@ workload's SPIFFE domain** and the expected tenant, workload, root and task
 from your own registration/request records. Never derive those expectations or
 trust anchors from the unverified JWS itself.
 
-Install `python -m pip install 'cryptography==50.0.1'` in an isolated verifier
+Install `python -m pip install --upgrade cryptography` in an isolated verifier
 environment. Save the following as `verify_terminal.py`. It implements the
 supported direct-CA, single-leaf Ed25519/P-256 profile, a 64-KiB input bound and a fixed 30-second
 certificate clock tolerance. It checks the signature and identity/correlation
@@ -2066,9 +2051,10 @@ These library error names are distinct from the sidecar's `ERR_*` envelope.
 
 Use this alternative to the sidecar container for a bare VM, systemd host,
 or macOS development machine. Container users can also download the bundle
-for the guide, template or deep audit without installing its standalone binary. ORAS is only the registry client used to pull
-the signed generic bundle; it is not linked into or required by the sidecar at
-runtime.
+for offline documentation or deep audit without installing its standalone binary.
+[Install ORAS](https://oras.land/docs/installation/) to download the files and
+[install Cosign](https://docs.sigstore.dev/cosign/system_config/installation/) to
+verify their signatures. Neither tool is needed to run the sidecar afterward.
 
 ```bash
 mkdir aac-sidecar-v0.4.4
@@ -2096,7 +2082,7 @@ bash ./verify-developer-beta.sh . v0.4.4
 ### Optional deep artifact audit
 
 For a reproducible audit beyond signature/checksum verification, install
-Python 3.10+ and Go 1.26.6 (or a compatible later Go metadata reader), then run
+Python 3.10+ and Go, then run
 this **after** the Cosign verification above:
 
 ```bash
