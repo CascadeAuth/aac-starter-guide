@@ -1,12 +1,12 @@
 {
-  "base_site_sha256": "743e1478a785f3db5ab6a784a091e56d310b3c9ddc97f348fd130e90ace9eded",
+  "base_site_sha256": "3d232cd0575c15a88f8e4b7ba287e7c4b548dc59b2e46a862a61d1f8afc4e615",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "AEG.md": "70c1e9f499672e24670cca9e8cf9a35afb14e7e0411626296d2bea42e0e4b30f",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
-    "DEVELOPER_BETA_STARTER_GUIDE.md": "b82a2ed99ae86ae67e01f146f5d97649024b6bdfeb39f92e88c9df99977ca09d",
+    "DEVELOPER_BETA_STARTER_GUIDE.md": "6f40cc3882e0a86e494bc509bb48e010b4db79b8e5b9989ee0e0765e048abafb",
     "DOCKER_HUB_OVERVIEW.md": "e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d",
     "KEYS_AND_CERTIFICATES.md": "a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -21,13 +21,13 @@
     "cli/0.2.4/reference/aeg-render.html": "a3ce95fa39b0186b3a62e8552f50ea979c7cd8d50a04a1a4ba2ffb805fdcb26d",
     "cli/0.2.4/reference/index.html": "98407086bc57510f4dccbd2f7429fb83aa2d7b134143496a76c31d9a3cb0273f",
     "cli/index.html": "69fa6a3762c12f4d0da0294a496dc1cdb4ddc2fff3d3bb6f026a5a4d4f052e27",
-    "index.html": "2a64d0fa7d3ab8074f48c501b48a794c009d3e7b7e3cdb6c61bf1dbc973f6f2c",
-    "keys-and-certificates.html": "7067d5e0a3cda2a07def712bf48c81cb3ef3118d77bf1a61f99d48755e95592f",
-    "release-notes.html": "c736c1585cb792514d13e17187876d96b96ced4fc2aef7a940fcf21210197ce8",
-    "release.json": "3ad1cc5e06b34d2881d8a6e36428995d520358bf02228f51538e3b49a07513c2",
+    "index.html": "5b89503fe7116789000683be45f37579b0ea67710b08be2db43598a900ec8fb6",
+    "keys-and-certificates.html": "c5af334dcde33d7f670f40bf600f4caa99851e74d3aefb7cd40a02640d9b40d7",
+    "release-notes.html": "2e19350b2cafbee9e23a6cb7e2bde408a0beaa7d7741d829d03a97dee0a2bf8f",
+    "release.json": "0fb520d0abc3ef5c1c6b00f2d27410baf2b140fb44d455f3160cc40b72737dca",
     "released-components.json": "548c6fc83d9db3eeed5a73039c1af8827aae9ba6eb63c47df27b4d8fc8f4ed7e",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "schema_version": 1,
-  "updated_component": "aac-cli"
+  "updated_component": "sidecar"
 }

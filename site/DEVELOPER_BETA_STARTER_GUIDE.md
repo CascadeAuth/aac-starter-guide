@@ -2220,6 +2220,10 @@ Use the included license for permitted use and redistribution terms.
 
 ## Execution graphs
 
+Install or upgrade `aac-cli` to get both `aac` and `aeg` in the same Python
+environment. Online graph queries use that CLI's selected profile and tenant
+API key; offline graph rendering and local listing need no login.
+
 Use the [Agent Execution Graph guide](https://cascadeauth.github.io/aac-starter-guide/aeg.html)
 for installation, local run discovery, and rendering local and authorized central
 evidence into self-contained HTML. The public reservation demo prints actual
