@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Graph guide — AAC CLI 0.2.4</title><style>
+body{margin:0;color:#19313b;background:#f9fbfc;font:16px/1.65 system-ui,sans-serif}
+header,main,footer{max-width:1000px;margin:auto;padding:20px 28px}
+header{border-bottom:1px solid #dce6e8}nav{display:flex;gap:18px;flex-wrap:wrap}
+a{color:#087e83}h1,h2,h3{line-height:1.3;scroll-margin-top:20px}h2{margin-top:40px}
+pre{overflow:auto;padding:16px;background:#edf3f4;border-radius:6px}
+code{font-size:.92em}table{border-collapse:collapse;display:block;overflow:auto}
+th,td{padding:8px 12px;border:1px solid #dce6e8;text-align:left;vertical-align:top}
+.version,footer{color:#526770;font-size:14px}main{padding-bottom:60px}
+</style></head>
+<body><header><nav aria-label="Main navigation"><a href="/aac-starter-guide/">Developer guide</a>
+<a href="/aac-starter-guide/aeg.html">Execution graphs</a><a href="/aac-starter-guide/cli/0.2.4/guide/">Graph guide</a>
+<a href="/aac-starter-guide/cli/0.2.4/reference/">Command reference</a></nav><p class="version">AAC CLI 0.2.4</p></header>
+<main><h1 id="agent-execution-graph">Agent Execution Graph</h1>
+<p>This guide describes the <code>aeg</code> command supplied by <code>aac-cli</code>.</p>
+<p><code>aeg</code> reconstructs observed authority and application activity from local
+sidecar logs, application records and authorized central trace metadata. It
+writes an interactive HTML file; no server is needed to view it. Records and
+output stay on the operator's machine. The renderer never uploads local files.</p>
+<h2 id="install-and-select-a-profile">Install and select a profile</h2>
+<p>Requires Python 3.10 or later. Install in a Python virtual environment, or use
+pipx to keep one dedicated CLI environment:</p>
+<pre><code class="language-sh">python -m pip install --upgrade aac-cli
+# Alternatively:
+pipx install aac-cli
+# For subsequent pipx upgrades:
+pipx upgrade aac-cli
+</code></pre>
+<p>The one package supplies both <code>aac</code> and <code>aeg</code>. Check <code>aac --version</code> and
+<code>aeg --version</code> after upgrading. The graph command's version identifies its CLI
+release and renderer source identity; there is no separate renderer upgrade.</p>
+<p>For an online render, pass <code>--profile PROFILE</code> to <code>aeg</code>. It uses the same
+installed CLI's <code>chain show</code> implementation and your selected profile's tenant
+API key. This is the trace API key, not the browser/SSO administration session.
+There is no second credential store. Installation does not create a tenant or
+its credentials; configure the CLI profile first. Offline rendering and local
+listing need no login and ignore any ambient profile unless <code>--profile</code> is
+explicitly supplied to render. Local inputs are never uploaded.</p>
+<h2 id="migrate-a-standalone-aeg-installation">Migrate a standalone AEG installation</h2>
+<p>Keep your AAC CLI home (<code>~/.aac</code> by default or <code>AAC_CLI_HOME</code>), profiles,
+credentials, agent folders, retained evidence and generated graphs. None of the
+commands below deletes that material.</p>
+<p>For pip installations, activate the environment you intend to keep, upgrade
+<code>aac-cli</code>, and verify both commands. Remove <code>aac-aeg</code> only from the environment
+where you previously installed it:</p>
+<pre><code class="language-sh">python -m pip install --upgrade aac-cli
+aac --version
+aeg --version
+python -m pip uninstall aac-aeg
+</code></pre>
+<p>For separate pipx installations, inspect <code>pipx list</code>, install or upgrade
+<code>aac-cli</code>, verify its <code>aac</code> and <code>aeg</code> commands, then use <code>pipx uninstall aac-aeg</code>
+if that is the legacy environment you intend to remove. A legacy <code>[online]</code>
+installation can have its own old CLI dependency; removing that pipx environment
+does not upgrade another CLI environment. Do not delete unrelated environments.</p>
+<p>The CLI owns only <code>aac</code> and <code>aeg</code>; the legacy package alone owns <code>aac-aeg</code>.
+Change saved scripts to call <code>aeg</code>. During transition both packages can coexist
+in the same environment without overlapping renderer modules or command files.
+Uninstalling the legacy package leaves the new commands intact. If your shell
+still finds an older command, inspect <code>command -v aac</code> and <code>command -v aeg</code>,
+refresh its command cache (<code>hash -r</code> where supported), and select the environment
+you upgraded. The tool does not silently uninstall other copies for you.</p>
+<h2 id="find-an-execution-and-render-it">Find an execution and render it</h2>
+<p>Sidecars write their configured local telemetry sink. In the CLI-generated
+Compose layout, <code>aac agent status --agent NAME</code> identifies the agent directory;
+<code>compose.env</code> names <code>AAC_AGENT_STATE_DIR</code>. The file is normally
+<code>&lt;agent-directory&gt;/state/telemetry.jsonl</code> on the setup host, mounted at
+<code>/var/lib/aac/telemetry.jsonl</code>. A path on that host is not automatically available
+on another laptop. Use a retained file sink and explicitly obtain any partner
+files you are authorized to hold.</p>
+<pre><code class="language-sh">aeg list --events ./planner-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --since 24h --output table
+
+aeg render --mint-response ./start-response.json \
+  --events ./planner-telemetry.jsonl --events ./booking-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --actions ./booking-actions.jsonl \
+  --output ./graphs/reservation.html
+</code></pre>
+<p>Use <code>--root-token-id ID</code> instead of <code>--mint-response FILE</code> for a root returned
+by local list. Both selectors are mutually exclusive. With exactly one root in
+supplied evidence, the selector may be omitted and the chosen root is printed.
+Ambiguous inputs require a selector; the tool never picks the latest run. Each
+attempt keeps its own root, even when several attempts concern the same order.
+Only actual composite links join independent roots.</p>
+<p>Add <code>--profile PROFILE</code> to query permitted central metadata in the same render
+command. Alternatively, <code>--trace-json FILE</code> reads an earlier <code>aac chain show --output json</code> export offline. These source options are mutually exclusive.
+A selector or profile does not identify the tenant of local files. Repeat
+<code>--events</code> and <code>--actions</code> for ordinary distinct files from multiple agents.</p>
+<p><code>list</code> supports local files, <code>--task-ref</code> (exact match), <code>--since 30m|24h|7d</code>,
+<code>--from TIME</code>, <code>--to TIME</code>, and <code>--output table|json</code>. Explicit times require a
+timezone; the UTC interval includes its start and excludes its end. <code>--since</code>
+and <code>--from</code> are mutually exclusive. Times are observed activity, not guaranteed
+chain start or business completion. Roots, task references and file/line sources
+are included in JSON output. Profile/hybrid listing is not available in this
+release. Actions without a sidecar token-to-root mapping remain diagnostics;
+the tool never joins by purchase-order label or timestamp alone.</p>
+<h2 id="read-the-graph">Read the graph</h2>
+<p>Double-click nodes and edges for details. Token details retain all supplied
+business actions, including intermediate actions, source locations, receipt
+verdicts and available full terminal responses. Application reports are not
+verified business truth. Receipt verdicts are the sidecar's recorded observations;
+this tool does not verify signatures again. A <code>verified</code> verdict alone does not
+supply a reservation ID, amount, payment status or full receipt.</p>
+<p>Partial graphs are normal. Missing ancestors appear as <strong>not observed</strong> references
+only where explicit IDs establish them. The graph does not invent intermediate
+edges, actors, amounts or outcomes. Receiver reporting identity is distinct from
+token creator identity. Conflicting fields show <strong>sources disagree</strong>, with the
+value left uncertain. Sparse central metadata cannot erase richer local records.
+No exactly-once count is implied by the number of records; these formats have no
+universal unique event identifier.</p>
+<p>Central telemetry deliberately omits business payloads, authority caps, exact
+caveat expiry and full receipts. Missing/delayed events from best-effort forwarding
+are a separate limitation. A failed query is reported explicitly; any recoverable
+local HTML remains marked partial and the command exits 4. An opaque 404 is not
+proof of another tenant's chain's existence or nonexistence. Local <code>success</code>
+events do not prove completion of the business task.</p>
+<p>Amounts are shown as raw/grouped numeric values. Currency and unit context must
+come from supplied records; the renderer does not assume USD. Registered business
+labels such as <code>originator_reference</code> are distinguished from sidecar-enforced
+amount/time constraints. The renderer itself enforces no authorization policy.</p>
+<h2 id="application-record-contract">Application record contract</h2>
+<p>The versioned <a href="https://cascadeauth.github.io/aac-starter-guide/action-taken-v1.json">action-taken-v1 JSON Schema</a>
+is also installed as <code>aac_cli/_aeg/data/action-taken-v1.json</code>. Any standard JSON Schema
+2020-12 validator can check it. <code>render</code> and <code>list</code> validate while reading and
+report the source file and line. A separate <code>validate</code> command is not supplied.</p>
+<p>Write one UTF-8 JSON object per line with exactly these eight fields:</p>
+<pre><code class="language-json">{&quot;timestamp_unix_seconds&quot;:1789992000,&quot;event_type&quot;:&quot;action_taken&quot;,&quot;tenant_id&quot;:&quot;tnt-11111111-1111-4111-8111-111111111111&quot;,&quot;tenant_short&quot;:&quot;Example tenant&quot;,&quot;token_id&quot;:&quot;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&quot;,&quot;actor_spiffe_id&quot;:&quot;spiffe://tenant.example/booking&quot;,&quot;action_summary&quot;:&quot;Synthetic unpaid reservation created&quot;,&quot;action_payload&quot;:{&quot;task_ref&quot;:&quot;attempt-1&quot;,&quot;reservation_id&quot;:&quot;synthetic-attempt-1&quot;,&quot;amount&quot;:8000,&quot;currency&quot;:&quot;USD&quot;,&quot;payment_status&quot;:&quot;unpaid&quot;}}
+</code></pre>
+<p><code>tenant_id</code> is the canonical registered <code>tnt-&lt;UUIDv4&gt;</code> identity. <code>tenant_short</code>
+is a display label, never identity or authority. Obtain <code>token_id</code> from the
+verified invocation context, not an untrusted business payload. The workload's
+SPIFFE ID supplies <code>actor_spiffe_id</code>. Use the action's wall-clock epoch seconds.
+<code>action_payload.task_ref</code> is required; other payload fields are tenant-defined.
+Convergence records use the triggering arrival's token and a labeled <code>branches</code>
+map of branch token references. Do not add a ninth required root field. The
+sidecar record provides root mapping.</p>
+<p>Language-neutral producer steps: construct the eight-field object after the
+business decision; encode it with the language's JSON encoder; append the encoded
+object and one newline to the application's own retained file. Standard-library
+Python writing example (no AAC SDK dependency):</p>
+<pre><code class="language-python">import json
+with open(&quot;business-actions.jsonl&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as stream:
+    stream.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + &quot;\n&quot;)
+</code></pre>
+<p>Emit forwarded/refused/settled business decisions; do not turn a protocol failure
+or an <code>await</code> hold into completed work. Existing log systems can export this same
+format. A filename is a convention and does not establish tenant identity.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>Cannot select one root:</strong> use local <code>list</code>, then pass the intended
+<code>--root-token-id</code> or its saved <code>--mint-response</code>. A task label alone cannot
+join independent attempts.</li>
+<li><strong>No reconstructable observations:</strong> check the supplied files and selected
+root. Obtain the relevant retained telemetry from authorized participants;
+a root ID alone is not evidence.</li>
+<li><strong>Central query failed:</strong> check the explicitly selected profile and its tenant
+API-key configuration with <code>aac profile show</code>. Do not share or paste the key.
+A denied or unavailable trace does not prove another tenant's chain exists.
+Any recoverable local graph remains partial and exit status is 4.</li>
+<li><strong>Output would overwrite evidence:</strong> choose another output filename. Keep
+source logs and exports available for later investigation.</li>
+<li><strong>A field says not observed or sources disagree:</strong> inspect the source entries
+in the graph. Missing records are not success or failure, and a conflicting
+value cannot be resolved by choosing the last file supplied.</li>
+</ul>
+<h2 id="boundaries">Boundaries</h2>
+<p>Designed for tens of displayed nodes in a presentation, roughly 100–200 for
+investigation with pan/zoom; this is planning guidance, not a certified cap.
+Ordinary repeated attempts in current files are supported. Rotated/copied-file
+qualification, detailed competing-source presentation and standalone validation
+are separate future work. No remote log collector or central business-data search
+is included. Self-contained HTML retains the embedded dependency license notices.</p>
+<p>Exit codes: 0 means the requested local operation completed, 2 means input,
+selection or output failure, and 4 means a central query failed but a partial
+local graph was written. These codes are not business outcomes.</p>
+<p>Choose <code>--output</code> explicitly when rendering. The command refuses an output path
+that would overwrite one of its evidence inputs.</p>
+</main><footer>Documentation for AAC CLI 0.2.4.
+<a href="/aac-starter-guide/cli/">CLI versions</a></footer></body></html>

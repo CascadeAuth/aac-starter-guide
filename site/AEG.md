@@ -1,33 +1,67 @@
 # Agent Execution Graph
 
-Version: `aac-aeg 0.1.0`.
+This guide describes the `aeg` command supplied by `aac-cli`.
 
-`aac-aeg` reconstructs observed authority and application activity from local
+`aeg` reconstructs observed authority and application activity from local
 sidecar logs, application records and authorized central trace metadata. It
 writes an interactive HTML file; no server is needed to view it. Records and
 output stay on the operator's machine. The renderer never uploads local files.
 
-Requires Python 3.10 or later:
+## Install and select a profile
+
+Requires Python 3.10 or later. Install in a Python virtual environment, or use
+pipx to keep one dedicated CLI environment:
 
 ```sh
-python -m pip install aac-aeg
-# To query an existing AAC CLI profile, also install the compatible public CLI:
-python -m pip install 'aac-aeg[online]'
+python -m pip install --upgrade aac-cli
+# Alternatively:
+pipx install aac-cli
+# For subsequent pipx upgrades:
+pipx upgrade aac-cli
 ```
 
-`[online]` is Python's syntax for an optional dependency set. It asks the
-installer to also install the separate `aac-cli>=0.2.3` package in the same
-environment. AEG does not bundle the CLI inside its own package. The installed
-commands remain `aac-aeg` and `aac`; the brackets are used only during installation.
+The one package supplies both `aac` and `aeg`. Check `aac --version` and
+`aeg --version` after upgrading. The graph command's version identifies its CLI
+release and renderer source identity; there is no separate renderer upgrade.
 
-For an online render, pass `--profile PROFILE` to `aac-aeg`. It starts
-`aac chain show --profile PROFILE --token-id ROOT --output json` as a subprocess
-and consumes the returned JSON. The CLI reads the existing profile and its tenant
-API key, then makes the authenticated trace request. This query uses the API key,
-not the browser/SSO administration session. AEG keeps no second credential store
-and does not read the key itself. Installation does not create a tenant or its
-credentials; configure the CLI profile first. Offline rendering never invokes
-`aac`, even with an ambient profile.
+For an online render, pass `--profile PROFILE` to `aeg`. It uses the same
+installed CLI's `chain show` implementation and your selected profile's tenant
+API key. This is the trace API key, not the browser/SSO administration session.
+There is no second credential store. Installation does not create a tenant or
+its credentials; configure the CLI profile first. Offline rendering and local
+listing need no login and ignore any ambient profile unless `--profile` is
+explicitly supplied to render. Local inputs are never uploaded.
+
+## Migrate a standalone AEG installation
+
+Keep your AAC CLI home (`~/.aac` by default or `AAC_CLI_HOME`), profiles,
+credentials, agent folders, retained evidence and generated graphs. None of the
+commands below deletes that material.
+
+For pip installations, activate the environment you intend to keep, upgrade
+`aac-cli`, and verify both commands. Remove `aac-aeg` only from the environment
+where you previously installed it:
+
+```sh
+python -m pip install --upgrade aac-cli
+aac --version
+aeg --version
+python -m pip uninstall aac-aeg
+```
+
+For separate pipx installations, inspect `pipx list`, install or upgrade
+`aac-cli`, verify its `aac` and `aeg` commands, then use `pipx uninstall aac-aeg`
+if that is the legacy environment you intend to remove. A legacy `[online]`
+installation can have its own old CLI dependency; removing that pipx environment
+does not upgrade another CLI environment. Do not delete unrelated environments.
+
+The CLI owns only `aac` and `aeg`; the legacy package alone owns `aac-aeg`.
+Change saved scripts to call `aeg`. During transition both packages can coexist
+in the same environment without overlapping renderer modules or command files.
+Uninstalling the legacy package leaves the new commands intact. If your shell
+still finds an older command, inspect `command -v aac` and `command -v aeg`,
+refresh its command cache (`hash -r` where supported), and select the environment
+you upgraded. The tool does not silently uninstall other copies for you.
 
 ## Find an execution and render it
 
@@ -40,10 +74,10 @@ on another laptop. Use a retained file sink and explicitly obtain any partner
 files you are authorized to hold.
 
 ```sh
-aac-aeg list --events ./planner-telemetry.jsonl \
+aeg list --events ./planner-telemetry.jsonl \
   --actions ./planner-actions.jsonl --since 24h --output table
 
-aac-aeg render --mint-response ./start-response.json \
+aeg render --mint-response ./start-response.json \
   --events ./planner-telemetry.jsonl --events ./booking-telemetry.jsonl \
   --actions ./planner-actions.jsonl --actions ./booking-actions.jsonl \
   --output ./graphs/reservation.html
@@ -103,7 +137,7 @@ amount/time constraints. The renderer itself enforces no authorization policy.
 ## Application record contract
 
 The versioned [action-taken-v1 JSON Schema](https://cascadeauth.github.io/aac-starter-guide/action-taken-v1.json)
-is also installed as `aac_aeg/data/action-taken-v1.json`. Any standard JSON Schema
+is also installed as `aac_cli/_aeg/data/action-taken-v1.json`. Any standard JSON Schema
 2020-12 validator can check it. `render` and `list` validate while reading and
 report the source file and line. A separate `validate` command is not supplied.
 
@@ -137,6 +171,24 @@ Emit forwarded/refused/settled business decisions; do not turn a protocol failur
 or an `await` hold into completed work. Existing log systems can export this same
 format. A filename is a convention and does not establish tenant identity.
 
+## Troubleshooting
+
+- **Cannot select one root:** use local `list`, then pass the intended
+  `--root-token-id` or its saved `--mint-response`. A task label alone cannot
+  join independent attempts.
+- **No reconstructable observations:** check the supplied files and selected
+  root. Obtain the relevant retained telemetry from authorized participants;
+  a root ID alone is not evidence.
+- **Central query failed:** check the explicitly selected profile and its tenant
+  API-key configuration with `aac profile show`. Do not share or paste the key.
+  A denied or unavailable trace does not prove another tenant's chain exists.
+  Any recoverable local graph remains partial and exit status is 4.
+- **Output would overwrite evidence:** choose another output filename. Keep
+  source logs and exports available for later investigation.
+- **A field says not observed or sources disagree:** inspect the source entries
+  in the graph. Missing records are not success or failure, and a conflicting
+  value cannot be resolved by choosing the last file supplied.
+
 ## Boundaries
 
 Designed for tens of displayed nodes in a presentation, roughly 100–200 for
@@ -150,5 +202,5 @@ Exit codes: 0 means the requested local operation completed, 2 means input,
 selection or output failure, and 4 means a central query failed but a partial
 local graph was written. These codes are not business outcomes.
 
-The Python library imports as `aac_aeg`. Default library output is
-`./aeg-out`, never the installed package directory; the CLI requires `--output`.
+Choose `--output` explicitly when rendering. The command refuses an output path
+that would overwrite one of its evidence inputs.

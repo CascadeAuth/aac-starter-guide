@@ -1,11 +1,18 @@
 {
-  "aeg_documentation_source": "reviewed-source",
+  "aeg_documentation_source": "cli-component",
   "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
-  "components_sha256": "a9d4599ba621665e1e2f40359100c1bdbaaf95fca8ef8dc68c0bb6707ad8f86f",
+  "cli_artifacts": {
+    "cli_version": "0.2.4",
+    "cli_wheel_sha256": "990889664ed527123a57dffd1288cde7f8a215364232e497b5cc85506021b49e",
+    "renderer_sha256": "e444d19d48410200f040c05bba84d3e2426ecb5ba350430203cad5df74f4104d"
+  },
+  "cli_documentation_revision": "d51cce385e00a2155a5cd760941f0a98feb96f43",
+  "components_sha256": "548c6fc83d9db3eeed5a73039c1af8827aae9ba6eb63c47df27b4d8fc8f4ed7e",
   "document_sha256": {
-    "AEG.md": "07e69f0ff403a5826c0ad862e915e0496714b8f021d34970e2f89c8d2f54b805",
+    "AEG.md": "bc3197b0ad058befcdaeb3cd7e7b65d26c64a600d770e6d9114122bf8f1f8611",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
+    "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
     "DEVELOPER_BETA_STARTER_GUIDE.md": "b82a2ed99ae86ae67e01f146f5d97649024b6bdfeb39f92e88c9df99977ca09d",
     "DOCKER_HUB_OVERVIEW.md": "e3c51fb343006132fbe7189132bb053b36d492f6c3756c7d4df7be12d1ecf25d",
     "KEYS_AND_CERTIFICATES.md": "a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4",
@@ -13,7 +20,7 @@
     "RELEASE_NOTES.md": "abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef",
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
-    "aeg.html": "162e244316a9d377d621dc62f189ff23dfd709d37c54784ead20777381eae1d5",
+    "aeg.html": "17d86db4505148fdeb7a45f2f07e744524f2534ae32ff5a8385efb8f3f0050da",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "documentation_revision": "ecc543004752a39057effc74ff4fbb1da8f6d11a",

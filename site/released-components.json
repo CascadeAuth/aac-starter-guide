@@ -1,12 +1,8 @@
 {
   "packages": {
-    "aac-aeg": {
-      "url": "https://pypi.org/project/aac-aeg/",
-      "version": "0.1.0"
-    },
     "aac-cli": {
       "url": "https://pypi.org/project/aac-cli/",
-      "version": "0.2.3"
+      "version": "0.2.4"
     },
     "aac-invoke-auth": {
       "url": "https://pypi.org/project/aac-invoke-auth/",
