@@ -1,5 +1,5 @@
 {
-  "base_site_sha256": "3d232cd0575c15a88f8e4b7ba287e7c4b548dc59b2e46a862a61d1f8afc4e615",
+  "base_site_sha256": "7518ea4e4a0431b5a457840ba9324da9fddc088db2d77ca993baa842dee20a2d",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "AEG.md": "70c1e9f499672e24670cca9e8cf9a35afb14e7e0411626296d2bea42e0e4b30f",
@@ -21,10 +21,10 @@
     "cli/0.2.4/reference/aeg-render.html": "a3ce95fa39b0186b3a62e8552f50ea979c7cd8d50a04a1a4ba2ffb805fdcb26d",
     "cli/0.2.4/reference/index.html": "98407086bc57510f4dccbd2f7429fb83aa2d7b134143496a76c31d9a3cb0273f",
     "cli/index.html": "69fa6a3762c12f4d0da0294a496dc1cdb4ddc2fff3d3bb6f026a5a4d4f052e27",
-    "index.html": "5b89503fe7116789000683be45f37579b0ea67710b08be2db43598a900ec8fb6",
-    "keys-and-certificates.html": "c5af334dcde33d7f670f40bf600f4caa99851e74d3aefb7cd40a02640d9b40d7",
-    "release-notes.html": "2e19350b2cafbee9e23a6cb7e2bde408a0beaa7d7741d829d03a97dee0a2bf8f",
-    "release.json": "0fb520d0abc3ef5c1c6b00f2d27410baf2b140fb44d455f3160cc40b72737dca",
+    "index.html": "f1c93c6a581823c1ef3578382ef8b8f11042de5b122fda650415a1a325654c45",
+    "keys-and-certificates.html": "43a89465fa7e3acc055f45112bd2715209ce0105c2de88dc040b427a33fe06f5",
+    "release-notes.html": "aefe20baa8b52e374e543ccda4ede767390ba0a786ff951828ef5490e54d7e0b",
+    "release.json": "3002775047ffc0f6cfbb7b47e3cc29de160493da2cbfe07db5fc02c59061b9b3",
     "released-components.json": "548c6fc83d9db3eeed5a73039c1af8827aae9ba6eb63c47df27b4d8fc8f4ed7e",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
