@@ -106,13 +106,13 @@ domain of your own. The 5–10 minute Quick path applies once your tenant
 configuration, credentials and agent are ready. Start with the path you need:
 
 The commands use a Bash-compatible shell. The AAC Python packages require
-Python 3.10 or later; `python3` below must refer to a supported interpreter.
+Python 3.11 or later; `python3` below must refer to a supported interpreter.
 New to AAC terminology? Start with
 the [workflow overview and glossary](#how-a-delegated-workflow-works).
 
 | Path | Have these ready |
 |---|---|
-| Register a developer tenant | A GitHub or Google account; Python 3.10+ with `venv`; a protected directory or secret manager for credentials. AAC assigns your trust domain, so no DNS record is required |
+| Register a developer tenant | A GitHub or Google account; Python 3.11+ with `venv`; a protected directory or secret manager for credentials. AAC assigns your trust domain, so no DNS record is required |
 | Run the local Python example | The registered tenant and trust domain; Python environment with the companion libraries; OpenSSL 3.x; an installed sidecar; free local ports 8000, 8080 and 9443. The development PKI recipe below supplies the certificates. |
 | Run the container | Docker and your running agent container, plus prepared configuration/key and writable state directories |
 | Install a standalone binary | ORAS and Cosign for the signed bundle; choose the archive matching Linux/macOS and AMD64/ARM64 |
@@ -2082,7 +2082,7 @@ bash ./verify-developer-beta.sh . v0.4.4
 ### Optional deep artifact audit
 
 For a reproducible audit beyond signature/checksum verification, install
-Python 3.10+ and Go, then run
+Python 3.11+ and Go, then run
 this **after** the Cosign verification above:
 
 ```bash

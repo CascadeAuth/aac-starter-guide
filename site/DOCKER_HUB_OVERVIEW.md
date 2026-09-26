@@ -24,7 +24,7 @@ certificate-maintenance checks.
 
 **First setup:** budget about an hour of hands-on work. AAC assigns your trust
 domain, so there is no DNS record to publish and no propagation wait.
-You need a GitHub or Google account and Python 3.10 or later for the AAC CLI
+You need a GitHub or Google account and Python 3.11 or later for the AAC CLI
 (the commands use the tested Python 3.12 environment). [Register your developer tenant](https://cascadeauth.github.io/aac-starter-guide/#register-your-developer-tenant)
 and follow the guide's development PKI recipe if you do not already have an
 issuer. The optional Python example also uses OpenSSL 3.x and its documented
