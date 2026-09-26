@@ -31,6 +31,10 @@ pipx upgrade aac-cli
 <p>The one package supplies both <code>aac</code> and <code>aeg</code>. Check <code>aac --version</code> and
 <code>aeg --version</code> after upgrading. The graph command's version identifies its CLI
 release and renderer source identity; there is no separate renderer upgrade.</p>
+<p>If either command still reports an older release, inspect <code>command -v aac</code> and
+<code>command -v aeg</code>. Both should resolve to the virtual environment or pipx
+installation you just upgraded. Select that environment and refresh the shell's
+command cache (<code>hash -r</code> where supported) before checking the versions again.</p>
 <p>For an online render, pass <code>--profile PROFILE</code> to <code>aeg</code>. It uses the same
 installed CLI's <code>chain show</code> implementation and your selected profile's tenant
 API key. This is the trace API key, not the browser/SSO administration session.

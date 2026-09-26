@@ -2,21 +2,21 @@
   "cli_version": "0.2.4",
   "cli_wheel_sha256": "990889664ed527123a57dffd1288cde7f8a215364232e497b5cc85506021b49e",
   "component": "aac-cli",
-  "documentation_revision": "d51cce385e00a2155a5cd760941f0a98feb96f43",
+  "documentation_revision": "eda244d3d514f0f2901b9a5946ff9ac72ccd673e",
   "files": {
-    "AEG.md": "bc3197b0ad058befcdaeb3cd7e7b65d26c64a600d770e6d9114122bf8f1f8611",
+    "AEG.md": "70c1e9f499672e24670cca9e8cf9a35afb14e7e0411626296d2bea42e0e4b30f",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "aeg.html": "17d86db4505148fdeb7a45f2f07e744524f2534ae32ff5a8385efb8f3f0050da",
-    "cli/0.2.4/guide/index.html": "b42b6cda6a51d498b2735b31e60e78ab053018cb5fe9ef2da9425f0d8c8e24ba",
+    "cli/0.2.4/guide/index.html": "a5eb39a317c47e8c2a80ab5a5b6a4e5ae030a285499f6ccd1d08b8b7ba1b73ce",
     "cli/0.2.4/reference/aeg-list.html": "4d394c759ba45b4ba37f536976e60795e1c6a2c1d185b17d15ccae6c3704b6ed",
     "cli/0.2.4/reference/aeg-render.html": "a3ce95fa39b0186b3a62e8552f50ea979c7cd8d50a04a1a4ba2ffb805fdcb26d",
     "cli/0.2.4/reference/index.html": "98407086bc57510f4dccbd2f7429fb83aa2d7b134143496a76c31d9a3cb0273f"
   },
   "preview": false,
-  "previous_documentation_revision": null,
+  "previous_documentation_revision": "d51cce385e00a2155a5cd760941f0a98feb96f43",
   "renderer_sha256": "e444d19d48410200f040c05bba84d3e2426ecb5ba350430203cad5df74f4104d",
   "schema_version": 1
 }

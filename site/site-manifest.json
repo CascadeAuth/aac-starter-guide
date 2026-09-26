@@ -1,8 +1,8 @@
 {
-  "base_site_sha256": "87e211bff787f659ab017c2fa044498d11557f8192d5a4300d3dcc53f44a2b2c",
+  "base_site_sha256": "743e1478a785f3db5ab6a784a091e56d310b3c9ddc97f348fd130e90ace9eded",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "AEG.md": "bc3197b0ad058befcdaeb3cd7e7b65d26c64a600d770e6d9114122bf8f1f8611",
+    "AEG.md": "70c1e9f499672e24670cca9e8cf9a35afb14e7e0411626296d2bea42e0e4b30f",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
@@ -14,9 +14,9 @@
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "aeg.html": "17d86db4505148fdeb7a45f2f07e744524f2534ae32ff5a8385efb8f3f0050da",
-    "cli-component.json": "cebd12d0b80d642f21f5081564bb2a0aa91700a6c1d263506933e790b5722f16",
-    "cli/0.2.4/component.json": "cebd12d0b80d642f21f5081564bb2a0aa91700a6c1d263506933e790b5722f16",
-    "cli/0.2.4/guide/index.html": "b42b6cda6a51d498b2735b31e60e78ab053018cb5fe9ef2da9425f0d8c8e24ba",
+    "cli-component.json": "032fd4fcc912a5f6a2ff3080b2ab207f3f67ff568b08f2db64df98df8e9a9b84",
+    "cli/0.2.4/component.json": "032fd4fcc912a5f6a2ff3080b2ab207f3f67ff568b08f2db64df98df8e9a9b84",
+    "cli/0.2.4/guide/index.html": "a5eb39a317c47e8c2a80ab5a5b6a4e5ae030a285499f6ccd1d08b8b7ba1b73ce",
     "cli/0.2.4/reference/aeg-list.html": "4d394c759ba45b4ba37f536976e60795e1c6a2c1d185b17d15ccae6c3704b6ed",
     "cli/0.2.4/reference/aeg-render.html": "a3ce95fa39b0186b3a62e8552f50ea979c7cd8d50a04a1a4ba2ffb805fdcb26d",
     "cli/0.2.4/reference/index.html": "98407086bc57510f4dccbd2f7429fb83aa2d7b134143496a76c31d9a3cb0273f",
@@ -24,7 +24,7 @@
     "index.html": "2a64d0fa7d3ab8074f48c501b48a794c009d3e7b7e3cdb6c61bf1dbc973f6f2c",
     "keys-and-certificates.html": "7067d5e0a3cda2a07def712bf48c81cb3ef3118d77bf1a61f99d48755e95592f",
     "release-notes.html": "c736c1585cb792514d13e17187876d96b96ced4fc2aef7a940fcf21210197ce8",
-    "release.json": "a650fbcfe6d59c6b1a87ef54d73f02ec4040e9f1c20a89e1d84b19e407ae31cd",
+    "release.json": "3ad1cc5e06b34d2881d8a6e36428995d520358bf02228f51538e3b49a07513c2",
     "released-components.json": "548c6fc83d9db3eeed5a73039c1af8827aae9ba6eb63c47df27b4d8fc8f4ed7e",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },

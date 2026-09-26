@@ -24,6 +24,11 @@ The one package supplies both `aac` and `aeg`. Check `aac --version` and
 `aeg --version` after upgrading. The graph command's version identifies its CLI
 release and renderer source identity; there is no separate renderer upgrade.
 
+If either command still reports an older release, inspect `command -v aac` and
+`command -v aeg`. Both should resolve to the virtual environment or pipx
+installation you just upgraded. Select that environment and refresh the shell's
+command cache (`hash -r` where supported) before checking the versions again.
+
 For an online render, pass `--profile PROFILE` to `aeg`. It uses the same
 installed CLI's `chain show` implementation and your selected profile's tenant
 API key. This is the trace API key, not the browser/SSO administration session.
