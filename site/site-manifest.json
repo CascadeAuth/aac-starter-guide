@@ -1,8 +1,7 @@
 {
-  "aeg_documentation_source": "reviewed-source",
-  "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
-  "components_sha256": "a9d4599ba621665e1e2f40359100c1bdbaaf95fca8ef8dc68c0bb6707ad8f86f",
-  "document_sha256": {
+  "base_site_sha256": "4dd75f0295fc32c4b3fb9412b1ad1c424c6bcc96433b8217c384763d8af77c81",
+  "files": {
+    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "AEG.md": "07e69f0ff403a5826c0ad862e915e0496714b8f021d34970e2f89c8d2f54b805",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
@@ -14,12 +13,13 @@
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "aeg.html": "162e244316a9d377d621dc62f189ff23dfd709d37c54784ead20777381eae1d5",
+    "index.html": "677f888fb5f8675e6ff03c2f902bcc6f15a2daa5370f27c1807bf464ded6896c",
+    "keys-and-certificates.html": "7a2fe9d62e1380003127db156048d7636a5610dacb1e46a3b408af1d8c27fac9",
+    "release-notes.html": "9bbcb2c66c38701b9b95bba4739b174193989d908aa39c39dbb5a4ef3ec20234",
+    "release.json": "347f01ef5d06b5c6b67c06c06f6e4288d6a2fdc2c60504c5cf3a22ac3fc4785b",
+    "released-components.json": "a9d4599ba621665e1e2f40359100c1bdbaaf95fca8ef8dc68c0bb6707ad8f86f",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
-  "documentation_revision": "79a2077f303f6d4d4f3e08fb79fa6c905112b9ba",
-  "documentation_source": "reviewed-source",
-  "guide_sha256": "b82a2ed99ae86ae67e01f146f5d97649024b6bdfeb39f92e88c9df99977ca09d",
-  "image": "docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1",
-  "template_sha256": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d",
-  "version": "v0.4.4"
+  "schema_version": 1,
+  "updated_component": "sidecar"
 }
