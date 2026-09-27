@@ -9,7 +9,7 @@ output stay on the operator's machine. The renderer never uploads local files.
 
 ## Install and select a profile
 
-Requires Python 3.10 or later. Install in a Python virtual environment, or use
+Requires Python 3.11 or later. Install in a Python virtual environment, or use
 pipx to keep one dedicated CLI environment:
 
 ```sh
