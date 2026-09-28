@@ -24,49 +24,17 @@ The one package supplies both `aac` and `aeg`. Check `aac --version` and
 `aeg --version` after upgrading. The graph command's version identifies its CLI
 release and renderer source identity; there is no separate renderer upgrade.
 
-If either command still reports an older release, inspect `command -v aac` and
-`command -v aeg`. Both should resolve to the virtual environment or pipx
-installation you just upgraded. Select that environment and refresh the shell's
-command cache (`hash -r` where supported) before checking the versions again.
+Use `command -v aac` and `command -v aeg` to check that both commands resolve
+to the selected virtual environment or pipx installation. Their version output
+must identify the same owning CLI release.
 
-For an online render, pass `--profile PROFILE` to `aeg`. It uses the same
-installed CLI's `chain show` implementation and your selected profile's tenant
+For online listing or rendering, pass `--profile PROFILE` to `aeg`. It uses the same
+installed CLI's `chain list` or `chain show` command and your selected profile's tenant
 API key. This is the trace API key, not the browser/SSO administration session.
 There is no second credential store. Installation does not create a tenant or
 its credentials; configure the CLI profile first. Offline rendering and local
 listing need no login and ignore any ambient profile unless `--profile` is
-explicitly supplied to render. Local inputs are never uploaded.
-
-## Migrate a standalone AEG installation
-
-Keep your AAC CLI home (`~/.aac` by default or `AAC_CLI_HOME`), profiles,
-credentials, agent folders, retained evidence and generated graphs. None of the
-commands below deletes that material.
-
-For pip installations, activate the environment you intend to keep, upgrade
-`aac-cli`, and verify both commands. Remove `aac-aeg` only from the environment
-where you previously installed it:
-
-```sh
-python -m pip install --upgrade aac-cli
-aac --version
-aeg --version
-python -m pip uninstall aac-aeg
-```
-
-For separate pipx installations, inspect `pipx list`, install or upgrade
-`aac-cli`, verify its `aac` and `aeg` commands, then use `pipx uninstall aac-aeg`
-if that is the legacy environment you intend to remove. A legacy `[online]`
-installation can have its own old CLI dependency; removing that pipx environment
-does not upgrade another CLI environment. Do not delete unrelated environments.
-
-The CLI owns only `aac` and `aeg`; the legacy package alone owns `aac-aeg`.
-Change saved scripts to call `aeg`. During transition both packages can coexist
-in the same environment without overlapping renderer modules or command files.
-Uninstalling the legacy package leaves the new commands intact. If your shell
-still finds an older command, inspect `command -v aac` and `command -v aeg`,
-refresh its command cache (`hash -r` where supported), and select the environment
-you upgraded. The tool does not silently uninstall other copies for you.
+explicitly supplied. Local inputs are never uploaded.
 
 ## Find an execution and render it
 
@@ -101,14 +69,84 @@ command. Alternatively, `--trace-json FILE` reads an earlier `aac chain show
 A selector or profile does not identify the tenant of local files. Repeat
 `--events` and `--actions` for ordinary distinct files from multiple agents.
 
-`list` supports local files, `--task-ref` (exact match), `--since 30m|24h|7d`,
-`--from TIME`, `--to TIME`, and `--output table|json`. Explicit times require a
-timezone; the UTC interval includes its start and excludes its end. `--since`
-and `--from` are mutually exclusive. Times are observed activity, not guaranteed
-chain start or business completion. Roots, task references and file/line sources
-are included in JSON output. Profile/hybrid listing is not available in this
-release. Actions without a sidecar token-to-root mapping remain diagnostics;
-the tool never joins by purchase-order label or timestamp alone.
+## List local and central observations
+
+The supplied sources select the mode; there is no mode flag or implicit query
+from an ambient profile.
+
+| Sources | Mode | Result |
+|---|---|---|
+| `--events` and/or `--actions` | local | Read the supplied files without a network request. |
+| `--profile` | control-plane | List the calling tenant's participant-visible roots without reading evidence files. |
+| Profile and files | hybrid | Join contributed observations by root token ID, once per root. |
+
+Supplying neither source is a usage error. Any listed root can be passed to
+`aeg render --root-token-id ID` with the desired profile and/or files.
+
+```sh
+aeg list --profile planner --since 7d --output table
+
+aeg list --profile planner --events ./planner-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --task-ref attempt-1 \
+  --from 2026-09-14T00:00:00Z --to 2026-09-21T00:00:00Z \
+  --limit 50 --max-pages 3 --output json
+
+aeg render --profile planner --root-token-id ROOT_ID --output ./graphs/selected.html
+```
+
+`--task-ref` is an exact local match. It requires files: the control plane never
+stores task references or private business labels. In hybrid mode it selects
+locally matched roots with activity in the window and enriches them with fetched
+central rows. It cannot select a central-only root by a label AAC does not hold.
+Actions without a sidecar token-to-root mapping remain diagnostics; no per-action
+network lookup or join by purchase-order label or timestamp is attempted.
+
+With a profile, the default window is the previous 24 hours. `--since` accepts
+positive integer hours or days, up to 31 days. Alternatively, supply both
+`--from TIME --to TIME`, at most 31 days apart. Timezone-qualified timestamps
+are normalized to one UTC half-open interval `[from,to)` shared by local
+selection and every central page. `--since` and `--from` are mutually exclusive.
+Older local mappings/task references remain available for correlation. Local-only
+listing retains its existing unbounded default, optional open-ended `--from` or
+`--to`, and minute lookbacks such as `--since 30m`.
+
+Central enumeration fetches one page by default. `--limit` sets its size
+(1–200, default 50); `--max-pages` bounds a call (1–20, default 1). These flags
+and `--page-token` require a profile. If more pages remain, repeat the same
+profile/files/task filter with `--page-token TOKEN`, omitting `--since`.
+The server recovers the original interval/page size from the token; any explicit
+interval/limit must match. A continuation invocation reports the rows contributed
+to that invocation, so local rows may reappear. A central match on an earlier or
+unfetched page does not contribute to this invocation's source column.
+
+The `sources` column is `local`, `control-plane` or `both`. **Local means no
+central row contributed to this query**, not that AAC never received the chain.
+Central observations may always be incomplete: forwarding is best-effort and
+pagination is live. Late events and visibility changes can alter repeat queries;
+roots that arrive before an already-consumed page boundary can be missed. Repeat
+the original window to refresh. Tokens expire 15 minutes after enumeration starts.
+
+JSON retains `chains` and `diagnostics`. Online output adds `schema_version: 1`,
+`mode`, resolved `from`/`to`, and `central` fetch coverage: `status` (`more`,
+`exhausted` or `failed`), `pages_fetched`, `limit`, `has_more`, `next_page_token`,
+`pagination: live` and `evidence: best_effort`. `exhausted` only means the query
+has no next page, not complete execution evidence. On failure, `has_more` is the
+last successful page's indication (null before any success), and the token
+identifies the page to retry when available.
+
+Rows include root ID, local task references, earliest/latest observed times and
+contributing sources. Central rows also carry `central_observations`, preserving
+the participant IDs, categories, outcomes, observed token count and maximum hop
+from the public `aac chain list` JSON v1 contract (first released in CLI 0.2.5).
+Those summaries cover retained central evidence, including times outside the
+selection window; local times cover selected observations. Joined times span
+both contributions. They are not guaranteed start/completion or execution totals.
+
+If a page fails or is incompatible, already fetched central rows and recoverable
+local rows remain visible, with diagnostics and exit 4. An unsuccessful bare
+continuation cannot recover its interval, so local rows are withheld rather than
+filtered against a guessed window. Retry the original interval. No API error,
+empty page or missing file establishes another tenant's chain absence.
 
 ## Read the graph
 
@@ -203,9 +241,9 @@ qualification, detailed competing-source presentation and standalone validation
 are separate future work. No remote log collector or central business-data search
 is included. Self-contained HTML retains the embedded dependency license notices.
 
-Exit codes: 0 means the requested local operation completed, 2 means input,
+Exit codes: 0 means the requested operation completed within its fetch bound, 2 means input,
 selection or output failure, and 4 means a central query failed but a partial
-local graph was written. These codes are not business outcomes.
+local graph or listing was produced. These codes are not business outcomes.
 
 Choose `--output` explicitly when rendering. The command refuses an output path
 that would overwrite one of its evidence inputs.

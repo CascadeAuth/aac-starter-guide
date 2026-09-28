@@ -2,14 +2,14 @@
   "aeg_documentation_source": "cli-component",
   "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
   "cli_artifacts": {
-    "cli_version": "0.2.5",
-    "cli_wheel_sha256": "8546e2695b82449be989407dd8b3b6458a17ed33a079f47a1706003b18f6609b",
-    "renderer_sha256": "e444d19d48410200f040c05bba84d3e2426ecb5ba350430203cad5df74f4104d"
+    "cli_version": "0.2.6",
+    "cli_wheel_sha256": "0edade72d43da7a7c698de9abe1d05c0effb36045a55d3d042f545f56f6ec9a4",
+    "renderer_sha256": "f0477c0f8e73bffe5e111842d8aca3f5745345acb8cb58bed911deba7d826798"
   },
-  "cli_documentation_revision": "26f5b98309ea5d8be1873108b9d1276d8a87089d",
-  "components_sha256": "2754a73426ef0c229af327acdd95d360eb74086b889c5a9fcde73f652d9a9644",
+  "cli_documentation_revision": "408f36780ca067531c7de7ee43cf0290e41cf07d",
+  "components_sha256": "65035a6bd93b4a623bc83252bda24c5e3a2422c5c12e57a0f82000e2bc65495b",
   "document_sha256": {
-    "AEG.md": "8756a2caf0f0440ca7f9b2d8a10c19526d03223672dfca0c0c5382f3e8a7a9e0",
+    "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
@@ -20,7 +20,7 @@
     "RELEASE_NOTES.md": "abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef",
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
-    "aeg.html": "d342a52db16d6a53ecdfed13391d8ac7163eac0d87b5e40dcc604546d6bcfd22",
+    "aeg.html": "3469973f2756acdc14d953e41f6555bbbf149b26fda47f1485b18ce54a84ac5f",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "documentation_revision": "4a0ecb0390bd9ed687b11483010758de85951ded",
