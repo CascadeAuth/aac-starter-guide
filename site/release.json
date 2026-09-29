@@ -13,7 +13,7 @@
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
-    "DEVELOPER_BETA_STARTER_GUIDE.md": "ad3309318ce76843a1543515ff248c2cfd4aa647c80e9d20463be6b641ed24c0",
+    "DEVELOPER_BETA_STARTER_GUIDE.md": "9f12a9dead989bbd2fce036ca4aa2fe889c3069ed1037cca2b81aecc7f3a692b",
     "DOCKER_HUB_OVERVIEW.md": "af05fe9322c912e00fea46dbca641ad316e4e6e91b2f761d5ebd1cd73dbb37e4",
     "KEYS_AND_CERTIFICATES.md": "a761df44cf8e06db35f9d429486b8486925cf0e45f3193824a6852f654a1a2a4",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -23,9 +23,9 @@
     "aeg.html": "b0644d16a00199ce146b39b5480c677517e4fb1172d06fd32362001b2d215906",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
-  "documentation_revision": "85c4f87e842b08d05f8f3afd82b8a7c1f7a5e6d2",
+  "documentation_revision": "e1bf89398661097791e15810ff59f2792918ee3e",
   "documentation_source": "reviewed-source",
-  "guide_sha256": "ad3309318ce76843a1543515ff248c2cfd4aa647c80e9d20463be6b641ed24c0",
+  "guide_sha256": "9f12a9dead989bbd2fce036ca4aa2fe889c3069ed1037cca2b81aecc7f3a692b",
   "image": "docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1",
   "template_sha256": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d",
   "version": "v0.4.4"

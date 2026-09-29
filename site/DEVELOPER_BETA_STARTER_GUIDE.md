@@ -112,8 +112,8 @@ the [workflow overview and glossary](#how-a-delegated-workflow-works).
 
 | Path | Have these ready |
 |---|---|
-| Register a developer tenant | A GitHub or Google account; Python 3.11+ with `venv`; a protected directory or secret manager for credentials. AAC assigns your trust domain, so no DNS record is required |
-| Run the local Python example | The registered tenant and trust domain; Python environment with the companion libraries; OpenSSL 3.x; an installed sidecar; free local ports 8000, 8080 and 9443. The development PKI recipe below supplies the certificates. |
+| [Register a tenant](https://cascadeauth.github.io/aac-starter-guide/cli/) | A GitHub or Google account for developer self-service, or an enterprise onboarding ceremony and Microsoft Entra ID connection; Python 3.11+ with `venv`; protected credential storage. AAC assigns your trust domain, so no DNS record is required |
+| [Run the two-tenant reservation demo](https://github.com/CascadeAuth/aac-compose-demo) | Docker and the CLI; the demo uses [aac init](https://cascadeauth.github.io/aac-starter-guide/cli/) to prepare both agents, then explicitly configures their peers. |
 | Run the container | Docker and your running agent container, plus prepared configuration/key and writable state directories |
 | Install a standalone binary | ORAS and Cosign for the signed bundle; choose the archive matching Linux/macOS and AMD64/ARM64 |
 | Verify a container or audit artifacts — optional | Cosign and Docker Buildx for image verification; ORAS for the optional bundle; Python and Go for the optional deep audit |
@@ -126,7 +126,7 @@ synchronized and its public CA certificates installed. You do not need an
 existing corporate PKI for the development example. Its short-lived test CA
 must stay separate from production identities and trust stores.
 
-New tenant: [register](#register-your-developer-tenant), [create development PKI](#generate-development-pki),
+New tenant: [register and prepare an agent](#register-your-developer-tenant); optional advanced setup: [create development PKI](#generate-development-pki),
 [publish public trust](#publish-public-trust-material), then [run the local example](#optional-runnable-paired-agent-example).
 Existing tenant: use the Quick guide below, or go directly to
 [audit and diagnostics](#audit-your-workflows). Non-Python agent authors can
@@ -681,7 +681,7 @@ the same environment for the local example:
 
 ```bash
 python -m pip install --upgrade 'aac-invoke-auth[fastapi]'
-python -c 'import aac_invoke_auth; print(aac_invoke_auth.__file__)'
+python -m pip show aac-invoke-auth
 ```
 
 `aac-invoke-auth` is a library, not a separate daemon. Its base package supplies
@@ -713,6 +713,27 @@ messages.
 
 ### Register your developer tenant
 
+Prefer [aac init](https://cascadeauth.github.io/aac-starter-guide/cli/) for supported tenant registration and agent setup. It prepares
+the tenant-admin key, assigned domain, workload, certificates and configuration
+in CLI-managed directories. Start with the [CLI user guide](https://cascadeauth.github.io/aac-starter-guide/cli/)
+for shared GitHub, shared Google and enterprise Microsoft Entra ID onboarding;
+the enterprise first connection and recovery verifier are prerequisites to its
+normal `init` flow. The [complete command reference](https://cascadeauth.github.io/aac-starter-guide/cli/)
+identifies every published CLI snapshot.
+
+Save the guide's agent YAML for your workload, then run its [aac init](https://cascadeauth.github.io/aac-starter-guide/cli/) command.
+Generated CA/leaf material is development-only. The CLI also validates supplied
+certificates and keys from your issuer; that choice alone does not qualify a
+production deployment. Use [the public reservation demo](https://github.com/CascadeAuth/aac-compose-demo)
+for an executed two-tenant example with no user-written inline Python.
+
+#### Optional advanced manual registration
+
+The following lower-level route is for operators who deliberately manage the
+material paths themselves; it is not required by the guided setup or demo.
+`set -euo pipefail` is Bash error handling. Here it makes the private-key
+existence guard stop execution rather than overwrite an existing key.
+
 Choose a new, unbound profile for each tenant. The following example uses the
 `stage` profile created above and GitHub sign-in; use `--idp google` for Google.
 Your verified identity becomes the first tenant administrator.
@@ -724,23 +745,24 @@ Do not rerun key generation over an existing key.
 ```bash
 set -euo pipefail
 export AAC_PROFILE=stage
-export AAC_ONBOARDING_DIR="$HOME/aac-onboarding/$AAC_PROFILE"
+export AAC_MATERIAL_DIR="$HOME/aac-material/$AAC_PROFILE"
 umask 077
-mkdir -p "$AAC_ONBOARDING_DIR"
-test ! -e "$AAC_ONBOARDING_DIR/tenant-admin.pem"
-openssl genpkey -algorithm ed25519 -out "$AAC_ONBOARDING_DIR/tenant-admin.pem"
-openssl pkey -in "$AAC_ONBOARDING_DIR/tenant-admin.pem" \
-  -pubout -out "$AAC_ONBOARDING_DIR/tenant-admin.pub.pem"
+mkdir -p "$AAC_MATERIAL_DIR"
+test ! -e "$AAC_MATERIAL_DIR/tenant-admin.pem"
+openssl genpkey -algorithm ed25519 -out "$AAC_MATERIAL_DIR/tenant-admin.pem"
+openssl pkey -in "$AAC_MATERIAL_DIR/tenant-admin.pem" \
+  -pubout -out "$AAC_MATERIAL_DIR/tenant-admin.pub.pem"
 
 aac tenant register --profile "$AAC_PROFILE" \
   --display-name 'YOUR TEAM OR PROJECT' --contact 'YOUR EMAIL' \
-  --tenant-admin-pubkey-file "$AAC_ONBOARDING_DIR/tenant-admin.pub.pem" \
+  --tenant-admin-pubkey-file "$AAC_MATERIAL_DIR/tenant-admin.pub.pem" \
   --idp github --output table
 
 aac sso login --profile "$AAC_PROFILE"
 aac sso whoami --profile "$AAC_PROFILE" --output table
-export AAC_TENANT_ID="$(aac profile show "$AAC_PROFILE" | python -c 'import json,sys; print(json.load(sys.stdin)["binding"]["tenant_id"])')"
-aac tenant describe --profile "$AAC_PROFILE" --tenant-id "$AAC_TENANT_ID" --output table
+AAC_TENANT_ID=$(aac profile show "$AAC_PROFILE" --field tenant-id)
+export AAC_TENANT_ID
+aac tenant describe --profile "$AAC_PROFILE" --output table
 ```
 
 Follow the CLI's browser/device instructions. AAC assigns the `tnt-<uuid>`
@@ -759,8 +781,7 @@ record. Assigning it and registering a workload are separate operations; run
 them in this order:
 
 ```bash
-AAC_TRUST_DOMAIN="$(aac tenant assign-hosted-domain --profile "$AAC_PROFILE" \
-  | python -c 'import json,sys; print(json.load(sys.stdin)["trust_domain"])')"
+AAC_TRUST_DOMAIN=$(aac tenant assign-hosted-domain --profile "$AAC_PROFILE" --field trust-domain)
 export AAC_TRUST_DOMAIN
 echo "$AAC_TRUST_DOMAIN"
 aac tenant list-trust-domains --profile "$AAC_PROFILE" --output table
@@ -825,6 +846,10 @@ then install it privately in both processes. The development recipe below
 generates its own.
 
 ### Generate development PKI
+
+**Optional advanced manual recipe.** The preferred [aac init](https://cascadeauth.github.io/aac-starter-guide/cli/) path generates
+or accepts these files for you. This longer recipe belongs only to the optional
+hand-built application examples below, not the required onboarding journey.
 
 Use this only for the local development example after registering your tenant
 and `spiffe://<trust-domain>/demo/agent` workload. Keep the shell variables from
@@ -940,16 +965,16 @@ publisher's root-key directory:
 
 ```bash
 export AAC_ROOT_KEY_ID=demo-root-v1
-test ! -e "$AAC_ONBOARDING_DIR/${AAC_ROOT_KEY_ID}.pem"
-openssl genpkey -algorithm ed25519 -out "$AAC_ONBOARDING_DIR/${AAC_ROOT_KEY_ID}.pem"
-openssl pkey -in "$AAC_ONBOARDING_DIR/${AAC_ROOT_KEY_ID}.pem" \
-  -pubout -out "$AAC_ONBOARDING_DIR/${AAC_ROOT_KEY_ID}.pub.pem"
-mkdir -p "$AAC_ONBOARDING_DIR/root-public"
-cp "$AAC_ONBOARDING_DIR/${AAC_ROOT_KEY_ID}.pub.pem" "$AAC_ONBOARDING_DIR/root-public/"
+test ! -e "$AAC_MATERIAL_DIR/${AAC_ROOT_KEY_ID}.pem"
+openssl genpkey -algorithm ed25519 -out "$AAC_MATERIAL_DIR/${AAC_ROOT_KEY_ID}.pem"
+openssl pkey -in "$AAC_MATERIAL_DIR/${AAC_ROOT_KEY_ID}.pem" \
+  -pubout -out "$AAC_MATERIAL_DIR/${AAC_ROOT_KEY_ID}.pub.pem"
+mkdir -p "$AAC_MATERIAL_DIR/root-public"
+cp "$AAC_MATERIAL_DIR/${AAC_ROOT_KEY_ID}.pub.pem" "$AAC_MATERIAL_DIR/root-public/"
 
 export AAC_TAP_TENANT_ID="$AAC_TENANT_ID"
-export AAC_TAP_ADMIN_KEY_FILE="$AAC_ONBOARDING_DIR/tenant-admin.pem"
-export AAC_TAP_ROOT_KEYS_DIR="$AAC_ONBOARDING_DIR/root-public"
+export AAC_TAP_ADMIN_KEY_FILE="$AAC_MATERIAL_DIR/tenant-admin.pem"
+export AAC_TAP_ROOT_KEYS_DIR="$AAC_MATERIAL_DIR/root-public"
 export AAC_TAP_ROOT_KEYS_INGEST_URL=https://api.stage.cascadeauth.dev/v1/root-keys/ingest
 export AAC_TAP_POLL_INTERVAL_SECONDS=60
 aac-trust-anchor-publisher
@@ -971,7 +996,7 @@ To enable SPIFFE-bundle publication, stop the foreground publisher, place
 restarting that one publisher. The trust-domain binding must already be active.
 
 ```bash
-export AAC_TAP_SPIFFE_BUNDLE_DIR="$AAC_ONBOARDING_DIR/spiffe-ca-public"
+export AAC_TAP_SPIFFE_BUNDLE_DIR="$AAC_MATERIAL_DIR/spiffe-ca-public"
 # Populate this directory with your issuer's public <anchor_id>.ca.pem files.
 export AAC_TAP_SPIFFE_TRUST_DOMAIN="$AAC_TRUST_DOMAIN"
 export AAC_TAP_SPIFFE_BUNDLE_INGEST_URL=https://api.stage.cascadeauth.dev/v1/spiffe-bundle/ingest
@@ -1116,7 +1141,7 @@ seamless cutover or automatic downgrade.
 
 Use the development PKI above, your registered tenant/workload and the root key
 published in the trust-publication step. Keep `AAC_TENANT_ID`,
-`AAC_TRUST_DOMAIN`, `AAC_ONBOARDING_DIR` and `AAC_DEMO_DIR` in your shell.
+`AAC_TRUST_DOMAIN`, `AAC_MATERIAL_DIR` and `AAC_DEMO_DIR` in your shell.
 The CLI stores the bare API-key string at `~/.aac/credentials/<tenant-id>`;
 its `.session` sibling is different and must not be used here. For a key kept
 elsewhere, set `AAC_API_KEY_FILE` to the protected file containing just that key.
@@ -1137,7 +1162,7 @@ import yaml
 
 os.umask(0o077)
 base = Path(os.environ['AAC_DEMO_DIR']).expanduser().resolve()
-onboarding = Path(os.environ['AAC_ONBOARDING_DIR']).expanduser().resolve()
+onboarding = Path(os.environ['AAC_MATERIAL_DIR']).expanduser().resolve()
 tenant = os.environ['AAC_TENANT_ID']
 domain = os.environ['AAC_TRUST_DOMAIN']
 if not re.fullmatch(r'tnt-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', tenant):
