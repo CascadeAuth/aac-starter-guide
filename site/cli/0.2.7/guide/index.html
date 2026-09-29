@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AAC CLI user guide — AAC CLI 0.2.7</title><style>
+body{margin:0;color:#19313b;background:#f9fbfc;font:16px/1.65 system-ui,sans-serif}
+header,main,footer{max-width:1000px;margin:auto;padding:20px 28px}
+header{border-bottom:1px solid #dce6e8}nav{display:flex;gap:18px;flex-wrap:wrap}
+a{color:#087e83}h1,h2,h3{line-height:1.3;scroll-margin-top:20px}h2{margin-top:40px}
+pre{overflow:auto;padding:16px;background:#edf3f4;border-radius:6px}
+code{font-size:.92em}table{border-collapse:collapse;display:block;overflow:auto}
+th,td{padding:8px 12px;border:1px solid #dce6e8;text-align:left;vertical-align:top}
+.version,footer{color:#526770;font-size:14px}main{padding-bottom:60px}
+</style></head>
+<body><header><nav aria-label="Main navigation"><a href="/aac-starter-guide/">Developer guide</a>
+<a href="/aac-starter-guide/cli/0.2.7/guide/">CLI user guide</a><a href="/aac-starter-guide/cli/0.2.7/guide/graphs.html">Graph guide</a>
+<a href="/aac-starter-guide/cli/0.2.7/reference/">Command reference</a></nav><p class="version">AAC CLI 0.2.7</p></header>
+<main><h1 id="aac-cli-user-guide">AAC CLI user guide</h1>
+<p>Use <code>aac</code> to register a tenant, sign in, prepare an agent's AAC files and
+maintain identities and credentials. Use <code>aeg</code> to inspect execution evidence.
+Install <strong>aac-cli</strong> to get both commands. The version label on this page names
+the command snapshot; check <code>aac --version</code> before copying an example.</p>
+<ul>
+<li><a href="#install-and-choose-an-environment">Install and choose an environment</a></li>
+<li><a href="#register-a-tenant">Register a tenant</a></li>
+<li><a href="#prepare-and-maintain-an-agent">Prepare and maintain an agent</a></li>
+<li><a href="#supply-your-own-certificates">Supply your own certificates</a></li>
+<li><a href="#profiles-and-scalar-values">Profiles and scalar values</a></li>
+<li><a href="#manage-credentials">Manage credentials</a></li>
+<li><a href="#domains-and-workloads">Domains and workloads</a></li>
+<li><a href="#repair-an-identity-provider-connection">Repair an identity-provider connection</a></li>
+<li><a href="#one-tenant-with-many-production-agents">One tenant with many production agents</a></li>
+<li><a href="#find-and-inspect-an-execution">Find and inspect an execution</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="../reference/">Complete command reference</a></li>
+</ul>
+<h2 id="install-and-choose-an-environment">Install and choose an environment</h2>
+<p>Use Python 3.11–3.14 and a Bash-compatible shell:</p>
+<pre><code class="language-bash">python3 -m venv .aac-tools
+source .aac-tools/bin/activate
+python -m pip install --upgrade aac-cli
+aac --version
+aeg --version
+</code></pre>
+<p>The examples use AAC <strong>stage</strong> for development. Obtain your deployment's
+admin, data-plane and public trust URLs from AAC operations for another
+environment. A profile selects endpoints and a tenant; it is not a sidecar
+deployment. Credentials and agents live under <code>~/.aac</code> (the AAC CLI home).
+Set <code>AAC_CLI_HOME</code> before setup to choose a different directory.</p>
+<p>Examples use shell variables such as <code>$AAC_PROFILE</code> for values selected
+earlier. Quoted <code>&lt;UPPER_SNAKE_CASE&gt;</code> placeholders mean values you must replace;
+do not paste the angle brackets. Example email addresses, domains and labels
+are illustrative. Commands in a later lifecycle section are deliberate
+administrative actions, not a single script to run from top to bottom.</p>
+<p>For Bash scripts, <code>set -euo pipefail</code> stops on failed commands, unset variables
+and failed pipelines. This is shell error handling, not an AAC prerequisite.
+Assign a command substitution first, then export it: an <code>export</code> on the same
+line can hide a failed command's exit status.</p>
+<pre><code class="language-bash">set -euo pipefail
+AAC_PROFILE=stage
+export AAC_PROFILE
+</code></pre>
+<h2 id="register-a-tenant">Register a tenant</h2>
+<p>A tenant is one organisation. Register it once, then add its workloads.
+Developer tenants use AAC's shared GitHub or Google connections; enterprise
+tenants use their own Microsoft Entra ID connection. Registering a tenant is
+permanent. Use a separate unbound profile for a new tenant.</p>
+<h3 id="developer-setup-with-shared-github">Developer setup with shared GitHub</h3>
+<p>Prefer <code>aac init</code>: it prepares tenant-admin material, registers your tenant,
+signs you in, requests the assigned domain and registers one workload. Save
+this minimal development configuration as <code>orders.yaml</code>:</p>
+<pre><code class="language-yaml">agent_name: orders
+workload_path: orders
+tls_server_names: [localhost, 127.0.0.1]
+sidecar:
+  agent_invoke_url: http://127.0.0.1:8000/invoke
+classes_of_action: {}
+destinations: {}
+</code></pre>
+<pre><code class="language-bash">aac init --profile stage --agent orders --agent-config orders.yaml \
+  --admin-url https://api.stage.cascadeauth.dev \
+  --data-plane-url https://api.stage.cascadeauth.dev \
+  --trust-url https://trust.stage.cascadeauth.dev \
+  --display-name 'Example Team' --contact dev@example.com --idp github
+</code></pre>
+<p>The first sign-in registers the tenant; the second opens its administrator
+session. Confirm the displayed registration plan. For a noninteractive script,
+add <code>--create-tenant</code> to explicitly permit registration. Success returns the
+tenant/workload identities and prepared paths; it does not start a sidecar.
+Retry an interrupted setup with the same inputs. A conflicting profile or
+agent identity is refused rather than overwritten.</p>
+<h3 id="developer-setup-with-shared-google">Developer setup with shared Google</h3>
+<p>For a separate new tenant, use a fresh profile and agent name, and a matching
+configuration file. The registration command is the same except for
+<code>--idp google</code>. Google uses browser PKCE with a local loopback callback;
+GitHub normally uses device sign-in. For an existing tenant:</p>
+<pre><code class="language-bash">aac sso login --profile stage --idp github
+aac sso login --profile google-team --idp google
+aac sso whoami --profile stage --output table
+aac sso logout --profile stage
+</code></pre>
+<p>Choose the connection used to register that tenant. <code>whoami</code> and <code>logout</code>
+work locally. Sessions have no refresh token; sign in again after expiry.
+AAC operates the shared connections; developers do not register their own
+GitHub or Google OAuth application for these paths.</p>
+<h3 id="enterprise-registration-and-microsoft-entra-id">Enterprise registration and Microsoft Entra ID</h3>
+<p>AAC operations registers an enterprise tenant during an onboarding ceremony.
+Provide your organisation's name, contact and tenant-admin <strong>public</strong> key.
+Operations supplies the approved endpoints and the allocated tenant ID.
+The bootstrap token remains under the ceremony's custody; an ordinary tenant
+administrator does not need it after onboarding. The optional manual route
+below shows the ceremony command, not a requirement to run a private server.</p>
+<p>Before the first connection, generate an offline recovery key. Retain its
+private file offline and give operations only the enrollment document:</p>
+<pre><code class="language-bash">aac sso generate-idp-recovery-key \
+  --private-key-file offline-idp-recovery.pem --enrollment-file recovery-enrollment.json
+</code></pre>
+<p>In Microsoft Entra ID, register a single-directory public-client application.
+Record its <strong>Application (client) ID</strong>, the <strong>Directory (tenant) ID</strong> and the
+Object ID of the security group containing your AAC administrators. Enable
+public-client flows for device sign-in. Register the mobile/desktop loopback
+redirect <code>http://127.0.0.1/callback</code> without a fixed port for PKCE, and include
+security-group IDs in ID tokens. Save <code>connection.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;issuer&quot;: &quot;https://login.microsoftonline.com/&lt;ENTRA_DIRECTORY_ID&gt;/v2.0&quot;,
+  &quot;family&quot;: &quot;entra&quot;,
+  &quot;expected_audience&quot;: &quot;&lt;ENTRA_APPLICATION_CLIENT_ID&gt;&quot;,
+  &quot;binding_claims&quot;: {&quot;tid&quot;: &quot;&lt;ENTRA_DIRECTORY_ID&gt;&quot;},
+  &quot;groups_claim&quot;: &quot;groups&quot;,
+  &quot;role_map&quot;: {&quot;&lt;ENTRA_ADMIN_GROUP_OBJECT_ID&gt;&quot;: [&quot;tenant-admin&quot;]}
+}
+</code></pre>
+<p>Use the client ID GUID, not the application's display name. Use your exact
+directory issuer, not <code>common</code>, <code>organizations</code> or <code>consumers</code>. Do not add
+<code>jwks_static</code>: AAC performs OIDC discovery to obtain signing keys and flow
+endpoints; static keys are a local test facility and do not enable interactive
+login. <code>role_map</code> can map groups to <code>tenant-admin</code>, <code>key-admin</code>, <code>policy-admin</code>
+or <code>auditor-read</code>. A token without a mapped group cannot obtain an AAC role.</p>
+<p>Operations enrolls the compared public recovery key before registering the
+first connection, using its protected ceremony environment:</p>
+<pre><code class="language-bash">aac sso enroll-idp-recovery-key --profile prod --tenant-id '&lt;TENANT_ID&gt;' \
+  --file recovery-enrollment.json --bootstrap-token &quot;$AAC_BOOTSTRAP_TOKEN&quot;
+aac sso register-idp --profile prod --tenant-id '&lt;TENANT_ID&gt;' \
+  --file connection.json --bootstrap-token &quot;$AAC_BOOTSTRAP_TOKEN&quot;
+</code></pre>
+<p>For tenant use, create your profile and sign in to the allocated tenant.
+Successful sign-in binds the profile and caches a session:</p>
+<pre><code class="language-bash">aac profile create prod --admin-url '&lt;ADMIN_URL&gt;' --data-plane-url '&lt;DATA_PLANE_URL&gt;'
+aac sso login --profile prod --tenant-id '&lt;TENANT_ID&gt;' \
+  --idp-url 'https://login.microsoftonline.com/&lt;ENTRA_DIRECTORY_ID&gt;/v2.0' --flow device
+aac sso login --profile prod \
+  --idp-url 'https://login.microsoftonline.com/&lt;ENTRA_DIRECTORY_ID&gt;/v2.0' --flow pkce --no-browser
+aac sso whoami --profile prod --output table
+aac tenant describe --profile prod --output table
+</code></pre>
+<p><code>--no-browser</code> prints the PKCE URL; open it on the machine with the CLI's
+loopback listener. Device flow permits the browser on another machine.
+<code>aac sso list-idp --profile prod</code> shows safe connection handles even during a
+login failure. Once a tenant-admin session works, omit the bootstrap token
+when registering additional connections. GitHub/Google onboarding and both
+Entra flows have dated stage acceptance from September 2026; that evidence
+does not certify every directory's policies. Other provider recipes are not
+claimed as field-validated here.</p>
+<h3 id="optional-manual-registration-and-key-preparation">Optional manual registration and key preparation</h3>
+<p>Use this when coordinating the enterprise ceremony or when you deliberately
+need the lower-level registration command. Guided setup normally creates or
+accepts the tenant-admin key for you. OpenSSL 1.1.1 or newer is required for
+these Ed25519 commands. The subshell's <code>set -e</code> makes the existence guard stop
+execution rather than overwrite a private key:</p>
+<pre><code class="language-bash">(
+  set -e
+  umask 077
+  mkdir -p tenant-material
+  test ! -e tenant-material/tenant-admin.pem
+  openssl genpkey -algorithm ed25519 -out tenant-material/tenant-admin.pem
+  openssl pkey -in tenant-material/tenant-admin.pem -pubout -out tenant-material/tenant-admin.pub.pem
+) || exit 3
+aac tenant register --profile prod --display-name 'Example Corporation' \
+  --contact ops@example.com --tenant-admin-pubkey-file tenant-material/tenant-admin.pub.pem \
+  --bootstrap-token &quot;$AAC_BOOTSTRAP_TOKEN&quot;
+</code></pre>
+<p>Self-service manual registration uses <code>--idp github</code> or <code>--idp google</code> instead
+of the bootstrap token. AAC allocates the ID and saves the tenant API key;
+protect the one-time registration output. Never submit a private PEM as the
+public-key file. If a response is lost, retry identical registration inputs
+so the saved request can resume. A bound profile cannot register a second
+tenant. A saved-request mismatch requires restoring the original request
+inputs; do not create a second tenant to work around an unknown outcome.</p>
+<h2 id="prepare-and-maintain-an-agent">Prepare and maintain an agent</h2>
+<p>After enterprise first-connection setup and sign-in, use the same <code>aac init</code>
+path with <code>--profile prod</code>, the deployment's trust URL and your agent YAML;
+omit the shared-provider <code>--idp</code> flag. Keep the active tenant-admin private key
+available through the supported material flags. Configuration describes the
+real workload path, listeners/TLS names, classes of action and recipients.
+No class or self-destination is installed implicitly.</p>
+<p>Each invocation selects one agent. A second workload needs its own agent name,
+workload path and configuration. <code>~/.aac/agents/&lt;name&gt;/sidecar</code> contains
+sidecar material; <code>agent</code> contains the pairing secret shared with that
+application; <code>keep</code> contains renewal material. Tenant-admin/publisher material
+is shared only inside that tenant's directory. Treat private files as secrets.</p>
+<pre><code class="language-bash">aac agent list --output table
+aac agent status --agent orders --output table
+aac init --profile stage --agent orders --layout container
+aac init --profile stage --agent orders --agent-config orders.yaml
+aac agent status --agent orders --remote --output table
+aac agent renew --agent orders
+aac agent renew --agent orders --ca
+</code></pre>
+<p>An unchanged <code>init</code> refresh recreates supported configuration/Compose outputs
+without replacing keys. An explicit configuration file applies the new
+settings after validation; identities cannot silently change. <code>status</code> reports
+expiry, missing files, permissions and the next command; exit 3 means attention
+is required. <code>--remote</code> additionally checks publication of this agent's root
+key and CA; inspect those checks, not only local health. After leaf renewal,
+restart consumers to load new files. CA renewal also requires publisher
+republication and peer trust refresh; verify both communication directions.</p>
+<h3 id="supply-your-own-certificates">Supply your own certificates</h3>
+<p>Generated development CAs and one-day leaf certificates are for development.
+For supplied PKI, your issuer must sign the workload/receipt SPIFFE identity
+and the HTTPS names clients actually connect to. Supply the complete set:</p>
+<pre><code class="language-bash">aac init --profile prod --agent orders --agent-config orders.yaml \
+  --trust-url '&lt;TRUST_URL&gt;' --tenant-admin-key-file tenant-material/tenant-admin.pem \
+  --root-signing-key-file tenant-material/orders-root.pem \
+  --ca-cert-file tenant-material/ca.pem \
+  --workload-key-file tenant-material/workload.pem --workload-cert-file tenant-material/workload.crt \
+  --terminal-key-file tenant-material/receipt.pem --terminal-cert-file tenant-material/receipt.crt \
+  --tls-key-file tenant-material/https.pem --tls-cert-file tenant-material/https.crt
+</code></pre>
+<p>The CLI validates supplied files; it cannot renew certificates it did not sign.
+Use <code>aac agent renew</code> with replacement key/certificate pairs from your issuer
+(and <code>--ca-cert-file</code> when changing the CA). Supplied PKI alone does not
+qualify a deployment for production: select durable replay protection, key
+custody, ingress and storage appropriate to your service. See
+<a href="/aac-starter-guide/keys-and-certificates.html">keys and certificates</a>.</p>
+<h2 id="profiles-and-scalar-values">Profiles and scalar values</h2>
+<pre><code class="language-bash">aac profile list --output table
+aac profile create test --admin-url https://api.stage.cascadeauth.dev --data-plane-url https://api.stage.cascadeauth.dev
+aac profile show test
+aac profile update test --admin-url https://api.stage.cascadeauth.dev
+AAC_PROFILE=stage
+export AAC_PROFILE
+aac profile show
+aac profile delete test
+</code></pre>
+<p>Selection is the command's <code>--profile</code>, then <code>AAC_PROFILE</code>, then <code>main</code>.
+<code>profile show NAME</code> selects its positional name instead. Registration/login
+binds a profile; you cannot edit <code>tenant_id</code> through <code>profile update</code>.
+<code>show</code> distinguishes stored and effective settings, including environment
+overrides, and never displays credentials. Deletion affects local profile
+configuration, not the remote tenant; follow its pending-operation checks.</p>
+<pre><code class="language-bash">AAC_TENANT_ID=$(aac profile show &quot;$AAC_PROFILE&quot; --field tenant-id)
+export AAC_TENANT_ID
+AAC_TRUST_DOMAIN=$(aac tenant assign-hosted-domain --profile &quot;$AAC_PROFILE&quot; --field trust-domain)
+export AAC_TRUST_DOMAIN
+aac agent status --agent orders --field tenant-id
+aac agent status --agent orders --field hosted-trust-domain
+aac agent status --agent orders --field workload-spiffe-id
+</code></pre>
+<p><code>profile show --field tenant-id</code> is read-only and returns the <strong>effective</strong>
+tenant ID: <code>AAC_TENANT_ID</code> takes precedence over the stored profile value.
+Unset that environment variable when you intend to inspect the stored binding.
+<code>assign-hosted-domain</code> is an operation: it requests/reuses the allocation and
+returns the validated server value, saving it only in the matching bound
+profile. Use read-only <code>agent status</code> for already-prepared agent identities;
+its profile check and local health requirements still apply. Do not read the
+CLI's private record files. Each scalar is unquoted with one newline; invalid
+selectors, unavailable values or unhealthy agents fail with empty stdout.
+Do not combine <code>--field</code> with an explicit <code>--output</code>; agent fields are local
+and cannot be combined with <code>--remote</code>.</p>
+<h2 id="manage-credentials">Manage credentials</h2>
+<p>Administrative commands require a tenant-admin session unless their reference
+explicitly names another role or a ceremony. API keys authenticate data-plane
+clients; they do not replace administrator sessions.</p>
+<h3 id="rotate-a-tenant-api-key-without-downtime">Rotate a tenant API key without downtime</h3>
+<pre><code class="language-bash">aac tenant api-key list --profile prod --output table
+aac tenant api-key issue --profile prod
+</code></pre>
+<p>Issuance returns the new key ID and writes a separate protected staged key
+file. Move every client to it, verify traffic, then retire the <strong>old</strong> key ID:</p>
+<pre><code class="language-bash">aac tenant api-key retire --profile prod --key-id '&lt;OLD_API_KEY_ID&gt;' --yes
+</code></pre>
+<p>The list reports lifecycle metadata, never key bytes. Do not retire a key
+before its consumers move. <code>ERR_API_KEY_ROTATION_ALREADY_IN_PROGRESS</code> means
+finish the existing rotation; <code>ERR_API_KEY_LAST_ACTIVE</code> refuses removal of
+the last active key. After loss or suspected compromise, this command revokes
+all active keys and issues one replacement, so plan a coordinated restart:</p>
+<pre><code class="language-bash">aac tenant reissue-api-key --profile prod
+</code></pre>
+<h3 id="rotate-the-tenant-admin-key">Rotate the tenant-admin key</h3>
+<p>Prepare a fresh Ed25519 key pair under your normal custody. Stop publishers,
+register the new public half, install the private half at their configured
+location and recreate/restart them. Confirm accepted uploads before resuming:</p>
+<pre><code class="language-bash">aac tenant rotate-admin-key --profile prod --tenant-admin-pubkey-file '&lt;NEW_ADMIN_PUBLIC_KEY_FILE&gt;'
+</code></pre>
+<p>The old key stops verifying immediately and cannot be reinstated
+(<code>ERR_ADMIN_KEY_PREVIOUSLY_RETIRED</code>). The publisher reads its key at start;
+restarting a container with an old mount/environment still uses the old key.</p>
+<h2 id="domains-and-workloads">Domains and workloads</h2>
+<p>An AAC-assigned hosted trust domain needs no DNS proof. Use its returned
+name rather than assembling a suffix yourself. For a domain you control,
+prove the exact DNS name, then bind it as a SPIFFE trust domain:</p>
+<pre><code class="language-bash">aac tenant issue-domain-challenge --profile prod --domain example.com
+# Publish the returned TXT record in DNS, then:
+aac tenant verify-domain --profile prod --domain example.com
+aac tenant describe --profile prod --output table
+aac tenant bind-trust-domain --profile prod --trust-domain example.com
+aac tenant list-trust-domains --profile prod --output table
+aac tenant add-workload --profile prod --spiffe-id spiffe://example.com/orders --display-name Orders
+aac tenant list-workloads --profile prod --output table
+aac tenant describe-workload --profile prod --workload-id '&lt;WORKLOAD_ID&gt;'
+aac tenant update-workload --profile prod --workload-id '&lt;WORKLOAD_ID&gt;' --display-name 'Order service'
+</code></pre>
+<p>Responses supply claim/binding/workload IDs for later operations. A business
+domain proof and a SPIFFE binding are separate records. A domain held by
+another tenant requires the platform transfer procedure. Teardown is
+deliberate; deactivated workload identities remain reserved:</p>
+<pre><code class="language-bash">aac tenant deactivate-workload --profile prod --workload-id '&lt;WORKLOAD_ID&gt;' --reason 'Service retired'
+aac tenant revoke-trust-domain --profile prod --binding-id '&lt;BINDING_ID&gt;' --reason 'Service retired'
+aac tenant release-domain --profile prod --domain example.com --reason 'No longer used'
+aac tenant revoke-domain --profile prod --domain example.com --reason 'Compromised'
+aac tenant reactivate-hosted-domain --profile prod
+</code></pre>
+<p>Release and revoke are alternative business-domain lifecycle actions, not a
+sequence to apply blindly. Hosted reactivation reuses the permanent name
+and is allowed only under the server's self-service/ceremony policy.</p>
+<h2 id="repair-an-identity-provider-connection">Repair an identity-provider connection</h2>
+<p>While sign-in works, list the connection and submit a complete replacement
+file with the exact observed revision; concurrent edits fail safely:</p>
+<pre><code class="language-bash">aac sso list-idp --profile prod --output table
+aac sso replace-idp --profile prod --connection-id '&lt;CONNECTION_ID&gt;' --revision '&lt;REVISION&gt;' --file connection.json
+aac sso list-idp-recovery-keys --profile prod --output table
+</code></pre>
+<p>When the only IdP is unavailable, tenant operations signs a scoped repair with
+its offline key; AAC operations independently compares the request ID and
+fingerprint through the incident channel and approves that exact request:</p>
+<pre><code class="language-bash">aac sso request-idp-repair --profile prod --connection-id '&lt;CONNECTION_ID&gt;' \
+  --revision '&lt;REVISION&gt;' --file connection.json --recovery-key-file offline-idp-recovery.pem
+# AAC operations runs the second-party approval:
+aac sso approve-idp-repair --profile prod --tenant-id '&lt;TENANT_ID&gt;' \
+  --connection-id '&lt;CONNECTION_ID&gt;' --repair-request-id '&lt;REPAIR_REQUEST_ID&gt;' \
+  --repair-intent-fingerprint '&lt;REPAIR_INTENT_FINGERPRINT&gt;' --bootstrap-token &quot;$AAC_BOOTSTRAP_TOKEN&quot;
+</code></pre>
+<p>After approval, tenant operations redeems it for the exact replacement:</p>
+<pre><code class="language-bash">aac sso replace-idp --profile prod --connection-id '&lt;CONNECTION_ID&gt;' \
+  --revision '&lt;REVISION&gt;' --file connection.json --repair-request-id '&lt;REPAIR_REQUEST_ID&gt;' \
+  --recovery-key-file offline-idp-recovery.pem
+</code></pre>
+<p>The repair grants no general administration or login authority. After replacement,
+sign in normally and verify the descriptor. Keep recovery material separate
+from tenant-admin/publisher keys. To replace or deliberately revoke it:</p>
+<pre><code class="language-bash">aac sso generate-idp-recovery-key --private-key-file next-recovery.pem --enrollment-file next-enrollment.json
+aac sso rotate-idp-recovery-key --profile prod --file next-enrollment.json --replaces-recovery-key-id '&lt;RECOVERY_KEY_ID&gt;'
+aac sso revoke-idp-recovery-key --profile prod --recovery-key-id '&lt;RECOVERY_KEY_ID&gt;' --reason 'Retired'
+</code></pre>
+<p>Rotation needs a working tenant-admin session. Compare the currently active
+key ID before changing it; a stale lifecycle precondition fails. Revocation
+removes that recovery route until another verifier is enrolled.</p>
+<h2 id="one-tenant-with-many-production-agents">One tenant with many production agents</h2>
+<p>Set up the tenant once: register it, establish the enterprise IdP and recovery
+path, protect the tenant-admin key and run a publisher for the tenant's CA
+and its originators' root public keys. Register each workload, issue its
+identity certificate from the tenant's issuer and deploy one sidecar beside
+each application. Use unique application/sidecar pairing secrets per pair.</p>
+<p>For a chain of 100 agents where each calls the next, register their identities:</p>
+<pre><code class="language-bash">for n in {1..100}; do
+  aac tenant add-workload --profile prod --spiffe-id &quot;spiffe://example.com/agent-$n&quot; --display-name &quot;Agent $n&quot;
+done
+</code></pre>
+<p>The tenant issuer issues each SPIFFE identity; the CLI does not become your
+production CA. Agent 1, if it starts the task, needs the root signing key and
+a configured initial class of action. Agents 1–99 need explicit destinations
+for their successors; forwarding narrows inherited authority and signs with
+the workload identity key. Agent 100 needs a receipt-signing key if it
+finishes the task. All need the applicable trust URLs, tenant API key,
+runtime storage/replay configuration and their own pairing secret. Publish
+only public CA/root material; distribute private material only to its consumer.</p>
+<p>Use the <a href="/aac-starter-guide/#configuration-and-workflow-state">configuration reference</a>
+for accepted fields and the <a href="/aac-starter-guide/keys-and-certificates.html">key inventory</a>
+for custody and certificate lifetimes. Configure actual peers, not invented
+self-calls. <code>aac init</code> can prepare its supported supplied-material layout;
+role-specific minimal deployments can use the optional manual route. A
+100-workload registration example is not a throughput or deployment qualification.</p>
+<h2 id="find-and-inspect-an-execution">Find and inspect an execution</h2>
+<pre><code class="language-bash">aac trust-anchor list --profile prod --output table
+aac trust-anchor describe --profile prod --kid '&lt;ROOT_KEY_ID&gt;'
+aac chain list --profile prod --since 7d --limit 50 --output json
+aac chain show --profile prod --token-id '&lt;ROOT_TOKEN_ID&gt;' --output table
+aeg list --events planner-events.jsonl --actions planner-actions.jsonl --since 24h
+aeg list --profile prod --since 7d --output table
+aeg list --profile prod --events planner-events.jsonl --actions planner-actions.jsonl --since 7d
+aeg render --profile prod --root-token-id '&lt;ROOT_TOKEN_ID&gt;' --output execution.html
+</code></pre>
+<p>The central API shows participant-visible observations, not business payloads.
+<code>chain list</code> fetches one page. Reuse its resolved <code>from</code>/<code>to</code> interval and
+<code>next_page_token</code> to continue; cursors expire after 15 minutes. Relative windows
+are resolved once per listing. <code>aeg list --max-pages</code> bounds multi-page fetches
+and reports continuation/partial coverage. Local mode reads files; a profile
+selects control-plane mode; both select hybrid mode. <code>sources=local</code> does not
+prove AAC never ingested that root. Actions without token-to-root evidence
+remain unresolved. A local task-reference filter cannot select central-only
+rows. Late arrivals can change live pages; repeat the original interval to
+refresh. Render the selected <code>root_token_id</code>, optionally adding local files.
+See the <a href="../guide/graphs.html">graph guide</a> for saved traces, partial evidence,
+conflicts, application records and exit code 4 on central fetch failure.</p>
+<p>Run the <a href="https://github.com/CascadeAuth/aac-compose-demo">two-tenant reservation demo</a>
+for a complete setup → peer configuration → verified receipt workflow with
+the current published components. The application omits supplier integration
+and payment; it does not guarantee a price hold.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Result</th>
+<th>Meaning and next step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exit 2</td>
+<td>Invalid flag/value/combination. Check this version's reference.</td>
+</tr>
+<tr>
+<td>Exit 3</td>
+<td>Local profile, credential or agent state needs attention; follow stderr. No scalar value is emitted.</td>
+</tr>
+<tr>
+<td>Exit 4</td>
+<td>Endpoint unreachable. Check the selected endpoints and connectivity; do not blindly replay mutations.</td>
+</tr>
+<tr>
+<td><code>ERR_SESSION_TOKEN_MISSING</code>, expired session</td>
+<td>Sign in to the intended tenant again.</td>
+</tr>
+<tr>
+<td><code>ERR_SESSION_TENANT_MISMATCH</code>, <code>ERR_SESSION_ROLE_FORBIDDEN</code></td>
+<td>Check profile, tenant and group-to-role mapping; an API key is not an admin session.</td>
+</tr>
+<tr>
+<td><code>ERR_IDP_ALREADY_BOUND</code></td>
+<td>Registration is create-only; inspect and replace the connection with its current revision.</td>
+</tr>
+<tr>
+<td><code>ERR_TRACE_NOT_FOUND</code></td>
+<td>Check the root/token ID and participant visibility; missing telemetry is not proof no execution occurred.</td>
+</tr>
+<tr>
+<td><code>AADSTS700016</code></td>
+<td>Entra audience must be the Application (client) ID GUID.</td>
+</tr>
+<tr>
+<td><code>AADSTS50011</code></td>
+<td>Register the exact loopback callback path for PKCE.</td>
+</tr>
+<tr>
+<td>No login flow endpoints</td>
+<td>A static test connection cannot perform browser/device login; use discovery for the enterprise connection.</td>
+</tr>
+</tbody>
+</table>
+<p>Remote rejections use exit 1 and preserve the server's stable code on stderr.
+Rate limits include the wait interval; retry deliberately. Retain sanitized
+command/version/error details when contacting support@cascadeauth.com; omit
+API keys, tokens, private PEMs and raw business payloads.</p>
+</main><footer>Documentation for AAC CLI 0.2.7.
+<a href="/aac-starter-guide/cli/">CLI versions</a></footer></body></html>

@@ -2,12 +2,12 @@
   "aeg_documentation_source": "cli-component",
   "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
   "cli_artifacts": {
-    "cli_version": "0.2.6",
-    "cli_wheel_sha256": "0edade72d43da7a7c698de9abe1d05c0effb36045a55d3d042f545f56f6ec9a4",
+    "cli_version": "0.2.7",
+    "cli_wheel_sha256": "577eb728d88d7eb813a004b7d9357679dc49c3c0fd26efcfb6fc79271689641c",
     "renderer_sha256": "f0477c0f8e73bffe5e111842d8aca3f5745345acb8cb58bed911deba7d826798"
   },
-  "cli_documentation_revision": "408f36780ca067531c7de7ee43cf0290e41cf07d",
-  "components_sha256": "65035a6bd93b4a623bc83252bda24c5e3a2422c5c12e57a0f82000e2bc65495b",
+  "cli_documentation_revision": "c7618936b2e75a7e4cbbf5b0956b4c965d2952b8",
+  "components_sha256": "9343628b5b608e8ce5bb4da4e792920b2169d7f1fec1ab8155068267e89f66a5",
   "document_sha256": {
     "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
@@ -20,7 +20,7 @@
     "RELEASE_NOTES.md": "abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef",
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
-    "aeg.html": "3469973f2756acdc14d953e41f6555bbbf149b26fda47f1485b18ce54a84ac5f",
+    "aeg.html": "b0644d16a00199ce146b39b5480c677517e4fb1172d06fd32362001b2d215906",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "documentation_revision": "85c4f87e842b08d05f8f3afd82b8a7c1f7a5e6d2",
