@@ -6,7 +6,7 @@
     "cli_wheel_sha256": "577eb728d88d7eb813a004b7d9357679dc49c3c0fd26efcfb6fc79271689641c",
     "renderer_sha256": "f0477c0f8e73bffe5e111842d8aca3f5745345acb8cb58bed911deba7d826798"
   },
-  "cli_documentation_revision": "c7618936b2e75a7e4cbbf5b0956b4c965d2952b8",
+  "cli_documentation_revision": "8b39b66036268b97a6053fbf8e2ce85d27fbe3ea",
   "components_sha256": "9343628b5b608e8ce5bb4da4e792920b2169d7f1fec1ab8155068267e89f66a5",
   "document_sha256": {
     "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",

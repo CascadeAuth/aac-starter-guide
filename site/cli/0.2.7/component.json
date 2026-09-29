@@ -2,7 +2,7 @@
   "cli_version": "0.2.7",
   "cli_wheel_sha256": "577eb728d88d7eb813a004b7d9357679dc49c3c0fd26efcfb6fc79271689641c",
   "component": "aac-cli",
-  "documentation_revision": "c7618936b2e75a7e4cbbf5b0956b4c965d2952b8",
+  "documentation_revision": "8b39b66036268b97a6053fbf8e2ce85d27fbe3ea",
   "files": {
     "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
@@ -11,7 +11,7 @@
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "aeg.html": "b0644d16a00199ce146b39b5480c677517e4fb1172d06fd32362001b2d215906",
     "cli/0.2.7/guide/graphs.html": "4ed25f9bf1e0c16e71c01dadf6f266696ddf83e4ff8522b4d0a39ec1c4505b36",
-    "cli/0.2.7/guide/index.html": "21d7f4dd0eedc3e41825a19a2d7203c16f5591d72fee4ce9ab84745079d1d51c",
+    "cli/0.2.7/guide/index.html": "7bc7149677bd6e6ffecd9a8f75d459795cc0a92eb478d1f8fbe42019728116df",
     "cli/0.2.7/reference/aac-agent-list.html": "adc6893109b16c7346429010a5cee3fcba207255cea886302be6cfd24b9dfead",
     "cli/0.2.7/reference/aac-agent-renew.html": "b6f07545facdf4fac8b001a70a5c56d80590c20ac928cd8d6f0cd7181184160e",
     "cli/0.2.7/reference/aac-agent-status.html": "1eaa9fd592a88715a63582a1eeafa64329e11f59f4b6c90bb4031add8dd587bb",
@@ -75,7 +75,7 @@
     "cli/0.2.7/reference/index.html": "a717cef3825848a22e0f10e737546d73d2171a084263ff9bd16702e04b4a85e8"
   },
   "preview": false,
-  "previous_documentation_revision": null,
+  "previous_documentation_revision": "c7618936b2e75a7e4cbbf5b0956b4c965d2952b8",
   "renderer_sha256": "f0477c0f8e73bffe5e111842d8aca3f5745345acb8cb58bed911deba7d826798",
   "schema_version": 2
 }

@@ -1,5 +1,5 @@
 {
-  "base_site_sha256": "34f2f32b57a64157fc705d75f95c3844e8d59fc4d4c97d906889b133bbf23216",
+  "base_site_sha256": "acaf966dd6f976c84a4b05c22d70e28e38a97327cb8903b3556537108be4a68e",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",
@@ -14,7 +14,7 @@
     "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "aeg.html": "b0644d16a00199ce146b39b5480c677517e4fb1172d06fd32362001b2d215906",
-    "cli-component.json": "aad8bb96cfb1fb9ea2a416c70c6aad3721cc5ec5b0c12d47afd830b243e288a7",
+    "cli-component.json": "3665589cc24d02f1f53c0874c8e3e84599d6c4ee7a34f414ac6821cb5f89160c",
     "cli/0.2.4/component.json": "032fd4fcc912a5f6a2ff3080b2ab207f3f67ff568b08f2db64df98df8e9a9b84",
     "cli/0.2.4/guide/index.html": "a5eb39a317c47e8c2a80ab5a5b6a4e5ae030a285499f6ccd1d08b8b7ba1b73ce",
     "cli/0.2.4/reference/aeg-list.html": "4d394c759ba45b4ba37f536976e60795e1c6a2c1d185b17d15ccae6c3704b6ed",
@@ -30,9 +30,9 @@
     "cli/0.2.6/reference/aeg-list.html": "e354359e888a2068ca62499c7b5a386d21692f5180162047fa6a2357d89e1d83",
     "cli/0.2.6/reference/aeg-render.html": "f3a15b10ffe87c2168fb7babc2dad9da4023b6d04e55ed925ae9f765a84854c0",
     "cli/0.2.6/reference/index.html": "dcd5b53dda610c22229238b5832a27c0428389af123610369d9127e0e5e48209",
-    "cli/0.2.7/component.json": "aad8bb96cfb1fb9ea2a416c70c6aad3721cc5ec5b0c12d47afd830b243e288a7",
+    "cli/0.2.7/component.json": "3665589cc24d02f1f53c0874c8e3e84599d6c4ee7a34f414ac6821cb5f89160c",
     "cli/0.2.7/guide/graphs.html": "4ed25f9bf1e0c16e71c01dadf6f266696ddf83e4ff8522b4d0a39ec1c4505b36",
-    "cli/0.2.7/guide/index.html": "21d7f4dd0eedc3e41825a19a2d7203c16f5591d72fee4ce9ab84745079d1d51c",
+    "cli/0.2.7/guide/index.html": "7bc7149677bd6e6ffecd9a8f75d459795cc0a92eb478d1f8fbe42019728116df",
     "cli/0.2.7/reference/aac-agent-list.html": "adc6893109b16c7346429010a5cee3fcba207255cea886302be6cfd24b9dfead",
     "cli/0.2.7/reference/aac-agent-renew.html": "b6f07545facdf4fac8b001a70a5c56d80590c20ac928cd8d6f0cd7181184160e",
     "cli/0.2.7/reference/aac-agent-status.html": "1eaa9fd592a88715a63582a1eeafa64329e11f59f4b6c90bb4031add8dd587bb",
@@ -98,10 +98,10 @@
     "index.html": "cba5eb13437df51e1d336e3d21d4ebff81f5a91069467b86895d5af5dd4e938a",
     "keys-and-certificates.html": "4d5c93ca2ddea79abe5f7748098b672b8ed5c7fc5af99afdae6ab1772f7a40de",
     "release-notes.html": "60ae6de8958eb737e95483a7fb4818f08fee52424857ecf93f30ef87cadc8236",
-    "release.json": "c6d3d86872daa011403e48b2e87cda2fe744287b59a3b598246436d3d90ca1fa",
+    "release.json": "186c9a9c416cd57763b84bdacf7b78d943a28c9fa1ba0c1bc68ff93e70d7ad95",
     "released-components.json": "9343628b5b608e8ce5bb4da4e792920b2169d7f1fec1ab8155068267e89f66a5",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "schema_version": 1,
-  "updated_component": "sidecar"
+  "updated_component": "aac-cli"
 }
