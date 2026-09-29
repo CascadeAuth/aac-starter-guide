@@ -1,5 +1,5 @@
 {
-  "base_site_sha256": "07606e730e5c1debb6e017b9cd92d795349b57e8d0f753035464f611c9a265c3",
+  "base_site_sha256": "31dda03330baf147d4e1d47b9b2f007fcf7acb161b836c0b929a914f2a487136",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "AEG.md": "073c21115253b5ffd5437c9bac8e9f3cfc1d04483f6fc82a5af173402a85d4c8",
@@ -31,13 +31,13 @@
     "cli/0.2.6/reference/aeg-render.html": "f3a15b10ffe87c2168fb7babc2dad9da4023b6d04e55ed925ae9f765a84854c0",
     "cli/0.2.6/reference/index.html": "dcd5b53dda610c22229238b5832a27c0428389af123610369d9127e0e5e48209",
     "cli/index.html": "d29499ae75de319e52c083b7fb984709bf7c05c0f8c8c3ee197e7d1577ab6401",
-    "index.html": "1edd00d8bd5d315ebd5bdeb2766740893785601d35d94baae87afe7dade94268",
-    "keys-and-certificates.html": "7fe8699158fe00e7afb0cd20740106f9946e40f8a574f4915a59a2fe47856cae",
-    "release-notes.html": "7b64788ac9b51dd8a584a528000172d7bbb553cde987e1d0ab19c560e3295f81",
-    "release.json": "919375c6352ff0faa6fbc5c9faa4310e5d14c6226077771ca8764b039f892e5c",
+    "index.html": "8cb6b155c4b7142104cf501896d89b9c52a39365a42793d8a9203f3cb81ee6cf",
+    "keys-and-certificates.html": "d2016bc8523fbbebca83a3ff3cc65430d1264bca4dcc7278107f23defeb83a8e",
+    "release-notes.html": "8bca99f7565e2028ec801ac9f70cfbbb7261db11aed0cd7d0d2a3efcb4c6692b",
+    "release.json": "5dc18072ffcb55afd3f912fb0e9331af035930feca260de033cce9bac7ca227a",
     "released-components.json": "65035a6bd93b4a623bc83252bda24c5e3a2422c5c12e57a0f82000e2bc65495b",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
   "schema_version": 1,
-  "updated_component": "aac-cli"
+  "updated_component": "sidecar"
 }

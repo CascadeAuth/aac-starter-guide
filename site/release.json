@@ -23,7 +23,7 @@
     "aeg.html": "3469973f2756acdc14d953e41f6555bbbf149b26fda47f1485b18ce54a84ac5f",
     "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
   },
-  "documentation_revision": "4a0ecb0390bd9ed687b11483010758de85951ded",
+  "documentation_revision": "85c4f87e842b08d05f8f3afd82b8a7c1f7a5e6d2",
   "documentation_source": "reviewed-source",
   "guide_sha256": "ad3309318ce76843a1543515ff248c2cfd4aa647c80e9d20463be6b641ed24c0",
   "image": "docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1",
