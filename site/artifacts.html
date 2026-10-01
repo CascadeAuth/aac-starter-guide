@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install and verify artifacts</title><meta name="description" content="Standalone installation and optional signature or artifact verification.">
+<link rel="canonical" href="https://cascadeauth.github.io/aac-starter-guide/artifacts.html"><style>
+:root { color-scheme: light; --ink:#19313b; --muted:#526770; --line:#dce6e8; --accent:#087e83; }
+* { box-sizing:border-box } html { scroll-behavior:smooth; scroll-padding-top:90px }
+body { margin:0; color:var(--ink); background:#f9fbfc; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
+a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; overflow-wrap:anywhere }
+a:hover { color:#045154 } a:focus-visible,button:focus-visible { outline:3px solid #dba52c; outline-offset:3px }
+header { position:sticky; top:0; z-index:2; background:#fff; border-bottom:1px solid var(--line); padding:15px 5%; display:flex; align-items:center; justify-content:space-between; gap:16px }
+header .brand { font-weight:750; font-size:18px; color:var(--ink); text-decoration:none }
+header .badge { font-size:12px; padding:4px 10px; background:#e0f3f0; color:#125b59; border-radius:20px; white-space:nowrap }
+header .pages { display:flex; flex-wrap:wrap; gap:6px 18px; margin-right:auto; font-size:14px }
+header .pages a { color:var(--muted); text-decoration:none; font-weight:600; padding:2px 0; border-bottom:2px solid transparent }
+header .pages a:hover { color:var(--accent) }
+header .pages a[aria-current="page"] { color:var(--ink); border-bottom-color:var(--accent) }
+.layout { max-width:1400px; margin:auto; display:grid; grid-template-columns:250px minmax(0,1fr); gap:42px; padding:32px 5% 64px }
+aside { position:sticky; top:90px; align-self:start; max-height:calc(100vh - 115px); overflow:auto; padding-right:10px; font-size:13px }
+aside p { margin:0 0 12px; color:var(--muted); font-weight:650; text-transform:uppercase; letter-spacing:.08em }
+aside a { display:block; padding:6px 0; text-decoration:none; color:var(--muted) }
+aside a:hover { color:var(--accent) }
+.mobile-toc { display:none; margin-bottom:22px; padding:12px; background:#edf5f5; border-radius:6px }
+.mobile-toc summary { cursor:pointer; font-weight:650 } .mobile-toc a { display:block; padding:6px 0 }
+main { min-width:0; max-width:950px; background:#fff; padding:30px 36px; border:1px solid var(--line); border-radius:12px }
+h1,h2,h3 { line-height:1.25; letter-spacing:-.025em } h1 { font-size:32px; margin-top:0 } h2 { font-size:24px; margin-top:44px; padding-top:16px; border-top:1px solid var(--line) } h3 { font-size:19px; margin-top:28px }
+p,li { max-width:85ch } code { font: .87em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace; background:#eef3f5; padding:2px 4px; border-radius:4px; overflow-wrap:anywhere }
+pre { overflow-x:auto; background:#102830; color:#ecf4f7; padding:20px; border-radius:8px; line-height:1.6 } pre code { background:none; color:inherit; padding:0; overflow-wrap:normal }
+table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:14px; margin:20px 0 }
+th,td { border:1px solid var(--line); padding:11px 13px; text-align:left; vertical-align:top; min-width:125px } th { background:#edf5f5; font-weight:650 }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px } .actions a { border:1px solid #b6d4d4; border-radius:6px; padding:8px 12px; text-decoration:none; font-size:14px; font-weight:600 }
+.code-box { position:relative } .code-box pre { padding-top:44px } .copy { position:absolute; top:8px; right:8px; border:1px solid #66858c; background:#24424b; color:white; border-radius:4px; padding:4px 8px; cursor:pointer }
+footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px } footer summary { cursor:pointer } footer code { word-break:break-all }
+.skip { position:absolute; left:-10000px } .skip:focus { left:12px; top:12px; z-index:5; background:white; padding:10px }
+@media(max-width:900px) { .layout { display:block; padding:20px 4% } aside { display:none } .mobile-toc { display:block } main { max-width:none; padding:24px } }
+@media(max-width:550px) { html { scroll-padding-top:150px } body { font-size:15px } header { padding:12px 4%; flex-wrap:wrap } header .brand { font-size:16px } header .pages { order:3; flex-basis:100%; margin-right:0 } aside { columns:1 } main { padding:20px 16px } h1 { font-size:27px } .actions a { flex:1 0 100% } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } }
+</style></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><a class="brand" href="./">AAC developer documentation</a>
+<nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html">Release note</a><a href="aeg.html">Execution graphs</a><a href="references.html">References</a></nav></header>
+<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#verify-a-container-or-audit-artifacts--optional">Verify a container or audit artifacts — optional</a><a href="#alternative-standalone-binary-installation-with-oras">Alternative standalone-binary installation with ORAS</a></aside>
+<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#verify-a-container-or-audit-artifacts--optional">Verify a container or audit artifacts — optional</a><a href="#alternative-standalone-binary-installation-with-oras">Alternative standalone-binary installation with ORAS</a></nav></details><nav class="actions" aria-label="Downloads"><a href="ARTIFACT_REFERENCE.md" download>Download this reference</a></nav><h1 id="install-standalone-binaries-and-verify-artifacts">Install standalone binaries and verify artifacts</h1>
+<p><a href="https://cascadeauth.github.io/aac-starter-guide/">Start with the Docker journey</a> · <a href="https://cascadeauth.github.io/aac-starter-guide/references.html">All references</a></p>
+<p>This reference is for a deployment or integration you have chosen to configure.
+For the first authenticated reservation, use the packaged Compose journey above.</p>
+<h2 id="verify-a-container-or-audit-artifacts--optional">Verify a container or audit artifacts — optional</h2>
+<p>Install Docker and Cosign. Verify the
+published digest against CascadeAuth's GitHub Actions keyless identity:</p>
+<pre><code class="language-bash">set -euo pipefail
+export AAC_SIDECAR_VERSION=v0.4.4
+export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
+export AAC_SIDECAR_DIGEST=&quot;$(
+  docker buildx imagetools inspect &quot;${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}&quot; |
+    awk '$1 == &quot;Digest:&quot; { print $2; exit }'
+)&quot;
+[[ &quot;${AAC_SIDECAR_DIGEST}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
+
+cosign verify \
+  --certificate-identity 'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot;
+
+docker pull &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot;
+docker image inspect &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot; \
+  --format '{{index .Config.Labels &quot;org.opencontainers.image.version&quot;}} {{index .Config.Labels &quot;org.opencontainers.image.licenses&quot;}}'
+</code></pre>
+<p>The final line must print:</p>
+<pre><code class="language-text">v0.4.4 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+</code></pre>
+<h2 id="alternative-standalone-binary-installation-with-oras">Alternative standalone-binary installation with ORAS</h2>
+<p>Use this alternative to the sidecar container for a bare VM, systemd host,
+or macOS development machine. Container users can also download the bundle
+for offline documentation or deep audit without installing its standalone binary.
+<a href="https://oras.land/docs/installation/">Install ORAS</a> to download the files and
+<a href="https://docs.sigstore.dev/cosign/system_config/installation/">install Cosign</a> to
+verify their signatures. Neither tool is needed to run the sidecar afterward.</p>
+<pre><code class="language-bash">mkdir aac-sidecar-v0.4.4
+cd aac-sidecar-v0.4.4
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
+bundle_digest=&quot;$(oras resolve &quot;${bundle_ref}&quot;)&quot;
+[[ &quot;${bundle_digest}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
+
+cosign verify \
+  --certificate-identity 'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  &quot;docker.io/cascadeauth/aac-sidecar@${bundle_digest}&quot;
+
+oras pull &quot;docker.io/cascadeauth/aac-sidecar@${bundle_digest}&quot;
+
+cosign verify-blob \
+  --certificate-identity 'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  --bundle checksums.txt.bundle \
+  checksums.txt
+
+bash ./verify-developer-beta.sh . v0.4.4
+</code></pre>
+<h3 id="install-the-verified-standalone-binary">Install the verified standalone binary</h3>
+<p>Select only the archive for the current platform. Default developer install:</p>
+<pre><code class="language-bash">version=v0.4.4
+platform=linux_amd64  # or linux_arm64, darwin_amd64, darwin_arm64
+install_root=&quot;${HOME}/.local/lib/aac-sidecar/releases/${version}&quot;
+
+mkdir -p &quot;${install_root}&quot; &quot;${HOME}/.local/bin&quot;
+tar -xzf &quot;aac-sidecar_${version}_${platform}.tar.gz&quot; -C &quot;${install_root}&quot;
+ln -sfn &quot;${install_root}/aac-sidecar&quot; &quot;${HOME}/.local/bin/aac-sidecar&quot;
+&quot;${HOME}/.local/bin/aac-sidecar&quot; -version
+</code></pre>
+<p>For an Ubuntu ARM64 VM (<code>uname -m</code> returns <code>aarch64</code>), select <code>linux_arm64</code>,
+not the <code>linux_amd64</code> default in the example. Install Cosign and ORAS in the
+verification environment before this standalone path; the container path also
+uses Docker's Buildx plugin for digest inspection. Do not overwrite an existing
+installation or delete unrelated services to make the destination appear clean.</p>
+<p>For an operator-managed production service, <code>/opt/aac/sidecar/releases/&lt;version&gt;</code>
+may be root-owned, but the service process itself must run as a dedicated
+non-root account. Do not default a developer install to a root-owned directory.</p>
+<h3 id="optional-deep-artifact-audit">Optional deep artifact audit</h3>
+<p>For a reproducible audit beyond signature/checksum verification, install
+Python 3.11+ and Go, then run
+this <strong>after</strong> the Cosign verification above:</p>
+<pre><code class="language-bash">python3 --version
+go version
+bash ./verify-developer-beta.sh . v0.4.4 --deep-audit
+</code></pre>
+<p>Go reads embedded build metadata from each binary; it does not execute foreign-platform
+binaries. The verifier's final version check executes only your host's binary.
+The optional audit checks:</p>
+<ul>
+<li>All four platform archives, exact file sets and matching license/notices/guide.</li>
+<li>Binary platform, Go build metadata, version/commit, <code>-trimpath</code> and disabled
+CGO; Linux ELF symbol/debug-section absence and private-source/key markers.</li>
+<li>The OCI archive's two Linux platforms, complete referenced SHA-256 blob graph,
+descriptor lengths, runtime user/entrypoint, release labels, legal files and
+application-layer file set; every layer is scanned for forbidden source/key
+markers without extracting it into your filesystem.</li>
+<li>SPDX 2.3 identifiers/relationships and its four binary SHA-256 values against
+the standalone archives.</li>
+<li>in-toto/SLSA version, commit, targets, builder/tool identity and every public
+subject digest against the signed checksum manifest.</li>
+</ul>
+<p>It prints a JSON audit summary with the binary hashes and inventory counts.
+Archive bounds fail closed if an input exceeds the supported release profile.
+The audit verifies the signed build metadata and artifact contents; it does
+not reproduce the build. A green audit does not replace
+Cosign identity verification, runtime readiness, or your tenant's qualification.</p>
+
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="LICENSE">License</a> · <a href="THIRD_PARTY_NOTICES.md">Third-party notices</a></p>
+<details><summary>This document's Go build provenance</summary><pre><code>{
+  &quot;version&quot;: &quot;v0.4.4&quot;,
+  &quot;image&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1&quot;,
+  &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
+  &quot;documentation_revision&quot;: &quot;9ab7373f9db59747cea21c5572cf76b78fdd13f7&quot;,
+  &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
+  &quot;source_document&quot;: &quot;ARTIFACT_REFERENCE.md&quot;,
+  &quot;source_sha256&quot;: &quot;a3095c5c18a4469a86281054851e4134f009918d373f1803d408faa46cd13f6e&quot;
+}</code></pre><p>This record describes this page's source and the sidecar release used when it was built. See the <a href="release.json">current site release record</a> for current component identities and document checksums.</p></details></footer>
+</main></div><script>
+document.querySelectorAll('pre').forEach(pre => {
+  const box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  const button = document.createElement('button'); button.className = 'copy';
+  button.type = 'button'; button.textContent = 'Copy'; button.setAttribute('aria-label', 'Copy code');
+  button.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(pre.querySelector('code').textContent); button.textContent = 'Copied'; }
+    catch { button.textContent = 'Select and copy'; }
+    setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+  }); box.appendChild(button);
+});
+</script></body></html>

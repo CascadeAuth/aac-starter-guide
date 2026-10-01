@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Release note</title><meta name="description" content="Upgrade guidance grouped by sidecar release.">
-<link rel="canonical" href="https://cascadeauth.github.io/aac-starter-guide/release-notes.html"><style>
+<title>References</title><meta name="description" content="Choose a deployment, integration or operational reference.">
+<link rel="canonical" href="https://cascadeauth.github.io/aac-starter-guide/references.html"><style>
 :root { color-scheme: light; --ink:#19313b; --muted:#526770; --line:#dce6e8; --accent:#087e83; }
 * { box-sizing:border-box } html { scroll-behavior:smooth; scroll-padding-top:90px }
 body { margin:0; color:var(--ink); background:#f9fbfc; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
@@ -37,63 +37,58 @@ footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); co
 </style></head>
 <body><a class="skip" href="#content">Skip to content</a>
 <header><a class="brand" href="./">AAC developer documentation</a>
-<nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html" aria-current="page">Release note</a><a href="aeg.html">Execution graphs</a><a href="references.html">References</a></nav></header>
-<div class="layout"><aside aria-label="On this page"><p>On this page</p><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a><a href="#044">0.4.4</a></aside>
-<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"><a href="#040">0.4.0</a><a href="#041">0.4.1</a><a href="#042">0.4.2</a><a href="#043">0.4.3</a><a href="#044">0.4.4</a></nav></details><nav class="actions" aria-label="Downloads"><a href="RELEASE_NOTES.md" download>Download release notes</a></nav><h1 id="release-note">Release note</h1>
-<h2 id="040">0.4.0</h2>
-<p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
-in earlier releases.</p>
-<h3 id="configuration-upgrade-note">Configuration upgrade note</h3>
-<p>For <code>sidecar.dev_mode</code> and
-<code>sidecar.agent_invoke_context.include_full_prior_payloads</code>, use unquoted
-<code>true</code> or <code>false</code>. Mixed-case spellings such as <code>yEs</code> now fail configuration
-loading; check hand-edited configurations before upgrading. CLI-generated
-configurations already use canonical booleans.</p>
-<h3 id="native-forwarding-upgrade-note">Native forwarding upgrade note</h3>
-<p>Remove <code>valid_until</code> from every native
-<code>forward</code> or <code>forward_composite</code> decision's <code>additional_predicates</code>, including
-<code>additional_forwards</code> entries. Even equal or shorter supplied deadlines are
-refused. Use the destination's configured <code>valid_for</code>; continuation expiry is
-bounded by inherited authority and the 24-hour root limit. Dates inside your
-business payload remain ordinary data. A2A's separate shorter-expiry contract
-and the library's absolute expiry cap are preserved.</p>
-<p>Native candidates are checked before outgoing proof signing or send. For
-example, <code>amount_max:8000</code> cannot continue as <code>amount_max:9500</code>. The receiving
-sidecar independently enforces this rule, including against a deliberately
-constructed widened chain. Ordinary narrowing and fresh authority under a
-still-valid original approval remain possible through the normal authorization
-path; an existing narrow chain is not widened.</p>
-<p>The native callback's <code>200</code> / <code>dispatched</code> acknowledgement precedes background
-completion. Observe the later local outcome: a refused <code>forward</code> emits a
-<code>dispatch</code> failure with <code>ERR_CHAIN_INVALID</code>; a refused reactive
-<code>forward_composite</code> emits <code>composite_mint</code> with that code. Valid sibling branches
-continue. Composite candidates are checked against their own fresh-root and
-attestation chain. Proactive composite candidate rejection is a synchronous
-403; reserved expiry input is an invalid-decision response before dispatch.</p>
-<h2 id="041">0.4.1</h2>
-<p>Upgrade guidance: remove any <code>state_store.cold</code> block, including empty or
-null blocks, and replace configured class/destination <code>predicates.valid_until</code>
-with <code>valid_for</code>. An omitted destination timeout now inherits the global
-5-second default instead of the former independent 3-second default. Set an
-explicit <code>timeout_ms</code> to retain a deliberate destination override. Conflicting
-explicit task references refuse native decisions before any branch signs or
-sends; already-committed roots retain their provenance in a 207 response.
-With A2A enabled and <code>deadline_seconds</code> below 5, the unchanged global default
-is too large: set an explicit destination <code>timeout_ms</code> no greater than that
-deadline (for example, 3000ms for 3 seconds), or lower the global dispatch budget.
-CLI-generated configurations already supply explicit destination timeouts.</p>
-<h2 id="042">0.4.2</h2>
-<p>This release documents the native two-tenant reservation demo and links its public
-setup, receipt/refusal and certificate-lifecycle exercises. This release carries
-the updated guide and overview; runtime authorization, configuration and wire
-behavior are unchanged from v0.4.1. Existing v0.4.1 artifacts remain available unchanged.</p>
-<h2 id="043">0.4.3</h2>
-<p>Distribution update: the runnable image is published after its matching
-signed bundle. Runtime behavior and configuration remain the same as v0.4.2.</p>
-<h2 id="044">0.4.4</h2>
-<p>The configuration template links to the standalone AAC developer documentation
-site. Current guide corrections can publish independently of sidecar releases.
-Runtime behavior, configuration and authorization remain unchanged from v0.4.3.</p>
+<nav class="pages" aria-label="Documentation pages"><a href="./">Developer guide</a><a href="keys-and-certificates.html">Keys and certificates</a><a href="release-notes.html">Release note</a><a href="aeg.html">Execution graphs</a><a href="references.html" aria-current="page">References</a></nav></header>
+<div class="layout"><aside aria-label="On this page"><p>On this page</p></aside>
+<main id="content"><details class="mobile-toc"><summary>On this page</summary><nav aria-label="Page contents"></nav></details><nav class="actions" aria-label="Downloads"><a href="REFERENCES.md" download>Download this reference</a></nav><h1 id="references">References</h1>
+<p>For your first authenticated reservation, follow the
+<a href="https://cascadeauth.github.io/aac-starter-guide/">numbered Docker journey</a>.
+Use these pages when you need a particular installation, integration or
+operational procedure.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deploy your own tenant and agents, including a 100-agent chain</td>
+<td><a href="deployment.html">Deployment</a></td>
+</tr>
+<tr>
+<td>Understand authority, integrate native AAC or use the optional A2A example</td>
+<td><a href="protocol.html">Protocol and integration</a></td>
+</tr>
+<tr>
+<td>Diagnose failures, inspect evidence, rotate credentials and upgrade</td>
+<td><a href="operations.html">Operations</a></td>
+</tr>
+<tr>
+<td>Install a standalone binary, verify a container or audit artifacts — optional</td>
+<td><a href="artifacts.html">Artifacts</a></td>
+</tr>
+<tr>
+<td>Understand key roles and custody</td>
+<td><a href="keys-and-certificates.html">Keys and certificates</a></td>
+</tr>
+<tr>
+<td>Register developer/enterprise tenants and use CLI commands</td>
+<td><a href="https://cascadeauth.github.io/aac-starter-guide/cli/">Versioned CLI user guide and reference</a></td>
+</tr>
+<tr>
+<td>Discover and render execution evidence</td>
+<td><a href="aeg.html">Execution graphs</a></td>
+</tr>
+<tr>
+<td>Find upgrade instructions by release</td>
+<td><a href="release-notes.html">Release note</a></td>
+</tr>
+</tbody>
+</table>
+<p>Manual recipes in the integration reference are optional fixtures for that
+specific protocol example. The default journey uses maintained CLI setup and
+the packaged Compose application.</p>
 
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a> · <a href="LICENSE">License</a> · <a href="THIRD_PARTY_NOTICES.md">Third-party notices</a></p>
 <details><summary>This document's Go build provenance</summary><pre><code>{
@@ -102,8 +97,8 @@ Runtime behavior, configuration and authorization remain unchanged from v0.4.3.<
   &quot;bundle&quot;: &quot;docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd&quot;,
   &quot;documentation_revision&quot;: &quot;9ab7373f9db59747cea21c5572cf76b78fdd13f7&quot;,
   &quot;documentation_source&quot;: &quot;reviewed-source&quot;,
-  &quot;source_document&quot;: &quot;RELEASE_NOTES.md&quot;,
-  &quot;source_sha256&quot;: &quot;abe553eb4c89706a180f21eaae7108e61309696f04cd41ff181739ef254cdfef&quot;
+  &quot;source_document&quot;: &quot;REFERENCES.md&quot;,
+  &quot;source_sha256&quot;: &quot;d2ad97f387bee2e82e64ab8df6e9e307bab1b2c0b6d89bd43e3451b50d279f8c&quot;
 }</code></pre><p>This record describes this page's source and the sidecar release used when it was built. See the <a href="release.json">current site release record</a> for current component identities and document checksums.</p></details></footer>
 </main></div><script>
 document.querySelectorAll('pre').forEach(pre => {
