@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Graph guide — AAC CLI 0.2.8</title><style>
+body{margin:0;color:#19313b;background:#f9fbfc;font:16px/1.65 system-ui,sans-serif}
+header,main,footer{max-width:1000px;margin:auto;padding:20px 28px}
+header{border-bottom:1px solid #dce6e8}nav{display:flex;gap:18px;flex-wrap:wrap}
+a{color:#087e83}h1,h2,h3{line-height:1.3;scroll-margin-top:20px}h2{margin-top:40px}
+pre{overflow:auto;padding:16px;background:#edf3f4;border-radius:6px}
+code{font-size:.92em}table{border-collapse:collapse;display:block;overflow:auto}
+th,td{padding:8px 12px;border:1px solid #dce6e8;text-align:left;vertical-align:top}
+.version,footer{color:#526770;font-size:14px}main{padding-bottom:60px}
+</style></head>
+<body><header><nav aria-label="Main navigation"><a href="/aac-starter-guide/">Developer guide</a>
+<a href="/aac-starter-guide/cli/0.2.8/guide/">CLI user guide</a><a href="/aac-starter-guide/cli/0.2.8/guide/graphs.html">Graph guide</a>
+<a href="/aac-starter-guide/cli/0.2.8/reference/">Command reference</a></nav><p class="version">AAC CLI 0.2.8</p></header>
+<main><h1 id="agent-execution-graph">Agent Execution Graph</h1>
+<p>This guide describes the <code>aeg</code> command supplied by <code>aac-cli</code>.</p>
+<p><code>aeg</code> reconstructs observed authority and application activity from local
+sidecar telemetry, application action records and authorized control-plane trace data. It
+writes an interactive HTML file; no server is needed to view it. Records and
+output stay on the operator's machine. The renderer never uploads local files.</p>
+<h2 id="install-and-select-a-profile">Install and select a profile</h2>
+<p>Requires Python 3.11 or later. Install in a Python virtual environment, or use
+pipx to keep one dedicated CLI environment:</p>
+<pre><code class="language-sh">python -m pip install --upgrade aac-cli
+# Alternatively:
+pipx install aac-cli
+# For subsequent pipx upgrades:
+pipx upgrade aac-cli
+</code></pre>
+<p>The one package supplies both <code>aac</code> and <code>aeg</code>. Check <code>aac --version</code> and
+<code>aeg --version</code> after upgrading. The graph command's version identifies its CLI
+release and renderer source identity; there is no separate renderer upgrade.</p>
+<p>Use <code>command -v aac</code> and <code>command -v aeg</code> to check that both commands resolve
+to the selected virtual environment or pipx installation. Their version output
+must identify the same owning CLI release.</p>
+<p>For online listing or rendering, pass <code>--profile PROFILE</code> to <code>aeg</code>. It uses the same
+installed CLI's <code>chain list</code> or <code>chain show</code> command and your selected profile's tenant
+API key. This is the trace API key, not the browser/SSO administration session.
+There is no second credential store. Installation does not create a tenant or
+its credentials; configure the CLI profile first. Offline rendering and local
+listing need no login and ignore any ambient profile unless <code>--profile</code> is
+explicitly supplied. Local inputs are never uploaded.</p>
+<h2 id="choose-the-data-sources-for-your-graph">Choose the data sources for your graph</h2>
+<p>AEG can combine three kinds of data:</p>
+<ul>
+<li><strong>Sidecar telemetry:</strong> local execution records written by the sidecars, such
+as delegation, receive and response events, available authority constraints
+and recorded receipt-verification results.</li>
+<li><strong>Control-plane trace data via API:</strong> execution observations forwarded to AAC
+and returned through the calling tenant's authorized trace API. These are
+not the control plane's infrastructure/server logs. They can cover participants
+whose local files you do not have, within your tenant's permitted visibility.</li>
+<li><strong>Application action records:</strong> structured reports of what the agent
+applications did, with business context such as an order, amount or result.</li>
+</ul>
+<p>The six combo numbers below are labels, <strong>not a ranking from least to most
+information</strong>. Control-plane data can add execution coverage; application
+records add business detail. Neither substitutes for the other. All three offer
+the most potential context, but duplicate or missing observations may add nothing.</p>
+<p>The <strong>aac command(s)</strong> column links to complete examples so the table stays
+readable. The <code>aac-cli</code> package installs the <code>aac</code> and <code>aeg</code> executables.
+<code>aeg list</code> and <code>aeg render</code> are the graph commands; <code>aac chain show</code> can export a trace.</p>
+<p><strong>Table 1. Data-source combinations and their contributions to Agent Execution Graphs</strong></p>
+<table>
+<thead>
+<tr>
+<th>Combo No.</th>
+<th>Data Source</th>
+<th>What it adds to AEG</th>
+<th>aac command(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Sidecar telemetry</td>
+<td>Local protocol detail, authority constraints and recorded outcomes from the supplied sidecars. Coverage is limited to the records you supply.</td>
+<td><a href="#combo-1-sidecar-telemetry-list-and-render">List and render</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sidecar telemetry + control-plane trace data via API</td>
+<td>Local detail plus authorized observations from AAC; these can fill gaps in execution coverage when some local files are unavailable.</td>
+<td><a href="#combo-2-sidecar-telemetry-control-plane-trace-data-list-and-render">List and render</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Sidecar telemetry + application action records</td>
+<td>Links application-reported business actions and results to the authority graph reconstructed from local sidecar records.</td>
+<td><a href="#combo-3-sidecar-telemetry-application-action-records-list-and-render">List and render</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sidecar telemetry + control-plane trace data via API + application action records</td>
+<td>Combines local protocol detail, authorized control-plane coverage and application-reported business context.</td>
+<td><a href="#combo-4-sidecar-telemetry-control-plane-trace-data-application-action-records-list-and-render">List and render</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Control-plane trace data via API + application action records</td>
+<td>Adds local business reports to the graph reconstructed from the control-plane trace, when its token-to-root mapping can connect those reports. Private authority details omitted by the API stay unavailable.</td>
+<td><a href="#combo-5-control-plane-trace-data-application-action-records-discover-then-render">Discover, then render</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Control-plane trace data via API</td>
+<td>Reconstructs the available authorized execution observations without local input files. It omits private business payloads, authority caps, exact expiry and full receipts.</td>
+<td><a href="#combo-6-control-plane-trace-data-list-and-render">List and render</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Application action records</strong> are structured application log entries that
+conform to AAC's <a href="#application-record-contract">Application record contract</a>.
+They are <code>action_taken</code> JSONL records, not arbitrary application log text.
+Application records alone cannot reconstruct the authority graph.</p>
+<h2 id="commands-for-each-combination">Commands for each combination</h2>
+<h3 id="identify-your-inputs-and-choose-an-execution">Identify your inputs and choose an execution</h3>
+<p><code>./evidence/sidecar.jsonl</code> is an illustrative path to an <strong>existing structured
+sidecar telemetry log</strong>. It is not created by either command below and is not
+an arbitrary container console/access log. Replace it with your actual
+telemetry file. In a CLI-generated layout this is usually
+<code>&lt;agent-directory&gt;/state/telemetry.jsonl</code> on the setup host;
+<code>aac agent status --agent NAME</code> identifies that directory.</p>
+<p><code>./evidence/actions.jsonl</code> is likewise an existing file of application-emitted
+<code>action_taken</code> records. Replace it with your application's actual file.
+The examples do not create an <code>./evidence</code> directory or collect/copy these
+inputs for you. Repeat <code>--events</code> or <code>--actions</code> when you have several files.</p>
+<p><code>tenant-a</code> is an already configured AAC CLI profile with a tenant API key
+permitted to read the execution. The profile controls API access; it does not
+grant access to another tenant's local files or identify who owns files you supply.</p>
+<p><strong>Listing is optional discovery.</strong> In every listing example,
+<code>--output table</code> means “print a table to standard output,” normally your
+terminal screen. No table file is saved unless you redirect the output yourself.
+Choose the intended execution and copy its complete value from the
+<strong>ROOT TOKEN ID</strong> column. Do not confuse it with a task reference, order number
+or an individual hop's token ID.</p>
+<p><strong>Rendering is a separate operation.</strong> In each render block below, replace
+<code>REPLACE_WITH_ROOT_TOKEN_ID</code> with that chosen ID, keeping the quotes.
+The shell variable <code>$ROOT_ID</code> passes this value to <code>--root-token-id</code>.
+The renderer rereads the specified files and, when <code>--profile</code> is supplied,
+fetches the selected root's detailed trace itself. It does not read the printed
+table or an implicit file/cache left by <code>aeg list</code>.</p>
+<p><strong>You do not have to run the two commands in sequence.</strong> If you already have
+the root ID from a previous listing or a successful chain-start response,
+run the render block directly. You can also replace <code>--root-token-id &quot;$ROOT_ID&quot;</code>
+with <code>--mint-response ./start-response.json</code> when you have a saved successful
+start response. Use one selector, not both. With exactly one root in supplied
+files or a saved trace, the renderer can infer the root; ambiguous inputs are
+refused. A profile alone is not a root selector.</p>
+<p>The two commands use <code>--output</code> differently: <code>aeg list --output table</code>
+chooses a display <strong>format</strong>, while <code>aeg render --output ./graphs/example.html</code>
+chooses a destination <strong>file</strong>. The renderer creates missing output directories.
+Paths beginning with <code>./</code> are relative to the directory where you run the
+command. Open the resulting HTML in a browser; use a new output filename to
+retain an earlier graph.</p>
+<p>Listing filters such as <code>--since</code>, <code>--limit</code> and <code>--max-pages</code> apply only
+to discovery. They do not carry forward into rendering. The renderer builds
+the selected execution from the available input records and fetched trace,
+which may contain observations outside the listing's discovery interval.
+A successful hybrid listing therefore does not establish a successful hybrid render.</p>
+<p>Saving a listing as table text or JSON does not turn it into render input.
+<code>--trace-json</code> expects a detailed <code>aac chain show</code> export, as described
+<a href="#use-a-saved-control-plane-trace-instead-of-a-live-api-query">below</a>.</p>
+<h3 id="combo-1-sidecar-telemetry-list-and-render">Combo 1: sidecar telemetry, list and render</h3>
+<p><strong>Inputs:</strong> an existing sidecar telemetry file. No API access or application action file is used.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --events ./evidence/sidecar.jsonl --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --events ./evidence/sidecar.jsonl \
+  --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/combo-1.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-1.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The renderer reads the sidecar telemetry directly. Additional sidecar files can add missing participants or hops. A recorded protocol success alone does not establish completion of the business task.</p>
+<h3 id="combo-2-sidecar-telemetry-control-plane-trace-data-list-and-render">Combo 2: sidecar telemetry + control-plane trace data, list and render</h3>
+<p><strong>Inputs:</strong> an existing sidecar telemetry file and the API access configured in <code>tenant-a</code>.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --profile tenant-a --events ./evidence/sidecar.jsonl \
+  --since 24h --limit 50 --max-pages 3 --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --profile tenant-a --events ./evidence/sidecar.jsonl \
+  --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/combo-2.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-2.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The renderer rereads the sidecar file and requests the selected root's detailed API trace. It preserves richer local fields when the trace omits them. Forwarding, retention and permissions can leave gaps; successful retrieval is not a completeness guarantee.</p>
+<h3 id="combo-3-sidecar-telemetry-application-action-records-list-and-render">Combo 3: sidecar telemetry + application action records, list and render</h3>
+<p><strong>Inputs:</strong> an existing sidecar telemetry file and a conforming application action-record file. The sidecar observations provide the token-to-root mappings used to attach the application records.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --events ./evidence/sidecar.jsonl \
+  --actions ./evidence/actions.jsonl --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --events ./evidence/sidecar.jsonl \
+  --actions ./evidence/actions.jsonl \
+  --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/combo-3.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-3.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The renderer reads both files itself and adds application-reported actions for tokens it can match. This is offline, even when an ambient profile is set. Application reports are not independently verified business truth.</p>
+<h3 id="combo-4-sidecar-telemetry-control-plane-trace-data-application-action-records-list-and-render">Combo 4: sidecar telemetry + control-plane trace data + application action records, list and render</h3>
+<p><strong>Inputs:</strong> the two existing local files and the API access configured in <code>tenant-a</code>.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --profile tenant-a --events ./evidence/sidecar.jsonl \
+  --actions ./evidence/actions.jsonl \
+  --since 24h --limit 50 --max-pages 3 --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --profile tenant-a --events ./evidence/sidecar.jsonl \
+  --actions ./evidence/actions.jsonl \
+  --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/combo-4.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-4.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The renderer rereads both files and independently fetches the selected root's detailed trace. Inspect which sources contributed and any gaps or conflicts. Using all three inputs does not automatically make the graph complete, and local files are not uploaded.</p>
+<h3 id="combo-5-control-plane-trace-data-application-action-records-discover-then-render">Combo 5: control-plane trace data + application action records, discover then render</h3>
+<p><strong>Inputs:</strong> an existing conforming application action-record file and the API access configured in <code>tenant-a</code>. A local sidecar file is not required. “Discover then render” describes the route when you do not know the root ID; discovery is optional when you already have it.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --profile tenant-a --since 24h \
+  --limit 50 --max-pages 3 --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --profile tenant-a --actions ./evidence/actions.jsonl \
+  --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/combo-5.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-5.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The selected ID is the only information you carry from discovery to rendering. The listing does not produce a trace file. During rendering, the API is queried again for that root's detailed trace; its token-to-root mappings connect matching application records.</p>
+<p>A control-plane listing contains root summaries, not per-token mappings, so the listing above does not read the action file. Unmatched action records are reported as diagnostics during rendering; the renderer does not join by order labels, timestamps or guessed identities. An amount reported by an application does not reveal an authority cap omitted by the API.</p>
+<h3 id="combo-6-control-plane-trace-data-list-and-render">Combo 6: control-plane trace data, list and render</h3>
+<p><strong>Inputs:</strong> the API access configured in <code>tenant-a</code>. No local telemetry or application action files are required.</p>
+<p><strong>Optional discovery — print candidate executions to your terminal:</strong></p>
+<pre><code class="language-sh">aeg list --profile tenant-a --since 24h \
+  --limit 50 --max-pages 3 --output table
+</code></pre>
+<p>No listing file is written. Copy the chosen row's <strong>ROOT TOKEN ID</strong> into the
+quoted assignment below. If you already know that ID, skip discovery and run
+this render block alone.</p>
+<p><strong>Render — read the sources and write the HTML graph:</strong></p>
+<pre><code class="language-sh">ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --profile tenant-a --root-token-id &quot;$ROOT_ID&quot; \
+  --output ./graphs/combo-6.html
+</code></pre>
+<p><strong>Output file:</strong> <code>./graphs/combo-6.html</code> — the <code>graphs</code> subdirectory of your current working directory.
+The renderer fetches the selected root's detailed trace directly; it does not consume the earlier listing. It cannot recover private application records, full receipts or authority fields AAC does not retain. An empty or failed response does not establish that another tenant's execution did not happen.</p>
+<h3 id="use-a-saved-control-plane-trace-instead-of-a-live-api-query">Use a saved control-plane trace instead of a live API query</h3>
+<p>A saved trace is another way to supply the same data origin, not a seventh
+source combination. Export the selected root once, then render it offline:</p>
+<pre><code class="language-sh">mkdir -p ./evidence
+ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aac chain show --profile tenant-a --token-id &quot;$ROOT_ID&quot; --output json \
+  &gt; ./evidence/trace.json
+
+aeg render --trace-json ./evidence/trace.json --root-token-id &quot;$ROOT_ID&quot; \
+  --output ./graphs/saved-trace.html
+</code></pre>
+<p>Add the corresponding <code>--events</code> and/or <code>--actions</code> inputs for combinations
+2, 4 or 5. <code>--trace-json</code> and <code>--profile</code> are mutually exclusive for rendering.
+A saved export is a snapshot; opening or rendering it offline does not fetch
+new observations from AAC.</p>
+<h2 id="find-an-execution-and-render-it">Find an execution and render it</h2>
+<p>Sidecars write their configured local telemetry sink. In the CLI-generated
+Compose layout, <code>aac agent status --agent NAME</code> identifies the agent directory;
+<code>compose.env</code> names <code>AAC_AGENT_STATE_DIR</code>. The file is normally
+<code>&lt;agent-directory&gt;/state/telemetry.jsonl</code> on the setup host, mounted at
+<code>/var/lib/aac/telemetry.jsonl</code>. A path on that host is not automatically available
+on another laptop. Use a retained file sink and explicitly obtain any partner
+files you are authorized to hold.</p>
+<pre><code class="language-sh">aeg list --events ./planner-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --since 24h --output table
+
+aeg render --mint-response ./start-response.json \
+  --events ./planner-telemetry.jsonl --events ./booking-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --actions ./booking-actions.jsonl \
+  --output ./graphs/reservation.html
+</code></pre>
+<p>Use <code>--root-token-id ID</code> instead of <code>--mint-response FILE</code> for a root returned
+by local list. Both selectors are mutually exclusive. With exactly one root in
+supplied evidence, the selector may be omitted and the chosen root is printed.
+Ambiguous inputs require a selector; the tool never picks the latest run. Each
+attempt keeps its own root, even when several attempts concern the same order.
+Only actual composite links join independent roots.</p>
+<p>Add <code>--profile PROFILE</code> to query permitted central metadata in the same render
+command. Alternatively, <code>--trace-json FILE</code> reads an earlier <code>aac chain show --output json</code> export offline. These source options are mutually exclusive.
+A selector or profile does not identify the tenant of local files. Repeat
+<code>--events</code> and <code>--actions</code> for ordinary distinct files from multiple agents.</p>
+<h2 id="list-local-and-central-observations">List local and central observations</h2>
+<p>The supplied sources select the mode; there is no mode flag or implicit query
+from an ambient profile.</p>
+<table>
+<thead>
+<tr>
+<th>Sources</th>
+<th>Mode</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--events</code> and/or <code>--actions</code></td>
+<td>local</td>
+<td>Read the supplied files without a network request.</td>
+</tr>
+<tr>
+<td><code>--profile</code></td>
+<td>control-plane</td>
+<td>List the calling tenant's participant-visible roots without reading evidence files.</td>
+</tr>
+<tr>
+<td>Profile and files</td>
+<td>hybrid</td>
+<td>Join contributed observations by root token ID, once per root.</td>
+</tr>
+</tbody>
+</table>
+<p>Supplying neither source is a usage error. Any listed root can be passed to
+<code>aeg render --root-token-id ID</code> with the desired profile and/or files.</p>
+<pre><code class="language-sh">aeg list --profile planner --since 7d --output table
+
+aeg list --profile planner --events ./planner-telemetry.jsonl \
+  --actions ./planner-actions.jsonl --task-ref attempt-1 \
+  --from 2026-09-14T00:00:00Z --to 2026-09-21T00:00:00Z \
+  --limit 50 --max-pages 3 --output json
+
+ROOT_ID='REPLACE_WITH_ROOT_TOKEN_ID'
+aeg render --profile planner --root-token-id &quot;$ROOT_ID&quot; --output ./graphs/selected.html
+</code></pre>
+<p><code>--task-ref</code> is an exact local match. It requires files: the control plane never
+stores task references or private business labels. In hybrid mode it selects
+locally matched roots with activity in the window and enriches them with fetched
+central rows. It cannot select a central-only root by a label AAC does not hold.
+For listing, actions without a mapping from supplied sidecar records remain
+diagnostics: control-plane root summaries do not provide a per-token mapping.
+Rendering <a href="#combo-5-control-plane-trace-data-application-action-records-discover-then-render">combo 5</a> can instead use the selected root's detailed API
+trace to join application records. No per-action network lookup or join by
+purchase-order label or timestamp is attempted.</p>
+<p>With a profile, the default window is the previous 24 hours. <code>--since</code> accepts
+positive integer hours or days, up to 31 days. Alternatively, supply both
+<code>--from TIME --to TIME</code>, at most 31 days apart. Timezone-qualified timestamps
+are normalized to one UTC half-open interval <code>[from,to)</code> shared by local
+selection and every central page. <code>--since</code> and <code>--from</code> are mutually exclusive.
+Older local mappings/task references remain available for correlation. Local-only
+listing retains its existing unbounded default, optional open-ended <code>--from</code> or
+<code>--to</code>, and minute lookbacks such as <code>--since 30m</code>.</p>
+<p>Central enumeration fetches one page by default. <code>--limit</code> sets its size
+(1–200, default 50); <code>--max-pages</code> bounds a call (1–20, default 1). These flags
+and <code>--page-token</code> require a profile. If more pages remain, repeat the same
+profile/files/task filter with <code>--page-token TOKEN</code>, omitting <code>--since</code>.
+The server recovers the original interval/page size from the token; any explicit
+interval/limit must match. A continuation invocation reports the rows contributed
+to that invocation, so local rows may reappear. A central match on an earlier or
+unfetched page does not contribute to this invocation's source column.</p>
+<p>The <code>sources</code> column is <code>local</code>, <code>control-plane</code> or <code>both</code>. <strong>Local means no
+central row contributed to this query</strong>, not that AAC never received the chain.
+Central observations may always be incomplete: forwarding is best-effort and
+pagination is live. Late events and visibility changes can alter repeat queries;
+roots that arrive before an already-consumed page boundary can be missed. Repeat
+the original window to refresh. Tokens expire 15 minutes after enumeration starts.</p>
+<p>JSON retains <code>chains</code> and <code>diagnostics</code>. Online output adds <code>schema_version: 1</code>,
+<code>mode</code>, resolved <code>from</code>/<code>to</code>, and <code>central</code> fetch coverage: <code>status</code> (<code>more</code>,
+<code>exhausted</code> or <code>failed</code>), <code>pages_fetched</code>, <code>limit</code>, <code>has_more</code>, <code>next_page_token</code>,
+<code>pagination: live</code> and <code>evidence: best_effort</code>. <code>exhausted</code> only means the query
+has no next page, not complete execution evidence. On failure, <code>has_more</code> is the
+last successful page's indication (null before any success), and the token
+identifies the page to retry when available.</p>
+<p>Rows include root ID, local task references, earliest/latest observed times and
+contributing sources. Central rows also carry <code>central_observations</code>, preserving
+the participant IDs, categories, outcomes, observed token count and maximum hop
+from the public <code>aac chain list</code> JSON v1 contract (first released in CLI 0.2.5).
+Those summaries cover retained central evidence, including times outside the
+selection window; local times cover selected observations. Joined times span
+both contributions. They are not guaranteed start/completion or execution totals.</p>
+<p>If a page fails or is incompatible, already fetched central rows and recoverable
+local rows remain visible, with diagnostics and exit 4. An unsuccessful bare
+continuation cannot recover its interval, so local rows are withheld rather than
+filtered against a guessed window. Retry the original interval. No API error,
+empty page or missing file establishes another tenant's chain absence.</p>
+<h2 id="read-the-graph">Read the graph</h2>
+<h3 id="layout-and-participant-legend">Layout and participant legend</h3>
+<p>The page starts with a compact title, the full <strong>Chain root token ID</strong>
+and the legend, followed immediately by the graph. This ID is the selected
+chain's <code>root_token_id</code>, the same value passed to <code>--root-token-id</code>. You can select
+the full ID; it wraps when needed. The graph fits the available viewport initially.
+Use the zoom and pan controls for larger graphs: fitting all nodes does not make
+every label readable at once. Double-click a node or edge for its details.
+Scroll to read the page; enable the palm control when you want wheel gestures
+to pan the graph instead.</p>
+<p>The legend includes recipients as well as token creators. In the
+travel example, <strong>Vantis</strong> and <strong>Tourfedia</strong> are the two tenants; <strong>trip-planner</strong>
+and <strong>booking</strong> are their respective agents. The Tourfedia booking node is the
+<strong>intended recipient</strong>, derived from the leaf token's audience constraint. That
+constraint identifies who may receive the token. It does not, by itself, prove
+that delivery, receipt verification or the business action occurred; those
+claims require their own observations. Token creator and recipient are distinct
+roles, so a Vantis-created token does not become a Tourfedia-created token merely
+because it names Tourfedia as its recipient.</p>
+<p>Colors identify participants consistently across their token and recipient
+nodes. Vantis is blue and Tourfedia is orange in the travel example. Nodes belonging to
+the same participant share a color; their token labels identify the individual
+nodes. Written participant names and role shapes provide cues in addition to
+color: originator ellipse, token rectangle and intended-recipient hexagon. An
+unrecorded originator identity remains explicitly unknown.</p>
+<p>Pale node fills and dark text keep labels readable. When the participant count
+exceeds the palette, distinct <code>P1</code>, <code>P2</code>, … labels identify participants whose
+colors are reused. Badges also identify abbreviated node labels; the full
+identity remains in the legend and details. Equal display names include their
+identities to distinguish them. Composite roots use a diamond; failure/decision badges and borders show
+observed states while participant fills remain visible.</p>
+<h3 id="data-sources-used-for-this-graph">Data sources used for this graph</h3>
+<p>The collapsible <strong>Data sources used for this graph</strong> panel replaces
+<strong>Evidence coverage and limitations</strong>. There is one panel, <strong>below the rendered
+graph</strong>, initially collapsed. Its summary names the source categories used;
+expanding it shows the files, observed agents and tenants, timestamp span of the
+contributing records, and control-plane query status, followed by applicable
+limitations and next steps. A supplied file with no matching records is different
+from one that contributed data. A requested query that failed is different from
+a query that was not requested or one that succeeded with no matching observations.</p>
+<p>For example, a graph rendered from two sidecar telemetry files and two
+application action files, without <code>--profile</code> or <code>--trace-json</code>, reports:</p>
+<table>
+<thead>
+<tr>
+<th>Data source</th>
+<th>Used in this graph</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sidecar telemetry</td>
+<td>Two files, from the planner and booking agents</td>
+</tr>
+<tr>
+<td>Application action records</td>
+<td>Two files, from the planner and booking applications</td>
+</tr>
+<tr>
+<td>Control-plane trace data</td>
+<td>Not included — no API query or saved trace was requested</td>
+</tr>
+</tbody>
+</table>
+<p>The record timestamp span describes available observations, not a guaranteed
+execution start/end time or continuous logging coverage. Only limitations
+relevant to the sources and results used in this graph follow the source list.</p>
+<p>The panel explains what to do when an action or result is missing:</p>
+<blockquote>
+<p>A missing action or result means these inputs do not establish its outcome.
+First check the selected chain root, the supplied files and their observed
+times. Then add the relevant available sources and render again. More source
+categories can help only when they contain matching records; they cannot
+recover data that was never recorded or is no longer retained.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>What is missing or incomplete</th>
+<th>What to do next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A participant, token or handoff</td>
+<td>Supply that participant's retained sidecar telemetry with another <code>--events FILE</code>, if you are authorized to use it. An authorized control-plane trace may also add forwarded observations: add <code>--profile PROFILE</code> to a file-only render (combos 2 or 4), or use a saved trace export.</td>
+</tr>
+<tr>
+<td>Business action details or a result such as a reservation ID</td>
+<td>Supply the application's matching structured <code>action_taken</code> records with <code>--actions FILE</code> (combos 3, 4 or 5). Check their token IDs and the available token-to-root mapping. Control-plane traces deliberately omit private business payloads and full receipts.</td>
+</tr>
+<tr>
+<td>A requested control-plane query failed</td>
+<td>Check the reported diagnostic, profile/access configuration and connectivity, then retry. A failed query must not be treated as a successful query with no records.</td>
+</tr>
+<tr>
+<td>Expected forwarded records have not arrived</td>
+<td>Re-render later if forwarding may be delayed. If the records were never captured, were not forwarded or are outside retention, obtain retained local files where available; otherwise leave the outcome unknown.</td>
+</tr>
+</tbody>
+</table>
+<p>For the combo-3 example above, combo 4 may add control-plane observations, but
+it does not guarantee a missing business result will appear. Rendering again
+reads evidence; it does not retry the original business action.</p>
+<h3 id="interpreting-observations">Interpreting observations</h3>
+<p>Double-click nodes and edges for details. Token details retain all supplied
+business actions, including intermediate actions, source locations, receipt
+verdicts and available full terminal responses. Application reports are not
+verified business truth. Receipt verdicts are the sidecar's recorded observations;
+this tool does not verify signatures again. A <code>verified</code> verdict alone does not
+supply a reservation ID, amount, payment status or full receipt.</p>
+<p>Partial graphs are normal. Missing ancestors appear as <strong>not observed</strong> references
+only where explicit IDs establish them. The graph does not invent intermediate
+edges, actors, amounts or outcomes. Receiver reporting identity is distinct from
+token creator identity. Conflicting fields show <strong>sources disagree</strong>, with the
+value left uncertain. Sparse central metadata cannot erase richer local records.
+No exactly-once count is implied by the number of records; these formats have no
+universal unique event identifier.</p>
+<p>Central telemetry deliberately omits business payloads, authority caps, exact
+caveat expiry and full receipts. Missing/delayed events from best-effort forwarding
+are a separate limitation. A failed query is reported explicitly; any recoverable
+local HTML remains marked partial and the command exits 4. An opaque 404 is not
+proof of another tenant's chain's existence or nonexistence. Local <code>success</code>
+events do not prove completion of the business task.</p>
+<p>Amounts are shown as raw/grouped numeric values. Currency and unit context must
+come from supplied records; the renderer does not assume USD. Registered business
+labels such as <code>originator_reference</code> are distinguished from sidecar-enforced
+amount/time constraints. The renderer itself enforces no authorization policy.</p>
+<h2 id="application-record-contract">Application record contract</h2>
+<p>The versioned <a href="https://cascadeauth.github.io/aac-starter-guide/action-taken-v1.json">action-taken-v1 JSON Schema</a>
+is also installed as <code>aac_cli/_aeg/data/action-taken-v1.json</code>. Any standard JSON Schema
+2020-12 validator can check it. <code>render</code> and <code>list</code> validate while reading and
+report the source file and line. A separate <code>validate</code> command is not supplied.</p>
+<p>Write one UTF-8 JSON object per line with exactly these eight fields:</p>
+<pre><code class="language-json">{&quot;timestamp_unix_seconds&quot;:1789992000,&quot;event_type&quot;:&quot;action_taken&quot;,&quot;tenant_id&quot;:&quot;tnt-11111111-1111-4111-8111-111111111111&quot;,&quot;tenant_short&quot;:&quot;Example tenant&quot;,&quot;token_id&quot;:&quot;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&quot;,&quot;actor_spiffe_id&quot;:&quot;spiffe://tenant.example/booking&quot;,&quot;action_summary&quot;:&quot;Synthetic unpaid reservation created&quot;,&quot;action_payload&quot;:{&quot;task_ref&quot;:&quot;attempt-1&quot;,&quot;reservation_id&quot;:&quot;synthetic-attempt-1&quot;,&quot;amount&quot;:8000,&quot;currency&quot;:&quot;USD&quot;,&quot;payment_status&quot;:&quot;unpaid&quot;}}
+</code></pre>
+<p><code>tenant_id</code> is the canonical registered <code>tnt-&lt;UUIDv4&gt;</code> identity. <code>tenant_short</code>
+is a display label, never identity or authority. Obtain <code>token_id</code> from the
+verified invocation context, not an untrusted business payload. The workload's
+SPIFFE ID supplies <code>actor_spiffe_id</code>. Use the action's wall-clock epoch seconds.
+<code>action_payload.task_ref</code> is required; other payload fields are tenant-defined.
+Convergence records use the triggering arrival's token and a labeled <code>branches</code>
+map of branch token references. Do not add a ninth required root field. A sidecar
+observation from a supplied telemetry file or the detailed control-plane trace
+provides the token-to-root mapping.</p>
+<p>Language-neutral producer steps: construct the eight-field object after the
+business decision; encode it with the language's JSON encoder; append the encoded
+object and one newline to the application's own retained file. Standard-library
+Python writing example (no AAC SDK dependency):</p>
+<pre><code class="language-python">import json
+with open(&quot;business-actions.jsonl&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as stream:
+    stream.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + &quot;\n&quot;)
+</code></pre>
+<p>Emit forwarded/refused/settled business decisions; do not turn a protocol failure
+or an <code>await</code> hold into completed work. Existing log systems can export this same
+format. A filename is a convention and does not establish tenant identity.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>Cannot select one root:</strong> use local <code>list</code>, then pass the intended
+<code>--root-token-id</code> or its saved <code>--mint-response</code>. A task label alone cannot
+join independent attempts.</li>
+<li><strong>No reconstructable observations:</strong> check the supplied files and selected
+root. Obtain the relevant retained telemetry from authorized participants;
+a root ID alone is not evidence.</li>
+<li><strong>Central query failed:</strong> check the explicitly selected profile and its tenant
+API-key configuration with <code>aac profile show</code>. Do not share or paste the key.
+A denied or unavailable trace does not prove another tenant's chain exists.
+Any recoverable local graph remains partial and exit status is 4.</li>
+<li><strong>Output would overwrite evidence:</strong> choose another output filename. Keep
+source logs and exports available for later investigation.</li>
+<li><strong>A field says not observed or sources disagree:</strong> inspect the source entries
+in the graph. Missing records are not success or failure, and a conflicting
+value cannot be resolved by choosing the last file supplied.</li>
+</ul>
+<h2 id="boundaries">Boundaries</h2>
+<p>Designed for tens of displayed nodes in a presentation, roughly 100–200 for
+investigation with pan/zoom; this is planning guidance, not a certified cap.
+Ordinary repeated attempts in current files are supported. Rotated/copied-file
+qualification, detailed competing-source presentation and standalone validation
+are separate future work. No remote log collector or central business-data search
+is included. Self-contained HTML retains the embedded dependency license notices.</p>
+<p>Exit codes: 0 means the requested operation completed within its fetch bound, 2 means input,
+selection or output failure, and 4 means a central query failed but a partial
+local graph or listing was produced. These codes are not business outcomes.</p>
+<p>Choose <code>--output</code> explicitly when rendering. The command refuses an output path
+that would overwrite one of its evidence inputs.</p>
+</main><footer>Documentation for AAC CLI 0.2.8.
+<a href="/aac-starter-guide/cli/">CLI versions</a></footer></body></html>
