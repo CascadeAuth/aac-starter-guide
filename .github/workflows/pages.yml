@@ -1,4 +1,4 @@
-name: publish starter guide
+name: publish AAC documentation
 on:
   push:
     branches: [main]
@@ -27,7 +27,9 @@ jobs:
           test -f site/index.html
           test -f site/release.json
           test -f site/released-components.json
-          test -f site/release-notes.html
+          test -f site/release-notes/index.html
+          test -f site/site-manifest.json
+          test -f site/cli-component.json
           test -z "$(find site -type l -print)"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
