@@ -40,8 +40,9 @@ replay_protection:
 # Bare memory without deployment_profile keeps its old development-only meaning.
 
 # A2A 1.0 unary requests: receive peer messages and send from your paired agent.
-# Presence enables the external `POST /a2a/v1`, public Agent Card, and the
-# loopback-only paired-agent `POST /v1/agent/a2a/dispatch`. The local handler
+# Presence enables the external `POST /a2a/v1` and the public Agent Card. The
+# loopback-only paired-agent `POST /v1/agent/a2a/dispatch` is enabled by the
+# continuation_authority and egress_idempotency blocks below. The local handler
 # receives the unchanged verified body at its standard A2A path. Every bound is
 # explicit: there is no body-size default or unlimited mode. The example limits
 # below must be sized and tested for your deployment before use.
@@ -84,8 +85,13 @@ a2a:
   #       examples: ["Hold two seats to Lisbon"]
   #       input_modes: ["text/plain"]          # only text/plain, application/json
   #       output_modes: ["application/json"]
+  # Sending from your paired agent needs both blocks below. Supply both or
+  # neither; one without the other stops startup. With neither, the sidecar is
+  # receive-only: it still verifies and delivers peer messages and serves the
+  # Agent Card, the dispatch route answers 404, and no state file is opened.
   # Verified inbound authority remains deliberately ephemeral and is scoped by
-  # exact pair/task/presenter. It can only be shortened by this required cap.
+  # exact pair/task/presenter. When sending is enabled it can only be shortened
+  # by this cap.
   continuation_authority:
     retention_seconds: 600
   # The bbolt file is opened and validated before either listener binds. Mount

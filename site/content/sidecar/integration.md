@@ -750,7 +750,7 @@ Build the sample **application** image locally and pull the published sidecar:
 cd "$AAC_DEMO_DIR"
 python configure_container.py
 docker build --tag aac-demo-agent "$AAC_DEMO_DIR/container/agent"
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.0
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.1
 ```
 
 Run from a non-root host account. This local demonstration runs both containers
@@ -771,7 +771,7 @@ docker run --detach --name aac-demo-sidecar --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac" \
-  docker.io/cascadeauth/aac-sidecar:v0.5.0 -config /etc/aac/sidecar-config.yaml
+  docker.io/cascadeauth/aac-sidecar:v0.5.1 -config /etc/aac/sidecar-config.yaml
 docker logs --tail 30 aac-demo-agent
 docker logs --tail 30 aac-demo-sidecar
 docker exec aac-demo-agent \
