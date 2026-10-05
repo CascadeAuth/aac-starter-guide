@@ -18,21 +18,31 @@ trust domains. The journey prepares credentials and configuration from scratch.
 
 ## 1. Install AAC CLI and prepare the example
 
+Install [AAC CLI from PyPI](https://pypi.org/project/aac-cli/) first:
+
+```bash
+python3 -m venv .aac-tools
+. .aac-tools/bin/activate
+python -m pip install --upgrade aac-cli
+aac --version
+aeg --version
+```
+
+Keep the environment active, then prepare the Docker Compose example:
+
 ```bash
 git clone https://github.com/CascadeAuth/aac-compose-demo.git
 cd aac-compose-demo
-python3 -m venv .venv
-. .venv/bin/activate
 ./demo prepare
 ```
 
-Preparation installs the current released CLI and freezes component
+Preparation selects the current released CLI and freezes component
 versions/digests in `.local/components.json`. Compose supplies the sidecars,
 publishers and application dependencies. Keep this shell and directory.
 
 ## 2. Register and connect your tenants
 
-Continue the [numbered developer journey](https://cascadeauth.github.io/aac-starter-guide/#1-install-aac-cli-and-prepare-the-example)
+Continue the [numbered developer journey](https://docs.cascadeauth.com/get-started/#1-install-aac-cli-and-prepare-the-example)
 from `mkdir -p .local`: set the isolated CLI home, copy the two agent inputs,
 register both tenants interactively and explicitly configure peer public trust.
 The CLI generates the credentials and complete configuration. A publisher sends
@@ -53,7 +63,7 @@ The private Docker network publishes no host ports.
 
 ## 4. Inspect the graph and stop
 
-Follow the journey's [list → select → render steps](https://cascadeauth.github.io/aac-starter-guide/#5-list-select-and-render-an-execution)
+Follow the journey's [list → select → render steps](https://docs.cascadeauth.com/get-started/#5-list-select-and-render-an-execution)
 or execute the complete render command printed by the run. Open its HTML file
 locally. Then stop the containers while preserving credentials and evidence:
 
@@ -73,28 +83,30 @@ locally. Then stop the containers while preserving credentials and evidence:
 Basic replay is process-local and lost on restart; it does not coordinate
 replicas. Shared durable uses qualified authenticated-TLS Valkey. Retained A2A
 dispatch results are separate from replay and audit logs. The
-[deployment reference](https://cascadeauth.github.io/aac-starter-guide/deployment.html)
+[deployment reference](https://docs.cascadeauth.com/sidecar/configuration/)
 covers production identities, storage, restricted ingress and multi-agent setup.
 Run one root-set writer per tenant and one SPIFFE-bundle writer per active
 binding; adding a domain can require another publisher process with root
 publishing disabled.
 
-Use the [artifact reference](https://cascadeauth.github.io/aac-starter-guide/artifacts.html)
-for standalone installation and **Verify a container or audit artifacts — optional**.
-The [CLI guide/reference](https://cascadeauth.github.io/aac-starter-guide/cli/)
+Use the [artifact reference](https://docs.cascadeauth.com/sidecar/install/)
+for container or standalone installation. Optional
+[signature and artifact checks](https://docs.cascadeauth.com/sidecar/reference/verification/)
+have their own reference.
+The [CLI guide/reference](https://docs.cascadeauth.com/cli/)
 includes developer and enterprise registration. All
-[references](https://cascadeauth.github.io/aac-starter-guide/references.html)
+[references](https://docs.cascadeauth.com/sidecar/configuration/)
 remain public.
 
 ## Stage and support
 
 Current version: **`v0.4.4`**, image `docker.io/cascadeauth/aac-sidecar:v0.4.4`.
 Use versioned/digest references; there is no mutable `latest` tag.
-The [released-component record](https://cascadeauth.github.io/aac-starter-guide/released-components.json)
+The [released-component record](https://docs.cascadeauth.com/released-components.json)
 provides current installation metadata; each demo run retains its exact selection.
 
-[AAC Sidecar Developer Beta Binary License 1.0](https://cascadeauth.github.io/aac-starter-guide/LICENSE)
-and [third-party notices](https://cascadeauth.github.io/aac-starter-guide/THIRD_PARTY_NOTICES.md)
+[AAC Sidecar Developer Beta Binary License 1.0](https://docs.cascadeauth.com/LICENSE)
+and [third-party notices](https://docs.cascadeauth.com/THIRD_PARTY_NOTICES.md)
 apply. No production SLA is implied. Support: **support@cascadeauth.com**;
 licensing: **legal@cascadeauth.com**.
 The public beta is for evaluation and integration development, not production
@@ -114,7 +126,7 @@ idempotent minting. See the guide's native authority and pairing sections.
 Native forwarding refuses widened candidates before outgoing proof signing or
 send. Remove caller `valid_until` from native forwarding `additional_predicates`
 and use destination `valid_for`; inherited/root expiry bounds still apply.
-The [starter guide](https://cascadeauth.github.io/aac-starter-guide/) explains
+The [starter guide](https://docs.cascadeauth.com/get-started/) explains
 asynchronous refusal outcomes and the unchanged A2A expiry behavior.
 
 **Upgrade to v0.4.1:** remove any `state_store.cold` block; durable arrival storage

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Release notes - AAC Docs</title>
+<meta name="description" content="Changes and upgrade guidance by component."><link rel="canonical" href="https://docs.cascadeauth.com/release-notes/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
+<h1 id="release-notes">Release notes</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<h2 id="0-4-0">0.4.0</h2>
+<p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
+in earlier releases.</p>
+<h3 id="configuration-upgrade-note">Configuration upgrade note</h3>
+<p>For <code>sidecar.dev_mode</code> and
+<code>sidecar.agent_invoke_context.include_full_prior_payloads</code>, use unquoted
+<code>true</code> or <code>false</code>. Mixed-case spellings such as <code>yEs</code> now fail configuration
+loading; check hand-edited configurations before upgrading. CLI-generated
+configurations already use canonical booleans.</p>
+<h3 id="native-forwarding-upgrade-note">Native forwarding upgrade note</h3>
+<p>Remove <code>valid_until</code> from every native
+<code>forward</code> or <code>forward_composite</code> decision's <code>additional_predicates</code>, including
+<code>additional_forwards</code> entries. Even equal or shorter supplied deadlines are
+refused. Use the destination's configured <code>valid_for</code>; continuation expiry is
+bounded by inherited authority and the 24-hour root limit. Dates inside your
+business payload remain ordinary data. A2A's separate shorter-expiry contract
+and the library's absolute expiry cap are preserved.</p>
+<p>Native candidates are checked before outgoing proof signing or send. For
+example, <code>amount_max:8000</code> cannot continue as <code>amount_max:9500</code>. The receiving
+sidecar independently enforces this rule, including against a deliberately
+constructed widened chain. Ordinary narrowing and fresh authority under a
+still-valid original approval remain possible through the normal authorization
+path; an existing narrow chain is not widened.</p>
+<p>The native callback's <code>200</code> / <code>dispatched</code> acknowledgement precedes background
+completion. Observe the later local outcome: a refused <code>forward</code> emits a
+<code>dispatch</code> failure with <code>ERR_CHAIN_INVALID</code>; a refused reactive
+<code>forward_composite</code> emits <code>composite_mint</code> with that code. Valid sibling branches
+continue. Composite candidates are checked against their own fresh-root and
+attestation chain. Proactive composite candidate rejection is a synchronous
+403; reserved expiry input is an invalid-decision response before dispatch.</p>
+<h2 id="0-4-1">0.4.1</h2>
+<p>Upgrade guidance: remove any <code>state_store.cold</code> block, including empty or
+null blocks, and replace configured class/destination <code>predicates.valid_until</code>
+with <code>valid_for</code>. An omitted destination timeout now inherits the global
+5-second default instead of the former independent 3-second default. Set an
+explicit <code>timeout_ms</code> to retain a deliberate destination override. Conflicting
+explicit task references refuse native decisions before any branch signs or
+sends; already-committed roots retain their provenance in a 207 response.
+With A2A enabled and <code>deadline_seconds</code> below 5, the unchanged global default
+is too large: set an explicit destination <code>timeout_ms</code> no greater than that
+deadline (for example, 3000ms for 3 seconds), or lower the global dispatch budget.
+CLI-generated configurations already supply explicit destination timeouts.</p>
+<h2 id="0-4-2">0.4.2</h2>
+<p>This release documents the native two-tenant reservation demo and links its public
+setup, receipt/refusal and certificate-lifecycle exercises. This release carries
+the updated guide and overview; runtime authorization, configuration and wire
+behavior are unchanged from v0.4.1. Existing v0.4.1 artifacts remain available unchanged.</p>
+<h2 id="0-4-3">0.4.3</h2>
+<p>Distribution update: the runnable image is published after its matching
+signed bundle. Runtime behavior and configuration remain the same as v0.4.2.</p>
+<h2 id="0-4-4">0.4.4</h2>
+<p>The configuration template links to the standalone AAC developer documentation
+site. Current guide corrections can publish independently of sidecar releases.
+Runtime behavior, configuration and authorization remain unchanged from v0.4.3.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operate and troubleshoot the sidecar - AAC Docs</title>
+<meta name="description" content="Diagnostics, maintenance and evidence verification."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/operations/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/operations/" aria-current="page">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Operate and troubleshoot the sidecar</span></nav>
+<h1 id="operate-and-troubleshoot-the-sidecar">Operate and troubleshoot the sidecar</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/operations/index.md" download="sidecar-operations.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p><a href="/get-started/">Start the AAC journey</a> · <a href="/sidecar/configuration/">All references</a></p>
+<p>This reference is for a deployment or integration you have chosen to configure.
+For the first authenticated reservation, use the packaged Compose journey above.</p>
+<p>Use the actual paths printed by your setup and run. The executable offline
+audit recipes below refer to the <a href="/sidecar/integration/#optional-runnable-paired-agent-example">optional protocol fixture</a>
+and its <code>AAC_DEMO_DIR</code>; the reservation demo instead prints its retained agent
+state paths and saved mint response. Do not guess a tenant's local file path.</p>
+<h2 id="diagnostics-and-support">Diagnostics and support</h2>
+<p>Work in this order: exact installed version → configuration/file permissions →
+<code>/healthz</code> and <code>/readyz</code> → trust publication and certificate validity → workload
+projection → pairing → workflow outcome → local and central evidence. A 401
+at an agent callback means pairing failed before business execution. A trust
+or recipient rejection should leave the agent untouched. A healthy process
+with missing trust can remain unable to accept an authenticated workflow.</p>
+<p>Contact <code>support@cascadeauth.com</code> with the version, image/bundle digest,
+platform, timestamp/time zone, request/root identifier if appropriate, stable
+error code and sanitized reproduction. Beta support is best-effort without a
+24/7 SLA. For a suspected compromise, stop affected admission, preserve local
+evidence and contact the same support address; your operator owns credential
+revocation and recovery. License questions go to <code>legal@cascadeauth.com</code>.</p>
+<h2 id="optional-central-trace-forwarding">Optional central trace forwarding</h2>
+<p>The sidecar always follows its configured local telemetry sink. To also send
+eligible chain metadata to AAC, add this block using the supplied data-plane
+URL and a private tenant API-key file:</p>
+<pre><code class="language-yaml">sidecar:
+  telemetry:
+    sink: &quot;/var/lib/aac/telemetry.jsonl&quot;
+    central_forward:
+      control_plane_url: &quot;https://api.stage.cascadeauth.dev&quot;
+      api_key_file: &quot;/etc/aac/keys/tenant-api-key&quot;
+</code></pre>
+<p>The parent directory must exist. The sidecar exchanges that API key for a
+short-lived <code>telemetry-ingest</code> session and sends only the allowed central
+metadata. Business payloads, task references, human claims, raw AAC/DPoP
+credentials and terminal attestations remain local. A2A protocol diagnostics
+without chain identifiers also remain local. Local <code>sink: &quot;none&quot;</code> may be used
+with central forwarding when local retention is intentionally disabled.</p>
+<p>Forwarding uses a bounded background queue and never waits on the authorization
+path. Outages, queue saturation or shutdown can lose central events; retain
+local audit data according to your needs. Coarse local warnings identify
+exchange/forward failures without printing credentials or response bodies. The
+API-key file is reread on each token exchange, so an atomic replacement takes
+effect without a restart; already-issued sessions retain their own expiry.</p>
+<p>After a real workflow, use <code>aac chain --help</code> and the returned root token
+identifier to inspect its central trace. Allow for asynchronous delivery;
+successful local events alone do not prove central delivery.</p>
+<h2 id="audit-your-workflows">Audit your workflows</h2>
+<p>Configure a tenant-local JSONL sink and retain it alongside your application's
+business audit. Each line is one JSON object; fields not applicable to an event
+are omitted. Start with <code>root_token_id</code> from the client, then follow token IDs,
+hop indices, workload identities, decisions and failures across your sidecars.
+Wall-clock arrival order across hosts is not a causal guarantee.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mint</code></td>
+<td>Root/initial authority creation or its failure</td>
+</tr>
+<tr>
+<td><code>receive</code></td>
+<td>Authority admission and local delivery, or a verification/callback failure</td>
+</tr>
+<tr>
+<td><code>dispatch</code></td>
+<td>Outbound delegation/result, including downstream failure</td>
+</tr>
+<tr>
+<td><code>respond</code></td>
+<td>Local terminal response; a successful settlement includes the compact JWS</td>
+</tr>
+<tr>
+<td><code>composite_mint</code></td>
+<td>A supported composite authority was created from multiple arrivals</td>
+</tr>
+<tr>
+<td><code>a2a_ingress</code></td>
+<td>Protocol/body/admission diagnostics for a unary A2A request</td>
+</tr>
+<tr>
+<td><code>a2a_egress</code></td>
+<td>Paired-agent A2A dispatch outcome and retained-state pressure</td>
+</tr>
+</tbody>
+</table>
+<p>Native events use <code>result: success</code> or <code>failure</code>; A2A diagnostics may use
+<code>accepted</code>, <code>rejected</code> or <code>failed</code>. Event availability depends on how far the
+request progressed. A request rejected before authority can be decoded may
+have no root/token ID. A bad pairing signature at the application is an
+application HTTP 401, not proof of a chain-verification event at the sidecar.</p>
+<h3 id="local-event-fields">Local event fields</h3>
+<table>
+<thead>
+<tr>
+<th>Fields</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>timestamp_unix_seconds</code>, <code>event_type</code>, <code>result</code></td>
+<td>Event time as Unix seconds (possibly fractional), category and outcome</td>
+</tr>
+<tr>
+<td><code>root_token_id</code>, <code>token_id</code>, <code>parent_token_id</code>, <code>hop_index</code></td>
+<td>Chain correlation and parent/hop relationships</td>
+</tr>
+<tr>
+<td><code>creator_svid_hash</code>, <code>audience_hash</code>, <code>caveat_audience</code></td>
+<td>Creator/audience binding and the readable audience where available</td>
+</tr>
+<tr>
+<td><code>tenant_id</code>, <code>actor_spiffe_id</code>, <code>presenter_spiffe_id</code></td>
+<td>Local tenant/actor and verified presenting workload</td>
+</tr>
+<tr>
+<td><code>caveat_predicates</code>, <code>destination</code>, <code>task_ref</code>, <code>originator_issuer</code></td>
+<td>Local restrictions, destination profile and task/originator context; may contain business-sensitive values</td>
+</tr>
+<tr>
+<td><code>parent_token_ids_list</code>, <code>parent_root_token_ids</code>, <code>parent_tenant_ids</code>, <code>inbound_token_id</code></td>
+<td>Multi-parent/composite and inbound correlation</td>
+</tr>
+<tr>
+<td><code>http_status</code>, <code>response_size_bytes</code>, <code>latency_ms</code></td>
+<td>Observed response and operation measurements when emitted</td>
+</tr>
+<tr>
+<td><code>terminal_attestation</code>, <code>terminal_attestation_verification</code></td>
+<td>Compact terminal JWS and the downstream verifier's recorded result, where available</td>
+</tr>
+<tr>
+<td><code>failure_code</code>, <code>failure_detail</code>, <code>agent_decision_action</code></td>
+<td>Stable failure category, diagnostic text (bounded), and agent decision</td>
+</tr>
+<tr>
+<td><code>agent_id</code>, <code>agent_descriptor_hash</code></td>
+<td>Optional agent/descriptor correlation</td>
+</tr>
+<tr>
+<td><code>method</code>, <code>protocol_version</code>, <code>result_kind</code>, <code>error_category</code></td>
+<td>Optional A2A protocol diagnostics</td>
+</tr>
+<tr>
+<td><code>request_body_bytes</code>, <code>configured_body_limit_bytes</code></td>
+<td>Request size and configured A2A body bound</td>
+</tr>
+<tr>
+<td><code>egress_entries</code>, <code>egress_reserved_cached_bytes</code>, <code>egress_cached_response_bytes</code></td>
+<td>Current local retained dispatch state and byte use</td>
+</tr>
+<tr>
+<td><code>egress_expired_reclaimed_total</code>, <code>egress_saturation_rejections_total</code>, <code>egress_oversize_rejections_total</code></td>
+<td>Cumulative reclamation/capacity/response-bound counters</td>
+</tr>
+<tr>
+<td><code>egress_conflicts_total</code>, <code>egress_in_progress_hits_total</code>, <code>egress_cached_hits_total</code></td>
+<td>Cumulative changed-body conflicts, in-progress hits and cached-result reuse</td>
+</tr>
+</tbody>
+</table>
+<p>Not every supported field is populated by every current path. Treat optional
+absence as unknown, not a successful verification or a zero measurement.
+Ordinary access/application logs are separate from this JSONL schema.</p>
+<p>These abbreviated, synthetic examples show the shape, not complete captured
+events. Ellipses indicate omitted values and must not be fed into a verifier:</p>
+<pre><code class="language-json">{&quot;timestamp_unix_seconds&quot;:1700000000,&quot;event_type&quot;:&quot;mint&quot;,&quot;result&quot;:&quot;success&quot;,&quot;root_token_id&quot;:&quot;...&quot;,&quot;agent_decision_action&quot;:&quot;forward&quot;}
+{&quot;timestamp_unix_seconds&quot;:1700000001,&quot;event_type&quot;:&quot;receive&quot;,&quot;result&quot;:&quot;failure&quot;,&quot;failure_code&quot;:&quot;ERR_DPOP_REPLAY&quot;}
+{&quot;timestamp_unix_seconds&quot;:1700000002,&quot;event_type&quot;:&quot;receive&quot;,&quot;result&quot;:&quot;failure&quot;,&quot;failure_code&quot;:&quot;ERR_RECIPIENT_NOT_AUTHORIZED&quot;}
+{&quot;timestamp_unix_seconds&quot;:1700000003,&quot;event_type&quot;:&quot;respond&quot;,&quot;result&quot;:&quot;success&quot;,&quot;root_token_id&quot;:&quot;...&quot;,&quot;agent_decision_action&quot;:&quot;settle&quot;,&quot;terminal_attestation&quot;:&quot;...&quot;}
+</code></pre>
+<h3 id="investigate-three-common-failures">Investigate three common failures</h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>What to inspect</th>
+<th>Next step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Replayed proof</td>
+<td>Receiver HTTP 403 with <code>ERR_DPOP_REPLAY</code>; local receive failure, possibly without a root ID</td>
+<td>Do not resend a captured AAC/DPoP request. Use the originator/paired-agent API to produce a fresh proof; for a business retry preserve the original A2A dispatch ID and body. Never disable replay checks to retry.</td>
+</tr>
+<tr>
+<td>Wrong recipient</td>
+<td>Receiver <code>ERR_RECIPIENT_NOT_AUTHORIZED</code>; sender may record <code>ERR_DOWNSTREAM_REJECTED</code></td>
+<td>Compare <code>destinations.*.audience_pattern</code> to the receiver's exact <code>agent.spiffe_id</code>. A wildcard holder audience does not turn a different final recipient into the intended workload.</td>
+</tr>
+<tr>
+<td>Bad pairing</td>
+<td>Agent HTTP 401 before its business handler; library reports a missing/malformed header, timestamp skew or signature mismatch. Sidecar delivery can report <code>ERR_AGENT_REJECTED</code></td>
+<td>Compare the two secret files without printing them, check clocks, method/path, covered headers and exact body bytes. Sign once after serialization and transmit those bytes unchanged.</td>
+</tr>
+</tbody>
+</table>
+<p>Keep access logs or request correlation when a pre-verification failure has no
+root ID. Do not invent a root association from unverified caller headers.
+After a successful two-agent flow, correlate sender <code>dispatch</code> and receiver
+<code>receive</code>/<code>respond</code>, then verify the terminal JWS below. An HTTP 200 alone is
+insufficient evidence of the intended recipient or settlement.</p>
+<h3 id="retain-and-inspect-safely">Retain and inspect safely</h3>
+<p>The sidecar writes file sinks with mode 0600 and fails startup for an unusable
+path. Restrict access, encrypt backups, define a retention period, and forward
+to an append-only/tamper-evident store if your audit requirements need it.
+JSONL itself is not a signed or tamper-proof ledger. Preserve clock/source
+metadata and test your collector's loss detection. For file rotation, coordinate
+stop/reopen/restart; renaming an open file does not make the process reopen a
+new path. Do not rely on log retention as a substitute for retained A2A state.</p>
+<p>Central forwarding sends a smaller metadata envelope asynchronously. Payloads,
+task references, human claims, raw authority/DPoP and terminal attestations stay
+local. Central outages can lose events without stopping authorization. Use:</p>
+<pre><code class="language-bash">aac chain show --help
+aac chain show --profile &quot;$AAC_PROFILE&quot; --token-id '&lt;root_token_id&gt;' --output json
+</code></pre>
+<p>Only participating tenants can inspect a trace. A missing central trace can
+mean delayed/lost forwarding, an unknown ID, or no access; investigate local
+evidence and coarse forwarding warnings before changing credentials.</p>
+<h3 id="verify-terminal-evidence-offline">Verify terminal evidence offline</h3>
+<p>Save the local <code>terminal_attestation</code> string from a <code>respond</code> event into
+<code>terminal.jws</code>. Verify it using your <strong>already trusted CA certificates for that
+workload's SPIFFE domain</strong> and the expected tenant, workload, root and task
+from your own registration/request records. Never derive those expectations or
+trust anchors from the unverified JWS itself.</p>
+<p>Install <code>python -m pip install --upgrade cryptography</code> in an isolated verifier
+environment. Save the following as <code>verify_terminal.py</code>. It implements the
+supported direct-CA, single-leaf Ed25519/P-256 profile, a 64-KiB input bound and a fixed 30-second
+certificate clock tolerance. It checks the signature and identity/correlation
+bindings; it does not reconstruct the entire AAC chain or prove the business
+action happened. Pair it with the workflow and application audit records.</p>
+<pre><code class="language-python">import argparse
+import base64
+import hashlib
+import json
+import re
+import time
+from pathlib import Path
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import ec, ed25519
+from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
+from cryptography.x509.oid import SignatureAlgorithmOID
+
+ORDER = int(&quot;FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551&quot;, 16)
+
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def unb64(value):
+    require(bool(re.fullmatch(r&quot;[A-Za-z0-9_-]+&quot;, value)), &quot;Invalid base64url&quot;)
+    return base64.urlsafe_b64decode(value + &quot;=&quot; * (-len(value) % 4))
+
+
+def verify(compact, ca_pem, tenant, spiffe, root, task, at):
+    require(len(compact) &lt;= 65536, &quot;Attestation too large&quot;)
+    parts = compact.split(&quot;.&quot;)
+    require(len(parts) == 3, &quot;Expected compact JWS&quot;)
+    header, claims = [json.loads(unb64(p)) for p in parts[:2]]
+    require(isinstance(header, dict) and isinstance(claims, dict), &quot;Expected JSON objects&quot;)
+    require(
+        header.get(&quot;typ&quot;) == &quot;aac-terminal-attestation+jwt&quot; and &quot;crit&quot; not in header,
+        &quot;Unsupported protected header&quot;,
+    )
+    require(header.get(&quot;alg&quot;) in (&quot;EdDSA&quot;, &quot;ES256&quot;), &quot;Unsupported algorithm&quot;)
+    chain = header.get(&quot;x5c&quot;)
+    require(isinstance(chain, list) and len(chain) == 1, &quot;Expected one x5c leaf&quot;)
+    leaf = x509.load_der_x509_certificate(base64.b64decode(chain[0], validate=True))
+    public = leaf.public_key()
+    spki = public.public_bytes(
+        serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    kid = base64.urlsafe_b64encode(hashlib.sha256(spki).digest()).rstrip(b&quot;=&quot;).decode()
+    require(header.get(&quot;kid&quot;) == kid, &quot;Leaf-key fingerprint mismatch&quot;)
+    uris = leaf.extensions.get_extension_for_class(
+        x509.SubjectAlternativeName
+    ).value.get_values_for_type(x509.UniformResourceIdentifier)
+    require(
+        [u for u in uris if u.startswith(&quot;spiffe://&quot;)] == [spiffe], &quot;Unexpected workload identity&quot;
+    )
+
+    def valid(cert):
+        return (
+            cert.not_valid_before_utc.timestamp() - 30
+            &lt;= at
+            &lt;= cert.not_valid_after_utc.timestamp() + 30
+        )
+
+    require(valid(leaf), &quot;Leaf outside certificate validity&quot;)
+    trusted = False
+    for ca in x509.load_pem_x509_certificates(ca_pem):
+        if not valid(ca):
+            continue
+        key = ca.public_key()
+        try:
+            if (
+                isinstance(key, ed25519.Ed25519PublicKey)
+                and leaf.signature_algorithm_oid == SignatureAlgorithmOID.ED25519
+            ):
+                key.verify(leaf.signature, leaf.tbs_certificate_bytes)
+            elif (
+                isinstance(key, ec.EllipticCurvePublicKey)
+                and isinstance(key.curve, ec.SECP256R1)
+                and leaf.signature_algorithm_oid == SignatureAlgorithmOID.ECDSA_WITH_SHA256
+            ):
+                key.verify(leaf.signature, leaf.tbs_certificate_bytes, ec.ECDSA(hashes.SHA256()))
+            else:
+                continue
+            trusted = True
+            break
+        except Exception:
+            continue
+    require(trusted, &quot;Leaf not signed by a currently valid trusted CA&quot;)
+    signature = unb64(parts[2])
+    data = &quot;.&quot;.join(parts[:2]).encode(&quot;ascii&quot;)
+    require(len(signature) == 64, &quot;Expected 64-byte signature&quot;)
+    if header[&quot;alg&quot;] == &quot;EdDSA&quot;:
+        require(isinstance(public, ed25519.Ed25519PublicKey), &quot;Algorithm/key mismatch&quot;)
+        public.verify(signature, data)
+    else:
+        require(
+            isinstance(public, ec.EllipticCurvePublicKey)
+            and isinstance(public.curve, ec.SECP256R1),
+            &quot;Algorithm/key mismatch&quot;,
+        )
+        r, s = int.from_bytes(signature[:32], &quot;big&quot;), int.from_bytes(signature[32:], &quot;big&quot;)
+        require(0 &lt; r &lt; ORDER and 0 &lt; s &lt;= ORDER // 2, &quot;Invalid or noncanonical ES256 signature&quot;)
+        public.verify(encode_dss_signature(r, s), data, ec.ECDSA(hashes.SHA256()))
+    expected = {
+        &quot;iss&quot;: tenant,
+        &quot;terminal_agent_svid&quot;: spiffe,
+        &quot;root_token_id&quot;: root,
+        &quot;task_ref&quot;: task,
+    }
+    require(isinstance(root, str) and bool(root), &quot;Expected root must be nonempty&quot;)
+    for name, value in expected.items():
+        require(claims.get(name) == value, &quot;Claim mismatch: &quot; + name)
+    require(
+        bool(re.fullmatch(r&quot;tnt-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}&quot;, tenant)),
+        &quot;Invalid expected tenant&quot;,
+    )
+    require(
+        type(claims.get(&quot;iat&quot;)) is int and -(2**63) &lt;= claims[&quot;iat&quot;] &lt; 2**63,
+        &quot;Invalid issued-at time&quot;,
+    )
+    require(
+        isinstance(claims.get(&quot;settlement_id&quot;), str) and bool(claims[&quot;settlement_id&quot;]),
+        &quot;Missing settlement ID&quot;,
+    )
+    require(
+        &quot;action_summary&quot; not in claims or isinstance(claims[&quot;action_summary&quot;], str),
+        &quot;Invalid action summary&quot;,
+    )
+    return {&quot;verified&quot;: True, **expected, &quot;settlement_id&quot;: claims[&quot;settlement_id&quot;]}
+
+
+def read_compact(path):
+    with Path(path).open(&quot;rb&quot;) as stream:
+        raw = stream.read(65537)
+    require(len(raw) &lt;= 65536, &quot;Attestation file exceeds 64 KiB&quot;)
+    return raw.decode(&quot;ascii&quot;).strip()
+
+
+if __name__ == &quot;__main__&quot;:
+    p = argparse.ArgumentParser()
+    for flag in (&quot;jws&quot;, &quot;ca&quot;, &quot;tenant&quot;, &quot;spiffe&quot;, &quot;root&quot;, &quot;task&quot;):
+        p.add_argument(&quot;--&quot; + flag, required=True)
+    p.add_argument(&quot;--at&quot;, type=int, default=None)
+    a = p.parse_args()
+    result = verify(
+        read_compact(a.jws),
+        Path(a.ca).read_bytes(),
+        a.tenant,
+        a.spiffe,
+        a.root,
+        a.task,
+        int(time.time()) if a.at is None else a.at,
+    )
+    print(json.dumps(result))
+</code></pre>
+<pre><code class="language-bash">python verify_terminal.py --jws terminal.jws --ca &quot;$AAC_DEMO_DIR/pki/dev-ca.crt&quot; \
+  --tenant &quot;$AAC_TENANT_ID&quot; --spiffe &quot;spiffe://${AAC_TRUST_DOMAIN}/demo/agent&quot; \
+  --root '&lt;root_token_id returned by your client&gt;' --task '&lt;task_ref from your request&gt;'
+</code></pre>
+<p>For the normal current-time check, omit <code>--at</code>. For historical analysis, use an
+independently trusted observation time and archived trusted CA material; never
+use an unverified <code>iat</code> to choose the certificate time. Historical verification
+does not establish that a key is trusted or a credential active now.
+The attestation has no expiry claim; <code>iat</code> is signed metadata, not a replay
+defense. Check it against your independently recorded workflow timeline.
+For a result from the two-agent example's peer, use its registered
+<code>spiffe://&lt;trust-domain&gt;/demo/peer</code> identity instead of <code>/demo/agent</code>.</p>
+<h2 id="sidecar-error-reference">Sidecar error reference</h2>
+<p>Application errors use this envelope; <code>detail</code> may be null and diagnostic
+wording may change. Use <code>code</code> for automation and <code>request_id</code> for support.
+The HTTP status and <code>code</code> together identify the response; the same code can
+appear at different operation boundaries.</p>
+<pre><code class="language-json">{&quot;error&quot;:{&quot;code&quot;:&quot;ERR_RECIPIENT_NOT_AUTHORIZED&quot;,&quot;message&quot;:&quot;Recipient verification failed&quot;,&quot;detail&quot;:null,&quot;request_id&quot;:&quot;req-aac-sdk-example&quot;}}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning and next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ERR_A2A_AUTHORITY_REGISTRATION_FAILED</code></td>
+<td>Verified inbound continuation could not be retained; retry only after the local authority/state problem is resolved.</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_DISPATCH_FAILED</code></td>
+<td>Outbound A2A operation failed; inspect local logs and endpoint/TLS configuration before retrying.</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_DISPATCH_TIMEOUT</code></td>
+<td>A2A operation exceeded its deadline; reconcile the outcome and preserve the dispatch ID/body.</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_DISPATCH_UNCERTAIN</code></td>
+<td>Delivery outcome is unknown; do not create a new dispatch ID to repeat a possible business action.</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_OVERLOADED</code></td>
+<td>A2A admission capacity is full; apply backoff and check configured concurrency/headroom.</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_REMOTE_REJECTED</code></td>
+<td>The peer rejected A2A delivery; inspect its authorized error response and recipient/profile expectations.</td>
+</tr>
+<tr>
+<td><code>ERR_AGENT_REJECTED</code></td>
+<td>The local agent returned a rejecting HTTP response; check pairing first, then its application policy/logs.</td>
+</tr>
+<tr>
+<td><code>ERR_AGENT_TIMEOUT</code></td>
+<td>Local agent response exceeded its budget; inspect the handler and deadlines.</td>
+</tr>
+<tr>
+<td><code>ERR_AGENT_UNREACHABLE</code></td>
+<td>Local agent could not be reached; check process, loopback namespace, port and TLS settings.</td>
+</tr>
+<tr>
+<td><code>ERR_CHAIN_INVALID</code></td>
+<td>Chain structure or restrictions are invalid; inspect the submitted chain and attenuation rules.</td>
+</tr>
+<tr>
+<td><code>ERR_CLASS_OF_ACTION_NOT_FOUND</code></td>
+<td>Mint/originate named an unknown class; use a configured <code>classes_of_action</code> name.</td>
+</tr>
+<tr>
+<td><code>ERR_CONFIG_ERROR</code></td>
+<td>The requested operation lacks valid configuration; inspect signer/material/duration settings and startup logs.</td>
+</tr>
+<tr>
+<td><code>ERR_CONTINUATION_AUTHORITY_UNAVAILABLE</code></td>
+<td>Inbound authority is missing or expired for this pair/task/presenter; obtain a new authorized arrival rather than fabricating continuation.</td>
+</tr>
+<tr>
+<td><code>ERR_DESTINATION_NOT_FOUND</code></td>
+<td>A decision/envelope named no configured destination; correct its profile name.</td>
+</tr>
+<tr>
+<td><code>ERR_DOWNSTREAM_REJECTED</code></td>
+<td>Native downstream delivery was rejected; inspect the peer's response and expected identity/restrictions.</td>
+</tr>
+<tr>
+<td><code>ERR_DOWNSTREAM_TIMEOUT</code></td>
+<td>Downstream transport failed or timed out; check TLS, reachability and budgets, and reconcile before retrying business work.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_ATH_MISMATCH</code></td>
+<td>Proof does not bind the submitted authority credential; transmit the matching chain and proof together.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_CHAIN</code></td>
+<td>Proof certificate/trust validation failed; check CA publication, algorithms and certificate validity.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_HTM</code></td>
+<td>Proof HTTP method differs from the request; sign for the actual method.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_HTU</code></td>
+<td>Proof URL differs from the request; check final scheme/host/port/path and proxy routing.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_REPLAY</code></td>
+<td>Proof has already been claimed; obtain fresh authorization/proof through supported APIs, preserving business idempotency.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_SIG</code></td>
+<td>Proof signature or protected-header profile is invalid; check signer, algorithm and exact signed bytes.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_TIME</code></td>
+<td>Proof time is outside the accepted window; synchronize clocks and generate a fresh proof.</td>
+</tr>
+<tr>
+<td><code>ERR_DPOP_TTL_TOO_LONG</code></td>
+<td>Proof lifetime exceeds the supported bound; use the sidecar's supported issuance path.</td>
+</tr>
+<tr>
+<td><code>ERR_DUPLICATE_CONVERGENCE</code></td>
+<td>The composite task is already converging; do not trigger a second concurrent convergence.</td>
+</tr>
+<tr>
+<td><code>ERR_EGRESS_DISPATCH_IN_PROGRESS</code></td>
+<td>The same A2A operation is still running; back off and retry the same ID/body.</td>
+</tr>
+<tr>
+<td><code>ERR_EGRESS_IDEMPOTENCY_CONFLICT</code></td>
+<td>An existing dispatch ID was reused with different authenticated bytes; preserve the original request or start a genuinely new operation.</td>
+</tr>
+<tr>
+<td><code>ERR_EGRESS_IDEMPOTENCY_SATURATED</code></td>
+<td>Retained dispatch capacity is exhausted; check retention and qualified entry/byte budgets.</td>
+</tr>
+<tr>
+<td><code>ERR_EGRESS_RESPONSE_TOO_LARGE</code></td>
+<td>Response exceeded the retained-result bound; reconcile the operation and review the configured response limit.</td>
+</tr>
+<tr>
+<td><code>ERR_HMAC_CHAIN_MISMATCH</code></td>
+<td>Chain authentication failed; reject the chain and check its serialized/delegated form.</td>
+</tr>
+<tr>
+<td><code>ERR_INTERNAL_ERROR</code></td>
+<td>An internal operation failed; retain the request ID and sanitized evidence for support.</td>
+</tr>
+<tr>
+<td><code>ERR_INTERNAL_VERIFIER_ERROR</code></td>
+<td>Verification failed internally; stop relying on that attempt and report the request ID.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_AGENT_DECISION</code></td>
+<td>The agent returned an invalid/unsupported decision or used it at the wrong workflow stage; fix the handler response.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_MINT_INPUT</code></td>
+<td>Native authority input is invalid or conflicts: check predicate names, canonical integers, byte limits and task_ref consistency; remove request valid_until and use class valid_for.</td>
+</tr>
+<tr>
+<td><code>ERR_PAIRING_AUTH_FAILED</code></td>
+<td>Native chain-start pairing failed (401): sign the exact POST alias/raw body with this pair's secret, use fresh canonical headers once each, and check clock skew.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_AGENT_RESPONSE</code></td>
+<td>Agent/peer response does not match the supported response schema; validate the integration contract.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_OIDC_ISSUER</code></td>
+<td>Originator issuer is invalid for this request; use the verified application's correct issuer.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_REQUEST</code></td>
+<td>Request shape, headers, pairing or protocol metadata are invalid; inspect status/detail and the endpoint's request schema.</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_REQUEST_ENCODING</code></td>
+<td>Request text/encoding is invalid; send the supported UTF-8 representation.</td>
+</tr>
+<tr>
+<td><code>ERR_MISSING_AAC_MACAROON</code></td>
+<td>No required AAC authority credential was supplied; use the supported sending sidecar.</td>
+</tr>
+<tr>
+<td><code>ERR_MISSING_DPOP_PROOF</code></td>
+<td>No required presenting proof was supplied; use the supported sending sidecar.</td>
+</tr>
+<tr>
+<td><code>ERR_MISSING_REQUIRED_HEADER</code></td>
+<td>A required operation header is absent; supply the documented value.</td>
+</tr>
+<tr>
+<td><code>ERR_PRESENTER_NOT_PREVIOUS_HOLDER</code></td>
+<td>Presenting workload is not the previous authorized holder; correct the sender/chain binding.</td>
+</tr>
+<tr>
+<td><code>ERR_RECIPIENT_NOT_AUTHORIZED</code></td>
+<td>Receiving workload is not the exact final recipient; correct the destination audience.</td>
+</tr>
+<tr>
+<td><code>ERR_REPLAY_AUTHORITY_INCOMPATIBLE</code></td>
+<td>Replay service/profile is incompatible; restore the supported authenticated retained-write-safe configuration.</td>
+</tr>
+<tr>
+<td><code>ERR_REPLAY_AUTHORITY_QUARANTINED</code></td>
+<td>Replay authority is in its safety quarantine; keep admission closed until it is ready.</td>
+</tr>
+<tr>
+<td><code>ERR_REPLAY_AUTHORITY_SATURATED</code></td>
+<td>Replay storage has reached its safe bound; Basic admits new claims as old records expire. Size for all new replay claims, including requests rejected later. Never evict unexpired records to make room.</td>
+</tr>
+<tr>
+<td><code>ERR_REPLAY_AUTHORITY_TIMEOUT</code></td>
+<td>Replay decision timed out; check service health/latency rather than bypassing it.</td>
+</tr>
+<tr>
+<td><code>ERR_REPLAY_AUTHORITY_UNAVAILABLE</code></td>
+<td>Replay authority is unavailable; restore it before admitting requests.</td>
+</tr>
+<tr>
+<td><code>ERR_REQUEST_TOO_LARGE</code></td>
+<td>Body/header/operation limit was exceeded; reduce the request or qualify an appropriate configured limit.</td>
+</tr>
+<tr>
+<td><code>ERR_ROOT_SIGNATURE_INVALID</code></td>
+<td>Root signature is invalid; check root key ID, trust publication and signed content.</td>
+</tr>
+<tr>
+<td><code>ERR_ROUTE_NOT_FOUND</code></td>
+<td>Method/path is unsupported on that listener; check endpoint and port.</td>
+</tr>
+<tr>
+<td><code>ERR_STATE_STORE_UNAVAILABLE</code></td>
+<td>Local workflow arrival state is unavailable; repair the state service before retrying.</td>
+</tr>
+<tr>
+<td><code>ERR_T0_ON_WIRE</code></td>
+<td>A root-only token was sent where a delegated chain is required; use the sidecar's normal dispatch path.</td>
+</tr>
+<tr>
+<td><code>ERR_T1_ON_WIRE</code></td>
+<td>Initial holder authority was sent without a peer delegation; use the normal dispatch path.</td>
+</tr>
+<tr>
+<td><code>ERR_TOKEN_EXPIRED</code></td>
+<td>Authority has expired; obtain a new authorized task/chain.</td>
+</tr>
+<tr>
+<td><code>ERR_TOKEN_FORMAT</code></td>
+<td>Serialized authority cannot be decoded as the supported token format; do not alter or hand-construct it.</td>
+</tr>
+<tr>
+<td><code>ERR_TOKEN_NOT_FOUND</code></td>
+<td>Required buffered arrival/token is absent; check task/token correlation and lifecycle.</td>
+</tr>
+<tr>
+<td><code>ERR_UNKNOWN_PREDICATE</code></td>
+<td>A restriction name is unsupported; use the published predicate vocabulary.</td>
+</tr>
+<tr>
+<td><code>ERR_UNKNOWN_TENANT_KEY</code></td>
+<td>Referenced tenant/root key is not in the trusted set; check tenant ID, key ID, publication and revocation.</td>
+</tr>
+<tr>
+<td><code>ERR_UNSUPPORTED_MEDIA_TYPE</code></td>
+<td>Content type is unsupported; use the endpoint's documented JSON media type.</td>
+</tr>
+</tbody>
+</table>
+<p>Authenticated A2A protocol errors can instead use JSON-RPC errors under HTTP 200:
+<code>-32700</code> parse error, <code>-32600</code> invalid request, <code>-32601</code> unknown method,
+<code>-32602</code> invalid parameters, <code>-32004</code> unsupported operation and <code>-32009</code>
+unsupported version. Inspect the JSON body even when HTTP transport succeeded.
+Admission/authentication/body-size errors may use non-200 HTTP responses.</p>
+<p>CLI/control-plane errors are a separate surface. For example,
+<code>ERR_API_KEY_LAST_ACTIVE</code> belongs to API-key retirement, not sidecar receiving;
+its documented recovery is to issue/migrate a second active key first.</p>
+<h2 id="upgrade-rollback-and-uninstall">Upgrade, rollback, and uninstall</h2>
+<ul>
+<li>Verify a new immutable version before placing it in a new version directory.</li>
+<li>Stop admission, point the service symlink at the new version, restart, and
+require health/readiness before restoring traffic.</li>
+<li>Roll back by restoring the previous verified symlink; never replace an
+existing version directory in place.</li>
+<li>Preserve bbolt, Shared durable replay, trust, and configuration state across
+binary/image replacement according to the tenant retention policy. Basic
+replay history is lost on every restart; choose Shared durable if that is
+unacceptable.</li>
+<li>Remove the image or versioned binary only after stopping the service and
+completing the chosen credential-retention or retirement plan below. Public artifacts already downloaded by others
+cannot be recalled.</li>
+</ul>
+<p>Developer-binary uninstall:</p>
+<pre><code class="language-bash">rm &quot;${HOME}/.local/bin/aac-sidecar&quot;
+rm -rf &quot;${HOME}/.local/lib/aac-sidecar/releases/v0.4.4&quot;
+</code></pre>
+<p>Do not use those commands for an operator-owned production directory or state
+volume. Follow the tenant's change, retention, and secure-deletion procedures.</p>
+<h3 id="rotate-or-revoke-credentials-deliberately">Rotate or revoke credentials deliberately</h3>
+<p>A binary upgrade does not rotate tenant credentials. Before revocation, identify
+all clients of the exact key and distinguish planned rotation from compromise:</p>
+<pre><code class="language-bash">aac tenant api-key list --profile &quot;$AAC_PROFILE&quot; --output table
+aac tenant api-key issue --help
+aac tenant api-key retire --help
+aac tenant reissue-api-key --help
+aac trust-anchor list --profile &quot;$AAC_PROFILE&quot; --output table
+aac trust-anchor revoke --help
+</code></pre>
+<p>For planned API-key rotation, issue the second active key, migrate all clients,
+verify them, then retire the exact old key. The control plane refuses to retire
+the last ACTIVE API key (<code>ERR_API_KEY_LAST_ACTIVE</code>); issue and migrate a second
+key first. For a lost/compromised key, follow
+the recovery command's separate semantics. The telemetry API-key file is
+reread on token exchange; existing sessions keep their own expiry.</p>
+<p>Root-key rotation uses a new key ID, publishes its public key, waits for trust
+visibility, moves the workload to it, verifies a real workflow, then revokes
+the old key. <strong>Revoking the last root-signing key is permitted</strong> for compromise
+or teardown; the API-key last-ACTIVE protection does not apply to root keys.
+Revoked roots leave the public trust set, so verifiers lose trust in chains
+rooted at that key when their trust view refreshes. Healthy control-plane-backed
+caches poll every five minutes by default; outage stale-serve behavior remains,
+and there is no instantaneous global revocation guarantee. Stop affected
+workflows and coordinate trust refresh/replacement with peers. Do not assume
+removing a public root erases a workload's locally held signing key.</p>
+<p>Replace workload/terminal keys with matching valid certificates and update trust as required. Replace a
+compromised pairing secret in both paired processes and restart them together.
+For remote signers, disable/revoke the exact key version and verify failure
+without provider/file fallback.</p>
+<p>An unsafe beta is removed from recommendations and replaced by a newly
+reviewed immutable version; its old digest is never overwritten. Pause affected
+traffic and preserve evidence while deciding whether rollback is safe.</p>
+<p>Local uninstall removes software, not a tenant account. For reusable testing,
+stop the processes and retain tenant registration, credentials in your secret
+manager, and necessary private state. Remove local credential copies only after
+verifying custody. Permanent workload/credential retirement is a separate
+operator action; this guide does not promise a tenant-account deletion API or
+a complete tenant-offboarding procedure.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#diagnostics-and-support" class="toc-h2">Diagnostics and support</a><a href="#optional-central-trace-forwarding" class="toc-h2">Optional central trace forwarding</a><a href="#audit-your-workflows" class="toc-h2">Audit your workflows</a><a href="#local-event-fields" class="toc-h3">Local event fields</a><a href="#investigate-three-common-failures" class="toc-h3">Investigate three common failures</a><a href="#retain-and-inspect-safely" class="toc-h3">Retain and inspect safely</a><a href="#verify-terminal-evidence-offline" class="toc-h3">Verify terminal evidence offline</a><a href="#sidecar-error-reference" class="toc-h2">Sidecar error reference</a><a href="#upgrade-rollback-and-uninstall" class="toc-h2">Upgrade, rollback, and uninstall</a><a href="#rotate-or-revoke-credentials-deliberately" class="toc-h3">Rotate or revoke credentials deliberately</a></aside></div></body></html>

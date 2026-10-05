@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Using Control Plane - AAC Docs</title>
+<meta name="description" content="Connect to AAC&#x27;s shared API service for identity, public trust and execution queries."><link rel="canonical" href="https://docs.cascadeauth.com/control-plane/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/" aria-current="true">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#what-it-provides" class="toc-h2">What it provides</a><a href="#connect-to-the-developer-beta-service" class="toc-h2">Connect to the developer-beta service</a><a href="#which-component-authenticates-each-request" class="toc-h2">Which component authenticates each request</a><a href="#check-service-and-tenant-state" class="toc-h2">Check service and tenant state</a><a href="#find-an-execution" class="toc-h2">Find an execution</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Using Control Plane</span></nav>
+<h1 id="using-control-plane">Using Control Plane</h1>
+<div class="page-actions"><span>Hosted AAC Control Plane · developer beta</span><a href="/control-plane/index.md" download="control-plane.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>The AAC Control Plane is the shared API service that connects tenant
+administration, identity, public trust and execution queries. The developer
+beta provides it as a hosted service. Your CLI, trust anchor publisher and
+sidecars connect to its endpoints from your own environment.</p>
+<p>Your tenant operates its agents and their sidecars, holds its private signing
+material, and decides what business work to authorize. AAC operates the shared
+Control Plane and public-trust endpoints.</p>
+<h2 id="what-it-provides">What it provides</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>How your tenant uses it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenant administration</td>
+<td>Register a tenant and manage its identity-provider connection, credentials and trust domains through the AAC CLI</td>
+</tr>
+<tr>
+<td>Security Token Service (STS)</td>
+<td>Exchange supported identity evidence for short-lived tokens scoped to the intended AAC service</td>
+</tr>
+<tr>
+<td>Workload and trust-domain registry</td>
+<td>Register agent identities, use an AAC-assigned trust domain or bind a domain you control</td>
+</tr>
+<tr>
+<td>Public-trust distribution</td>
+<td>Accept signed publisher uploads and serve tenant root public keys and SPIFFE CA bundles</td>
+</tr>
+<tr>
+<td>Execution metadata and audit queries</td>
+<td>Receive opted-in central telemetry and answer authorized chain listing/trace queries</td>
+</tr>
+</tbody>
+</table>
+<p>Business requests travel between agents and sidecars. Local sidecar verification
+uses trust material it has obtained and cached; the Control Plane does not
+re-authorize each delegation by contacting all earlier agents. See
+<a href="/overview/#what-local-verification-buys-and-what-it-does-not">the overview</a>
+for the guarantees and limits.</p>
+<h2 id="connect-to-the-developer-beta-service">Connect to the developer-beta service</h2>
+<p>AAC supplies an API endpoint and a public-trust endpoint. For the stage
+environment used by the <a href="/get-started/">AAC journey</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Endpoint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLI administration, data APIs, STS and signed trust ingest</td>
+<td><code>https://api.stage.cascadeauth.dev</code></td>
+</tr>
+<tr>
+<td>Public root keys and SPIFFE trust bundles</td>
+<td><code>https://trust.stage.cascadeauth.dev</code></td>
+</tr>
+</tbody>
+</table>
+<p>Install <a href="https://pypi.org/project/aac-cli/">AAC CLI from PyPI</a>, then create a
+local profile for those endpoints:</p>
+<pre><code class="language-bash">aac profile create stage \
+  --admin-url https://api.stage.cascadeauth.dev \
+  --data-plane-url https://api.stage.cascadeauth.dev
+aac profile show stage --output json
+</code></pre>
+<p>Creating a profile records local connection settings. Continue with
+<a href="/cli/guide/#register-a-tenant">tenant registration and sign-in</a>, or use your
+existing tenant and approved administrator identity. If the <code>stage</code> profile
+already exists, inspect it before changing it. Other AAC environments supply
+their own endpoint addresses.</p>
+<h2 id="which-component-authenticates-each-request">Which component authenticates each request</h2>
+<ul>
+<li><strong>AAC CLI:</strong> performs supported registration and administrator sign-in flows,
+then uses the resulting credentials for tenant operations.</li>
+<li><strong>Trust anchor publisher:</strong> signs public-material uploads with the tenant's
+registered administration key. <a href="/trust-anchor-publisher/">Configure the publisher</a>.</li>
+<li><strong>Sidecar:</strong> uses the configured credentials for services such as workload
+lookup and central telemetry; the telemetry path exchanges its API-key evidence
+through STS before ingestion. <a href="/sidecar/configuration/">Configure a sidecar</a>.</li>
+<li><strong>Trust readers:</strong> fetch public root keys and CA bundles from the public-trust
+endpoint. Private keys are retained by the tenant's components.</li>
+</ul>
+<p>Keep the credential roles distinct. The <a href="/overview/keys-and-certificates/">keys and certificates guide</a>
+explains which component holds each one, and the <a href="/cli/guide/#manage-credentials">CLI guide</a>
+covers rotation and recovery.</p>
+<h2 id="check-service-and-tenant-state">Check service and tenant state</h2>
+<p>Check API reachability, then use your authenticated profile to inspect the tenant:</p>
+<pre><code class="language-bash">curl --fail --silent --show-error https://api.stage.cascadeauth.dev/healthz
+aac tenant list-workloads --profile stage --output table
+aac trust-anchor list --profile stage --output table
+</code></pre>
+<p>A successful health response establishes service reachability. Tenant queries
+and an authenticated agent workflow establish that your particular setup works.</p>
+<h2 id="find-an-execution">Find an execution</h2>
+<p>With central telemetry enabled and observations available to your tenant:</p>
+<pre><code class="language-bash">aac chain list --profile stage --since 24h --output table
+aeg list --profile stage --since 24h --output table
+</code></pre>
+<p>The Control Plane exposes authorized execution metadata. Tenant-local files can
+add richer authority and application details; they are not uploaded just because
+you open a graph. Use the <a href="/aeg/">AEG guide</a> to combine sources, select a root
+and understand partial coverage.</p>
+<p>Use the <a href="/cli/reference/">CLI command reference</a> for the released administration
+and query interface, and <a href="/sidecar/operations/">operations</a> for diagnostics.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

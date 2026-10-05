@@ -1,0 +1,186 @@
+<svg id="kc-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 932" role="img"
+     aria-labelledby="kc-title kc-desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+  <title id="kc-title">How keys and certificates connect your tenant and agents</title>
+  <desc id="kc-desc">The tenant (your) environment, marked by a dashed boundary, holds everything except the hosted AAC Control Plane and other tenants. Once for the tenant:
+    the tenant API key is copied to each sidecar that needs it, and the administrator signing key signs every upload
+    made by aac-trust-anchor-publisher, which runs in your tenant environment and is not hosted by AAC. Setup copies each
+    agent's root public key and your CA certificate, named agent-dev-ca when the tool made it or agent-ca when your
+    issuer made it, into your tenant's publish folders; the publisher watches those folders and sends signed uploads
+    to the ingest API of the AAC Control Plane, which AAC hosts. Receiving sidecars in other tenants fetch that
+    public material from AAC's trust URL and cache it; they never need anything private of yours. For each agent:
+    the sidecar holds an identity, a receipt and an HTTPS key and certificate, each signed by your CA, a root
+    signing key used only when this agent starts the work, and a pairing secret, one shared secret that pairs your
+    agent application with its own sidecar. Your agent application holds the same pairing secret bytes and the public CA
+    certificate. Never leaves you: your CA's private key, the administrator signing key, the tenant API key, every
+    root signing key, every identity, receipt and HTTPS key, and every pairing secret.</desc>
+  <style>
+    #kc-diagram .bg{fill:#151619}
+    #kc-diagram .panel{fill:#202226;stroke:#35383e;stroke-width:1.5}
+    #kc-diagram .private{fill:#2b2418;stroke:#F2A33A;stroke-width:1.5}
+    #kc-diagram .public{fill:#16302b;stroke:#3fbfa5;stroke-width:1.5}
+    #kc-diagram .service{fill:#1b2a3d;stroke:#83baff;stroke-width:1.5}
+    #kc-diagram .plain{fill:#202226;stroke:#5a5f69;stroke-width:1.5}
+    #kc-diagram .band{fill:#1d1a15;stroke:#F2A33A;stroke-width:1.5;stroke-dasharray:6 5}
+    #kc-diagram text{fill:#f1f2f5;font-size:14.5px}
+    #kc-diagram .head{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#aeb3bd}
+    #kc-diagram .head-private{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#F2A33A}
+    #kc-diagram .title{font-size:15.5px;font-weight:650}
+    #kc-diagram .note{font-size:12.5px;fill:#aeb3bd}
+    #kc-diagram .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px}
+    #kc-diagram .mono-note{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;fill:#bfe9df}
+    #kc-diagram .flow{fill:none;stroke:#83baff;stroke-width:1.8}
+    #kc-diagram .flow-public{fill:none;stroke:#3fbfa5;stroke-width:1.8}
+    #kc-diagram .flow-private{fill:none;stroke:#F2A33A;stroke-width:1.8}
+    #kc-diagram .key-public{fill:#151619;stroke:#3fbfa5;stroke-width:1.8}
+    #kc-diagram .key-private{fill:#151619;stroke:#F2A33A;stroke-width:1.8}
+    #kc-diagram .key{font-size:12.5px;font-weight:700}
+    #kc-diagram .legend{font-size:13.5px}
+    #kc-diagram .key-service{fill:#151619;stroke:#83baff;stroke-width:1.8}
+    #kc-diagram .boundary{fill:none;stroke:#c3c8d2;stroke-width:1.6;stroke-dasharray:5 4}
+    #kc-diagram .head-zone{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#f1f2f5}
+    #kc-diagram .bracket{fill:none;stroke:#aeb3bd;stroke-width:1.5}
+  </style>
+  <defs>
+    <marker id="kc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#83baff"/>
+    </marker>
+    <marker id="kc-arrow-public" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#3fbfa5"/>
+    </marker>
+    <marker id="kc-arrow-private" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#F2A33A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="932" rx="12"/>
+
+  <g id="kc-legend" aria-label="Legend">
+    <rect class="private" x="40" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="64" y="29">Private: stays with you</text>
+    <rect class="public" x="232" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="256" y="29">Public: published for others to check</text>
+    <rect class="service" x="508" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="532" y="29">Publishing path</text>
+    <rect class="boundary" x="664" y="15" width="30" height="18" rx="2"/>
+    <text class="note" x="702" y="29">Tenant environment</text>
+  </g>
+
+  <g id="kc-your-environment" aria-label="Tenant (your) environment">
+    <path class="boundary" d="M24 46H976V620H528V392H24Z"/>
+    <text class="head-zone" x="40" y="68">TENANT (YOUR) ENVIRONMENT</text>
+  </g>
+
+  <g id="kc-tenant" aria-label="Once for the tenant">
+    <text class="head" x="40" y="94">ONCE FOR THE TENANT</text>
+
+    <rect class="private" x="40" y="108" width="200" height="44" rx="8"/>
+    <text x="140" y="135" text-anchor="middle">Tenant API key</text>
+    <path class="flow-private" d="M240 130H536" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="388" y="122" text-anchor="middle">a copy on each sidecar that needs it</text>
+
+    <rect class="private" x="40" y="200" width="200" height="44" rx="8"/>
+    <text x="140" y="227" text-anchor="middle">Administrator signing key</text>
+    <path class="flow-private" d="M140 244V330" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="152" y="326">signs every upload</text>
+
+    <rect class="public" x="254" y="174" width="224" height="44" rx="8"/>
+    <text x="366" y="201" text-anchor="middle">Each agent's root public key</text>
+    <rect class="public" x="254" y="230" width="224" height="78" rx="8"/>
+    <text x="366" y="254" text-anchor="middle">Your CA certificate</text>
+    <text class="mono-note" x="268" y="276">&lt;agent&gt;-dev-ca</text>
+    <text class="note" x="392" y="276">tool-made</text>
+    <text class="mono-note" x="268" y="295">&lt;agent&gt;-ca</text>
+    <text class="note" x="392" y="295">issuer-made</text>
+    <path class="flow-public" d="M478 196H490V330" marker-end="url(#kc-arrow-public)"/>
+    <path class="flow-public" d="M478 269H490"/>
+    <circle class="key-public" cx="490" cy="290" r="10"/>
+    <text class="key" x="490" y="294.5" text-anchor="middle">1</text>
+
+    <rect class="service" x="40" y="334" width="460" height="44" rx="8"/>
+    <text class="mono" x="262" y="361" text-anchor="middle">aac-trust-anchor-publisher</text>
+    <circle class="key-service" cx="392" cy="356" r="10"/>
+    <text class="key" x="392" y="360.5" text-anchor="middle">3</text>
+    <path class="flow" d="M270 378V436" marker-end="url(#kc-arrow)"/>
+    <text class="note" x="282" y="414">signed uploads to the ingest API</text>
+  </g>
+
+  <g id="kc-hosted" aria-label="AAC, hosted">
+    <text class="head-zone" x="40" y="428">AAC (HOSTED)</text>
+    <rect class="service" x="40" y="440" width="460" height="44" rx="8"/>
+    <text x="270" y="467" text-anchor="middle">AAC Control Plane</text>
+    <path class="flow" d="M270 484V556" marker-end="url(#kc-arrow)"/>
+    <text class="note" x="282" y="512">fetched from AAC's trust URL</text>
+    <text class="note" x="282" y="529">and cached by</text>
+  </g>
+
+  <g id="kc-other-tenants" aria-label="Other tenants">
+    <text class="head-zone" x="40" y="550">OTHER TENANTS</text>
+    <rect class="plain" x="40" y="560" width="460" height="62" rx="8"/>
+    <text x="270" y="585" text-anchor="middle">Receiving sidecars, in any tenant</text>
+    <text class="note" x="270" y="606" text-anchor="middle">they never need anything private of yours</text>
+  </g>
+
+  <g id="kc-agent" aria-label="For each agent">
+    <text class="head" x="540" y="94">FOR EACH AGENT</text>
+
+    <rect class="panel" x="540" y="108" width="420" height="304" rx="10"/>
+    <text class="title" x="560" y="135">Sidecar</text>
+
+    <rect class="private" x="560" y="148" width="250" height="38" rx="7"/>
+    <text x="574" y="172">Identity key + certificate</text>
+    <rect class="private" x="560" y="194" width="250" height="38" rx="7"/>
+    <text x="574" y="218">Receipt key + certificate</text>
+    <rect class="private" x="560" y="240" width="250" height="38" rx="7"/>
+    <text x="574" y="264">HTTPS key + certificate</text>
+    <path class="bracket" d="M818 152h10v122h-10M828 213h10"/>
+    <text x="846" y="208">signed by</text>
+    <text x="846" y="227">your CA</text>
+
+    <rect class="private" x="560" y="290" width="380" height="54" rx="7"/>
+    <text x="574" y="312">Root signing key</text>
+    <text class="note" x="574" y="332">used only when this agent starts the work</text>
+
+    <rect class="private" x="560" y="354" width="380" height="40" rx="7"/>
+    <text x="574" y="379">Pairing secret</text>
+    <circle class="key-private" cx="686" cy="374" r="10"/>
+    <text class="key" x="686" y="378.5" text-anchor="middle">2</text>
+
+    <rect class="panel" x="540" y="464" width="420" height="144" rx="10"/>
+    <text class="title" x="560" y="491">Your agent application</text>
+    <rect class="private" x="560" y="508" width="380" height="38" rx="7"/>
+    <text x="574" y="532">Pairing secret</text>
+    <circle class="key-private" cx="686" cy="527" r="10"/>
+    <text class="key" x="686" y="531.5" text-anchor="middle">2</text>
+    <rect class="public" x="560" y="554" width="380" height="38" rx="7"/>
+    <text x="574" y="578">CA certificate (public)</text>
+
+    <path class="flow-private" d="M800 398V504" marker-start="url(#kc-arrow-private)" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="814" y="443">same bytes in both</text>
+  </g>
+
+  <g id="kc-notes" aria-label="Notes">
+    <rect class="panel" x="40" y="642" width="920" height="140" rx="10"/>
+    <circle class="key-public" cx="66" cy="668" r="10"/>
+    <text class="key" x="66" y="672.5" text-anchor="middle">1</text>
+    <text class="legend" x="88" y="672.5">Setup copies each agent's root public key and your CA certificate into your tenant's publish folders.</text>
+    <text class="legend" x="88" y="691.5">The publisher watches those folders and uploads anything new.</text>
+    <circle class="key-private" cx="66" cy="716" r="10"/>
+    <text class="key" x="66" y="720.5" text-anchor="middle">2</text>
+    <text class="legend" x="88" y="720.5">One shared secret, not a key pair. It pairs your agent application with its own sidecar, so each can prove</text>
+    <text class="legend" x="88" y="739.5">a call came from the other. It is never shared with another pair or tenant.</text>
+    <circle class="key-service" cx="66" cy="762" r="10"/>
+    <text class="key" x="66" y="766.5" text-anchor="middle">3</text>
+    <text class="legend" x="88" y="766.5">Runs in your tenant environment, as a container or a host process. AAC does not host it.</text>
+  </g>
+
+  <g id="kc-never-leaves" aria-label="Never leaves you">
+    <rect class="band" x="40" y="800" width="920" height="112" rx="10"/>
+    <text class="head-private" x="60" y="828">NEVER LEAVES YOU</text>
+    <text x="60" y="858">Your CA's private key</text>
+    <text x="350" y="858">The administrator signing key</text>
+    <text x="700" y="858">The tenant API key</text>
+    <text x="60" y="888">Every root signing key</text>
+    <text x="350" y="888">Every identity, receipt and HTTPS key</text>
+    <text x="700" y="888">Every pairing secret</text>
+  </g>
+</svg>

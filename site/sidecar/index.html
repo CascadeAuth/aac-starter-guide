@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AAC Sidecar - AAC Docs</title>
+<meta name="description" content="Install a sidecar beside your agent and connect it to AAC."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/" aria-current="page">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">AAC Sidecar</span></nav>
+<h1 id="aac-sidecar">AAC Sidecar</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/index.md" download="sidecar.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>The sidecar runs beside your agent. It carries delegated authority, checks
+incoming requests, and passes verified context to the agent's business logic.
+The agent decides what work to do; the sidecar handles the authority chain,
+identity proofs and signed terminal evidence.</p>
+<h2 id="download-the-sidecar">Download the sidecar</h2>
+<p>Get the released container and its operating guide from
+<a href="https://hub.docker.com/r/cascadeauth/aac-sidecar/">AAC Sidecar on Docker Hub</a>:</p>
+<pre><code class="language-bash">docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.4.4 -version
+</code></pre>
+<p>Continue with <a href="/sidecar/install/">download and installation options</a> for the
+container or a standalone Linux/macOS binary. For a complete first example,
+<a href="/get-started/">start the AAC journey</a>.</p>
+<h2 id="connect-it-to-your-agent">Connect it to your agent</h2>
+<ol>
+<li>Use the <a href="/cli/guide/">AAC CLI</a> to register the tenant and prepare the agent's
+identities, credentials and configuration.</li>
+<li>Run the <a href="/trust-anchor-publisher/">trust anchor publisher</a> for the tenant's
+public root keys and CA certificates.</li>
+<li>Place the sidecar in the same loopback network environment as its paired
+agent—for example, in the same Kubernetes Pod or a shared Docker network
+namespace. Follow <a href="/sidecar/configuration/">configuration and placement</a>.</li>
+<li>Add pairing authentication to the agent. Python applications can install
+<a href="https://pypi.org/project/aac-invoke-auth/">aac-invoke-auth from PyPI</a>, which
+documents its FastAPI integration and framework-independent helpers.
+See <a href="/sidecar/integration/">agent integration</a> for the request/response flow.</li>
+</ol>
+<p>The sidecar uses the <a href="/control-plane/">Control Plane</a> for configured identity,
+trust and telemetry services. Business requests travel between the tenant's
+agents and sidecars.</p>
+<h2 id="operate-and-inspect">Operate and inspect</h2>
+<p>Use the <a href="/sidecar/operations/">operations guide</a> for startup, readiness,
+diagnostics, credential maintenance and upgrades. The
+<a href="/sidecar/configuration/#configuration-and-workflow-state">configuration reference</a>
+explains replay and workflow state in your environment.</p>
+<p>Use <a href="/aeg/">AEG</a> to find an execution and inspect the recorded authority,
+application actions and receipt-verification results. Each source has its own
+coverage; an execution graph describes the evidence available to the query.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#download-the-sidecar" class="toc-h2">Download the sidecar</a><a href="#connect-it-to-your-agent" class="toc-h2">Connect it to your agent</a><a href="#operate-and-inspect" class="toc-h2">Operate and inspect</a></aside></div></body></html>

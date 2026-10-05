@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aeg list - AAC Docs</title>
+<meta name="description" content="Released command syntax and options for aeg list."><link rel="canonical" href="https://docs.cascadeauth.com/aeg/reference/list/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/" aria-current="true">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>AEG</summary><nav aria-label="Section navigation"><a href="/aeg/">Agent Execution Graphs (AEG)</a><a href="/aeg/reference/">AEG command reference</a><a href="/aeg/reference/list/" aria-current="page">aeg list</a><a href="/aeg/reference/render/">aeg render</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/aeg/">AEG</a> / <a href="/aeg/reference/">AEG command reference</a> / <span aria-current="page">aeg list</span></nav>
+<h1 id="aeg-list"><code>aeg list</code></h1>
+<div class="page-actions"><span>AAC CLI 0.2.8</span><a href="/aeg/reference/list/index.md" download="aeg-reference-list.md">Markdown</a><span class="revision">Docs 6b7d8268ba78</span></div>
+<p>List roots from local files, a control-plane profile, or both.</p>
+<h2 id="synopsis">Synopsis</h2>
+<pre><code class="language-text">aeg list
+  [-h]
+  [--events FILE ...]
+  [--actions FILE ...]
+  [--profile PROFILE]
+  [--task-ref TASK_REF]
+  [--limit LIMIT]
+  [--max-pages MAX_PAGES]
+  [--page-token PAGE_TOKEN]
+  [--since SINCE | --from FROM_TIME]
+  [--to TO_TIME]
+  [--output {table,json}]
+</code></pre>
+<h2 id="arguments">Arguments</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h, --help</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>show this help message and exit</td>
+</tr>
+<tr>
+<td><code>--events</code></td>
+<td>no</td>
+<td><code>[]</code></td>
+<td>Sidecar JSONL file; repeat for each agent.</td>
+</tr>
+<tr>
+<td><code>--actions</code></td>
+<td>no</td>
+<td><code>[]</code></td>
+<td>Application action_taken JSONL file; repeat as needed.</td>
+</tr>
+<tr>
+<td><code>--profile</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Query this AAC CLI profile; with files, join by root ID.</td>
+</tr>
+<tr>
+<td><code>--task-ref</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Exact local task reference; requires local files.</td>
+</tr>
+<tr>
+<td><code>--limit</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Central page size, 1..200 (default 50).</td>
+</tr>
+<tr>
+<td><code>--max-pages</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Central fetch bound, 1..20 (default 1).</td>
+</tr>
+<tr>
+<td><code>--page-token</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Continue central enumeration; omit --since.</td>
+</tr>
+<tr>
+<td><code>--since</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Look back, e.g. 24h or 7d; online defaults to 24h, maximum 31d. Local also accepts m.</td>
+</tr>
+<tr>
+<td><code>--from</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Inclusive ISO 8601 observation time with timezone.</td>
+</tr>
+<tr>
+<td><code>--to</code></td>
+<td>no</td>
+<td><code>—</code></td>
+<td>Exclusive ISO 8601 observation time with timezone.</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td>no</td>
+<td><code>table</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="exit-codes">Exit codes</h2>
+<ul>
+<li><strong>0:</strong> completed successfully.</li>
+<li><strong>2:</strong> invalid arguments or evidence, or an unreadable/unwritable local file.</li>
+<li><strong>4:</strong> the requested central query failed; any recoverable graph or listing remains partial.</li>
+</ul>
+<p><a href="/aeg/">Agent Execution Graphs</a></p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#synopsis" class="toc-h2">Synopsis</a><a href="#arguments" class="toc-h2">Arguments</a><a href="#exit-codes" class="toc-h2">Exit codes</a></aside></div></body></html>

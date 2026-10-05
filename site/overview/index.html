@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Overview - AAC Docs</title>
+<meta name="description" content="Delegated authority, local verification and the limits of receipts."><link rel="canonical" href="https://docs.cascadeauth.com/overview/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/" aria-current="true">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Overview</summary><nav aria-label="Section navigation"><a href="/overview/" aria-current="page">Overview</a><a href="/overview/keys-and-certificates/">Keys and certificates</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Overview</span></nav>
+<h1 id="overview">Overview</h1>
+<div class="page-actions"><span>AAC platform · developer beta</span><a href="/overview/index.md" download="overview.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<h2 id="what-aac-is-for">What AAC is for</h2>
+<p>AAC lets a network of AI agents — tens, hundreds or thousands of them, inside one
+organisation and across organisations — carry <strong>delegated authority</strong> from agent
+to agent, with provable identity, local verification and auditable receipts.</p>
+<p>Authority starts with a decision your own application makes. Your application
+authenticates the person, or obtains the approved service identity, and decides
+what work it may authorize under your policy. AAC binds that decision into a
+signed chain every later agent can check. In one chain:</p>
+<ol>
+<li><strong>A person authorizes work.</strong> The originating agent's sidecar <strong>mints the root
+token</strong>: a root block carrying your tenant id, a hash of the identity your
+application supplied, a hash of the originating workload's identity, the root
+key id, the signature algorithm and the issue time — signed with your tenant's
+<strong>root signing key</strong>. The sidecar then appends the first caveat, the class of
+action.</li>
+<li><strong>Each agent that passes the work on attenuates the token.</strong> It appends a
+caveat that cannot widen what may be done, can only shorten the expiry, and
+names the holder allowed to act next. Its sidecar signs a <strong>proof of
+possession</strong> with its identity key, showing that the workload presenting the
+certificate really holds the private key behind it.</li>
+<li><strong>The receiving sidecar verifies locally</strong>: the root signature against the
+originating tenant's published root public key, then the caveat chain and its
+conditions, then the presenter's proof of possession, its identity against the
+caveat that named it, and the replay check.</li>
+<li><strong>The last agent</strong> — the one with nobody left to call — finishes the work and
+signs a <strong>receipt</strong> that can be checked afterwards.</li>
+</ol>
+<p>Two properties follow.</p>
+<p><strong>Authority never widens as it travels.</strong> A later hop's limits may stay the same
+or become tighter; no operation produces a child token permitting more than its
+parent. Holder binding is a separate control: each hop also names who may act
+next, so the same chain does not become usable by a different agent.</p>
+<p><strong>Every chain expires.</strong> No chain outlives 24 hours from the moment its root was
+signed. Work that runs longer takes a fresh authorization at a business
+checkpoint rather than a longer chain.</p>
+<h3 id="what-local-verification-buys-and-what-it-does-not">What local verification buys, and what it does not</h3>
+<p>Each hop is checked with local computation against trust material the sidecar
+already holds: the root signature, the certificate chain, the proof of possession
+and the chain's own conditions. Nothing on the request path asks the earlier
+agents, or their identity providers, to re-authorize the hop — the person signs in
+once, at the start, and the chain carries that decision onward. That is what keeps
+authority affordable as a network grows: a chain crossing ten organisations makes
+no fan-out of token-introspection calls to ten identity providers.</p>
+<p>Three limits are worth knowing before you design around it:</p>
+<ul>
+<li><strong>Trust material is cached, and a cache can miss.</strong> Sidecars refresh published
+root keys and CA certificates in the background, but a missing entry or a
+freshness deadline can make that refresh happen while a request is being
+verified — and verification <strong>fails closed</strong> when required trust material is
+unavailable or too stale.</li>
+<li><strong>A copied chain is not usable on its own, but a compromised agent is a
+different matter.</strong> Whoever copies a chain still has to present a valid proof of
+possession as the holder the chain names, and still meets the replay checks. An
+attacker who has compromised an authorized agent is already inside those
+controls — which is why the business limits you put in caveats, not identity
+alone, are worth setting.</li>
+<li><strong>The shared durable replay profile adds a dependency</strong> — a store your tenant
+operates — on the path of every received request. The Basic profile keeps replay
+state in the sidecar's own memory instead; see
+<a href="/sidecar/integration/#replay-protection-profiles">replay protection profiles</a>.</li>
+</ul>
+<h3 id="what-a-receipt-proves">What a receipt proves</h3>
+<p>A receipt is your tenant's signed statement that an agent reported a particular
+outcome. It is not by itself proof that the real-world action happened, and
+checking one months later is not automatic: it needs the trust material published
+at the time, an observation time you trust independently, and your own workflow
+records. <a href="/overview/keys-and-certificates/">Keys and certificates</a> says what to keep;
+<a href="/sidecar/operations/#verify-terminal-evidence-offline">Verify terminal evidence offline</a> has the
+procedure.</p>
+<h2 id="how-a-delegated-workflow-works">How a delegated workflow works</h2>
+<pre><code class="language-text">Originator application
+  |  mint-root: choose authority and submit a task
+  v
+Sidecar A --authenticated /invoke--&gt; Agent A
+  |  Agent A returns forward(destination, narrower predicates)
+  |  signed chain + proof of the presenting workload
+  v
+Sidecar B --authenticated /invoke--&gt; Agent B
+  |  Agent B returns settle or refuse
+  v
+settle -&gt; signed settlement evidence
+refuse -&gt; refusal result (no terminal attestation)
+</code></pre>
+<p>Sidecar B checks authority, identity, recipient and replay protection before
+calling Agent B. Each agent still decides whether the requested business action
+is appropriate. A <code>forward</code> decision can narrow authority, never broaden it.
+The local example uses one sidecar twice; the two-agent example shows the same
+flow with separate processes. Optional central telemetry correlates selected
+metadata; full local evidence stays with the tenant.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning and configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenant</td>
+<td>The organization/project boundary assigned a <code>tnt-&lt;uuid&gt;</code> ID; <code>tenant.id</code></td>
+</tr>
+<tr>
+<td>Workload / agent</td>
+<td>Your running application, identified by one concrete SPIFFE ID; <code>agent.spiffe_id</code></td>
+</tr>
+<tr>
+<td>Sidecar</td>
+<td>The process beside a workload that verifies and carries authority</td>
+</tr>
+<tr>
+<td>Root-signing key</td>
+<td>Starts an authority chain; <code>tenant.signing_key_file</code> or a configured remote signer</td>
+</tr>
+<tr>
+<td>SVID</td>
+<td>An X.509 certificate binding a workload SPIFFE identity to its public key; <code>agent.svid_cert_file</code></td>
+</tr>
+<tr>
+<td>DPoP</td>
+<td>Proof signed by the presenting workload, binding authority to the exact HTTP request; uses the local SVID key</td>
+</tr>
+<tr>
+<td>Class of action</td>
+<td>A named initial authority profile selected at mint time; <code>classes_of_action</code></td>
+</tr>
+<tr>
+<td>Predicate</td>
+<td>A restriction such as <code>action</code>, <code>amount_max</code>, <code>task_ref</code> or expiry</td>
+</tr>
+<tr>
+<td>Holder audience</td>
+<td>The workload identity permitted to hold a chain step; class and attenuation audience constraints</td>
+</tr>
+<tr>
+<td>Destination</td>
+<td>A named peer URL, exact recipient identity and limits; <code>destinations</code></td>
+</tr>
+<tr>
+<td>Attenuation</td>
+<td>Creating a child authority step with equal or narrower permissions</td>
+</tr>
+<tr>
+<td>Continuation authority</td>
+<td>A short-lived right to continue a verified inbound task for the same pair/task/presenter</td>
+</tr>
+<tr>
+<td>Settle / terminal attestation</td>
+<td>An agent finishes a task and its sidecar signs the terminal evidence using a distinct key</td>
+</tr>
+<tr>
+<td>Pairing secret</td>
+<td>Authenticates calls between one sidecar and its paired agent; <code>sidecar.agent_invoke_auth.secret_file</code></td>
+</tr>
+<tr>
+<td>Replay protection</td>
+<td>Rejects repeated presenting proofs; <code>replay_protection</code></td>
+</tr>
+<tr>
+<td>A2A retry state</td>
+<td>Retains dispatch outcomes so the same dispatch ID/body can be retried without executing twice; <code>a2a.egress_idempotency</code></td>
+</tr>
+<tr>
+<td><a href="/get-started/">Run the reservation example</a> or <a href="/sidecar/integration/">integrate your own agents</a>.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#what-aac-is-for" class="toc-h2">What AAC is for</a><a href="#what-local-verification-buys-and-what-it-does-not" class="toc-h3">What local verification buys, and what it does not</a><a href="#what-a-receipt-proves" class="toc-h3">What a receipt proves</a><a href="#how-a-delegated-workflow-works" class="toc-h2">How a delegated workflow works</a></aside></div></body></html>

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Keys and certificates - AAC Docs</title>
+<meta name="description" content="Trust material, custody and lifecycle."><link rel="canonical" href="https://docs.cascadeauth.com/overview/keys-and-certificates/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/" aria-current="true">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Overview</summary><nav aria-label="Section navigation"><a href="/overview/">Overview</a><a href="/overview/keys-and-certificates/" aria-current="page">Keys and certificates</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/overview/">Overview</a> / <span aria-current="page">Keys and certificates</span></nav>
+<h1 id="keys-and-certificates">Keys and certificates</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/overview/keys-and-certificates/index.md" download="overview-keys-and-certificates.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>Setting up AAC means creating a small web of key pairs, certificates and shared
+secrets, putting each one where it belongs, and replacing it before it runs out.
+That web is the real work of onboarding, and this page is its map. For every item
+it says what the item proves, where it lives, who gets a copy, and how long it
+lasts.</p>
+<p>Read it once before you create your first agent, and come back when something
+expires or when you move from a development machine to your organisation's own
+certificate authority.</p>
+<p>Two words used throughout. A <strong>tenant</strong> is one organisation registered with AAC.
+An <strong>agent</strong> is one of your workloads, running beside its own AAC sidecar.</p>
+<h2 id="how-keys-and-certificates-connect-your-tenant-and-agents">How keys and certificates connect your tenant and agents</h2>
+<p>Tenant setup puts public root keys and CA certificates in the publisher's input
+folders. The publisher runs in your tenant environment: it signs upload requests
+to the AAC Control Plane's ingest API, while receiving sidecars fetch the public
+material from AAC's trust URL to verify calls and receipts. Each agent keeps its
+private keys in its own sidecar. Its agent application and sidecar share one
+pairing secret so they can authenticate calls to each other.</p>
+<p>The tables below define each item and explain who holds it.</p>
+<p><a class="diagram-download" href="/assets/keys-and-certificates.svg" download="keys-and-certificates.svg">Download SVG</a></p>
+<div class="diagram-visual"><svg id="kc-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 932" role="img"
+     aria-labelledby="kc-title kc-desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+  <title id="kc-title">How keys and certificates connect your tenant and agents</title>
+  <desc id="kc-desc">The tenant (your) environment, marked by a dashed boundary, holds everything except the hosted AAC Control Plane and other tenants. Once for the tenant:
+    the tenant API key is copied to each sidecar that needs it, and the administrator signing key signs every upload
+    made by aac-trust-anchor-publisher, which runs in your tenant environment and is not hosted by AAC. Setup copies each
+    agent's root public key and your CA certificate, named agent-dev-ca when the tool made it or agent-ca when your
+    issuer made it, into your tenant's publish folders; the publisher watches those folders and sends signed uploads
+    to the ingest API of the AAC Control Plane, which AAC hosts. Receiving sidecars in other tenants fetch that
+    public material from AAC's trust URL and cache it; they never need anything private of yours. For each agent:
+    the sidecar holds an identity, a receipt and an HTTPS key and certificate, each signed by your CA, a root
+    signing key used only when this agent starts the work, and a pairing secret, one shared secret that pairs your
+    agent application with its own sidecar. Your agent application holds the same pairing secret bytes and the public CA
+    certificate. Never leaves you: your CA's private key, the administrator signing key, the tenant API key, every
+    root signing key, every identity, receipt and HTTPS key, and every pairing secret.</desc>
+  <style>
+    #kc-diagram .bg{fill:#151619}
+    #kc-diagram .panel{fill:#202226;stroke:#35383e;stroke-width:1.5}
+    #kc-diagram .private{fill:#2b2418;stroke:#F2A33A;stroke-width:1.5}
+    #kc-diagram .public{fill:#16302b;stroke:#3fbfa5;stroke-width:1.5}
+    #kc-diagram .service{fill:#1b2a3d;stroke:#83baff;stroke-width:1.5}
+    #kc-diagram .plain{fill:#202226;stroke:#5a5f69;stroke-width:1.5}
+    #kc-diagram .band{fill:#1d1a15;stroke:#F2A33A;stroke-width:1.5;stroke-dasharray:6 5}
+    #kc-diagram text{fill:#f1f2f5;font-size:14.5px}
+    #kc-diagram .head{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#aeb3bd}
+    #kc-diagram .head-private{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#F2A33A}
+    #kc-diagram .title{font-size:15.5px;font-weight:650}
+    #kc-diagram .note{font-size:12.5px;fill:#aeb3bd}
+    #kc-diagram .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px}
+    #kc-diagram .mono-note{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;fill:#bfe9df}
+    #kc-diagram .flow{fill:none;stroke:#83baff;stroke-width:1.8}
+    #kc-diagram .flow-public{fill:none;stroke:#3fbfa5;stroke-width:1.8}
+    #kc-diagram .flow-private{fill:none;stroke:#F2A33A;stroke-width:1.8}
+    #kc-diagram .key-public{fill:#151619;stroke:#3fbfa5;stroke-width:1.8}
+    #kc-diagram .key-private{fill:#151619;stroke:#F2A33A;stroke-width:1.8}
+    #kc-diagram .key{font-size:12.5px;font-weight:700}
+    #kc-diagram .legend{font-size:13.5px}
+    #kc-diagram .key-service{fill:#151619;stroke:#83baff;stroke-width:1.8}
+    #kc-diagram .boundary{fill:none;stroke:#c3c8d2;stroke-width:1.6;stroke-dasharray:5 4}
+    #kc-diagram .head-zone{font-size:12.5px;font-weight:700;letter-spacing:.09em;fill:#f1f2f5}
+    #kc-diagram .bracket{fill:none;stroke:#aeb3bd;stroke-width:1.5}
+  </style>
+  <defs>
+    <marker id="kc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#83baff"/>
+    </marker>
+    <marker id="kc-arrow-public" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#3fbfa5"/>
+    </marker>
+    <marker id="kc-arrow-private" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#F2A33A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="932" rx="12"/>
+
+  <g id="kc-legend" aria-label="Legend">
+    <rect class="private" x="40" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="64" y="29">Private: stays with you</text>
+    <rect class="public" x="232" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="256" y="29">Public: published for others to check</text>
+    <rect class="service" x="508" y="16" width="16" height="16" rx="4"/>
+    <text class="note" x="532" y="29">Publishing path</text>
+    <rect class="boundary" x="664" y="15" width="30" height="18" rx="2"/>
+    <text class="note" x="702" y="29">Tenant environment</text>
+  </g>
+
+  <g id="kc-your-environment" aria-label="Tenant (your) environment">
+    <path class="boundary" d="M24 46H976V620H528V392H24Z"/>
+    <text class="head-zone" x="40" y="68">TENANT (YOUR) ENVIRONMENT</text>
+  </g>
+
+  <g id="kc-tenant" aria-label="Once for the tenant">
+    <text class="head" x="40" y="94">ONCE FOR THE TENANT</text>
+
+    <rect class="private" x="40" y="108" width="200" height="44" rx="8"/>
+    <text x="140" y="135" text-anchor="middle">Tenant API key</text>
+    <path class="flow-private" d="M240 130H536" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="388" y="122" text-anchor="middle">a copy on each sidecar that needs it</text>
+
+    <rect class="private" x="40" y="200" width="200" height="44" rx="8"/>
+    <text x="140" y="227" text-anchor="middle">Administrator signing key</text>
+    <path class="flow-private" d="M140 244V330" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="152" y="326">signs every upload</text>
+
+    <rect class="public" x="254" y="174" width="224" height="44" rx="8"/>
+    <text x="366" y="201" text-anchor="middle">Each agent's root public key</text>
+    <rect class="public" x="254" y="230" width="224" height="78" rx="8"/>
+    <text x="366" y="254" text-anchor="middle">Your CA certificate</text>
+    <text class="mono-note" x="268" y="276">&lt;agent&gt;-dev-ca</text>
+    <text class="note" x="392" y="276">tool-made</text>
+    <text class="mono-note" x="268" y="295">&lt;agent&gt;-ca</text>
+    <text class="note" x="392" y="295">issuer-made</text>
+    <path class="flow-public" d="M478 196H490V330" marker-end="url(#kc-arrow-public)"/>
+    <path class="flow-public" d="M478 269H490"/>
+    <circle class="key-public" cx="490" cy="290" r="10"/>
+    <text class="key" x="490" y="294.5" text-anchor="middle">1</text>
+
+    <rect class="service" x="40" y="334" width="460" height="44" rx="8"/>
+    <text class="mono" x="262" y="361" text-anchor="middle">aac-trust-anchor-publisher</text>
+    <circle class="key-service" cx="392" cy="356" r="10"/>
+    <text class="key" x="392" y="360.5" text-anchor="middle">3</text>
+    <path class="flow" d="M270 378V436" marker-end="url(#kc-arrow)"/>
+    <text class="note" x="282" y="414">signed uploads to the ingest API</text>
+  </g>
+
+  <g id="kc-hosted" aria-label="AAC, hosted">
+    <text class="head-zone" x="40" y="428">AAC (HOSTED)</text>
+    <rect class="service" x="40" y="440" width="460" height="44" rx="8"/>
+    <text x="270" y="467" text-anchor="middle">AAC Control Plane</text>
+    <path class="flow" d="M270 484V556" marker-end="url(#kc-arrow)"/>
+    <text class="note" x="282" y="512">fetched from AAC's trust URL</text>
+    <text class="note" x="282" y="529">and cached by</text>
+  </g>
+
+  <g id="kc-other-tenants" aria-label="Other tenants">
+    <text class="head-zone" x="40" y="550">OTHER TENANTS</text>
+    <rect class="plain" x="40" y="560" width="460" height="62" rx="8"/>
+    <text x="270" y="585" text-anchor="middle">Receiving sidecars, in any tenant</text>
+    <text class="note" x="270" y="606" text-anchor="middle">they never need anything private of yours</text>
+  </g>
+
+  <g id="kc-agent" aria-label="For each agent">
+    <text class="head" x="540" y="94">FOR EACH AGENT</text>
+
+    <rect class="panel" x="540" y="108" width="420" height="304" rx="10"/>
+    <text class="title" x="560" y="135">Sidecar</text>
+
+    <rect class="private" x="560" y="148" width="250" height="38" rx="7"/>
+    <text x="574" y="172">Identity key + certificate</text>
+    <rect class="private" x="560" y="194" width="250" height="38" rx="7"/>
+    <text x="574" y="218">Receipt key + certificate</text>
+    <rect class="private" x="560" y="240" width="250" height="38" rx="7"/>
+    <text x="574" y="264">HTTPS key + certificate</text>
+    <path class="bracket" d="M818 152h10v122h-10M828 213h10"/>
+    <text x="846" y="208">signed by</text>
+    <text x="846" y="227">your CA</text>
+
+    <rect class="private" x="560" y="290" width="380" height="54" rx="7"/>
+    <text x="574" y="312">Root signing key</text>
+    <text class="note" x="574" y="332">used only when this agent starts the work</text>
+
+    <rect class="private" x="560" y="354" width="380" height="40" rx="7"/>
+    <text x="574" y="379">Pairing secret</text>
+    <circle class="key-private" cx="686" cy="374" r="10"/>
+    <text class="key" x="686" y="378.5" text-anchor="middle">2</text>
+
+    <rect class="panel" x="540" y="464" width="420" height="144" rx="10"/>
+    <text class="title" x="560" y="491">Your agent application</text>
+    <rect class="private" x="560" y="508" width="380" height="38" rx="7"/>
+    <text x="574" y="532">Pairing secret</text>
+    <circle class="key-private" cx="686" cy="527" r="10"/>
+    <text class="key" x="686" y="531.5" text-anchor="middle">2</text>
+    <rect class="public" x="560" y="554" width="380" height="38" rx="7"/>
+    <text x="574" y="578">CA certificate (public)</text>
+
+    <path class="flow-private" d="M800 398V504" marker-start="url(#kc-arrow-private)" marker-end="url(#kc-arrow-private)"/>
+    <text class="note" x="814" y="443">same bytes in both</text>
+  </g>
+
+  <g id="kc-notes" aria-label="Notes">
+    <rect class="panel" x="40" y="642" width="920" height="140" rx="10"/>
+    <circle class="key-public" cx="66" cy="668" r="10"/>
+    <text class="key" x="66" y="672.5" text-anchor="middle">1</text>
+    <text class="legend" x="88" y="672.5">Setup copies each agent's root public key and your CA certificate into your tenant's publish folders.</text>
+    <text class="legend" x="88" y="691.5">The publisher watches those folders and uploads anything new.</text>
+    <circle class="key-private" cx="66" cy="716" r="10"/>
+    <text class="key" x="66" y="720.5" text-anchor="middle">2</text>
+    <text class="legend" x="88" y="720.5">One shared secret, not a key pair. It pairs your agent application with its own sidecar, so each can prove</text>
+    <text class="legend" x="88" y="739.5">a call came from the other. It is never shared with another pair or tenant.</text>
+    <circle class="key-service" cx="66" cy="762" r="10"/>
+    <text class="key" x="66" y="766.5" text-anchor="middle">3</text>
+    <text class="legend" x="88" y="766.5">Runs in your tenant environment, as a container or a host process. AAC does not host it.</text>
+  </g>
+
+  <g id="kc-never-leaves" aria-label="Never leaves you">
+    <rect class="band" x="40" y="800" width="920" height="112" rx="10"/>
+    <text class="head-private" x="60" y="828">NEVER LEAVES YOU</text>
+    <text x="60" y="858">Your CA's private key</text>
+    <text x="350" y="858">The administrator signing key</text>
+    <text x="700" y="858">The tenant API key</text>
+    <text x="60" y="888">Every root signing key</text>
+    <text x="350" y="888">Every identity, receipt and HTTPS key</text>
+    <text x="700" y="888">Every pairing secret</text>
+  </g>
+</svg>
+</div>
+<details class="diagram-text"><summary>Text version</summary><pre><code class="language-text">TENANT (YOUR) ENVIRONMENT
++----------------------------------------------------------------------------------------------------------+
+| ONCE FOR THE TENANT                     FOR EACH AGENT                                                   |
+|   Tenant API key -------------------&gt;     Sidecar                                                        |
+|   Administrator signing key                 identity   key + certificate  \                              |
+|     |                                       receipt    key + certificate   &gt;- signed by                  |
+|     |  signs every upload                   HTTPS      key + certificate  /   your CA                    |
+|     v                                       root signing key  (used only when                            |
+|   aac-trust-anchor-publisher [3]              this agent starts the work)                                |
+|     ^        ^                              pairing secret [2]  &lt;-----------------+                      |
+|     |        |                                                                    |  same bytes          |
+|     |        +-- [1] each agent's root PUBLIC key                                 |  in both             |
+|     +-- [1] ---- your CA certificate                                          Your agent application     |
+|                    the tool made it:    &lt;agent&gt;-dev-ca                           pairing secret [2]      |
+|                    your issuer made it: &lt;agent&gt;-ca                               CA certificate (public) |
+|     |                                                                                                    |
++-----+----------------------------------------------------------------------------------------------------+
+      |  signed uploads to the ingest API
+      v
+AAC (HOSTED)
+  AAC Control Plane
+      |
+      |  fetched from AAC's trust URL and cached by
+      v
+OTHER TENANTS
+  Receiving sidecars, in any tenant -- they never need anything private of yours
+
+NOTES
+  [1] Setup copies each agent's root public key and your CA certificate into
+      your tenant's publish folders. The publisher watches those folders and
+      uploads anything new.
+  [2] One shared secret, not a key pair. It pairs your agent application with
+      its own sidecar, so each can prove a call came from the other. It is
+      never shared with another pair or tenant.
+  [3] Runs in your tenant environment, as a container or a host process.
+      AAC does not host it.
+
+NEVER LEAVES YOU
+  your CA's private key      the administrator signing key      the tenant API key
+  every root signing key     every identity/receipt/HTTPS key   every pairing secret
+</code></pre></details>
+<h2 id="who-signs-your-agents-certificates">Who signs your agents' certificates</h2>
+<p><strong>Your CA certificate belongs to the issuer, not to an individual agent.</strong>
+One organisation-wide CA can sign certificates for many agents; those agents
+can all use the same public CA certificate. Bring the CA certificates that
+issued the agent certificates you intend to use. If all agents share one issuer,
+one CA certificate is enough. If you use separate issuing CAs for different
+groups of agents, bring each relevant CA certificate. You do not need a new CA
+simply because you add another agent.</p>
+<p>The CLI's development setup is different: by default it creates one development
+CA per agent. In either setup, AAC publishes a trust-anchor entry per agent
+(<code>&lt;agent&gt;-dev-ca</code> or <code>&lt;agent&gt;-ca</code>), even when several entries contain the same
+organisation CA certificate. The number of published entries is therefore not
+the number of distinct CAs. Only the public certificate is published; an issuer's
+private CA key stays with that issuer.</p>
+<p>Everything else on this page follows from one choice, and AAC's control plane is
+not part of it: <strong>AAC issues no certificates and never holds a private key of
+yours.</strong> Either the <code>aac</code> command-line tool creates a development certificate
+authority on your own machine, or your organisation's issuer signs your agents'
+certificates and the tool never sees that authority's private key.</p>
+<h3 id="the-cli-creates-a-development-ca">The CLI creates a development CA</h3>
+<p>The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it.</p>
+<p><strong>Flags.</strong> No flags are needed. To reuse a development CA across agents, pass <code>--ca-key-file</code> and <code>--ca-cert-file</code> together; neither one alone.</p>
+<p><strong>Keys and signatures.</strong> The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.</p>
+<p><strong>The CLI</strong> creates a 7-day certificate authority and keeps its private key in the agent's keep/ folder; issues the workload, receipt and HTTPS certificates; publishes the CA certificate as a trust anchor named <code>&lt;agent&gt;-dev-ca</code>.</p>
+<p><strong>The CLI does not</strong> ask you for anything from your own certificate authority.</p>
+<p><strong>Renewal.</strong> <code>aac agent renew --agent &lt;name&gt;</code> issues fresh certificates from the same CA.</p>
+<h3 id="i-bring-my-own-ca">I bring my own CA</h3>
+<p>Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment.</p>
+<p><strong>Flags.</strong> All seven together: <code>--workload-cert-file</code>, <code>--terminal-cert-file</code> and <code>--tls-cert-file</code>, each with its key file (<code>--workload-key-file</code>, <code>--terminal-key-file</code>, <code>--tls-key-file</code>), plus <code>--ca-cert-file</code>. Never <code>--ca-key-file</code>: the CLI does not want your CA key.</p>
+<p><strong>Keys and signatures.</strong> Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it.</p>
+<p><strong>The CLI</strong> checks each certificate against its key, its issuer and its validity window, and HTTPS certificates against every configured connection name; registers the workload and writes the settings files and the pairing secret; publishes your CA certificate as a trust anchor named <code>&lt;agent&gt;-ca</code>.</p>
+<p><strong>The CLI does not</strong> create a certificate authority; issue any certificate; ask for, read or store your CA private key.</p>
+<p><strong>Renewal.</strong> <code>aac agent renew --agent &lt;name&gt;</code> cannot reissue what it did not sign: it takes the replacements your issuer produced.</p>
+<p>Your choice stays visible after setup, in two places.</p>
+<p><strong>In the name your tenant publishes.</strong> An authority the tool created is published
+as the trust anchor <code>&lt;agent&gt;-dev-ca</code>; your own issuer's is published as
+<code>&lt;agent&gt;-ca</code>. Another organisation's operator can therefore tell, before trusting
+you, whether they are trusting a disposable seven-day development authority or a
+company issuer. An agent's root key id does not follow that choice — it is always
+<code>&lt;agent&gt;-root-v1</code>, derived from the agent's name.</p>
+<p><strong>In how many authorities you have — and how many entries they publish.</strong> The
+command-line tool creates <strong>one development authority per agent by default</strong>,
+so three agents normally have three authorities unless you reuse a development
+CA explicitly. An organisation using its own issuer
+commonly has <strong>one authority for the whole organisation</strong>; that is a choice its
+own certificate authority makes, and it is not the same as publishing one entry.
+The anchor id is derived from the agent's name, so <code>payments</code> and <code>booking</code>
+publish <code>payments-ca</code> and <code>booking-ca</code> even when the same issuer signed both
+certificates — one issuer, one certificate, one entry per agent. Both shapes are
+supported. Where the rest of this page differs between them, it says so.</p>
+<h2 id="what-exists-once-for-the-whole-tenant">What exists once for the whole tenant</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>What it proves</th>
+<th>Where it lives</th>
+<th>Who gets a copy</th>
+<th>How long it lasts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenant API key</td>
+<td>that a caller is acting for your tenant on AAC's data calls</td>
+<td>on the machine that runs the <code>aac</code> command, and on each sidecar that reads your workload records or reports telemetry</td>
+<td>every sidecar that needs one</td>
+<td>until you reissue it with <code>aac tenant reissue-api-key</code></td>
+</tr>
+<tr>
+<td>Administrator sign-in session</td>
+<td>that a tenant administrator is signed in right now</td>
+<td>only the machine you signed in on</td>
+<td>nobody</td>
+<td>hours; sign in again with <code>aac sso login</code></td>
+</tr>
+<tr>
+<td>Administrator signing key</td>
+<td>that published trust material really came from your tenant — the publisher signs every upload request with it</td>
+<td>the machine that runs the publisher</td>
+<td>nobody. AAC received only its public half, when you registered</td>
+<td>until you rotate it, on the schedule below</td>
+</tr>
+<tr>
+<td>Your certificate authority</td>
+<td>that an agent holding a certificate it signed is one of yours. A receiving sidecar fetches your authority's certificate from AAC and checks the certificate the calling agent presents</td>
+<td>the <strong>certificate</strong> sits with each agent and in your tenant's publish folder. The <strong>private key</strong> stays with your issuer, or — when the tool made the authority — in that agent's <code>keep/</code> folder</td>
+<td>only the certificate leaves. AAC serves it to anyone at your tenant's trust URL; the private key never leaves you</td>
+<td>your issuer decides; a development authority the tool created lasts 7 days</td>
+</tr>
+<tr>
+<td>Publisher settings</td>
+<td>not a key: where the publisher finds your public material and where to send it</td>
+<td>the machine that runs the publisher</td>
+<td>—</td>
+<td>rewritten whenever you run setup again</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The trust anchor publisher is a process, not a key.</strong> It watches the two folders
+holding your public material — your agents' root public keys and your authority's
+certificates — and uploads anything new to the Control Plane ingest API in requests
+signed with your administrator key. It creates nothing and rotates nothing; it only
+distributes public results. It does
+not need to run all the time, but it must be running whenever that material
+changes, so most tenants simply leave it running.</p>
+<p>How many publisher processes you need depends on your trust domains, not on your
+agent count. The rule is one writer for your tenant's <strong>root-key set</strong>, and one
+writer for each <strong>active domain binding</strong>. One tenant with one trust domain
+therefore runs one publisher. A tenant that keeps its AAC-assigned domain and adds
+a domain of its own runs two processes — one per domain binding — with root-key
+publishing enabled in exactly one of them.</p>
+<h2 id="what-exists-for-each-agent">What exists for each agent</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>What it proves</th>
+<th>Where it lives</th>
+<th>Who gets a copy</th>
+<th>How long it lasts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity key and certificate</td>
+<td>that this workload is <code>spiffe://&lt;your trust domain&gt;/&lt;agent&gt;</code>. Its sidecar signs a proof of possession with the key on every call, so holding the certificate is not enough</td>
+<td>its own sidecar</td>
+<td><strong>the key: nobody.</strong> The certificate is public and travels — the sidecar presents it to every workload it calls, inside the proof of possession</td>
+<td>1 day, when the tool issues it</td>
+</tr>
+<tr>
+<td>Receipt key and certificate</td>
+<td>that this agent finished the work, in a receipt others can check afterwards. Setup gives it its own key, separate from the identity key, so the two signing jobs stay separate on disk and in the configuration</td>
+<td>its own sidecar</td>
+<td><strong>the key: nobody.</strong> The certificate travels inside every receipt this agent signs, so whoever checks the receipt gets it</td>
+<td>1 day, when the tool issues it</td>
+</tr>
+<tr>
+<td>HTTPS key and certificate</td>
+<td>lets callers reach this sidecar over HTTPS. Its certificate has to name the address the sidecar is actually served on</td>
+<td>its own sidecar</td>
+<td><strong>the key: nobody.</strong> The certificate is what every TLS client sees when it connects</td>
+<td>1 day, when the tool issues it</td>
+</tr>
+<tr>
+<td>Root signing key</td>
+<td>that a chain of authority started here. It signs the first block of every chain this agent begins</td>
+<td>its sidecar holds the private half</td>
+<td>the <strong>public</strong> half is published: setup copies it into your tenant's publish folder, the publisher uploads it, and AAC serves it under the key id <code>&lt;agent&gt;-root-v1</code></td>
+<td>until you retire that key id</td>
+</tr>
+<tr>
+<td>Pairing secret</td>
+<td>that a call really came from your own application, and from its own sidecar — in both directions. It is <strong>one shared secret, not a key pair</strong>: the same bytes sit in both processes and there is no public half</td>
+<td>its sidecar and authorized processes within that tenant application’s trusted boundary</td>
+<td>never another pair or tenant; this is not a mint-only credential</td>
+<td>until you regenerate it</td>
+</tr>
+<tr>
+<td>List of trusted authorities</td>
+<td>which authorities this sidecar accepts on the calls it makes</td>
+<td>its own sidecar</td>
+<td>nobody else</td>
+<td>rebuilt each time you renew</td>
+</tr>
+<tr>
+<td>Workload registration</td>
+<td>AAC's record that this identity is one of your agents. Not a key and not a file: it carries the identity string only, no key material</td>
+<td>AAC's registry</td>
+<td>—</td>
+<td>until you deactivate it</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What the separate receipt key does and does not buy.</strong> Setup gives the receipt
+its own key, so the two signing jobs are separate: separate files, separate
+configuration. That is where the separation ends — it is not a check made when a
+receipt is verified. A receiving sidecar checks that the certificate in a receipt
+chains to your published authority, names the expected agent, and matches the
+signature — and your identity certificate satisfies all three, because it carries
+the same identity and the same issuer. So treat both keys as one blast radius:
+whoever holds an agent's identity key can also produce a receipt that verifies
+for that agent.</p>
+<p>Other organisations' agents fetch your published authority certificates and root
+public keys from AAC's trust URL. <strong>Public certificates are meant to travel</strong> —
+they are presented on calls, carried in receipts and served to TLS clients. What
+never leaves you are the private keys and the pairing secret.</p>
+<h2 id="what-stays-with-you-and-what-your-application-receives">What stays with you, and what your application receives</h2>
+<p><strong>Never leaves you.</strong> Your certificate authority's private key — held by your
+issuer, or kept in the agent's <code>keep/</code> folder when the tool created the authority.
+Your administrator signing key. Every agent's root signing private key, and its
+identity, receipt and HTTPS private keys. Every pairing secret. Your tenant API
+key.</p>
+<p>An explicitly authorized separate originator may hold this pair's secret only
+within the same trusted application boundary. It can sign native chain-start
+requests as well as callbacks; the credential is not limited to minting.
+Native <code>/v1/agent/mint-root</code> and <code>/v1/agent/delegations</code> require it from v0.4.0,
+as do the existing paired callback/A2A surfaces described in the guide.
+Never share the secret across pairs or tenants.</p>
+<p><strong>What your own application gets.</strong> The only <strong>secret</strong> your application ever
+receives is its pairing secret. It also receives a copy of your certificate
+authority's certificate, which is public, so it can trust its sidecar over HTTPS.
+Nothing else: your application never holds a signing key, and it never needs one.</p>
+<h2 id="what-setup-prepares-and-what-the-runtime-actually-uses">What setup prepares, and what the runtime actually uses</h2>
+<p>Setup prepares a <strong>root signing key for every agent</strong>. Only agents that <em>start</em>
+work use it. An agent that receives work and passes it on narrows the authority it
+was given and signs its proof with its identity key, not with a root key — so on a
+forwarding agent the root key sits prepared and unused. That is deliberate: it
+means an agent can begin starting work later without another setup pass.</p>
+<p>Read the two tables above the same way. They list what a complete agent has
+available, not what every deployment exercises.</p>
+<h2 id="how-long-things-last-and-what-to-do-when-they-run-out">How long things last, and what to do when they run out</h2>
+<p><strong>Short-lived, and replaced by one command.</strong> An agent's identity, receipt and
+HTTPS certificates last a day when the tool issues them, and a development
+authority lasts seven days. <code>aac agent renew --agent &lt;name&gt;</code> replaces the
+certificates; add <code>--ca</code> to replace the development authority as well, which also
+puts the new authority certificate in your publish folder. When your own issuer
+signed them, that issuer produces the replacements and <code>renew</code> takes them — it
+cannot reissue what it did not sign.</p>
+<p><strong>Persistent, and not covered by that.</strong> Your root signing keys, your pairing
+secrets, your tenant API key, your administrator signing key and your publisher
+settings do not expire on their own. Waiting does not retire them. Each one stays
+valid until you deliberately replace it, so treat them as things you hold and look
+after, not as material that ages out.</p>
+<p>That distinction matters when a machine is lost or a secret may have leaked. The
+short-lived material is genuinely disposable — reissue it and move on. The
+persistent material is not, and needs a deliberate decision each time.</p>
+<h2 id="rotating-the-tenant-administrator-key">Rotating the tenant administrator key</h2>
+<p>Your administrator signing key is what makes published trust material yours, so
+rotate it:</p>
+<ul>
+<li><strong>as soon as you suspect it leaked</strong>, or see tenant activity you cannot account
+for;</li>
+<li><strong>when someone with access to it leaves</strong> your organisation or changes role;</li>
+<li><strong>once a year</strong>, as routine, even when nothing has gone wrong.</li>
+</ul>
+<p>Create the key pair yourself first — AAC only ever receives the public half, and
+the command refuses a private key rather than transmitting it:</p>
+<pre><code class="language-bash">umask 077
+openssl genpkey -algorithm ed25519 -out tenant-admin.pem
+openssl pkey -in tenant-admin.pem -pubout -out tenant-admin.public.pem
+aac tenant rotate-admin-key --tenant-admin-pubkey-file tenant-admin.public.pem
+</code></pre>
+<p>Rotation is <strong>immediate and forward-only</strong>. The previous key stops being accepted
+for uploads at once — there is no grace window, and it can never be reinstated.
+So plan the swap: a running trust anchor publisher holding the old private key
+must be given the new one and <strong>restarted</strong>, because it reads its key once, at
+startup. Until you do, its uploads are refused.</p>
+<h2 id="the-exact-file-names">The exact file names</h2>
+<p>This page deliberately names roles rather than paths, because where a file lands
+depends on how you set the agent up. The command-line tool publishes the exact
+list — every file it creates, where it puts it, and whether to back it up — in the
+section &quot;What each file is for, and what to back up&quot; on its own page:
+<a href="https://pypi.org/project/aac-cli/">https://pypi.org/project/aac-cli/</a>. That table is generated from the tool's own
+source, so it cannot drift from what the tool actually writes.</p>
+<h2 id="keeping-a-receipt-verifiable-months-later">Keeping a receipt verifiable months later</h2>
+<p>A receipt is a signature over what the last agent reported, made with a
+certificate that was valid when the work finished. Checking one long afterwards is
+not automatic, and it needs three things you keep yourself:</p>
+<ol>
+<li><strong>the trust material that was published at the time</strong> — AAC serves what is
+current, not an archive, and a development certificate may have been valid for
+only a day;</li>
+<li><strong>an observation time you trust independently</strong>, rather than the time written
+inside the evidence being checked;</li>
+<li><strong>your own workflow and authorization records</strong>, which are what connect a
+receipt to the task it belongs to and to the person who approved it.</li>
+</ol>
+<p>It is also worth being clear about what a receipt is. It is your tenant's signed
+statement that an agent reported a particular outcome. It is not, by itself, proof
+that the real-world action happened. The developer guide's &quot;Verify terminal
+evidence offline&quot; section has the procedure and its limits in full.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#how-keys-and-certificates-connect-your-tenant-and-agents" class="toc-h2">How keys and certificates connect your tenant and agents</a><a href="#who-signs-your-agents-certificates" class="toc-h2">Who signs your agents&#x27; certificates</a><a href="#the-cli-creates-a-development-ca" class="toc-h3">The CLI creates a development CA</a><a href="#i-bring-my-own-ca" class="toc-h3">I bring my own CA</a><a href="#what-exists-once-for-the-whole-tenant" class="toc-h2">What exists once for the whole tenant</a><a href="#what-exists-for-each-agent" class="toc-h2">What exists for each agent</a><a href="#what-stays-with-you-and-what-your-application-receives" class="toc-h2">What stays with you, and what your application receives</a><a href="#what-setup-prepares-and-what-the-runtime-actually-uses" class="toc-h2">What setup prepares, and what the runtime actually uses</a><a href="#how-long-things-last-and-what-to-do-when-they-run-out" class="toc-h2">How long things last, and what to do when they run out</a><a href="#rotating-the-tenant-administrator-key" class="toc-h2">Rotating the tenant administrator key</a><a href="#the-exact-file-names" class="toc-h2">The exact file names</a><a href="#keeping-a-receipt-verifiable-months-later" class="toc-h2">Keeping a receipt verifiable months later</a></aside></div></body></html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verify release artifacts - AAC Docs</title>
+<meta name="description" content="Optional signature, checksum and build-provenance checks."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/reference/verification/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a><a href="/sidecar/reference/verification/" aria-current="page">Verify release artifacts</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Verify release artifacts</span></nav>
+<h1 id="verify-release-artifacts">Verify release artifacts</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/reference/verification/index.md" download="sidecar-reference-verification.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>Use these optional checks when your deployment policy calls for signature,
+checksum or build-provenance verification. For ordinary installation, start
+with <a href="/sidecar/install/">Download and install the sidecar</a>.</p>
+<h2 id="verify-the-sidecar-container">Verify the sidecar container</h2>
+<p>Install Docker and Cosign. Verify the
+published digest against CascadeAuth's GitHub Actions keyless identity:</p>
+<pre><code class="language-bash">set -euo pipefail
+export AAC_SIDECAR_VERSION=v0.4.4
+export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
+export AAC_SIDECAR_DIGEST=&quot;$(
+  docker buildx imagetools inspect &quot;${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}&quot; |
+    awk '$1 == &quot;Digest:&quot; { print $2; exit }'
+)&quot;
+[[ &quot;${AAC_SIDECAR_DIGEST}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
+
+cosign verify \
+  --certificate-identity \
+    'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot;
+
+docker pull &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot;
+image_labels_format='{{index .Config.Labels &quot;org.opencontainers.image.version&quot;}} '
+image_labels_format+='{{index .Config.Labels &quot;org.opencontainers.image.licenses&quot;}}'
+docker image inspect &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot; \
+  --format &quot;$image_labels_format&quot;
+</code></pre>
+<p>The final line must print:</p>
+<pre><code class="language-text">v0.4.4 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+</code></pre>
+<h2 id="verify-the-standalone-bundle">Verify the standalone bundle</h2>
+<p>Use this alternative to the sidecar container for a bare VM, systemd host,
+or macOS development machine. Container users can also download the bundle
+for offline documentation or deep audit without installing its standalone binary.
+<a href="https://oras.land/docs/installation/">Install ORAS</a> to download the files and
+<a href="https://docs.sigstore.dev/cosign/system_config/installation/">install Cosign</a> to
+verify their signatures. Neither tool is needed to run the sidecar afterward.</p>
+<pre><code class="language-bash">mkdir aac-sidecar-v0.4.4
+cd aac-sidecar-v0.4.4
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
+bundle_digest=&quot;$(oras resolve &quot;${bundle_ref}&quot;)&quot;
+[[ &quot;${bundle_digest}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
+
+cosign verify \
+  --certificate-identity \
+    'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  &quot;docker.io/cascadeauth/aac-sidecar@${bundle_digest}&quot;
+
+oras pull &quot;docker.io/cascadeauth/aac-sidecar@${bundle_digest}&quot;
+
+cosign verify-blob \
+  --certificate-identity \
+    'https://github.com/CascadeAuth/aac-sidecar-go/.github/workflows/release.yml@refs/heads/main' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  --bundle checksums.txt.bundle \
+  checksums.txt
+
+bash ./verify-developer-beta.sh . v0.4.4
+</code></pre>
+<h2 id="deep-artifact-audit">Deep artifact audit</h2>
+<p>For a reproducible audit beyond signature/checksum verification, install
+Python 3.11+ and Go, then run
+this <strong>after</strong> the Cosign verification above:</p>
+<pre><code class="language-bash">python3 --version
+go version
+bash ./verify-developer-beta.sh . v0.4.4 --deep-audit
+</code></pre>
+<p>Go reads embedded build metadata from each binary; it does not execute foreign-platform
+binaries. The verifier's final version check executes only your host's binary.
+The optional audit checks:</p>
+<ul>
+<li>All four platform archives, exact file sets and matching license/notices/guide.</li>
+<li>Binary platform, Go build metadata, version/commit, <code>-trimpath</code> and disabled
+CGO; Linux ELF symbol/debug-section absence and private-source/key markers.</li>
+<li>The OCI archive's two Linux platforms, complete referenced SHA-256 blob graph,
+descriptor lengths, runtime user/entrypoint, release labels, legal files and
+application-layer file set; every layer is scanned for forbidden source/key
+markers without extracting it into your filesystem.</li>
+<li>SPDX 2.3 identifiers/relationships and its four binary SHA-256 values against
+the standalone archives.</li>
+<li>in-toto/SLSA version, commit, targets, builder/tool identity and every public
+subject digest against the signed checksum manifest.</li>
+</ul>
+<p>It prints a JSON audit summary with the binary hashes and inventory counts.
+Archive bounds fail closed if an input exceeds the supported release profile.
+The audit verifies the signed build metadata and artifact contents; it does
+not reproduce the build. A green audit does not replace
+Cosign identity verification, runtime readiness, or your tenant's qualification.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#verify-the-sidecar-container" class="toc-h2">Verify the sidecar container</a><a href="#verify-the-standalone-bundle" class="toc-h2">Verify the standalone bundle</a><a href="#deep-artifact-audit" class="toc-h2">Deep artifact audit</a></aside></div></body></html>

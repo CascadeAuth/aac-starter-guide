@@ -1,0 +1,74 @@
+Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-approve-idp-repair/
+
+Applies to: AAC CLI 0.2.8
+
+Documentation revision: 6b7d8268ba787d3e9354742259e78153a3a18cae
+
+---
+
+# `aac sso approve-idp-repair`
+
+AAC Ops approves one exact tenant-signed IdP repair.
+
+The second party compares the repair request ID and repair-intent fingerprint through the incident channel, then approves that exact intent with the AAC Ops bootstrap ceremony.
+
+## Synopsis
+
+```text
+aac sso approve-idp-repair
+  [-h]
+  [--profile PROFILE]
+  [--admin-url ADMIN_URL]
+  [--data-plane-url DATA_PLANE_URL]
+  [--output {json,table}]
+  --tenant-id TENANT_ID
+  --connection-id CONNECTION_ID
+  --repair-request-id REPAIR_REQUEST_ID
+  --repair-intent-fingerprint REPAIR_INTENT_FINGERPRINT
+  [--bootstrap-token BOOTSTRAP_TOKEN]
+```
+
+## Arguments
+
+| Argument | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `-h`, `--help` | flag | no | — | show this help message and exit |
+| `--profile` | value | no | — | Profile to run under (selection: --profile \> AAC_PROFILE \> reserved baseline `main`). `aac profile list` shows what exists. |
+| `--admin-url` | value | no | — | Admin-surface base URL (overrides profile). |
+| `--data-plane-url` | value | no | — | Data-plane-surface base URL (overrides profile). |
+| `--output` | `json` \| `table` | no | `json` | Output mode: json (the default) or table. |
+| `--tenant-id` | value | yes | — |  |
+| `--connection-id` | value | yes | — |  |
+| `--repair-request-id` | value | yes | — |  |
+| `--repair-intent-fingerprint` | value | yes | — |  |
+| `--bootstrap-token` | value | no | empty | AAC Ops ceremony token; falls back to AAC_BOOTSTRAP_TOKEN. |
+
+## Output
+
+`--output json` (the default) prints one JSON document to standard output; `--output table` prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable.
+
+## Exit codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Success. |
+| `1` | The control plane or the identity provider rejected the request. |
+| `2` | Usage error: an invalid flag, value or flag combination. |
+| `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
+| `4` | Transport failure: an endpoint could not be reached. |
+
+## Related commands
+
+- [`aac sso`](https://docs.cascadeauth.com/cli/reference/aac-sso/)
+- [`aac sso register-idp`](https://docs.cascadeauth.com/cli/reference/aac-sso-register-idp/) — Register a tenant↔IdP connection.
+- [`aac sso generate-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-generate-idp-recovery-key/) — Generate offline tenant IdP recovery-key artifacts.
+- [`aac sso enroll-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-enroll-idp-recovery-key/) — Enroll a tenant's IdP recovery public verifier.
+- [`aac sso list-idp-recovery-keys`](https://docs.cascadeauth.com/cli/reference/aac-sso-list-idp-recovery-keys/) — List IdP recovery-key lifecycle metadata.
+- [`aac sso rotate-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-rotate-idp-recovery-key/) — Replace the ACTIVE IdP recovery public verifier.
+- [`aac sso revoke-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-revoke-idp-recovery-key/) — Terminally revoke the ACTIVE IdP recovery key.
+- [`aac sso request-idp-repair`](https://docs.cascadeauth.com/cli/reference/aac-sso-request-idp-repair/) — Sign and submit one exact IdP connection repair request.
+- [`aac sso list-idp`](https://docs.cascadeauth.com/cli/reference/aac-sso-list-idp/) — List safe tenant IdP connection handles without authentication.
+- [`aac sso replace-idp`](https://docs.cascadeauth.com/cli/reference/aac-sso-replace-idp/) — Replace one tenant IdP connection from a complete file.
+- [`aac sso logout`](https://docs.cascadeauth.com/cli/reference/aac-sso-logout/) — Delete the cached AAC session for a tenant.
+- [`aac sso whoami`](https://docs.cascadeauth.com/cli/reference/aac-sso-whoami/) — Show cached session identity/expiry and the profile's saved AAC-assigned domain.
+- [`aac sso login`](https://docs.cascadeauth.com/cli/reference/aac-sso-login/) — Sign in via your tenant's IdP; caches an AAC session.

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aac tenant issue-domain-challenge - AAC Docs</title>
+<meta name="description" content="Released command syntax and options for aac tenant issue-domain-challenge."><link rel="canonical" href="https://docs.cascadeauth.com/cli/reference/aac-tenant-issue-domain-challenge/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/" aria-current="true">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>AAC CLI</summary><nav aria-label="Section navigation"><a href="/cli/">AAC CLI</a><a href="/cli/guide/">AAC CLI user guide</a><a href="/cli/reference/">Command reference</a><details class="command-family" open><summary>AAC commands</summary><details class="command-group"><summary><a href="/cli/reference/aac-agent/">aac agent</a></summary><div class="command-children"><a href="/cli/reference/aac-agent-list/">aac agent list</a><a href="/cli/reference/aac-agent-renew/">aac agent renew</a><a href="/cli/reference/aac-agent-status/">aac agent status</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-chain/">aac chain</a></summary><div class="command-children"><a href="/cli/reference/aac-chain-list/">aac chain list</a><a href="/cli/reference/aac-chain-show/">aac chain show</a></div></details><a href="/cli/reference/aac-init/">aac init</a><details class="command-group"><summary><a href="/cli/reference/aac-profile/">aac profile</a></summary><div class="command-children"><a href="/cli/reference/aac-profile-create/">aac profile create</a><a href="/cli/reference/aac-profile-delete/">aac profile delete</a><a href="/cli/reference/aac-profile-list/">aac profile list</a><a href="/cli/reference/aac-profile-show/">aac profile show</a><a href="/cli/reference/aac-profile-update/">aac profile update</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-sso/">aac sso</a></summary><div class="command-children"><a href="/cli/reference/aac-sso-approve-idp-repair/">aac sso approve-idp-repair</a><a href="/cli/reference/aac-sso-enroll-idp-recovery-key/">aac sso enroll-idp-recovery-key</a><a href="/cli/reference/aac-sso-generate-idp-recovery-key/">aac sso generate-idp-recovery-key</a><a href="/cli/reference/aac-sso-list-idp-recovery-keys/">aac sso list-idp-recovery-keys</a><a href="/cli/reference/aac-sso-list-idp/">aac sso list-idp</a><a href="/cli/reference/aac-sso-login/">aac sso login</a><a href="/cli/reference/aac-sso-logout/">aac sso logout</a><a href="/cli/reference/aac-sso-register-idp/">aac sso register-idp</a><a href="/cli/reference/aac-sso-replace-idp/">aac sso replace-idp</a><a href="/cli/reference/aac-sso-request-idp-repair/">aac sso request-idp-repair</a><a href="/cli/reference/aac-sso-revoke-idp-recovery-key/">aac sso revoke-idp-recovery-key</a><a href="/cli/reference/aac-sso-rotate-idp-recovery-key/">aac sso rotate-idp-recovery-key</a><a href="/cli/reference/aac-sso-whoami/">aac sso whoami</a></div></details><details class="command-group" open><summary><a href="/cli/reference/aac-tenant/">aac tenant</a></summary><div class="command-children"><a href="/cli/reference/aac-tenant-add-workload/">aac tenant add-workload</a><details class="command-group"><summary><a href="/cli/reference/aac-tenant-api-key/">aac tenant api-key</a></summary><div class="command-children"><a href="/cli/reference/aac-tenant-api-key-issue/">aac tenant api-key issue</a><a href="/cli/reference/aac-tenant-api-key-list/">aac tenant api-key list</a><a href="/cli/reference/aac-tenant-api-key-retire/">aac tenant api-key retire</a></div></details><a href="/cli/reference/aac-tenant-assign-hosted-domain/">aac tenant assign-hosted-domain</a><a href="/cli/reference/aac-tenant-bind-trust-domain/">aac tenant bind-trust-domain</a><a href="/cli/reference/aac-tenant-deactivate-workload/">aac tenant deactivate-workload</a><a href="/cli/reference/aac-tenant-describe-workload/">aac tenant describe-workload</a><a href="/cli/reference/aac-tenant-describe/">aac tenant describe</a><a href="/cli/reference/aac-tenant-issue-domain-challenge/" aria-current="page">aac tenant issue-domain-challenge</a><a href="/cli/reference/aac-tenant-list-trust-domains/">aac tenant list-trust-domains</a><a href="/cli/reference/aac-tenant-list-workloads/">aac tenant list-workloads</a><a href="/cli/reference/aac-tenant-list/">aac tenant list</a><a href="/cli/reference/aac-tenant-reactivate-hosted-domain/">aac tenant reactivate-hosted-domain</a><a href="/cli/reference/aac-tenant-register/">aac tenant register</a><a href="/cli/reference/aac-tenant-reissue-api-key/">aac tenant reissue-api-key</a><a href="/cli/reference/aac-tenant-release-domain/">aac tenant release-domain</a><a href="/cli/reference/aac-tenant-revoke-domain/">aac tenant revoke-domain</a><a href="/cli/reference/aac-tenant-revoke-trust-domain/">aac tenant revoke-trust-domain</a><a href="/cli/reference/aac-tenant-rotate-admin-key/">aac tenant rotate-admin-key</a><a href="/cli/reference/aac-tenant-update-workload/">aac tenant update-workload</a><a href="/cli/reference/aac-tenant-update/">aac tenant update</a><a href="/cli/reference/aac-tenant-verify-domain/">aac tenant verify-domain</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-trust-anchor/">aac trust-anchor</a></summary><div class="command-children"><a href="/cli/reference/aac-trust-anchor-describe/">aac trust-anchor describe</a><a href="/cli/reference/aac-trust-anchor-ingest-history/">aac trust-anchor ingest-history</a><a href="/cli/reference/aac-trust-anchor-list/">aac trust-anchor list</a><a href="/cli/reference/aac-trust-anchor-revoke/">aac trust-anchor revoke</a></div></details></details></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/cli/">AAC CLI</a> / <a href="/cli/reference/">Command reference</a> / <a href="/cli/reference/aac-tenant/">aac tenant</a> / <span aria-current="page">aac tenant issue-domain-challenge</span></nav>
+<h1 id="aac-tenant-issue-domain-challenge"><code>aac tenant issue-domain-challenge</code></h1>
+<div class="page-actions"><span>AAC CLI 0.2.8</span><a href="/cli/reference/aac-tenant-issue-domain-challenge/index.md" download="cli-reference-aac-tenant-issue-domain-challenge.md">Markdown</a><span class="revision">Docs 6b7d8268ba78</span></div>
+<p>Issue or rotate the DNS TXT challenge for one tenant business domain.</p>
+<h2 id="synopsis">Synopsis</h2>
+<pre><code class="language-text">aac tenant issue-domain-challenge
+  [-h]
+  [--profile PROFILE]
+  [--admin-url ADMIN_URL]
+  [--data-plane-url DATA_PLANE_URL]
+  [--output {json,table}]
+  [--tenant-id TENANT_ID]
+  --domain DOMAIN
+</code></pre>
+<h2 id="arguments">Arguments</h2>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td>flag</td>
+<td>no</td>
+<td>—</td>
+<td>show this help message and exit</td>
+</tr>
+<tr>
+<td><code>--profile</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Profile to run under (selection: --profile &gt; AAC_PROFILE &gt; reserved baseline <code>main</code>). <code>aac profile list</code> shows what exists.</td>
+</tr>
+<tr>
+<td><code>--admin-url</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Admin-surface base URL (overrides profile).</td>
+</tr>
+<tr>
+<td><code>--data-plane-url</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Data-plane-surface base URL (overrides profile).</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td><code>json</code> | <code>table</code></td>
+<td>no</td>
+<td><code>json</code></td>
+<td>Output mode: json (the default) or table.</td>
+</tr>
+<tr>
+<td><code>--tenant-id</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Owning canonical tenant id (defaults to profile/environment binding).</td>
+</tr>
+<tr>
+<td><code>--domain</code></td>
+<td>value</td>
+<td>yes</td>
+<td>—</td>
+<td>Canonical lowercase DNS domain without a trailing dot.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="output">Output</h2>
+<p><code>--output json</code> (the default) prints one JSON document to standard output; <code>--output table</code> prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable.</p>
+<h2 id="exit-codes">Exit codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Success.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>The control plane or the identity provider rejected the request.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Usage error: an invalid flag, value or flag combination.</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>A local configuration or state problem: profile, credential file, cached session or agent.</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>Transport failure: an endpoint could not be reached.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<p>Creates the tenant_domains row when absent or explicitly rotates the current challenge and resets it to pending. Requires the owning tenant's tenant-admin AAC session.</p>
+<h2 id="related-commands">Related commands</h2>
+<ul>
+<li><a href="/cli/reference/aac-tenant/"><code>aac tenant</code></a></li>
+<li><a href="/cli/reference/aac-tenant-register/"><code>aac tenant register</code></a> — Register a tenant or resume this profile's pending registration.</li>
+<li><a href="/cli/reference/aac-tenant-list/"><code>aac tenant list</code></a> — List registered tenants visible to your credential (your own tenant, with a session; registration-attribute tier).</li>
+<li><a href="/cli/reference/aac-tenant-describe/"><code>aac tenant describe</code></a> — One tenant's full registration state (API-key METADATA only).</li>
+<li><a href="/cli/reference/aac-tenant-verify-domain/"><code>aac tenant verify-domain</code></a> — Resolve and verify the current DNS TXT tenant-domain challenge.</li>
+<li><a href="/cli/reference/aac-tenant-release-domain/"><code>aac tenant release-domain</code></a> — Voluntarily release one business-domain claim for planned transfer.</li>
+<li><a href="/cli/reference/aac-tenant-revoke-domain/"><code>aac tenant revoke-domain</code></a> — Terminally revoke one business-domain claim for security or teardown.</li>
+<li><a href="/cli/reference/aac-tenant-update/"><code>aac tenant update</code></a> — Update mutable tenant attributes (sparse: only passed flags change).</li>
+<li><a href="/cli/reference/aac-tenant-api-key/"><code>aac tenant api-key</code></a> — Plan a zero-downtime tenant API-key rotation.</li>
+<li><a href="/cli/reference/aac-tenant-reissue-api-key/"><code>aac tenant reissue-api-key</code></a> — Replace a lost or suspected-compromised tenant API key.</li>
+<li><a href="/cli/reference/aac-tenant-add-workload/"><code>aac tenant add-workload</code></a> — Add a post-registration workload identity.</li>
+<li><a href="/cli/reference/aac-tenant-list-workloads/"><code>aac tenant list-workloads</code></a> — List this tenant's workload lifecycle records.</li>
+<li><a href="/cli/reference/aac-tenant-describe-workload/"><code>aac tenant describe-workload</code></a> — Describe one workload lifecycle record by opaque id.</li>
+<li><a href="/cli/reference/aac-tenant-update-workload/"><code>aac tenant update-workload</code></a> — Set or clear a workload's display name.</li>
+<li><a href="/cli/reference/aac-tenant-deactivate-workload/"><code>aac tenant deactivate-workload</code></a> — Terminally deactivate a workload.</li>
+<li><a href="/cli/reference/aac-tenant-assign-hosted-domain/"><code>aac tenant assign-hosted-domain</code></a> — Request the AAC-assigned trust domain for your tenant and save it in the bound profile; repeated calls reuse it.</li>
+<li><a href="/cli/reference/aac-tenant-reactivate-hosted-domain/"><code>aac tenant reactivate-hosted-domain</code></a> — Reactivate the tenant's AAC-assigned trust domain after a revocation; the name does not change.</li>
+<li><a href="/cli/reference/aac-tenant-bind-trust-domain/"><code>aac tenant bind-trust-domain</code></a> — Bind a SPIFFE trust domain using current exact-name evidence or ceremony.</li>
+<li><a href="/cli/reference/aac-tenant-list-trust-domains/"><code>aac tenant list-trust-domains</code></a> — List this tenant's trust-domain bindings.</li>
+<li><a href="/cli/reference/aac-tenant-rotate-admin-key/"><code>aac tenant rotate-admin-key</code></a> — Replace this tenant's admin key with a new PUBLIC key.</li>
+<li><a href="/cli/reference/aac-tenant-revoke-trust-domain/"><code>aac tenant revoke-trust-domain</code></a> — Revoke a trust-domain binding episode by binding id.</li>
+</ul>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#synopsis" class="toc-h2">Synopsis</a><a href="#arguments" class="toc-h2">Arguments</a><a href="#output" class="toc-h2">Output</a><a href="#exit-codes" class="toc-h2">Exit codes</a><a href="#notes" class="toc-h2">Notes</a><a href="#related-commands" class="toc-h2">Related commands</a></aside></div></body></html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install and operate the trust anchor publisher - AAC Docs</title>
+<meta name="description" content="Install, configure and operate your tenant&#x27;s public-trust publisher."><link rel="canonical" href="https://docs.cascadeauth.com/trust-anchor-publisher/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/" aria-current="true">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#prepare-the-inputs-for-either-mode" class="toc-h2">Prepare the inputs for either mode</a><a href="#run-a-container" class="toc-h2">Run a container</a><a href="#pull-and-configure-the-container" class="toc-h3">Pull and configure the container</a><a href="#operate-the-container" class="toc-h3">Operate the container</a><a href="#run-a-standalone-process-on-a-host" class="toc-h2">Run a standalone process on a host</a><a href="#install-the-python-package" class="toc-h3">Install the Python package</a><a href="#configure-and-start-the-host-process" class="toc-h3">Configure and start the host process</a><a href="#operate-the-host-process" class="toc-h3">Operate the host process</a><a href="#verify-publication-in-either-mode" class="toc-h2">Verify publication in either mode</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Install and operate the trust anchor publisher</span></nav>
+<h1 id="install-and-operate-the-trust-anchor-publisher">Install and operate the trust anchor publisher</h1>
+<div class="page-actions"><span>aac-trust-anchor-publisher 0.2.3</span><a href="/trust-anchor-publisher/index.md" download="trust-anchor-publisher.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>The publisher runs inside your tenant and sends public trust material to the
+<a href="/control-plane/">Control Plane</a>. Other tenants' sidecars read it to verify your
+authority chains and workload identities.</p>
+<p>Choose one deployment mode for each publication role:</p>
+<ul>
+<li><a href="#run-a-container">Run a container</a>: use the released GHCR image and Docker or
+your existing container platform.</li>
+<li><a href="#run-a-standalone-process-on-a-host">Run a standalone process on a host</a>:
+install the PyPI package and run it directly or as a system service.</li>
+</ul>
+<p>The <a href="/get-started/">AAC journey</a> uses the container mode through Docker Compose.
+The two paths below install the same publisher; you do not need both.</p>
+<h2 id="prepare-the-inputs-for-either-mode">Prepare the inputs for either mode</h2>
+<p>Complete <a href="/cli/guide/#prepare-and-maintain-an-agent">tenant and agent setup</a>
+first. Setup prepares public-material folders and a publisher environment file.
+For CLI-managed Compose, use its generated configuration and mounts:
+<code>compose.env</code> identifies <code>AAC_PUBLISHER_ENV_FILE</code> and the tenant directory.</p>
+<table>
+<thead>
+<tr>
+<th>Publication role</th>
+<th>Public input</th>
+<th>Published result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root keys</td>
+<td>One <code>&lt;key_id&gt;.pub.pem</code> per root-signing public key</td>
+<td>The tenant's public JWK Set</td>
+</tr>
+<tr>
+<td>SPIFFE bundle</td>
+<td>One <code>&lt;anchor_id&gt;.ca.pem</code> per public CA certificate</td>
+<td>The trust bundle for an active domain binding</td>
+</tr>
+</tbody>
+</table>
+<p>Run one writer for the tenant's root-key set and one for each domain bundle.
+One process can serve both roles for one domain. Several domains need separate
+bundle publishers, with root-key publication enabled in only one process.</p>
+<p>The publisher signs uploads with the tenant-admin private key. Root-signing
+private keys, CA private keys, workload private keys and pairing secrets stay
+with their own components. See <a href="/overview/keys-and-certificates/">keys and certificates</a>.</p>
+<h2 id="run-a-container">Run a container</h2>
+<h3 id="pull-and-configure-the-container">Pull and configure the container</h3>
+<p>Get the <a href="https://github.com/orgs/CascadeAuth/packages/container/package/aac-trust-anchor-publisher">released image from GHCR</a>:</p>
+<pre><code class="language-bash">docker pull ghcr.io/cascadeauth/aac-trust-anchor-publisher:0.2.3
+</code></pre>
+<p>The following Linux-host example publishes root keys. Replace the tenant ID
+with your registered tenant. The host admin key and public-key directory must
+already exist. As described in the <a href="https://pypi.org/project/aac-trust-anchor-publisher/#running-in-a-container">container operating guide</a>,
+keep the material readable by the host's <code>aac</code> group (files mode 640,
+directories mode 750). The image runs as a non-root user; the added group grants
+read access without making private material world-readable.</p>
+<pre><code class="language-bash">docker run -d --name aac-trust-anchor-publisher \
+  --restart unless-stopped \
+  --group-add &quot;$(getent group aac | cut -d: -f3)&quot; \
+  -e AAC_TAP_TENANT_ID=tnt-550e8400-e29b-41d4-9716-446655440000 \
+  -e AAC_TAP_ADMIN_KEY_FILE=/keys/tenant-admin.pem \
+  -e AAC_TAP_ROOT_KEYS_DIR=/root-keys \
+  -e AAC_TAP_ROOT_KEYS_INGEST_URL=https://api.stage.cascadeauth.dev/v1/root-keys/ingest \
+  --mount type=bind,src=/etc/aac/keys/tenant-admin.pem,dst=/keys/tenant-admin.pem,readonly \
+  --mount type=bind,src=/etc/aac/root-keys,dst=/root-keys,readonly \
+  ghcr.io/cascadeauth/aac-trust-anchor-publisher:0.2.3
+</code></pre>
+<p>For the bundle role, mount its public CA directory read-only and supply these
+additional environment variables to the container:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Container value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AAC_TAP_SPIFFE_BUNDLE_DIR</code></td>
+<td>The directory <strong>inside</strong> the container where the CA files are mounted</td>
+</tr>
+<tr>
+<td><code>AAC_TAP_SPIFFE_TRUST_DOMAIN</code></td>
+<td>Your tenant's active assigned or custom trust domain</td>
+</tr>
+<tr>
+<td><code>AAC_TAP_SPIFFE_BUNDLE_INGEST_URL</code></td>
+<td><code>https://api.stage.cascadeauth.dev/v1/spiffe-bundle/ingest</code></td>
+</tr>
+<tr>
+<td><code>AAC_TAP_SPIFFE_BUNDLE_READ_URL</code></td>
+<td><code>https://trust.stage.cascadeauth.dev/.well-known/spiffe-bundle/&lt;TRUST_DOMAIN&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use an environment file with <code>--env-file</code> instead of separate <code>-e</code> options if
+preferred. Its file paths must name the container mounts, not the host paths.
+For another AAC environment, use the endpoints supplied by its operator.
+The container needs outbound HTTPS and no inbound listening port.</p>
+<h3 id="operate-the-container">Operate the container</h3>
+<p>Read the container logs:</p>
+<pre><code class="language-bash">docker logs -f aac-trust-anchor-publisher
+</code></pre>
+<p>An exit code of 2, often shown as repeated restarts, means configuration or
+admin-key loading failed. Read the logs and fix the inputs. After changing the
+environment or admin key, recreate the container using the corrected command:</p>
+<pre><code class="language-bash">docker stop aac-trust-anchor-publisher
+docker rm aac-trust-anchor-publisher
+</code></pre>
+<p>These commands remove only the container; bind-mounted keys and public material
+stay on the host. Run the start command again. On another container platform,
+use that platform's equivalent configuration, restart policy and logs.</p>
+<h2 id="run-a-standalone-process-on-a-host">Run a standalone process on a host</h2>
+<h3 id="install-the-python-package">Install the Python package</h3>
+<p>Get the <a href="https://pypi.org/project/aac-trust-anchor-publisher/">package and full host operating guide from PyPI</a>.
+Use a dedicated virtual environment on the host that will run it:</p>
+<pre><code class="language-bash">python3 -m venv .aac-publisher
+. .aac-publisher/bin/activate
+python -m pip install --upgrade aac-trust-anchor-publisher
+aac-trust-anchor-publisher --help
+</code></pre>
+<h3 id="configure-and-start-the-host-process">Configure and start the host process</h3>
+<p>Use the generated publisher environment for CLI-managed setup. For an
+operator-managed setup, these exports illustrate a root-key publisher. Replace
+the tenant ID and host paths with your own prepared values:</p>
+<pre><code class="language-bash">export AAC_TAP_TENANT_ID=tnt-550e8400-e29b-41d4-9716-446655440000
+export AAC_TAP_ADMIN_KEY_FILE=/etc/aac/keys/tenant-admin.pem
+export AAC_TAP_ROOT_KEYS_DIR=/etc/aac/root-keys
+export AAC_TAP_ROOT_KEYS_INGEST_URL=https://api.stage.cascadeauth.dev/v1/root-keys/ingest
+export AAC_TAP_POLL_INTERVAL_SECONDS=60
+aac-trust-anchor-publisher
+</code></pre>
+<p>It runs in the foreground and logs to stdout/stderr. Stop that process before
+starting another writer with changed settings. To also publish a bundle, add
+the following values for an active domain binding, then start with both roles:</p>
+<pre><code class="language-bash">export AAC_TAP_SPIFFE_BUNDLE_DIR=/etc/aac/spiffe-bundle
+export AAC_TAP_SPIFFE_TRUST_DOMAIN=agents.example.com
+export AAC_TAP_SPIFFE_BUNDLE_INGEST_URL=https://api.stage.cascadeauth.dev/v1/spiffe-bundle/ingest
+tap_trust_url=https://trust.stage.cascadeauth.dev
+tap_bundle_path=&quot;.well-known/spiffe-bundle/${AAC_TAP_SPIFFE_TRUST_DOMAIN}&quot;
+export AAC_TAP_SPIFFE_BUNDLE_READ_URL=&quot;${tap_trust_url}/${tap_bundle_path}&quot;
+aac-trust-anchor-publisher
+</code></pre>
+<p>Use your tenant's actual trust domain and put its public CA certificates in
+the bundle directory. These are paths on this host. The read URL names the
+full public bundle path. The host needs outbound HTTPS; there is no listener.</p>
+<h3 id="operate-the-host-process">Operate the host process</h3>
+<p>For a managed Linux service, the wheel supplies a systemd unit:</p>
+<pre><code class="language-bash">aac-trust-anchor-publisher --print-systemd-unit
+</code></pre>
+<p>Follow the <a href="https://pypi.org/project/aac-trust-anchor-publisher/#running-under-systemd">systemd setup instructions</a>
+for the environment file, service account and unit. The supplied unit expects
+<code>/opt/aac/venv</code>; adjust <code>ExecStart</code> if you used the virtual environment above.
+The service account needs read access to its configured material. Use
+<code>systemctl</code> and <code>journalctl</code> for this host service.</p>
+<p>Configuration and the admin key are read at startup. Restart the foreground
+process or systemd service after changing them. Exit code 2 means an invalid
+setting or unreadable admin key; fix the cause before restarting.</p>
+<h2 id="verify-publication-in-either-mode">Verify publication in either mode</h2>
+<p>A running process is not proof of publication. Check accepted-ingest logs and
+the public endpoints your counterparties use. From a workstation, set the
+tenant ID and trust domain explicitly:</p>
+<pre><code class="language-bash">tenant_id=tnt-550e8400-e29b-41d4-9716-446655440000
+trust_domain=agents.example.com
+trust_url=https://trust.stage.cascadeauth.dev
+curl --fail --silent --show-error \
+  &quot;${trust_url}/.well-known/aac-root-keys/${tenant_id}&quot;
+curl --fail --silent --show-error \
+  &quot;${trust_url}/.well-known/spiffe-bundle/${trust_domain}&quot;
+</code></pre>
+<p>The second check applies to the bundle role. Confirm the expected key IDs and
+CA anchors. From an authenticated CLI profile on your administration host, inspect
+the same tenant's history and records:</p>
+<pre><code class="language-bash">aac trust-anchor ingest-history --profile stage --output table
+aac trust-anchor list --profile stage --output table
+</code></pre>
+<p>Both modes re-read public files on each poll and retry network/upload failures
+with backoff. Already-published material remains available during an outage.
+For key/CA rotation, follow the <a href="https://pypi.org/project/aac-trust-anchor-publisher/">publisher lifecycle procedures</a>
+and <a href="/overview/keys-and-certificates/">keys and certificates</a>; keep the required
+overlap, then restart the host service or recreate the container as described
+in its own operating section.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

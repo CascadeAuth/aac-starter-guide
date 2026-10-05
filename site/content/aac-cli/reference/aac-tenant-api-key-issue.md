@@ -1,0 +1,52 @@
+# `aac tenant api-key issue`
+
+Issue and stage a second ACTIVE API key exactly once.
+
+## Synopsis
+
+```text
+aac tenant api-key issue
+  [-h]
+  [--profile PROFILE]
+  [--admin-url ADMIN_URL]
+  [--data-plane-url DATA_PLANE_URL]
+  [--output {json,table}]
+  [--tenant-id TENANT_ID]
+  [--new-key-file NEW_KEY_FILE]
+```
+
+## Arguments
+
+| Argument | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `-h`, `--help` | flag | no | — | show this help message and exit |
+| `--profile` | value | no | — | Profile to run under (selection: --profile \> AAC_PROFILE \> reserved baseline `main`). `aac profile list` shows what exists. |
+| `--admin-url` | value | no | — | Admin-surface base URL (overrides profile). |
+| `--data-plane-url` | value | no | — | Data-plane-surface base URL (overrides profile). |
+| `--output` | `json` \| `table` | no | `json` | Output mode: json (the default) or table. |
+| `--tenant-id` | value | no | — | Tenant to rotate (defaults to the selected profile identity). |
+| `--new-key-file` | value | no | — | New staged credential path. Defaults to ~/.aac/credentials/\<tenant-id\>.next; existing files and symlinks are never overwritten. |
+
+## Output
+
+`--output json` (the default) prints one JSON document to standard output; `--output table` prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable.
+
+## Exit codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Success. |
+| `1` | The control plane or the identity provider rejected the request. |
+| `2` | Usage error: an invalid flag, value or flag combination. |
+| `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
+| `4` | Transport failure: an endpoint could not be reached. |
+
+## Notes
+
+The CLI saves a non-secret issuance identity before sending one request and writes plaintext only to a new mode-0600 staged file. It never replaces the current profile credential or retries automatically. After an ambiguous result, rerun this exact command.
+
+## Related commands
+
+- [`aac tenant api-key`](/cli/reference/aac-tenant-api-key/)
+- [`aac tenant api-key list`](/cli/reference/aac-tenant-api-key-list/) — List the complete at-most-two ACTIVE key metadata set.
+- [`aac tenant api-key retire`](/cli/reference/aac-tenant-api-key-retire/) — Terminally retire one exact ACTIVE key after client migration.

@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Run your first authenticated agent journey - AAC Docs</title>
+<meta name="description" content="Run a first authenticated reservation with Docker."><link rel="canonical" href="https://docs.cascadeauth.com/get-started/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/" aria-current="true">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#before-you-start" class="toc-h2">Before you start</a><a href="#1-install-aac-cli-and-prepare-the-example" class="toc-h2">1. Install AAC CLI and prepare the example</a><a href="#install-aac-cli" class="toc-h3">Install AAC CLI</a><a href="#prepare-the-docker-compose-example" class="toc-h3">Prepare the Docker Compose example</a><a href="#2-register-your-developer-tenant-accounts" class="toc-h2">2. Register your developer tenant accounts</a><a href="#3-connect-the-two-peers" class="toc-h2">3. Connect the two peers</a><a href="#4-run-and-verify-the-reservation" class="toc-h2">4. Run and verify the reservation</a><a href="#5-list-select-and-render-an-execution" class="toc-h2">5. List, select and render an execution</a><a href="#6-stop-the-example-and-keep-your-evidence" class="toc-h2">6. Stop the example and keep your evidence</a><a href="#troubleshooting-your-first-run" class="toc-h2">Troubleshooting your first run</a><a href="#what-aac-is-for" class="toc-h2">What AAC is for</a><a href="#deploy-beyond-the-example" class="toc-h2">Deploy beyond the example</a><a href="#references" class="toc-h2">References</a><a href="#configuration-and-workflow-state" class="toc-h3">Configuration and workflow state</a><a href="#beta-boundary-and-contact" class="toc-h2">Beta boundary and contact</a><a href="#release-notes" class="toc-h2">Release notes</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Run your first authenticated agent journey</span></nav>
+<h1 id="run-your-first-authenticated-agent-journey">Run your first authenticated agent journey</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/get-started/index.md" download="get-started.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>Marc Sterling, a director at Austin-based private equity firm Vantis Equity,
+needs to oversee an acquisition on-site in Shanghai. He uses Tourfedia's
+corporate travel management platform to organize his trip from Austin (AUS)
+to Shanghai (PVG).</p>
+<p>Run <strong>AAC: two tenants, one reservation made</strong> from a fresh machine with the
+public <a href="https://github.com/CascadeAuth/aac-compose-demo">Docker Compose demo</a>.
+Vantis Equity's trip-planner delegates to Tourfedia's booking agent. You will
+register both tenants, run their agents and sidecars, verify a signed receipt,
+and inspect the execution graph.</p>
+<p>The example application creates a reservation result; supplier integration and
+payment are omitted for clarity. The approval is simulated. A 30-minute limit
+bounds delegated authority, not a price hold.</p>
+<h2 id="before-you-start">Before you start</h2>
+<p>Use macOS or Linux with a Bash-compatible shell, Git, Python <strong>3.11 or later</strong>
+with <code>venv</code> and <code>pip</code>, and Docker with Compose and Buildx. Start the Docker
+engine. Keep the machine's clock synchronized and its public CA store current.
+Allow outbound HTTPS to GitHub, PyPI, Docker Hub, GHCR and the
+<a href="/sidecar/configuration/#aac-stage-endpoints">AAC stage endpoints</a>.
+You need a browser for interactive GitHub sign-in and real contact email addresses.
+The same human can own both tenants; a contact email does not select the sign-in account.</p>
+<p>The steps below create the tenants and prepare credentials. AAC assigns the
+trust domains; you do not need to own DNS, provision a CA or run Valkey for this
+local example. Docker keeps each agent/sidecar pair's loopback private and
+places the pairs on an isolated network without publishing host ports.</p>
+<table>
+<thead>
+<tr>
+<th>Public component</th>
+<th>How it is supplied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://pypi.org/project/aac-cli/">AAC CLI</a></td>
+<td>Install it in your host virtual environment; includes <code>aac</code> and <code>aeg</code>; <code>./demo prepare</code> freezes the run selection</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/r/cascadeauth/aac-sidecar/">AAC sidecar</a></td>
+<td>Compose pulls the selected immutable image</td>
+</tr>
+<tr>
+<td><a href="https://github.com/orgs/CascadeAuth/packages/container/package/aac-trust-anchor-publisher">Trust anchor publisher</a> / <a href="https://pypi.org/project/aac-trust-anchor-publisher/">Python package</a></td>
+<td>Compose runs the publisher image for each tenant</td>
+</tr>
+<tr>
+<td><a href="https://pypi.org/project/aac-invoke-auth/">aac-invoke-auth</a></td>
+<td>Supplied inside the example application image</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/python">Python image</a>, <a href="https://pypi.org/project/uvicorn/">Uvicorn</a> and <a href="https://pypi.org/project/httpx/">HTTPX</a></td>
+<td>Supplied inside the application image; host Python is also needed for CLI setup</td>
+</tr>
+</tbody>
+</table>
+<p>No minimum production sizing or fixed first-run duration is implied. Image and
+package downloads, sign-in and local build speed affect elapsed time. Measure
+registration-to-verified-result separately from cached start/run time.</p>
+<h2 id="1-install-aac-cli-and-prepare-the-example">1. Install AAC CLI and prepare the example</h2>
+<h3 id="install-aac-cli">Install AAC CLI</h3>
+<p>Install <a href="https://pypi.org/project/aac-cli/">aac-cli from PyPI</a> in a virtual
+environment. The package supplies both <code>aac</code> and <code>aeg</code>; its PyPI page also
+contains installation and usage documentation.</p>
+<pre><code class="language-bash">python3 -m venv .aac-tools
+. .aac-tools/bin/activate
+python -m pip install --upgrade aac-cli
+aac --version
+aeg --version
+</code></pre>
+<h3 id="prepare-the-docker-compose-example">Prepare the Docker Compose example</h3>
+<p>Keep that virtual environment active, then download and prepare the example:</p>
+<pre><code class="language-bash">git clone https://github.com/CascadeAuth/aac-compose-demo.git
+cd aac-compose-demo
+./demo prepare
+mkdir -p .local
+export AAC_CLI_HOME=&quot;$PWD/.local/aac&quot;
+cp config/trip-planner.yaml .local/trip-planner.yaml
+cp config/booking.yaml .local/booking.yaml
+</code></pre>
+<p>Keep this environment variable in each terminal used for the demo. It gives
+the demo its own CLI home and leaves your other profiles alone.</p>
+<p>These are <strong>operator-authored inputs</strong>, supplied explicitly with
+<code>--agent-config</code>. The CLI alone generates keys, certificates, publisher
+configuration, <code>compose.env</code> and <code>sidecar-config.yaml</code>. Never hand-edit those
+generated outputs or consume the private <code>record.json</code> schema.</p>
+<p>The inputs select Basic in-memory replay protection with <code>dev_mode: false</code>.
+Development-issued certificates do not require development exceptions.
+Each pair shares its own loopback interface; the sidecars communicate over a
+private Docker network using HTTPS names <code>trip-planner</code> and <code>booking</code>.
+No host ports are published.</p>
+<p><code>./demo prepare</code> resolves the current stable AAC package releases from PyPI and the
+sidecar from the published release record, then resolves exact container digests.
+It saves <code>.local/components.json</code> and installs the selected CLI in your active
+virtual environment. Subsequent starts and maintenance reuse that file; they
+never silently change a running demo. To start a new run with newer components,
+stop the demo, retain the old receipt, and move the selection file aside before
+running <code>./demo prepare</code> again. There is no mutable sidecar <code>latest</code> tag.</p>
+<p><strong>Outcome:</strong> the released CLI is installed, component versions/digests are frozen
+for this run, and each agent has an editable input file. Keep using this shell.</p>
+<h2 id="2-register-your-developer-tenant-accounts">2. Register your developer tenant accounts</h2>
+<p>Set your real contact addresses:</p>
+<pre><code class="language-bash">export VANTIS_CONTACT='you+vantis@example.com'
+export TOURFEDIA_CONTACT='you+tourfedia@example.com'
+aac init \
+  --profile vantis \
+  --agent trip-planner \
+  --agent-config .local/trip-planner.yaml \
+  --layout container \
+  --admin-url https://api.stage.cascadeauth.dev \
+  --data-plane-url https://api.stage.cascadeauth.dev \
+  --trust-url https://trust.stage.cascadeauth.dev \
+  --idp github \
+  --display-name 'Vantis Equity Demo' \
+  --contact &quot;$VANTIS_CONTACT&quot;
+aac init \
+  --profile tourfedia \
+  --agent booking \
+  --agent-config .local/booking.yaml \
+  --layout container \
+  --admin-url https://api.stage.cascadeauth.dev \
+  --data-plane-url https://api.stage.cascadeauth.dev \
+  --trust-url https://trust.stage.cascadeauth.dev \
+  --idp github \
+  --display-name 'Tourfedia Demo' \
+  --contact &quot;$TOURFEDIA_CONTACT&quot;
+</code></pre>
+<p>Run interactively and acknowledge each permanent tenant registration. There
+are two sign-ins per tenant: registration and administration. Use the same
+GitHub account for both sign-ins of that tenant. A rerun reuses its registration;
+it does not create another tenant. Noninteractive registration additionally
+requires the explicit <code>--create-tenant</code> acknowledgement.</p>
+<p>The assigned domains come from AAC; owning <code>tourfedia.com</code> is not a trust-domain
+binding. Empty peer configuration is intentional during initial registration.</p>
+<p><strong>Outcome:</strong> two tenant IDs and AAC-assigned domains, registered workloads,
+separate keys/certificates and generated container configuration. The CLI creates
+development PKI for this example; it does not qualify these identities for
+production. The agent runs application policy, its sidecar verifies/delegates
+authority, and its tenant's publisher publishes public roots and CA certificates.</p>
+<p>For enterprise registration, use the <a href="/cli/">CLI user guide</a>
+and its enterprise IdP ceremony before preparing your own workloads.</p>
+<h2 id="3-connect-the-two-peers">3. Connect the two peers</h2>
+<p>Read the registered facts through supported CLI status output:</p>
+<pre><code class="language-bash">aac agent status --agent trip-planner --output json &gt; .local/vantis-status.json
+aac agent status --agent booking --output json &gt; .local/tourfedia-status.json
+VANTIS_TENANT=$(aac agent status --agent trip-planner --field tenant-id)
+VANTIS_DOMAIN=$(aac agent status --agent trip-planner --field hosted-trust-domain)
+VANTIS_ID=$(aac agent status --agent trip-planner --field workload-spiffe-id)
+TOURFEDIA_TENANT=$(aac agent status --agent booking --field tenant-id)
+TOURFEDIA_DOMAIN=$(aac agent status --agent booking --field hosted-trust-domain)
+TOURFEDIA_ID=$(aac agent status --agent booking --field workload-spiffe-id)
+</code></pre>
+<p>Append these sections <strong>once</strong> to the input copies. The peer's public CA
+path is an explicit trust choice; no private key is exchanged.
+<code>ca.crt</code> is the peer's public CA certificate, the same anchor it publishes
+through AAC. In a real deployment the peer supplies that public certificate;
+reading it from the other agent's local directory is a convenience of running
+both tenants on one machine, not a requirement to access a peer's private files.</p>
+<pre><code class="language-bash">cat &gt;&gt; .local/trip-planner.yaml &lt;&lt;EOF
+trust_anchors:
+  tenant_ids: [$TOURFEDIA_TENANT]
+spiffe_bundles:
+  trust_domains: [$TOURFEDIA_DOMAIN]
+https_trust:
+  ca_files: [&quot;$AAC_CLI_HOME/agents/booking/agent/ca.crt&quot;]
+destinations:
+  tourfedia:
+    url: https://booking:9443/v1/agent/receive
+    audience_pattern: $TOURFEDIA_ID
+    valid_for: +30m
+    timeout_ms: 10000
+EOF
+cat &gt;&gt; .local/booking.yaml &lt;&lt;EOF
+trust_anchors:
+  tenant_ids: [$VANTIS_TENANT]
+spiffe_bundles:
+  trust_domains: [$VANTIS_DOMAIN]
+https_trust:
+  ca_files: [&quot;$AAC_CLI_HOME/agents/trip-planner/agent/ca.crt&quot;]
+EOF
+aac init --profile vantis --agent trip-planner --agent-config .local/trip-planner.yaml
+aac init --profile tourfedia --agent booking --agent-config .local/booking.yaml
+</code></pre>
+<p>These three trust settings have different jobs: verify tenant root signatures,
+verify workload certificates, and verify outbound HTTPS connections.
+The destination names the exact registered booking identity. The initial
+class supplies <code>valid_for: +2h</code>; the destination supplies <code>+30m</code>.
+Dynamic amounts come only from the application. Released native chain starts
+refuse conflicting class/request values and any request-supplied
+<code>valid_until</code>.</p>
+<p><strong>Outcome:</strong> each sidecar knows the other tenant's public trust and the planner
+has an explicit booking destination. If interrupted, inspect your input copies:
+do not append duplicate YAML sections. Rerun the final init commands to apply
+the completed inputs while preserving the existing identities.</p>
+<h2 id="4-run-and-verify-the-reservation">4. Run and verify the reservation</h2>
+<pre><code class="language-bash">./demo up
+./demo run
+</code></pre>
+<p>Startup builds the application image, starts the pairs and publishers, and
+waits for readiness and public trust publication. The normal run reserves at
+$8,000 under the simulated $10,000 approval. It waits up to 30 seconds for
+correlated completion; missing evidence or failure exits nonzero.</p>
+<p><strong>Success:</strong> output includes the actual task/root IDs, reservation and signed
+receipt, with <code>terminal_attestation_verification: verified</code>. An HTTP 200 or a
+<code>dispatched</code> acknowledgement alone does not establish this result.</p>
+<p>The demo also supplies <a href="https://github.com/CascadeAuth/aac-compose-demo#4-start-and-run">fare-change and fresh-authority exercises</a>
+and <a href="https://github.com/CascadeAuth/aac-compose-demo#5-refusals-and-controlled-attacks">refusal exercises</a>.
+They start separate attempts; a new authorization does not widen an old chain.</p>
+<h2 id="5-list-select-and-render-an-execution">5. List, select and render an execution</h2>
+<p>Each successful run saves its mint response under <code>.runs/</code>, prints the actual
+evidence paths and a complete render command. For discovery, list both agents'
+local files in the same shell:</p>
+<pre><code class="language-bash">PLANNER_STATE=&quot;$AAC_CLI_HOME/agents/trip-planner/state&quot;
+BOOKING_STATE=&quot;$AAC_CLI_HOME/agents/booking/state&quot;
+aeg list \
+  --events &quot;$PLANNER_STATE/telemetry.jsonl&quot; \
+  --events &quot;$BOOKING_STATE/telemetry.jsonl&quot; \
+  --actions &quot;$PLANNER_STATE/actions.jsonl&quot; \
+  --actions &quot;$BOOKING_STATE/actions.jsonl&quot; \
+  --since 24h \
+  --output table
+</code></pre>
+<p>Choose the root ID for the attempt you want. Replace <code>ROOT_ID</code> below with that
+listed value, or use the complete command printed by the demo for its saved
+mint response. Do not combine attempts just because they share an order number.</p>
+<pre><code class="language-bash">aeg render \
+  --events &quot;$PLANNER_STATE/telemetry.jsonl&quot; \
+  --events &quot;$BOOKING_STATE/telemetry.jsonl&quot; \
+  --actions &quot;$PLANNER_STATE/actions.jsonl&quot; \
+  --actions &quot;$BOOKING_STATE/actions.jsonl&quot; \
+  --root-token-id ROOT_ID \
+  --output .runs/selected.html
+</code></pre>
+<p>Open <code>.runs/selected.html</code> in a browser; it is self-contained and needs no web
+server. Inspect nodes for identities, narrowing, actions and receipt evidence.
+Add <code>--profile vantis</code> to list/render with authorized central metadata, or use
+only that profile for central observations. Local files are never uploaded.
+Missing partner evidence is labeled as partial; a business-action record is
+not itself a verified receipt. See <a href="/aeg/">Execution graphs</a>
+for source modes, filtering, pagination and interpretation.</p>
+<h2 id="6-stop-the-example-and-keep-your-evidence">6. Stop the example and keep your evidence</h2>
+<pre><code class="language-bash">./demo down
+</code></pre>
+<p>This removes local containers/network while retaining <code>.local/</code> credentials,
+the CLI home, component receipt and <code>.runs/</code> evidence. Tenant registrations
+are permanent; deleting a local profile does not delete a tenant. Protect
+retained keys and use the supported lifecycle commands to retire test workloads.
+For later work, reactivate <code>.venv</code> and set the same <code>AAC_CLI_HOME</code>; follow the
+demo's <a href="https://github.com/CascadeAuth/aac-compose-demo#6-refresh-renew-and-restart">refresh and renewal procedure</a>.</p>
+<h2 id="troubleshooting-your-first-run">Troubleshooting your first run</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker or Compose unavailable</td>
+<td>Start Docker and check <code>docker compose version</code> and <code>docker buildx version</code></td>
+</tr>
+<tr>
+<td>Registration/sign-in interrupted</td>
+<td>Rerun the same init command with the same CLI home/profile; use the same account for both sign-ins of that tenant</td>
+</tr>
+<tr>
+<td>Startup waits for trust</td>
+<td>Check <code>aac agent status --agent trip-planner --remote</code> and <code>aac agent status --agent booking --remote</code>; confirm publishers are running and the expected public CA/root is visible</td>
+</tr>
+<tr>
+<td>Peer TLS or identity refusal</td>
+<td>Check the explicit peer public-CA paths, domain and workload ID in the input YAML; apply it again through init</td>
+</tr>
+<tr>
+<td>Expired certificate</td>
+<td>Follow the demo's renewal procedure; refresh peer public trust if the CA changed</td>
+</tr>
+<tr>
+<td>No verified receipt or missing graph evidence</td>
+<td>Keep the failed output and actual task/root IDs; inspect both agents' retained evidence. Do not count readiness or an empty graph as success</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="/sidecar/operations/">operations and error codes</a>
+for focused diagnosis. Never resolve a refusal by disabling authentication,
+identity validation or replay checks.</p>
+<h2 id="what-aac-is-for">What AAC is for</h2>
+<p>AAC carries delegated authority between agents with workload identity, local
+verification and auditable receipts. Applications retain their business policy.
+The <a href="/sidecar/integration/">authority and integration reference</a>
+explains chains, receipts, predicates, pairing and the separate A2A example.</p>
+<h2 id="deploy-beyond-the-example">Deploy beyond the example</h2>
+<p>The local example uses <strong>Basic</strong> replay with ordinary security checks enabled.
+Basic retains duplicates within one running process, loses history on restart
+and does not coordinate replicas of the same receiving identity. Use <strong>Shared
+durable</strong> with the qualified authenticated-TLS Valkey deployment when you need
+retained replay history or replica coordination; it never falls back to Basic.</p>
+<p>Retained <strong>A2A dispatch results</strong> are a separate mechanism for safe retries
+across restart. They are not the replay cache or ordinary audit logs. The native
+reservation demo does not qualify production A2A storage or delivery guarantees.</p>
+<p>For one tenant with many agents, use the <a href="/sidecar/configuration/#one-tenant-with-many-production-agents">production journey and 100-agent role table</a>.
+Tenant setup happens once; workloads, identities and pairing secrets belong to
+each agent. Supplied-certificate setup uses your own issuer. Publisher ownership
+is one root-set writer per tenant and one SPIFFE-bundle writer per active binding;
+hosted and custom domains may use separate processes without competing writers.</p>
+<h2 id="references">References</h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Public reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenant and agent deployment, concrete ingress/PKI/storage requirements</td>
+<td><a href="/sidecar/configuration/">Deployment</a></td>
+</tr>
+<tr>
+<td>Keys, certificates, pairing secrets and custody</td>
+<td><a href="/overview/keys-and-certificates/">Keys and certificates</a></td>
+</tr>
+<tr>
+<td>CLI user journeys and generated command reference</td>
+<td><a href="/cli/">CLI documentation</a></td>
+</tr>
+<tr>
+<td>Protocol and optional A2A integration</td>
+<td><a href="/sidecar/integration/">Integration</a></td>
+</tr>
+<tr>
+<td>Diagnostics, audit, credential lifecycle and rollback</td>
+<td><a href="/sidecar/operations/">Operations</a></td>
+</tr>
+<tr>
+<td>Verify a container or audit artifacts — optional; standalone installation</td>
+<td><a href="/sidecar/install/">Artifacts</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuration-and-workflow-state">Configuration and workflow state</h3>
+<p>The <a href="/sidecar/configuration/#configuration-and-workflow-state">configuration reference</a>
+explains accepted settings and how authority, business payloads and retained
+state differ. Use the CLI to apply changes to managed agent inputs.</p>
+<h2 id="beta-boundary-and-contact">Beta boundary and contact</h2>
+<p>The sidecar is public developer-beta software under the
+<a href="/LICENSE">AAC Sidecar Developer Beta Binary License 1.0</a>.
+Read the <a href="/THIRD_PARTY_NOTICES.md">third-party notices</a>.
+For support contact <strong>support@cascadeauth.com</strong>; license questions:
+<strong>legal@cascadeauth.com</strong>. No production support/SLA is implied.
+This beta is for evaluation and integration development, not production or
+safety-critical use. Python companions retain their own licenses.
+Current installation examples select AAC Sidecar <strong><code>v0.4.4</code></strong> from
+<code>docker.io/cascadeauth/aac-sidecar:v0.4.4</code>; the <a href="/released-components.json">published component record</a> and
+each run's selection retain exact version/digest provenance.</p>
+<h2 id="release-notes">Release notes</h2>
+<p><a href="/release-notes/">Read release notes and upgrade guidance</a>.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

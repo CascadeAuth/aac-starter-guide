@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download and install the sidecar - AAC Docs</title>
+<meta name="description" content="Get the sidecar container or standalone binary, then connect it to your agent."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/install/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/" aria-current="page">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Download and install the sidecar</span></nav>
+<h1 id="download-and-install-the-sidecar">Download and install the sidecar</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/install/index.md" download="sidecar-install.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p>Get the AAC Sidecar container from
+<a href="https://hub.docker.com/r/cascadeauth/aac-sidecar/">Docker Hub</a>. The repository
+page includes the image tags, pull instructions and the public operating guide.
+Use a released version, then choose how to run it beside your agent.</p>
+<pre><code class="language-bash">docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.4.4 -version
+</code></pre>
+<p>The version command confirms the downloaded executable; it does not start a
+configured sidecar. Next, follow one of these paths:</p>
+<ul>
+<li><strong>First AAC example:</strong> <a href="/get-started/">start the AAC journey</a>. Docker Compose
+runs both agents, their sidecars and trust anchor publishers.</li>
+<li><strong>Your existing agent environment:</strong> <a href="/sidecar/configuration/#advanced-installation-guide-container">prepare the configuration and place the
+sidecar beside your workload</a>.
+Use the <a href="/cli/guide/">CLI guide</a> to prepare tenant and agent material.</li>
+<li><strong>A host process instead of a container:</strong> install the standalone binary below.</li>
+</ul>
+<h2 id="standalone-binary-for-linux-or-macos">Standalone binary for Linux or macOS</h2>
+<p>The same Docker Hub repository distributes a bundle containing binaries for
+<code>linux_amd64</code>, <code>linux_arm64</code>, <code>darwin_amd64</code> and <code>darwin_arm64</code>, with the
+configuration template, license and operating documentation.
+<a href="https://oras.land/docs/installation/">Install ORAS</a> to download the bundle:</p>
+<pre><code class="language-bash">mkdir aac-sidecar-v0.4.4
+cd aac-sidecar-v0.4.4
+oras pull docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
+</code></pre>
+<p>Choose the archive matching your operating system and CPU. On Ubuntu, if
+<code>uname -m</code> returns <code>aarch64</code>, select <code>linux_arm64</code>; Apple Silicon uses
+<code>darwin_arm64</code>. If you need to check signatures or checksums before extraction,
+use the <a href="/sidecar/reference/verification/#verify-the-standalone-bundle">release verification procedure</a>.</p>
+<pre><code class="language-bash">version=v0.4.4
+platform=linux_amd64  # choose the matching platform listed above
+install_root=&quot;${HOME}/.local/lib/aac-sidecar/releases/${version}&quot;
+
+mkdir -p &quot;${install_root}&quot; &quot;${HOME}/.local/bin&quot;
+tar -xzf &quot;aac-sidecar_${version}_${platform}.tar.gz&quot; -C &quot;${install_root}&quot;
+ln -sfn &quot;${install_root}/aac-sidecar&quot; &quot;${HOME}/.local/bin/aac-sidecar&quot;
+&quot;${HOME}/.local/bin/aac-sidecar&quot; -version
+</code></pre>
+<p>Run the executable with the configuration prepared for your agent:</p>
+<pre><code class="language-bash">&quot;${HOME}/.local/bin/aac-sidecar&quot; -config /absolute/path/to/sidecar-config.yaml
+</code></pre>
+<p>The sidecar and agent must share their loopback network environment, and the
+configured credentials, trust material and state paths must be available.
+<a href="/sidecar/configuration/">Configure for your environment</a> and
+<a href="/sidecar/operations/">operate the sidecar</a> explain these requirements and
+readiness checks. A managed service runs as a dedicated non-root account;
+a developer installation can stay under your home directory.
+An operator-managed installation under <code>/opt/aac/sidecar/releases/&lt;version&gt;</code>
+may be root-owned, but its service process must still run as the non-root
+account. Keep developer installations in a user-writable directory.</p>
+<h2 id="other-aac-components">Other AAC components</h2>
+<p>The <a href="/">installation hub</a> connects the rest of the stack:
+<a href="https://pypi.org/project/aac-cli/">AAC CLI on PyPI</a>,
+<a href="https://pypi.org/project/aac-trust-anchor-publisher/">trust anchor publisher on PyPI</a>
+or <a href="https://github.com/orgs/CascadeAuth/packages/container/package/aac-trust-anchor-publisher">GHCR</a>,
+and <a href="https://pypi.org/project/aac-invoke-auth/">aac-invoke-auth on PyPI</a>.
+Each package page includes its installation and usage documentation.</p>
+<p>For an additional audit, see <a href="/sidecar/reference/verification/">artifact signatures, checksums and provenance</a>.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#standalone-binary-for-linux-or-macos" class="toc-h2">Standalone binary for Linux or macOS</a><a href="#other-aac-components" class="toc-h2">Other AAC components</a></aside></div></body></html>

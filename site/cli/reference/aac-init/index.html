@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aac init - AAC Docs</title>
+<meta name="description" content="Released command syntax and options for aac init."><link rel="canonical" href="https://docs.cascadeauth.com/cli/reference/aac-init/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/" aria-current="true">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>AAC CLI</summary><nav aria-label="Section navigation"><a href="/cli/">AAC CLI</a><a href="/cli/guide/">AAC CLI user guide</a><a href="/cli/reference/">Command reference</a><details class="command-family" open><summary>AAC commands</summary><details class="command-group"><summary><a href="/cli/reference/aac-agent/">aac agent</a></summary><div class="command-children"><a href="/cli/reference/aac-agent-list/">aac agent list</a><a href="/cli/reference/aac-agent-renew/">aac agent renew</a><a href="/cli/reference/aac-agent-status/">aac agent status</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-chain/">aac chain</a></summary><div class="command-children"><a href="/cli/reference/aac-chain-list/">aac chain list</a><a href="/cli/reference/aac-chain-show/">aac chain show</a></div></details><a href="/cli/reference/aac-init/" aria-current="page">aac init</a><details class="command-group"><summary><a href="/cli/reference/aac-profile/">aac profile</a></summary><div class="command-children"><a href="/cli/reference/aac-profile-create/">aac profile create</a><a href="/cli/reference/aac-profile-delete/">aac profile delete</a><a href="/cli/reference/aac-profile-list/">aac profile list</a><a href="/cli/reference/aac-profile-show/">aac profile show</a><a href="/cli/reference/aac-profile-update/">aac profile update</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-sso/">aac sso</a></summary><div class="command-children"><a href="/cli/reference/aac-sso-approve-idp-repair/">aac sso approve-idp-repair</a><a href="/cli/reference/aac-sso-enroll-idp-recovery-key/">aac sso enroll-idp-recovery-key</a><a href="/cli/reference/aac-sso-generate-idp-recovery-key/">aac sso generate-idp-recovery-key</a><a href="/cli/reference/aac-sso-list-idp-recovery-keys/">aac sso list-idp-recovery-keys</a><a href="/cli/reference/aac-sso-list-idp/">aac sso list-idp</a><a href="/cli/reference/aac-sso-login/">aac sso login</a><a href="/cli/reference/aac-sso-logout/">aac sso logout</a><a href="/cli/reference/aac-sso-register-idp/">aac sso register-idp</a><a href="/cli/reference/aac-sso-replace-idp/">aac sso replace-idp</a><a href="/cli/reference/aac-sso-request-idp-repair/">aac sso request-idp-repair</a><a href="/cli/reference/aac-sso-revoke-idp-recovery-key/">aac sso revoke-idp-recovery-key</a><a href="/cli/reference/aac-sso-rotate-idp-recovery-key/">aac sso rotate-idp-recovery-key</a><a href="/cli/reference/aac-sso-whoami/">aac sso whoami</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-tenant/">aac tenant</a></summary><div class="command-children"><a href="/cli/reference/aac-tenant-add-workload/">aac tenant add-workload</a><details class="command-group"><summary><a href="/cli/reference/aac-tenant-api-key/">aac tenant api-key</a></summary><div class="command-children"><a href="/cli/reference/aac-tenant-api-key-issue/">aac tenant api-key issue</a><a href="/cli/reference/aac-tenant-api-key-list/">aac tenant api-key list</a><a href="/cli/reference/aac-tenant-api-key-retire/">aac tenant api-key retire</a></div></details><a href="/cli/reference/aac-tenant-assign-hosted-domain/">aac tenant assign-hosted-domain</a><a href="/cli/reference/aac-tenant-bind-trust-domain/">aac tenant bind-trust-domain</a><a href="/cli/reference/aac-tenant-deactivate-workload/">aac tenant deactivate-workload</a><a href="/cli/reference/aac-tenant-describe-workload/">aac tenant describe-workload</a><a href="/cli/reference/aac-tenant-describe/">aac tenant describe</a><a href="/cli/reference/aac-tenant-issue-domain-challenge/">aac tenant issue-domain-challenge</a><a href="/cli/reference/aac-tenant-list-trust-domains/">aac tenant list-trust-domains</a><a href="/cli/reference/aac-tenant-list-workloads/">aac tenant list-workloads</a><a href="/cli/reference/aac-tenant-list/">aac tenant list</a><a href="/cli/reference/aac-tenant-reactivate-hosted-domain/">aac tenant reactivate-hosted-domain</a><a href="/cli/reference/aac-tenant-register/">aac tenant register</a><a href="/cli/reference/aac-tenant-reissue-api-key/">aac tenant reissue-api-key</a><a href="/cli/reference/aac-tenant-release-domain/">aac tenant release-domain</a><a href="/cli/reference/aac-tenant-revoke-domain/">aac tenant revoke-domain</a><a href="/cli/reference/aac-tenant-revoke-trust-domain/">aac tenant revoke-trust-domain</a><a href="/cli/reference/aac-tenant-rotate-admin-key/">aac tenant rotate-admin-key</a><a href="/cli/reference/aac-tenant-update-workload/">aac tenant update-workload</a><a href="/cli/reference/aac-tenant-update/">aac tenant update</a><a href="/cli/reference/aac-tenant-verify-domain/">aac tenant verify-domain</a></div></details><details class="command-group"><summary><a href="/cli/reference/aac-trust-anchor/">aac trust-anchor</a></summary><div class="command-children"><a href="/cli/reference/aac-trust-anchor-describe/">aac trust-anchor describe</a><a href="/cli/reference/aac-trust-anchor-ingest-history/">aac trust-anchor ingest-history</a><a href="/cli/reference/aac-trust-anchor-list/">aac trust-anchor list</a><a href="/cli/reference/aac-trust-anchor-revoke/">aac trust-anchor revoke</a></div></details></details></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/cli/">AAC CLI</a> / <a href="/cli/reference/">Command reference</a> / <span aria-current="page">aac init</span></nav>
+<h1 id="aac-init"><code>aac init</code></h1>
+<div class="page-actions"><span>AAC CLI 0.2.8</span><a href="/cli/reference/aac-init/index.md" download="cli-reference-aac-init.md">Markdown</a><span class="revision">Docs 6b7d8268ba78</span></div>
+<p>Guided setup: register a developer tenant and create a runnable agent.</p>
+<p>Signs you in, registers a developer tenant (or reuses the profile's tenant), takes the AAC-assigned hosted trust domain, registers your workload, generates DEVELOPMENT keys and certificates, registers the tenant-admin public key together with a new tenant, and writes a complete sidecar configuration plus the publisher and Compose files. Safe to rerun: it resumes or reports the exact conflict and never overwrites private material.</p>
+<h2 id="synopsis">Synopsis</h2>
+<pre><code class="language-text">aac init
+  [-h]
+  [--profile PROFILE]
+  [--admin-url ADMIN_URL]
+  [--data-plane-url DATA_PLANE_URL]
+  [--trust-url TRUST_URL]
+  [--output {json,table}]
+  --agent AGENT
+  [--workload-path WORKLOAD_PATH]
+  [--workload-display-name WORKLOAD_DISPLAY_NAME]
+  [--agent-config PATH]
+  [--display-name DISPLAY_NAME]
+  [--contact CONTACT]
+  [--idp {github,google}]
+  [--bootstrap-token BOOTSTRAP_TOKEN]
+  [--flow {device,pkce}]
+  [--no-browser]
+  [--create-tenant]
+  [--layout {host,container}]
+  [--ca-key-file PATH]
+  [--workload-cert-file PATH]
+  [--terminal-cert-file PATH]
+  [--tls-cert-file PATH]
+  [--ca-cert-file PATH]
+  [--workload-key-file PATH]
+  [--terminal-key-file PATH]
+  [--tls-key-file PATH]
+  [--tenant-admin-key-file PATH]
+  [--root-signing-key-file PATH]
+  [--pairing-secret-file PATH]
+</code></pre>
+<h2 id="arguments">Arguments</h2>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td>flag</td>
+<td>no</td>
+<td>—</td>
+<td>show this help message and exit</td>
+</tr>
+<tr>
+<td><code>--profile</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Profile to set up under (default: AAC_PROFILE or main).</td>
+</tr>
+<tr>
+<td><code>--admin-url</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Control-plane admin URL; creates the profile if it does not exist.</td>
+</tr>
+<tr>
+<td><code>--data-plane-url</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Control-plane data-plane URL (optional).</td>
+</tr>
+<tr>
+<td><code>--trust-url</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Public trust-material base URL for the sidecar and publisher; required when creating an agent (AAC stage: https://trust.stage.cascadeauth.dev).</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td><code>json</code> | <code>table</code></td>
+<td>no</td>
+<td><code>json</code></td>
+<td>Output mode: json (the default) or table.</td>
+</tr>
+<tr>
+<td><code>--agent</code></td>
+<td>value</td>
+<td>yes</td>
+<td>—</td>
+<td>Target agent name under ~/.aac/agents/; must match agent_name in the file.</td>
+</tr>
+<tr>
+<td><code>--workload-path</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Optional SPIFFE path check; must match the configuration file or saved identity.</td>
+</tr>
+<tr>
+<td><code>--workload-display-name</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Display name for the workload record (default: &lt;agent-name&gt; workload).</td>
+</tr>
+<tr>
+<td><code>--agent-config</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Apply a tenant YAML configuration; required for a new agent. Refresh uses saved values when omitted.</td>
+</tr>
+<tr>
+<td><code>--display-name</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>New tenant's display name (required to register).</td>
+</tr>
+<tr>
+<td><code>--contact</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>New tenant's contact address (required to register).</td>
+</tr>
+<tr>
+<td><code>--idp</code></td>
+<td><code>github</code> | <code>google</code></td>
+<td>no</td>
+<td>—</td>
+<td>Developer-tier self-serve registration and sign-in with this identity provider.</td>
+</tr>
+<tr>
+<td><code>--bootstrap-token</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Ceremony bootstrap token for a control plane that gates registration (local stacks).</td>
+</tr>
+<tr>
+<td><code>--flow</code></td>
+<td><code>device</code> | <code>pkce</code></td>
+<td>no</td>
+<td>—</td>
+<td>Override the sign-in flow.</td>
+</tr>
+<tr>
+<td><code>--no-browser</code></td>
+<td>flag</td>
+<td>no</td>
+<td>—</td>
+<td>Print the sign-in URL instead of opening a browser.</td>
+</tr>
+<tr>
+<td><code>--create-tenant</code></td>
+<td>flag</td>
+<td>no</td>
+<td>—</td>
+<td>Acknowledge creating a permanent tenant without a prompt (required when stdin is not a terminal).</td>
+</tr>
+<tr>
+<td><code>--layout</code></td>
+<td><code>host</code> | <code>container</code></td>
+<td>no</td>
+<td>—</td>
+<td>Path layout for the sidecar configuration: host paths (the default) or the paths inside the containers. Run setup again with another --layout to change it.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-cli-creates-a-development-ca">The CLI creates a development CA</h3>
+<p>The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass <code>--ca-key-file</code> and <code>--ca-cert-file</code> together; neither one alone. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ca-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing certificate authority key for the CLI to sign with (with --ca-cert-file).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="i-bring-my-own-ca">I bring my own CA</h3>
+<p>Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. All seven together: <code>--workload-cert-file</code>, <code>--terminal-cert-file</code> and <code>--tls-cert-file</code>, each with its key file (<code>--workload-key-file</code>, <code>--terminal-key-file</code>, <code>--tls-key-file</code>), plus <code>--ca-cert-file</code>. Never <code>--ca-key-file</code>: the CLI does not want your CA key. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--workload-cert-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this certificate your issuer signed for the agent's identity.</td>
+</tr>
+<tr>
+<td><code>--terminal-cert-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this certificate your issuer signed for the agent's receipts.</td>
+</tr>
+<tr>
+<td><code>--tls-cert-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this certificate your issuer signed for the agent's HTTPS listener.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="used-by-both-cases">Used by both cases</h3>
+<p>Pass --ca-cert-file with --ca-key-file to reuse a development CA, or on its own with the three certificates above when your issuer signs.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ca-cert-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing certificate authority certificate.</td>
+</tr>
+<tr>
+<td><code>--workload-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing private key for the agent's identity.</td>
+</tr>
+<tr>
+<td><code>--terminal-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing private key for the agent's receipts.</td>
+</tr>
+<tr>
+<td><code>--tls-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing private key for the agent's HTTPS listener.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="other-material-you-can-supply">Other material you can supply</h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tenant-admin-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing tenant-admin signing key.</td>
+</tr>
+<tr>
+<td><code>--root-signing-key-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing root-signing key.</td>
+</tr>
+<tr>
+<td><code>--pairing-secret-file</code></td>
+<td>value</td>
+<td>no</td>
+<td>—</td>
+<td>Use this existing per-pair invoke-auth secret.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="output">Output</h2>
+<p><code>--output json</code> (the default) prints one JSON document to standard output; <code>--output table</code> prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable.</p>
+<h2 id="exit-codes">Exit codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Success.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>The control plane or the identity provider rejected the request.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Usage error: an invalid flag, value or flag combination.</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>A local configuration or state problem: profile, credential file, cached session or agent.</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>Transport failure: an endpoint could not be reached.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<p>Pass --agent-config to explicitly apply tenant configuration; omit it on a rerun to refresh the last applied values. Restart the sidecar after applying. Sidecar v0.4.0 and later require pairing signatures on /v1/agent/delegations and /v1/agent/mint-root. On older releases, restrict these routes to your authorized originating application at ingress.</p>
+<h2 id="related-commands">Related commands</h2>
+<ul>
+<li><a href="/cli/reference/"><code>aac</code></a></li>
+<li><a href="/cli/reference/aac-agent/"><code>aac agent</code></a> — Inspect and maintain an agent created by <code>aac init</code> (status/renew/list).</li>
+<li><a href="/cli/reference/aac-profile/"><code>aac profile</code></a> — Manage local profiles (list/show/create/update/delete).</li>
+<li><a href="/cli/reference/aac-tenant/"><code>aac tenant</code></a> — Tenant administration.</li>
+<li><a href="/cli/reference/aac-trust-anchor/"><code>aac trust-anchor</code></a> — Inspect YOUR tenant's trust-anchor state (keys + ingest ledger).</li>
+<li><a href="/cli/reference/aac-chain/"><code>aac chain</code></a> — Discover chains and inspect their audit observations.</li>
+<li><a href="/cli/reference/aac-sso/"><code>aac sso</code></a> — Platform single sign-on: IdP connections, login, sessions and recovery keys.</li>
+</ul>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#synopsis" class="toc-h2">Synopsis</a><a href="#arguments" class="toc-h2">Arguments</a><a href="#the-cli-creates-a-development-ca" class="toc-h3">The CLI creates a development CA</a><a href="#i-bring-my-own-ca" class="toc-h3">I bring my own CA</a><a href="#used-by-both-cases" class="toc-h3">Used by both cases</a><a href="#other-material-you-can-supply" class="toc-h3">Other material you can supply</a><a href="#output" class="toc-h2">Output</a><a href="#exit-codes" class="toc-h2">Exit codes</a><a href="#notes" class="toc-h2">Notes</a><a href="#related-commands" class="toc-h2">Related commands</a></aside></div></body></html>

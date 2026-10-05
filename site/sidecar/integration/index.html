@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent integration - AAC Docs</title>
+<meta name="description" content="Native AAC, pairing and optional A2A integration."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/integration/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/" aria-current="page">Agent integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Agent integration</span></nav>
+<h1 id="agent-integration">Agent integration</h1>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/integration/index.md" download="sidecar-integration.md">Markdown</a><span class="revision">Docs 42797a46037e</span></div>
+<p><a href="/overview/">Understand AAC authority and verification</a>.</p>
+<h2 id="authority-predicates-and-a2a-integration">Authority, predicates and A2A integration</h2>
+<p>Native originators call <code>POST /v1/agent/mint-root</code> or <code>/v1/agent/delegations</code>
+on the sidecar's external TLS listener. <strong>Both aliases require the pair's
+AAC1-HMAC-SHA256 signature, including in dev mode.</strong> Sign every chain-start request.
+Receiving or forwarding applications are not automatically chain-start callers.
+The example client below signs its native request with the published helper.</p>
+<p>The body contains <code>human_originator</code>, configured <code>class_of_action</code>, optional
+<code>task_ref</code>, optional object <code>payload</code>, and optional <code>obligations</code>, for example:</p>
+<pre><code class="language-json">{&quot;predicate&quot;:&quot;amount_max&quot;,&quot;value&quot;:&quot;10000&quot;}
+</code></pre>
+<p>Place those predicate/value objects in the <code>obligations</code> array. The application
+validates the human's login and decides policy, then supplies its result. T0
+contains root/identity metadata; T1 carries the first business predicates.
+Omitted/empty obligations preserve Mode 0 using class predicates. Equal duplicate
+values combine once, differing values within the list or across class/request
+are refused, and disjoint predicates combine. There is no override or automatic
+ceiling intersection: a dynamic amount normally has one source, the request.</p>
+<p>Names must be in the registry below. Values are nonempty strings without comma
+or colon; enforced <code>amount_max</code>, <code>amount_min</code> and <code>valid_from</code> also accept JSON
+integers and normalize to canonical decimal strings. Booleans, fractions,
+malformed integer text and out-of-range values refuse before mint. Keep
+predicates compact; put full business reports in your application's storage.
+<code>applied_predicates</code> reports the accepted limits: static values retain their existing JSON types, obligation values are
+strings, and generated <code>valid_until</code> is an integer; audience is a separate field.</p>
+<p>A top-level request <code>valid_until</code> or obligation named <code>valid_until</code> always
+refuses, even when equal or shorter. Remove it and use the class's configured
+<code>valid_for</code>. Payload dates remain business data.</p>
+<p>Sign uppercase POST, the <strong>exact alias used</strong>, timestamp, exact transmitted raw
+body and covered X-AAC headers using the pairing protocol below. Serialize once
+and send those bytes; a signature made for the other alias fails. Each auth
+header appears exactly once; duplicate covered headers also fail. Send a compact
+JSON request with the correct content type. Oversized or malformed requests
+are rejected without creating authority.
+Missing pairing configuration is 503 <code>ERR_CONFIG_ERROR</code>; failed pairing is 401
+<code>ERR_PAIRING_AUTH_FAILED</code>; invalid native predicates, conflicts or reserved
+expiry are 422 <code>ERR_INVALID_MINT_INPUT</code>. An invalid issuer retains
+its 422 <code>ERR_INVALID_OIDC_ISSUER</code> code; ordinary schema errors remain ordinary
+422. Selected invalid class predicates are configuration errors (503).</p>
+<p>Freshness is an inclusive 30-second window, <strong>not idempotency or one-time chain
+creation</strong>. A valid replay can execute mint again; do not automatically retry an
+uncertain result. Pure mint returns 200/not_attempted; callback delivery failure
+returns 207/failed with already-committed chain provenance. The response does not
+turn synthetic human claims into authentication.</p>
+<p>If configuration/obligations encode <code>task_ref</code>, omitted/null request metadata
+inherits it, matching metadata succeeds and disagreement refuses before mint.
+Otherwise requested/generated metadata remains metadata and is not silently
+added to T1. References used in headers are 1–256 printable ASCII characters.
+For signed correlation or convergence, normally supply <code>task_ref</code> as a
+per-request obligation. A static class value deliberately makes every chain
+of that class share a convergence key; it is not a default for independent
+runs. Only a signed predicate can key convergent arrival storage. Metadata-only
+correlation is not chain-authenticated, and <code>task_ref</code> is not an idempotency key.</p>
+<p>On native forwarding, explicit destination, additional and composite-attestation
+<code>task_ref</code> predicates must agree with nonempty workflow correlation. Every branch
+is checked before any branch signs or sends. A conflicting receive callback
+returns 502 <code>ERR_INVALID_AGENT_DECISION</code>; proactive composite returns 400; a
+mint callback returns 207/failed because its root is already committed. Prior
+buffered arrivals survive refusal; the failed receive's current arrival is
+removed. Metadata is never silently signed. If incoming correlation is absent,
+an explicitly signed new reference supplies the outgoing header and local audit.</p>
+<p>An explicitly authorized separate originator may hold the pair secret only
+inside the same trusted tenant-application boundary. It gains callback-signing
+capability too; this is not a mint-only credential. Never share across pairs or
+tenants. Keep appropriate network/ingress restrictions; the local sample binds
+the entire TLS listener to 127.0.0.1. Mode B and a new credential system are not
+part of this release.</p>
+<p>Agent <code>/invoke</code> responses use <code>AgentDecision</code>: <code>forward</code> supplies a configured
+<code>destination</code>, payload and optional narrowing <code>additional_predicates</code>; <code>settle</code>
+supplies a settlement ID and action summary; <code>refuse</code> supplies a reason. The
+sidecar validates the decision, delegates to the destination's exact workload
+identity, and signs/verifies the applicable chain and terminal evidence.
+Additional predicates narrow existing authority. The example carries the same
+<code>task_ref</code>, keeps <code>action: dev_noop</code>, and shortens validity from ten to five
+minutes; it never grants a broader audience or business permission.</p>
+<p>The beta's canonical predicate names are:</p>
+<pre><code class="language-text">account, action, amount, amount_max, amount_min, assessed_damage_amount,
+assessment_outcome, beneficiary, beneficiary_account, beneficiary_class,
+claim_ref, composite_conflict_minerals_clear, composite_esg_scope3_co2e_kg_total,
+composite_payout_amount, composite_payout_total, composite_units_total,
+conflict_minerals_clear, currency, data_scope, esg_scope3_co2e_kg, hours,
+human_authorization_class, max_authority_amount, min_account_age_days,
+originator_reference, payout_amount, program_reference, purpose, quantity_units,
+reporting_quarter, scope, surveyor_findings, task_ref, unit_price_usd,
+valid_from, valid_until
+</code></pre>
+<p>Use nonempty scalar values without comma or colon (reserved encoding
+separators). <code>amount_max</code>, <code>amount_min</code>, <code>valid_from</code> and <code>valid_until</code> use
+nonnegative decimal integers;
+time values are Unix seconds. A later amount cap cannot increase, an amount
+floor or not-before time cannot decrease, and the effective expiry is the
+minimum expiry in the chain. External chains require an expiry and have a
+maximum 24-hour root-relative lifetime. The agent must still enforce its business
+meaning for the other registered fields; a recognized name is not a general
+business-policy engine. Unknown predicate names fail closed.</p>
+<p>For unary A2A, the paired agent signs <code>POST /v1/agent/a2a/dispatch</code> using the
+published invoke-auth API. The envelope requires <code>schema_version</code>, a UUID
+<code>dispatch_id</code>, named <code>destination_profile</code>, <code>task_ref</code>, <code>authority</code>,
+<code>additional_predicates</code>, and <code>a2a_request</code>. The demonstrated authority mode is
+<code>originate</code>; <code>continue</code> is reserved for verified inbound authority belonging to
+the same pair/task/presenter and its retention window. Never derive continued
+authority from caller-supplied identity strings. The external sidecar verifies
+AAC/DPoP before forwarding the supported A2A body to the authenticated local
+handler. The handler receives verified context rather than raw bearer/DPoP
+credentials.</p>
+<p>A retry must preserve the dispatch ID and exact envelope. Changed content
+under an existing ID is a conflict. An in-progress or outcome-unknown response
+is not permission to issue a new ID and repeat a business action: follow the
+returned status and reconcile with your operation before retrying. Retain the
+bbolt file through process/container replacement for the configured retention
+window. Expiry is a bounded guarantee, not permanent deduplication.</p>
+<h3 id="generate-development-pki">Generate development PKI</h3>
+<p><strong>Optional advanced manual recipe.</strong> The preferred <a href="/cli/">aac init</a> path generates
+or accepts these files for you. This longer recipe belongs only to the optional
+hand-built application examples below, not the required onboarding journey.</p>
+<p>Use this only for the local development example after registering your tenant
+and <code>spiffe://&lt;trust-domain&gt;/demo/agent</code> workload. Keep the shell variables from
+onboarding. OpenSSL 3.x creates a seven-day development CA and one-day workload,
+terminal and localhost TLS certificates, all with distinct keys. Your existing
+root-signing key is created separately in the trust-publication step.</p>
+<p>The recipe refuses an existing output directory. It never adds the CA to your
+system trust store. Run it from the Python environment used for the CLI. It
+uses Python's enumerable default CA certificates, falling back to certifi's
+public roots (installed with the CLI) if that store is empty. If your network
+requires additional private CA certificates, add those trusted PEM certificates
+to <code>outbound-ca.pem</code> explicitly; do not disable TLS verification.</p>
+<p>If saving the block below as a script, first set <code>AAC_DEMO_DIR</code> in the calling
+shell, for example <code>export AAC_DEMO_DIR=&quot;$HOME/aac-demo/$AAC_PROFILE&quot;</code>.
+Variables exported inside a child script do not persist in its parent shell.</p>
+<pre><code class="language-bash">set -euo pipefail
+umask 077
+: &quot;${AAC_PROFILE:?Set the profile used for onboarding}&quot;
+: &quot;${AAC_TRUST_DOMAIN:?Set your assigned or verified trust domain}&quot;
+export AAC_DEMO_DIR=&quot;${AAC_DEMO_DIR:-$HOME/aac-demo/$AAC_PROFILE}&quot;
+export AAC_DEMO_SPIFFE_ID=&quot;spiffe://${AAC_TRUST_DOMAIN}/demo/agent&quot;
+python - &lt;&lt;'PY'
+import os, re, ssl
+import certifi
+domain = os.environ['AAC_TRUST_DOMAIN']
+if not re.fullmatch(r'[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?', domain):
+    raise SystemExit('Use your canonical lowercase trust domain')
+roots = ssl.create_default_context().get_ca_certs(binary_form=True)
+if not roots:
+    roots = ssl.create_default_context(cafile=certifi.where()).get_ca_certs(binary_form=True)
+if not roots:
+    raise SystemExit('No public CA roots; repair the CLI environment/certifi installation')
+PY
+test ! -e &quot;$AAC_DEMO_DIR&quot;
+mkdir -p &quot;$(dirname &quot;$AAC_DEMO_DIR&quot;)&quot;
+mkdir &quot;$AAC_DEMO_DIR&quot;
+mkdir &quot;$AAC_DEMO_DIR/pki&quot; &quot;$AAC_DEMO_DIR/state&quot; &quot;$AAC_DEMO_DIR/publish-ca&quot;
+cd &quot;$AAC_DEMO_DIR/pki&quot;
+openssl genpkey -algorithm ed25519 -out dev-ca.key
+openssl req -new -x509 -key dev-ca.key -out dev-ca.crt -days 7 \
+  -subj '/CN=AAC local development CA' \
+  -addext 'basicConstraints=critical,CA:TRUE,pathlen:0' \
+  -addext 'keyUsage=critical,keyCertSign,cRLSign' \
+  -addext 'subjectKeyIdentifier=hash'
+cat &gt; identity.ext &lt;&lt;EOF
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature
+extendedKeyUsage=clientAuth,serverAuth
+subjectAltName=critical,URI:${AAC_DEMO_SPIFFE_ID}
+EOF
+for purpose in workload terminal; do
+  openssl genpkey -algorithm ed25519 -out &quot;$purpose.key&quot;
+  openssl req -new -key &quot;$purpose.key&quot; -out &quot;$purpose.csr&quot; -subj '/'
+  openssl x509 -req -in &quot;$purpose.csr&quot; -CA dev-ca.crt -CAkey dev-ca.key \
+    -set_serial &quot;0x$(openssl rand -hex 16)&quot; -days 1 \
+    -extfile identity.ext -out &quot;$purpose.crt&quot;
+done
+openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out server.key
+openssl req -new -key server.key -out server.csr -subj '/CN=localhost'
+cat &gt; server.ext &lt;&lt;'EOF'
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature
+extendedKeyUsage=serverAuth
+subjectAltName=IP:127.0.0.1,DNS:localhost
+EOF
+openssl x509 -req -in server.csr -CA dev-ca.crt -CAkey dev-ca.key \
+  -set_serial &quot;0x$(openssl rand -hex 16)&quot; -days 1 -extfile server.ext -out server.crt
+openssl verify -CAfile dev-ca.crt workload.crt terminal.crt server.crt
+openssl rand -hex 32 &gt; pairing.secret
+cp dev-ca.crt &quot;$AAC_DEMO_DIR/publish-ca/local-demo.ca.pem&quot;
+python - &lt;&lt;'PY'
+from pathlib import Path
+import ssl
+import certifi
+roots = ssl.create_default_context().get_ca_certs(binary_form=True)
+if not roots:
+    roots = ssl.create_default_context(cafile=certifi.where()).get_ca_certs(binary_form=True)
+if not roots:
+    raise SystemExit('No public CA roots; repair the CLI environment/certifi installation')
+public_roots = ''.join(ssl.DER_cert_to_PEM_cert(cert) for cert in roots)
+Path('outbound-ca.pem').write_text(Path('dev-ca.crt').read_text() + public_roots)
+PY
+chmod 600 ./*
+cd &quot;$AAC_DEMO_DIR&quot;
+</code></pre>
+<p>Publish only <code>publish-ca/local-demo.ca.pem</code> using the SPIFFE publication
+instructions below. Keep <code>pki/dev-ca.key</code> with the operator; mount only the
+workload, terminal and TLS keys into the sidecar. The peer trusts the published
+CA; the paired application receives only <code>pairing.secret</code>.</p>
+<p>Check expiry before each later run with <code>openssl x509 -in &quot;$AAC_DEMO_DIR/pki/workload.crt&quot; -noout -dates</code>. Reissue matching leaf
+certificates before they expire, using the same tenant-approved issuer, or
+create a new development directory and deliberately update your trust/config.
+Do not overwrite keys or remove old trust while a workload still uses it.
+The OpenSSL <a href="https://docs.openssl.org/3.6/man1/openssl-req/">certificate request</a>
+and <a href="https://docs.openssl.org/3.6/man1/openssl-x509/">certificate signing</a>
+references describe the commands used here.</p>
+<h2 id="optional-runnable-paired-agent-example">Optional runnable paired-agent example</h2>
+<p>Use this synthetic example with a <strong>prepared test tenant</strong> and the sidecar
+configuration below. It performs no payment, trade, or other business action.
+Its human-originator fields are explicitly synthetic input, not proof of a
+GitHub, Google, or other identity-provider sign-in. A real originator must take
+those fields from its authenticated application context.</p>
+<p>This example uses a small Python/FastAPI application. If you already have an
+agent, integrate pairing authentication into its existing handler and server.</p>
+<h3 id="install-the-optional-sample-application-server">Install the optional sample application server</h3>
+<p>In the same virtual environment used for the
+<a href="/sidecar/configuration/#companion-developer-tools">deployment reference's companion tools</a>:</p>
+<pre><code class="language-bash">python -m pip install --upgrade uvicorn httpx PyYAML
+</code></pre>
+<p>Uvicorn serves the example FastAPI application over local HTTP; HTTPX sends the
+example client requests. Install these only when running this Python example.
+PyYAML writes the complete example configuration below.</p>
+<h3 id="replay-protection-profiles">Replay protection profiles</h3>
+<p>The template selects <strong>Basic</strong>: <code>backend: memory</code>, <code>deployment_profile: basic</code>.
+It works with <code>sidecar.dev_mode: false</code> and does not relax pairing, loopback,
+trust, projection, signatures, proof time or presenter/recipient checks.
+Existing configurations are not silently converted. Bare memory without a
+profile remains development-only and is reported as <code>development-memory</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Replay history and requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic</td>
+<td>Bounded process-local memory; one atomic claim per running history. Restart loses history; replicas do not coordinate</td>
+</tr>
+<tr>
+<td>Shared durable</td>
+<td><code>backend: valkey</code>, <code>deployment_profile: ha-retained-write-safe</code>; existing qualified retained-write-safe authority, authenticated TLS and workload-scoped credentials. Retained claims coordinate replicas of the exact receiver SPIFFE identity</td>
+</tr>
+</tbody>
+</table>
+<p>Shared durable failures never fall back to Basic. Choose one of the supported
+profiles above; neither changes the developer-beta license or support terms.</p>
+<p>Basic keeps replay records until they expire; it does not discard them to make
+room for new traffic. Duplicate proofs return 403 <code>ERR_DPOP_REPLAY</code>. Full
+storage returns 503 <code>ERR_REPLAY_AUTHORITY_SATURATED</code>; reduce admitted traffic
+or wait for records to expire. An unavailable replay store returns 503
+<code>ERR_REPLAY_AUTHORITY_UNAVAILABLE</code>. Check <code>/readyz</code> for the selected
+<code>replay_backend</code> and <code>replay_profile</code> when diagnosing the deployment.</p>
+<p>For Basic, <code>replay_protection.memory_max_entries</code> controls capacity. Size it for
+your expected concurrent replay records, including traffic bursts and requests
+that later fail authorization. A capacity refusal means you should reduce
+admitted traffic or increase capacity within your host's available memory.</p>
+<p>A still-valid proof can pass replay checking again after a Basic restart or on
+another replica. Choose Shared durable when replay history must survive
+replacement or coordinate replicas. Your application must still prevent repeat
+business actions; a fresh proof does not make an operation safe to repeat.
+Keep clocks synchronized.</p>
+<h4 id="operator-led-cutover-to-shared-durable">Operator-led cutover to Shared durable</h4>
+<ol>
+<li>Close protected admission to <strong>every</strong> Basic instance for the receiving
+workload. Drain in-flight operations, stop those instances, and prevent any
+old instance from rejoining. Record the final drain time.</li>
+<li>Configure every replacement for the same qualified Shared durable workload
+namespace and its scoped credentials. Preserve retained shared records and
+other workloads' state.</li>
+<li>Hold admission closed for <strong>at least 120 full seconds after the last Basic
+instance drains</strong>. Verify synchronized/non-regressing clocks and that the
+latest possible Basic proof expiry has passed at every replacement verifier.
+Extend the hold for clock uncertainty; measure the interval independently
+of wall-clock jumps.</li>
+<li>Complete shared readiness/quarantine checks and an authenticated validation
+workflow, then reopen admission only to Shared durable instances.</li>
+</ol>
+<p>A fresh Valkey epoch supplies the hold only if its <strong>entire interval</strong> is
+verified to follow the last Basic drain. An already initialized epoch can be
+ready immediately; restarting a sidecar does not reset it. Readiness alone
+never replaces the hold. Do not delete/reset shared state to manufacture a
+timer. There is no automatic migration engine, Basic startup quarantine,
+seamless cutover or automatic downgrade.</p>
+<h3 id="create-the-complete-local-configuration">Create the complete local configuration</h3>
+<p>Use the development PKI above, your registered tenant/workload and the root key
+published in the trust-publication step. Keep <code>AAC_TENANT_ID</code>,
+<code>AAC_TRUST_DOMAIN</code>, <code>AAC_MATERIAL_DIR</code> and <code>AAC_DEMO_DIR</code> in your shell.
+The CLI stores the bare API-key string at <code>~/.aac/credentials/&lt;tenant-id&gt;</code>;
+its <code>.session</code> sibling is different and must not be used here. For a key kept
+elsewhere, set <code>AAC_API_KEY_FILE</code> to the protected file containing just that key.</p>
+<p>Save this as <code>configure_demo.py</code> in your development directory. It writes an
+entire <code>sidecar-config.yaml</code>; no template overlay or manual merging is needed.
+Existing configurations are never overwritten. All listeners stay on localhost.
+This local example selects Basic replay explicitly; its small retained
+A2A-state limits are example sizing. Basic selection is independent of
+development mode, which remains enabled for the local fixture posture.</p>
+<pre><code class="language-python">import os
+import re
+from pathlib import Path
+import yaml
+
+os.umask(0o077)
+base = Path(os.environ[&quot;AAC_DEMO_DIR&quot;]).expanduser().resolve()
+onboarding = Path(os.environ[&quot;AAC_MATERIAL_DIR&quot;]).expanduser().resolve()
+tenant = os.environ[&quot;AAC_TENANT_ID&quot;]
+domain = os.environ[&quot;AAC_TRUST_DOMAIN&quot;]
+if not re.fullmatch(r&quot;tnt-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}&quot;, tenant):
+    raise SystemExit(&quot;Use the tenant ID returned by registration&quot;)
+if not re.fullmatch(r&quot;[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?&quot;, domain):
+    raise SystemExit(&quot;Use your assigned or verified lowercase trust domain&quot;)
+spiffe = f&quot;spiffe://{domain}/demo/agent&quot;
+key_id = os.environ.get(&quot;AAC_ROOT_KEY_ID&quot;, &quot;demo-root-v1&quot;)
+root_key = onboarding / (key_id + &quot;.pem&quot;)
+api_key = (
+    Path(os.environ.get(&quot;AAC_API_KEY_FILE&quot;, str(Path.home() / &quot;.aac/credentials&quot; / tenant)))
+    .expanduser()
+    .resolve()
+)
+pki = base / &quot;pki&quot;
+required = [
+    root_key,
+    api_key,
+    *[
+        pki / name
+        for name in (
+            &quot;workload.key&quot;,
+            &quot;workload.crt&quot;,
+            &quot;terminal.key&quot;,
+            &quot;terminal.crt&quot;,
+            &quot;server.key&quot;,
+            &quot;server.crt&quot;,
+            &quot;outbound-ca.pem&quot;,
+            &quot;pairing.secret&quot;,
+        )
+    ],
+]
+if any(not p.is_file() or not p.stat().st_size for p in required):
+    raise SystemExit(&quot;Prepare every credential file before creating the configuration&quot;)
+if not (base / &quot;state&quot;).is_dir():
+    raise SystemExit(&quot;Run development PKI setup first&quot;)
+config = {
+    &quot;schema_version&quot;: &quot;1.0&quot;,
+    &quot;replay_protection&quot;: {
+        &quot;backend&quot;: &quot;memory&quot;,
+        &quot;deployment_profile&quot;: &quot;basic&quot;,
+        &quot;memory_max_entries&quot;: 100000,
+    },
+    &quot;sidecar&quot;: {
+        &quot;dev_mode&quot;: True,
+        &quot;loopback_bind_address&quot;: &quot;127.0.0.1&quot;,
+        &quot;loopback_port&quot;: 8080,
+        &quot;external_bind_address&quot;: &quot;127.0.0.1&quot;,
+        &quot;external_port&quot;: 9443,
+        &quot;agent_invoke_url&quot;: &quot;http://127.0.0.1:8000/invoke&quot;,
+        &quot;agent_invoke_auth&quot;: {&quot;secret_file&quot;: str(pki / &quot;pairing.secret&quot;)},
+        &quot;tls_cert_file&quot;: str(pki / &quot;server.crt&quot;),
+        &quot;tls_key_file&quot;: str(pki / &quot;server.key&quot;),
+        &quot;tls_ca_file&quot;: str(pki / &quot;outbound-ca.pem&quot;),
+        &quot;log_level&quot;: &quot;info&quot;,
+        &quot;telemetry&quot;: {&quot;sink&quot;: str(base / &quot;state/telemetry.jsonl&quot;)},
+    },
+    &quot;tenant&quot;: {
+        &quot;id&quot;: tenant,
+        &quot;key_id&quot;: key_id,
+        &quot;signing_key_file&quot;: str(root_key),
+        &quot;signing_key_algorithm&quot;: &quot;ed25519&quot;,
+    },
+    &quot;agent&quot;: {
+        &quot;spiffe_id&quot;: spiffe,
+        &quot;svid_key_file&quot;: str(pki / &quot;workload.key&quot;),
+        &quot;svid_cert_file&quot;: str(pki / &quot;workload.crt&quot;),
+        &quot;attestation_key_file&quot;: str(pki / &quot;terminal.key&quot;),
+        &quot;attestation_cert_file&quot;: str(pki / &quot;terminal.crt&quot;),
+    },
+    &quot;trust_anchors&quot;: {
+        &quot;source&quot;: &quot;control_plane&quot;,
+        &quot;control_plane_url&quot;: &quot;https://trust.stage.cascadeauth.dev&quot;,
+        &quot;tenant_ids&quot;: [tenant],
+    },
+    &quot;spiffe_bundles&quot;: {
+        &quot;source&quot;: &quot;control_plane&quot;,
+        &quot;control_plane_url&quot;: &quot;https://trust.stage.cascadeauth.dev&quot;,
+        &quot;trust_domains&quot;: [domain],
+    },
+    &quot;workload_projection&quot;: {
+        &quot;source&quot;: &quot;control_plane&quot;,
+        &quot;control_plane_url&quot;: &quot;https://api.stage.cascadeauth.dev&quot;,
+        &quot;api_key_file&quot;: str(api_key),
+    },
+    &quot;a2a&quot;: {
+        &quot;public_base_url&quot;: &quot;https://127.0.0.1:9443&quot;,
+        &quot;local_handler_url&quot;: &quot;http://127.0.0.1:8000/a2a/v1&quot;,
+        &quot;max_request_body_bytes&quot;: 262144,
+        &quot;deadline_seconds&quot;: 60,
+        &quot;max_concurrent_requests&quot;: 20,
+        &quot;max_json_nesting_depth&quot;: 32,
+        &quot;max_json_nodes&quot;: 10000,
+        &quot;continuation_authority&quot;: {&quot;retention_seconds&quot;: 600},
+        &quot;egress_idempotency&quot;: {
+            &quot;state_file&quot;: str(base / &quot;state/a2a-egress.db&quot;),
+            &quot;retention_seconds&quot;: 86400,
+            &quot;max_entries_per_pair&quot;: 4096,
+            &quot;max_cached_response_body_bytes&quot;: 4096,
+            &quot;max_reserved_cached_bytes_per_pair&quot;: 16777216,
+        },
+    },
+    &quot;classes_of_action&quot;: {
+        &quot;demo_verify&quot;: {
+            &quot;predicates&quot;: {&quot;action&quot;: &quot;dev_noop&quot;},
+            &quot;valid_for&quot;: &quot;+10m&quot;,
+            &quot;audience_self&quot;: spiffe,
+        }
+    },
+    &quot;destinations&quot;: {
+        name: {
+            &quot;url&quot;: &quot;https://127.0.0.1:9443&quot; + path,
+            &quot;audience_pattern&quot;: spiffe,
+            &quot;predicates&quot;: {&quot;action&quot;: &quot;dev_noop&quot;},
+            &quot;valid_for&quot;: &quot;+5m&quot;,
+            &quot;timeout_ms&quot;: 10000,
+        }
+        for name, path in [(&quot;self_receive&quot;, &quot;/v1/agent/receive&quot;), (&quot;self_a2a&quot;, &quot;/a2a/v1&quot;)]
+    },
+}
+with (base / &quot;sidecar-config.yaml&quot;).open(&quot;x&quot;) as stream:
+    yaml.safe_dump(config, stream, sort_keys=False)
+print(&quot;Created complete configuration:&quot;, base / &quot;sidecar-config.yaml&quot;)
+</code></pre>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+python configure_demo.py
+</code></pre>
+<p>Confirm that your root key and development CA are visible at the public trust
+URLs before starting. Keep this setup local; a real deployment needs managed
+certificates, an explicitly chosen replay profile, qualified A2A storage and restricted ingress.</p>
+<h3 id="save-and-start-the-agent">Save and start the agent</h3>
+<p>Save the following as <code>agent.py</code>. Set <code>AAC_INVOKE_AUTH_SECRET_FILE</code> to the
+per-pair secret mounted in your agent; the sidecar's
+<code>sidecar.agent_invoke_auth.secret_file</code> must read the same bytes. Keep the file
+private and do not disable authentication.</p>
+<pre><code class="language-python">from fastapi import FastAPI, Request
+import os
+from aac_invoke_auth.fastapi import InvokeAuthGuard, InvokeAuthMiddleware
+
+app = FastAPI()
+app.add_middleware(
+    InvokeAuthMiddleware,
+    guard=InvokeAuthGuard.from_env(),
+    protected_paths=(&quot;/invoke&quot;, &quot;/a2a/v1&quot;),
+)
+
+
+def sample_decision(body):
+    payload = body.get(&quot;current_arrival&quot;, {}).get(&quot;payload&quot;, {})
+    if isinstance(payload, dict) and payload.get(&quot;step&quot;) == &quot;forward&quot;:
+        return {
+            &quot;action&quot;: &quot;forward&quot;,
+            &quot;destination&quot;: os.environ.get(&quot;AAC_DEMO_DESTINATION&quot;, &quot;self_receive&quot;),
+            &quot;payload&quot;: {&quot;step&quot;: &quot;settle&quot;},
+            &quot;additional_predicates&quot;: {&quot;task_ref&quot;: body[&quot;task_ref&quot;]},
+        }
+    if isinstance(payload, dict) and payload.get(&quot;step&quot;) == &quot;settle&quot;:
+        return {
+            &quot;action&quot;: &quot;settle&quot;,
+            &quot;settlement_id&quot;: body[&quot;task_ref&quot;],
+            &quot;action_summary&quot;: &quot;Completed synthetic demonstration; no business effect.&quot;,
+        }
+    return {&quot;action&quot;: &quot;refuse&quot;, &quot;reason&quot;: &quot;Demo agent has no other business policy.&quot;}
+
+
+@app.post(&quot;/invoke&quot;)
+async def invoke(request: Request):
+    return sample_decision(await request.json())
+
+
+@app.post(&quot;/a2a/v1&quot;)
+async def a2a(request: Request):
+    body = await request.json()
+    # The sidecar admits only the supported unary SendMessage profile here.
+    return {
+        &quot;jsonrpc&quot;: &quot;2.0&quot;,
+        &quot;id&quot;: body[&quot;id&quot;],
+        &quot;result&quot;: {
+            &quot;message&quot;: {
+                &quot;messageId&quot;: body[&quot;params&quot;][&quot;message&quot;][&quot;messageId&quot;] + &quot;-reply&quot;,
+                &quot;contextId&quot;: &quot;demo-&quot; + body[&quot;params&quot;][&quot;message&quot;][&quot;messageId&quot;],
+                &quot;role&quot;: &quot;ROLE_AGENT&quot;,
+                &quot;parts&quot;: [{&quot;text&quot;: &quot;Synthetic AAC-authorized reply&quot;}],
+            }
+        },
+    }
+</code></pre>
+<p>Save the client below too, then choose the Docker or standalone start instructions.
+An unsigned direct POST to <code>/invoke</code> must return 401; the same applies to <code>/a2a/v1</code>.
+Missing pairing configuration prevents agent startup.</p>
+<h3 id="save-and-run-the-client">Save and run the client</h3>
+<p>Save this as <code>demo_client.py</code>. Run it only in the same trusted local network
+namespace as the sidecar. It sends mint requests to the locally bound TLS listener on port 9443 and
+A2A dispatch to loopback port 8080.</p>
+<pre><code class="language-python">import json
+import os
+import ssl
+import time
+import uuid
+from pathlib import Path
+
+import httpx
+from aac_invoke_auth import sign_invoke_request
+
+
+def run_demo(client, secret, originator, destination_profile=&quot;self_a2a&quot;):
+    task = &quot;demo-&quot; + str(uuid.uuid4())
+    human = {
+        &quot;iss&quot;: &quot;https://synthetic.invalid&quot;,
+        &quot;sub&quot;: &quot;demo-only&quot;,
+        &quot;auth_time_unix_seconds&quot;: int(time.time()),
+    }
+    path = &quot;/v1/agent/mint-root&quot;
+    body = json.dumps(
+        {
+            &quot;human_originator&quot;: human,
+            &quot;class_of_action&quot;: &quot;demo_verify&quot;,
+            &quot;task_ref&quot;: task,
+            &quot;payload&quot;: {&quot;step&quot;: &quot;forward&quot;},
+        },
+        separators=(&quot;,&quot;, &quot;:&quot;),
+    ).encode()
+    headers = {&quot;Content-Type&quot;: &quot;application/json&quot;}
+    headers.update(
+        sign_invoke_request(secret=secret, method=&quot;POST&quot;, path=path, headers=headers, body=body)
+    )
+    response = originator.post(path, headers=headers, content=body)
+    response.raise_for_status()
+    minted = response.json()
+    if minted.get(&quot;delivery_status&quot;) != &quot;delivered&quot;:
+        raise RuntimeError(&quot;native workflow was not delivered&quot;)
+
+    path = &quot;/v1/agent/a2a/dispatch&quot;
+    dispatch_id = str(uuid.uuid4())
+    envelope = {
+        &quot;schema_version&quot;: &quot;aac.a2a.egress.v1&quot;,
+        &quot;dispatch_id&quot;: dispatch_id,
+        &quot;destination_profile&quot;: destination_profile,
+        &quot;task_ref&quot;: task + &quot;-a2a&quot;,
+        &quot;authority&quot;: {
+            &quot;mode&quot;: &quot;originate&quot;,
+            &quot;class_of_action&quot;: &quot;demo_verify&quot;,
+            &quot;human_originator&quot;: human,
+        },
+        &quot;additional_predicates&quot;: {},
+        &quot;a2a_request&quot;: {
+            &quot;jsonrpc&quot;: &quot;2.0&quot;,
+            &quot;id&quot;: task,
+            &quot;method&quot;: &quot;SendMessage&quot;,
+            &quot;params&quot;: {
+                &quot;message&quot;: {
+                    &quot;messageId&quot;: str(uuid.uuid4()),
+                    &quot;role&quot;: &quot;ROLE_USER&quot;,
+                    &quot;parts&quot;: [{&quot;text&quot;: &quot;Synthetic hello&quot;}],
+                }
+            },
+        },
+    }
+    body = json.dumps(envelope, separators=(&quot;,&quot;, &quot;:&quot;)).encode()
+
+    def send():
+        headers = {&quot;Content-Type&quot;: &quot;application/json&quot;, &quot;X-AAC-Envelope-Schema&quot;: &quot;aac.a2a.egress.v1&quot;}
+        headers.update(
+            sign_invoke_request(secret=secret, method=&quot;POST&quot;, path=path, headers=headers, body=body)
+        )
+        result = client.post(path, headers=headers, content=body)
+        result.raise_for_status()
+        if &quot;error&quot; in result.json():
+            raise RuntimeError(&quot;A2A returned a protocol error&quot;)
+        return result
+
+    first = send()
+    retry = send()  # Same dispatch_id AND same envelope; fresh pairing signature.
+    if retry.content != first.content:
+        raise RuntimeError(&quot;identical A2A retry returned different bytes&quot;)
+    return {
+        &quot;native_delivery&quot;: &quot;delivered&quot;,
+        &quot;task_ref&quot;: task,
+        &quot;root_token_id&quot;: minted[&quot;root_token_id&quot;],
+        &quot;a2a_dispatch_id&quot;: dispatch_id,
+        &quot;a2a_retry&quot;: &quot;same response bytes&quot;,
+    }
+
+
+if __name__ == &quot;__main__&quot;:
+    secret = Path(os.environ[&quot;AAC_INVOKE_AUTH_SECRET_FILE&quot;]).read_bytes().strip()
+    tls = ssl.create_default_context(cafile=os.environ[&quot;AAC_DEMO_CA_FILE&quot;])
+    with httpx.Client(base_url=&quot;http://127.0.0.1:8080&quot;, timeout=65, trust_env=False) as client:
+        with httpx.Client(
+            base_url=&quot;https://127.0.0.1:9443&quot;, verify=tls, timeout=65, trust_env=False
+        ) as originator:
+            print(
+                json.dumps(
+                    run_demo(
+                        client,
+                        secret,
+                        originator,
+                        os.environ.get(&quot;AAC_DEMO_A2A_DESTINATION&quot;, &quot;self_a2a&quot;),
+                    ),
+                    indent=2,
+                )
+            )
+</code></pre>
+<h3 id="run-the-example-with-docker">Run the example with Docker</h3>
+<p>This is the default container path; it does not require ORAS or a standalone
+sidecar. Save <code>agent.py</code>, <code>demo_client.py</code> and the complete configuration above
+in <code>AAC_DEMO_DIR</code>. Run this staging helper as <code>configure_container.py</code>. It copies
+only the selected runtime files into a new <code>container/</code> directory and refuses
+to overwrite it. The development CA private key stays outside that directory.</p>
+<pre><code class="language-python">import os
+from pathlib import Path
+import shutil
+import yaml
+
+os.umask(0o077)
+base = Path(os.environ[&quot;AAC_DEMO_DIR&quot;]).expanduser().resolve()
+config = yaml.safe_load((base / &quot;sidecar-config.yaml&quot;).read_text())
+for name in (&quot;agent.py&quot;, &quot;demo_client.py&quot;):
+    if not (base / name).is_file():
+        raise SystemExit(&quot;Save both example applications before staging&quot;)
+stage = base / &quot;container&quot;
+stage.mkdir()
+for name in (&quot;sidecar&quot;, &quot;agent&quot;, &quot;pair&quot;, &quot;state&quot;):
+    (stage / name).mkdir()
+
+
+def stage_key(source, name):
+    shutil.copyfile(source, stage / &quot;sidecar&quot; / name)
+    return &quot;/etc/aac/&quot; + name
+
+
+config[&quot;tenant&quot;][&quot;signing_key_file&quot;] = stage_key(config[&quot;tenant&quot;][&quot;signing_key_file&quot;], &quot;root.pem&quot;)
+for field, name in [
+    (&quot;svid_key_file&quot;, &quot;workload.key&quot;),
+    (&quot;svid_cert_file&quot;, &quot;workload.crt&quot;),
+    (&quot;attestation_key_file&quot;, &quot;terminal.key&quot;),
+    (&quot;attestation_cert_file&quot;, &quot;terminal.crt&quot;),
+]:
+    config[&quot;agent&quot;][field] = stage_key(config[&quot;agent&quot;][field], name)
+for field, name in [
+    (&quot;tls_key_file&quot;, &quot;server.key&quot;),
+    (&quot;tls_cert_file&quot;, &quot;server.crt&quot;),
+    (&quot;tls_ca_file&quot;, &quot;outbound-ca.pem&quot;),
+]:
+    config[&quot;sidecar&quot;][field] = stage_key(config[&quot;sidecar&quot;][field], name)
+config[&quot;workload_projection&quot;][&quot;api_key_file&quot;] = stage_key(
+    config[&quot;workload_projection&quot;][&quot;api_key_file&quot;], &quot;tenant-api-key&quot;
+)
+shutil.copyfile(base / &quot;pki/pairing.secret&quot;, stage / &quot;pair/pairing.secret&quot;)
+shutil.copyfile(base / &quot;pki/dev-ca.crt&quot;, stage / &quot;pair/dev-ca.crt&quot;)
+config[&quot;sidecar&quot;][&quot;agent_invoke_auth&quot;][&quot;secret_file&quot;] = &quot;/run/secrets/pairing.secret&quot;
+config[&quot;sidecar&quot;][&quot;telemetry&quot;][&quot;sink&quot;] = &quot;/var/lib/aac/telemetry.jsonl&quot;
+config[&quot;a2a&quot;][&quot;egress_idempotency&quot;][&quot;state_file&quot;] = &quot;/var/lib/aac/a2a-egress.db&quot;
+(stage / &quot;sidecar/sidecar-config.yaml&quot;).write_text(yaml.safe_dump(config, sort_keys=False))
+for name in (&quot;agent.py&quot;, &quot;demo_client.py&quot;):
+    shutil.copyfile(base / name, stage / &quot;agent&quot; / name)
+(stage / &quot;agent/Dockerfile&quot;).write_text(&quot;&quot;&quot;FROM python:3.12-slim
+RUN python -m pip install --no-cache-dir aac-invoke-auth[fastapi] uvicorn httpx
+WORKDIR /app
+COPY agent.py demo_client.py /app/
+RUN chmod 0444 /app/*.py
+ENV PYTHONDONTWRITEBYTECODE=1
+USER 65532:65532
+CMD [&quot;python&quot;, &quot;-m&quot;, &quot;uvicorn&quot;, &quot;agent:app&quot;, &quot;--host&quot;, &quot;127.0.0.1&quot;, &quot;--port&quot;, &quot;8000&quot;]
+&quot;&quot;&quot;)
+print(&quot;Created container configuration and sample application build directory&quot;)
+</code></pre>
+<p>Build the sample <strong>application</strong> image locally and pull the published sidecar:</p>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+python configure_container.py
+docker build --tag aac-demo-agent &quot;$AAC_DEMO_DIR/container/agent&quot;
+docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
+</code></pre>
+<p>Run from a non-root host account. This local demonstration runs both containers
+with your numeric UID/GID so their staged private files can remain mode 0600;
+managed deployments normally provision permissions for the image's default
+65532 user. The two containers share one network namespace. No ports are
+published; the client runs inside that namespace too.</p>
+<pre><code class="language-bash">test &quot;$(id -u)&quot; -ne 0
+docker run --detach --name aac-demo-agent --user &quot;$(id -u):$(id -g)&quot; \
+  --read-only --cap-drop ALL --security-opt no-new-privileges --tmpfs /tmp \
+  --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly&quot; \
+  --env AAC_INVOKE_AUTH_SECRET_FILE=/run/secrets/pairing.secret \
+  --env AAC_DEMO_CA_FILE=/run/secrets/dev-ca.crt aac-demo-agent
+docker run --detach --name aac-demo-sidecar --user &quot;$(id -u):$(id -g)&quot; \
+  --network container:aac-demo-agent --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly&quot; \
+  --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly&quot; \
+  --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac&quot; \
+  docker.io/cascadeauth/aac-sidecar:v0.4.4 -config /etc/aac/sidecar-config.yaml
+docker logs --tail 30 aac-demo-agent
+docker logs --tail 30 aac-demo-sidecar
+docker exec aac-demo-agent \
+  python -c 'import urllib.request
+print(urllib.request.urlopen(&quot;http://127.0.0.1:8080/readyz&quot;).read().decode())'
+docker exec aac-demo-agent python /app/demo_client.py
+</code></pre>
+<p>Allow startup and the initial trust refresh to finish. Readiness checks replay;
+the authenticated example checks trust and pairing. Read local evidence in
+<code>container/state/telemetry.jsonl</code>. After the exercise, stop/remove only these
+two example containers; retain the private staging/state directory according
+to your test policy:</p>
+<pre><code class="language-bash">docker stop aac-demo-sidecar aac-demo-agent
+docker rm aac-demo-sidecar aac-demo-agent
+</code></pre>
+<h3 id="run-the-example-with-a-standalone-sidecar">Run the example with a standalone sidecar</h3>
+<p>Use this alternative if you installed the standalone binary. In new terminals,
+activate the same Python environment and set <code>AAC_DEMO_DIR</code> to the directory
+created during setup. Start the agent, then the sidecar:</p>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+export AAC_INVOKE_AUTH_SECRET_FILE=&quot;$AAC_DEMO_DIR/pki/pairing.secret&quot;
+python -m uvicorn agent:app --host 127.0.0.1 --port 8000
+</code></pre>
+<pre><code class="language-bash">&quot;$HOME/.local/bin/aac-sidecar&quot; -config &quot;$AAC_DEMO_DIR/sidecar-config.yaml&quot;
+</code></pre>
+<p>From another activated terminal, check readiness and run the client:</p>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+export AAC_INVOKE_AUTH_SECRET_FILE=&quot;$AAC_DEMO_DIR/pki/pairing.secret&quot;
+export AAC_DEMO_CA_FILE=&quot;$AAC_DEMO_DIR/pki/outbound-ca.pem&quot;
+curl --fail --silent --show-error http://127.0.0.1:8080/readyz
+python demo_client.py
+</code></pre>
+<p>The client prints only correlation identifiers and outcomes. The native chain
+mints a root and initial holder authority, invokes the agent, forwards to
+<code>self_receive</code> with the same task restriction, then settles with a signed
+terminal attestation. The separate A2A call returns the sample reply; its identical
+retry uses the retained result rather than repeating the operation.</p>
+<p>A successful HTTP response is only part of the evidence. Match the returned
+<code>root_token_id</code> in the local telemetry file and check the mint, dispatch,
+receive and terminal <code>respond</code> events. The terminal attestation stays local;
+central trace forwarding deliberately excludes it. If forwarding is enabled,
+use <code>aac chain show --help</code> to inspect the same root's central metadata after
+allowing for asynchronous delivery. Record sanitized outcomes, never raw
+credentials, private payloads, SVIDs with private keys or complete logs.</p>
+<p>For a cross-tenant test, replace the self destinations with your explicitly
+registered peer's final URL and exact SPIFFE ID, include both tenants' public
+root keys and trust domains, and agree on predicates with that peer. Never
+point this no-policy demo at a real business handler.</p>
+<h2 id="work-through-two-agents">Work through two agents</h2>
+<p>For two independently registered tenants with separate CAs and the CLI-managed
+lifecycle, use the <a href="https://github.com/CascadeAuth/aac-compose-demo">Compose reservation demo</a>.
+The standalone example below remains a lower-level same-tenant reference.</p>
+<p>Use the standalone installation for this optional multi-process example.
+It is separate from the Docker path above. This example runs Agent A and Agent B as separate local processes in
+the same test tenant. It uses your existing development CA and published root;
+no CA private key is sent to an agent or peer. First stop the single-agent
+example's processes. Keep its files and retained state.</p>
+<p>Register the second workload, then install the helper's local dependencies:</p>
+<pre><code class="language-bash">aac tenant add-workload --profile &quot;$AAC_PROFILE&quot; \
+  --spiffe-id &quot;spiffe://${AAC_TRUST_DOMAIN}/demo/peer&quot; --display-name 'Synthetic peer agent'
+python -m pip install --upgrade cryptography PyYAML
+</code></pre>
+<p>Save the following as <code>configure_peer.py</code> in <code>AAC_DEMO_DIR</code>. It creates fresh,
+distinct peer keys/certificates and pairing secret, two complete configurations,
+and separate retained-state paths. It refuses existing peer output. It uses
+the development CA for at most one-day leaf validity, bounded by CA expiry.</p>
+<pre><code class="language-python">import copy
+import datetime as dt
+import ipaddress
+import os
+from pathlib import Path
+import secrets
+import yaml
+from cryptography import x509
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec, ed25519
+from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
+
+os.umask(0o077)
+base = Path(os.environ[&quot;AAC_DEMO_DIR&quot;]).expanduser().resolve()
+config = yaml.safe_load((base / &quot;sidecar-config.yaml&quot;).read_text())
+domain = config[&quot;agent&quot;][&quot;spiffe_id&quot;].split(&quot;/&quot;)[2]
+peer_spiffe = f&quot;spiffe://{domain}/demo/peer&quot;
+ca = x509.load_pem_x509_certificate((base / &quot;pki/dev-ca.crt&quot;).read_bytes())
+ca_key = serialization.load_pem_private_key((base / &quot;pki/dev-ca.key&quot;).read_bytes(), None)
+now = dt.datetime.now(dt.timezone.utc)
+if not isinstance(
+    ca_key, ed25519.Ed25519PrivateKey
+) or ca.not_valid_after_utc &lt;= now + dt.timedelta(hours=1):
+    raise SystemExit(&quot;Use a currently valid CA from the development PKI recipe&quot;)
+public_bytes = lambda key: key.public_bytes(
+    serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+)
+if (
+    public_bytes(ca_key.public_key()) != public_bytes(ca.public_key())
+    or ca.not_valid_before_utc &gt; now
+):
+    raise SystemExit(&quot;Development CA certificate/key mismatch or CA is not yet valid&quot;)
+if (base / &quot;sidecar-A.yaml&quot;).exists() or (base / &quot;peer&quot;).exists():
+    raise SystemExit(&quot;Peer configuration already exists; inspect it before changing it&quot;)
+peer = base / &quot;peer&quot;
+peer.mkdir()
+(peer / &quot;pki&quot;).mkdir()
+(peer / &quot;state&quot;).mkdir()
+
+
+def issue(name, identity=None):
+    key = (
+        ed25519.Ed25519PrivateKey.generate()
+        if identity and name == &quot;workload&quot;
+        else ec.generate_private_key(ec.SECP256R1())
+    )
+    subject = (
+        x509.Name([])
+        if identity
+        else x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, &quot;localhost&quot;)])
+    )
+    sans = (
+        [x509.UniformResourceIdentifier(identity)]
+        if identity
+        else [x509.IPAddress(ipaddress.ip_address(&quot;127.0.0.1&quot;)), x509.DNSName(&quot;localhost&quot;)]
+    )
+    cert = (
+        x509.CertificateBuilder()
+        .subject_name(subject)
+        .issuer_name(ca.subject)
+        .public_key(key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(now - dt.timedelta(seconds=5))
+        .not_valid_after(min(now + dt.timedelta(days=1), ca.not_valid_after_utc))
+        .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
+        .add_extension(
+            x509.KeyUsage(True, False, False, False, False, False, False, False, False),
+            critical=True,
+        )
+        .add_extension(
+            x509.ExtendedKeyUsage(
+                [ExtendedKeyUsageOID.CLIENT_AUTH, ExtendedKeyUsageOID.SERVER_AUTH]
+                if identity
+                else [ExtendedKeyUsageOID.SERVER_AUTH]
+            ),
+            critical=False,
+        )
+        .add_extension(x509.SubjectAlternativeName(sans), critical=bool(identity))
+        .sign(ca_key, None)
+    )
+    (peer / &quot;pki&quot; / f&quot;{name}.key&quot;).write_bytes(
+        key.private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.PKCS8,
+            serialization.NoEncryption(),
+        )
+    )
+    (peer / &quot;pki&quot; / f&quot;{name}.crt&quot;).write_bytes(cert.public_bytes(serialization.Encoding.PEM))
+
+
+issue(&quot;workload&quot;, peer_spiffe)
+issue(&quot;terminal&quot;, peer_spiffe)
+issue(&quot;server&quot;)
+(peer / &quot;pki/pairing.secret&quot;).write_text(secrets.token_hex(32) + &quot;\n&quot;)
+(peer / &quot;pki/outbound-ca.pem&quot;).write_bytes((base / &quot;pki/outbound-ca.pem&quot;).read_bytes())
+(peer / &quot;pki/dev-ca.crt&quot;).write_bytes((base / &quot;pki/dev-ca.crt&quot;).read_bytes())
+sender, receiver = copy.deepcopy(config), copy.deepcopy(config)
+sender[&quot;sidecar&quot;][&quot;telemetry&quot;][&quot;sink&quot;] = str(base / &quot;state/telemetry-A.jsonl&quot;)
+sender[&quot;a2a&quot;][&quot;egress_idempotency&quot;][&quot;state_file&quot;] = str(base / &quot;state/a2a-egress-A.db&quot;)
+sender[&quot;destinations&quot;] = {
+    name: {
+        &quot;url&quot;: &quot;https://127.0.0.1:9444&quot; + path,
+        &quot;audience_pattern&quot;: peer_spiffe,
+        &quot;predicates&quot;: {&quot;action&quot;: &quot;dev_noop&quot;},
+        &quot;valid_for&quot;: &quot;+5m&quot;,
+        &quot;timeout_ms&quot;: 10000,
+    }
+    for name, path in [(&quot;peer_receive&quot;, &quot;/v1/agent/receive&quot;), (&quot;peer_a2a&quot;, &quot;/a2a/v1&quot;)]
+}
+receiver[&quot;tenant&quot;].pop(&quot;signing_key_file&quot;)
+receiver[&quot;agent&quot;].update(
+    spiffe_id=peer_spiffe,
+    svid_key_file=str(peer / &quot;pki/workload.key&quot;),
+    svid_cert_file=str(peer / &quot;pki/workload.crt&quot;),
+    attestation_key_file=str(peer / &quot;pki/terminal.key&quot;),
+    attestation_cert_file=str(peer / &quot;pki/terminal.crt&quot;),
+)
+receiver[&quot;sidecar&quot;].update(
+    loopback_port=8081,
+    external_port=9444,
+    agent_invoke_url=&quot;http://127.0.0.1:8001/invoke&quot;,
+    agent_invoke_auth={&quot;secret_file&quot;: str(peer / &quot;pki/pairing.secret&quot;)},
+    tls_cert_file=str(peer / &quot;pki/server.crt&quot;),
+    tls_key_file=str(peer / &quot;pki/server.key&quot;),
+    tls_ca_file=str(peer / &quot;pki/outbound-ca.pem&quot;),
+    telemetry={&quot;sink&quot;: str(peer / &quot;state/telemetry-B.jsonl&quot;)},
+)
+receiver[&quot;a2a&quot;].update(
+    public_base_url=&quot;https://127.0.0.1:9444&quot;, local_handler_url=&quot;http://127.0.0.1:8001/a2a/v1&quot;
+)
+receiver[&quot;a2a&quot;][&quot;egress_idempotency&quot;][&quot;state_file&quot;] = str(peer / &quot;state/a2a-egress.db&quot;)
+receiver[&quot;classes_of_action&quot;] = {}
+receiver[&quot;destinations&quot;] = {}
+with (base / &quot;sidecar-A.yaml&quot;).open(&quot;x&quot;) as f:
+    yaml.safe_dump(sender, f, sort_keys=False)
+with (peer / &quot;sidecar-B.yaml&quot;).open(&quot;x&quot;) as f:
+    yaml.safe_dump(receiver, f, sort_keys=False)
+print(&quot;Created sidecar-A.yaml and peer/sidecar-B.yaml&quot;)
+</code></pre>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+python configure_peer.py
+</code></pre>
+<p>Use four terminals, with the same Python environment active and <code>AAC_DEMO_DIR</code>
+set to the absolute directory from setup. Run one of these commands in each:</p>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+AAC_INVOKE_AUTH_SECRET_FILE=&quot;$AAC_DEMO_DIR/pki/pairing.secret&quot; AAC_DEMO_DESTINATION=peer_receive \
+  python -m uvicorn agent:app --host 127.0.0.1 --port 8000
+</code></pre>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+AAC_INVOKE_AUTH_SECRET_FILE=&quot;$AAC_DEMO_DIR/peer/pki/pairing.secret&quot; \
+  python -m uvicorn agent:app --host 127.0.0.1 --port 8001
+</code></pre>
+<pre><code class="language-bash">&quot;$HOME/.local/bin/aac-sidecar&quot; -config &quot;$AAC_DEMO_DIR/sidecar-A.yaml&quot;
+</code></pre>
+<pre><code class="language-bash">&quot;$HOME/.local/bin/aac-sidecar&quot; -config &quot;$AAC_DEMO_DIR/peer/sidecar-B.yaml&quot;
+</code></pre>
+<p>Check readiness at <code>http://127.0.0.1:8080/readyz</code> and
+<code>http://127.0.0.1:8081/readyz</code>, then run the client in a fifth terminal:</p>
+<pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
+AAC_INVOKE_AUTH_SECRET_FILE=&quot;$AAC_DEMO_DIR/pki/pairing.secret&quot; \
+AAC_DEMO_CA_FILE=&quot;$AAC_DEMO_DIR/pki/outbound-ca.pem&quot; AAC_DEMO_A2A_DESTINATION=peer_a2a \
+  python demo_client.py
+</code></pre>
+<p>Agent A forwards the native task to <code>peer_receive</code>; Sidecar B verifies it and
+Agent B settles. The A2A operation goes to <code>peer_a2a</code>; its repeated dispatch uses
+the stored response. Correlate <code>state/telemetry-A.jsonl</code> with
+<code>peer/state/telemetry-B.jsonl</code> and verify B's terminal certificate/attestation
+using B's registered identity. Stop these four owned processes when finished;
+retain the state and private material according to your test-tenant policy.</p>
+<p>For separate hosts or tenants, replace localhost with restricted HTTPS ingress
+and use independently provisioned credentials on each side. Each receiver must
+trust the originator root tenant via <code>trust_anchors.tenant_ids</code> and the presenter
+CA domain via <code>spiffe_bundles.trust_domains</code>; use authenticated workload
+projection for the presenting and terminal identities. The sender's destination
+must name the peer's exact SPIFFE ID. Do not copy a CA private key or another
+workload's private keys between those hosts.</p>
+<h2 id="pairing-authentication-for-any-language">Pairing authentication for any language</h2>
+<p>Implement <code>AAC1-HMAC-SHA256</code> before trusting a sidecar's <code>/invoke</code> or <code>/a2a/v1</code>
+callback. A paired agent also uses it to call <code>/v1/agent/a2a/dispatch</code> on the
+sidecar's loopback listener. It is separate from the AAC-chain/DPoP verification
+between sidecars. No Python package is required by another language.</p>
+<ol>
+<li>Read the per-pair secret file as opaque bytes, removing surrounding ASCII
+whitespace. Use at least 32 secret bytes. The recommended <code>openssl rand -hex 32</code> produces 64 ASCII bytes: <strong>do not hex-decode those characters</strong>.</li>
+<li>Preserve the exact request-body bytes. Compute their SHA-256 and encode it
+as 64 lowercase hexadecimal characters. Do not parse/reserialize the body
+between signing and sending or verifying.</li>
+<li>Select every header whose lowercase name starts with <code>x-aac-</code>, excluding
+<code>x-aac-invoke-signature</code> and <code>x-aac-invoke-timestamp</code>. Reject duplicate covered
+names, including duplicates that differ only by case. Lowercase names,
+preserve their received values, sort by name, and join <code>name:value</code> lines
+with LF (<code>\n</code>). Do not add a trailing LF to this header block.</li>
+<li>Join the following six strings with LF, encoded as UTF-8:</li>
+</ol>
+<pre><code class="language-text">AAC1-HMAC-SHA256
+UPPERCASE_HTTP_METHOD
+REQUEST_PATH
+DECIMAL_UNIX_SECONDS
+LOWERCASE_HEX_SHA256_OF_BODY
+SORTED_COVERED_HEADER_BLOCK
+</code></pre>
+<p><code>REQUEST_PATH</code> is the endpoint path, such as <code>/invoke</code>, not a full URL. These
+paired endpoints use no query string. The final block may contain multiple
+lines. If it is empty, the canonical string ends in the LF separating it from
+the body digest; otherwise there is no final LF. Ordinary headers such as
+<code>Content-Type</code> are not covered. Add no spaces around <code>:</code> in covered lines.</p>
+<ol start="5">
+<li>Compute HMAC-SHA256 of that complete string using the secret bytes. Send:
+<code>X-AAC-Invoke-Timestamp: &lt;decimal seconds&gt;</code> and
+<code>X-AAC-Invoke-Signature: AAC1-HMAC-SHA256 &lt;lowercase hex HMAC&gt;</code>.</li>
+<li>The receiver requires exactly one timestamp and signature, the supported
+algorithm, a timestamp within <strong>30 seconds before or after its clock</strong>, and
+a constant-time signature match before invoking business logic. Preserve all
+raw covered-header instances until duplicate checks finish.</li>
+</ol>
+<p>The freshness window is not a nonce/replay cache. A captured paired request can
+still be fresh within that window; network isolation and secret custody remain
+required. Business retries use the operation's own idempotency rules, including
+the A2A <code>dispatch_id</code> and exact-body rule.</p>
+<table>
+<thead>
+<tr>
+<th>Signed context header</th>
+<th>Meaning after pairing verification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-AAC-Root-Token-Id</code></td>
+<td>Root identifier for correlation</td>
+</tr>
+<tr>
+<td><code>X-AAC-Presenter-Token-Id</code></td>
+<td>Current presented chain identifier</td>
+</tr>
+<tr>
+<td><code>X-AAC-Hop-Index</code></td>
+<td>Chain hop index</td>
+</tr>
+<tr>
+<td><code>X-AAC-Originator-Tenant-Id</code></td>
+<td>Root's originator tenant</td>
+</tr>
+<tr>
+<td><code>X-AAC-Presenter-Spiffe-Id</code></td>
+<td>Verified presenting workload</td>
+</tr>
+<tr>
+<td><code>X-AAC-Task-Ref</code></td>
+<td>Task restriction/correlation; preserve it in the supported response</td>
+</tr>
+<tr>
+<td><code>X-AAC-Envelope-Schema</code></td>
+<td>Required value <code>aac.a2a.egress.v1</code> for paired-agent A2A dispatch</td>
+</tr>
+</tbody>
+</table>
+<p>Before the signature check these are caller-controlled strings. Use the
+documented body/envelope schema too; a valid HMAC alone does not grant broader
+authority or make an arbitrary callback body valid.</p>
+<h3 id="pairing-test-vector">Pairing test vector</h3>
+<p>The deterministic values below are for interoperability tests only. Never use
+this secret for a deployment. <code>canonical</code> contains literal LF characters after
+JSON decoding; its last character is the final <code>o</code> in <code>task-demo</code>.</p>
+<pre><code class="language-json">{
+  &quot;secret_ascii&quot;: &quot;0123456789abcdef0123456789abcdef&quot;,
+  &quot;method&quot;: &quot;POST&quot;,
+  &quot;path&quot;: &quot;/invoke&quot;,
+  &quot;timestamp&quot;: 1700000000,
+  &quot;body_utf8&quot;: &quot;{\&quot;task\&quot;:\&quot;demo\&quot;}&quot;,
+  &quot;headers&quot;: {
+    &quot;X-AAC-Task-Ref&quot;: &quot;task-demo&quot;,
+    &quot;X-AAC-Hop-Index&quot;: &quot;2&quot;,
+    &quot;Content-Type&quot;: &quot;application/json&quot;
+  },
+  &quot;canonical&quot;: &quot;AAC1-HMAC-SHA256\nPOST\n/invoke\n1700000000\n74d517bf80045934cfecf491867e9b328c71686f935ca9c57e469ccc28868e3a\nx-aac-hop-index:2\nx-aac-task-ref:task-demo&quot;,
+  &quot;signature_header&quot;: &quot;AAC1-HMAC-SHA256 a931b3d7e2cfc7625f6dc00a75721ff297a51df006926519f922ecef440c20c5&quot;
+}
+</code></pre>
+<p>Python agents can use the published library's <code>sign_invoke_request</code> and
+<code>verify_invoke_request</code> functions, as the runnable example does. Its pairing
+errors are <code>MissingInvokeAuthHeader</code>, <code>MalformedInvokeAuthHeader</code>,
+<code>InvokeTimestampOutsideWindow</code> and <code>InvokeSignatureMismatch</code>; the supplied
+middleware rejects unauthenticated requests with HTTP 401 before business logic.
+<code>WeakInvokeAuthSecret</code> prevents startup with fewer than 32 secret bytes.
+These library error names are distinct from the sidecar's <code>ERR_*</code> envelope.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#authority-predicates-and-a2a-integration" class="toc-h2">Authority, predicates and A2A integration</a><a href="#generate-development-pki" class="toc-h3">Generate development PKI</a><a href="#optional-runnable-paired-agent-example" class="toc-h2">Optional runnable paired-agent example</a><a href="#install-the-optional-sample-application-server" class="toc-h3">Install the optional sample application server</a><a href="#replay-protection-profiles" class="toc-h3">Replay protection profiles</a><a href="#create-the-complete-local-configuration" class="toc-h3">Create the complete local configuration</a><a href="#save-and-start-the-agent" class="toc-h3">Save and start the agent</a><a href="#save-and-run-the-client" class="toc-h3">Save and run the client</a><a href="#run-the-example-with-docker" class="toc-h3">Run the example with Docker</a><a href="#run-the-example-with-a-standalone-sidecar" class="toc-h3">Run the example with a standalone sidecar</a><a href="#work-through-two-agents" class="toc-h2">Work through two agents</a><a href="#pairing-authentication-for-any-language" class="toc-h2">Pairing authentication for any language</a><a href="#pairing-test-vector" class="toc-h3">Pairing test vector</a></aside></div></body></html>

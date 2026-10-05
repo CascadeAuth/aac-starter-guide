@@ -1,0 +1,169 @@
+{
+  "component": "sidecar",
+  "documentation_revision": "42797a46037edf5ee429e481115b69646b5a7900",
+  "files": {
+    "DOCKER_HUB_OVERVIEW.md": "22504a58d54ae9a3da7b2fe99bc4b36c73ff5b9835f664fd9ec487e88a0f5eaa",
+    "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
+    "THIRD_PARTY_NOTICES.md": "073fa161fac455634dfa419894bb4cdf525961461f3d2c4e83b98670642f7116",
+    "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
+    "content/sidecar/artifacts.md": "9bc8c03aa993a9e032a3828543543db5f1e4b31bf2cdedb2c79436383698960c",
+    "content/sidecar/control-plane.md": "c29030563ce57a3262c9d5f9e286e68274a2b6024981a3a60e952c9b134c6ccc",
+    "content/sidecar/deployment.md": "c176ed11c97de161012557b3dcbdc3fc9a2ea50488d17483541cd05d2a820cf9",
+    "content/sidecar/get-started.md": "be3adcfe5a1ac8bbd3a82ed96870c0c08109e1cec2be7a57d8276cf5b457ddb9",
+    "content/sidecar/home.md": "7c7a9e5697847ce6a2e1c679531cb3fa02a7e8475bee596ba9e7f16c50198dc2",
+    "content/sidecar/integration.md": "f5870a40aa051d587b359ae0bf4b474b732e6f99dbe540d883cee7f59d2c4203",
+    "content/sidecar/keys-and-certificates.md": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
+    "content/sidecar/operations.md": "8bbc98824aab3758eae12836f8181fbbd9813bd3eb3c1e66827d39120d1a5cb3",
+    "content/sidecar/overview.md": "56d121f4d6721978fb9ffeb6346cb449684dfbf29d750b653d33311abaa11e05",
+    "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
+    "content/sidecar/release-notes.md": "aeff593ca61beaf350d5e2663900a37236801236c2469b37c331b47276f865b5",
+    "content/sidecar/released-components.json": "548c6fc83d9db3eeed5a73039c1af8827aae9ba6eb63c47df27b4d8fc8f4ed7e",
+    "content/sidecar/sidecar.md": "8d6cfedb879a58206d2d3d18e18d112653ccfd14fd898f4c41b32841de667192",
+    "content/sidecar/verification.md": "e5a11d335d0bf7c6d6003d883ca540dd4588e271d876e01d0251d071b9b11a74",
+    "sidecar-config.template.yaml": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d"
+  },
+  "pages": {
+    "/": {
+      "applicability": "AAC platform \u00b7 developer beta",
+      "content_sha256": "7c7a9e5697847ce6a2e1c679531cb3fa02a7e8475bee596ba9e7f16c50198dc2",
+      "description": "Learn AAC, configure a tenant and investigate an execution.",
+      "metadata_sha256": "25d2c2da3547c3ef6bc97532a35aa92aea5151b3d981e75185e2ae8eefba2545",
+      "route": "/",
+      "section": "Home",
+      "source": "content/sidecar/home.md",
+      "title": "AAC documentation"
+    },
+    "/control-plane/": {
+      "applicability": "Hosted AAC Control Plane \u00b7 developer beta",
+      "content_sha256": "c29030563ce57a3262c9d5f9e286e68274a2b6024981a3a60e952c9b134c6ccc",
+      "description": "Connect to AAC's shared API service for identity, public trust and execution queries.",
+      "metadata_sha256": "c32e8541eb9be36bb4b272244595ef37179c1d3dc09de342571e68bd4a974b02",
+      "route": "/control-plane/",
+      "section": "Control Plane",
+      "source": "content/sidecar/control-plane.md",
+      "title": "Using Control Plane"
+    },
+    "/get-started/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "be3adcfe5a1ac8bbd3a82ed96870c0c08109e1cec2be7a57d8276cf5b457ddb9",
+      "description": "Run a first authenticated reservation with Docker.",
+      "metadata_sha256": "f6e1c87554248f6aa1411f5c219c39777aa2c2bf1a5451687e8e69f428f5ceb0",
+      "route": "/get-started/",
+      "section": "Get started",
+      "source": "content/sidecar/get-started.md",
+      "title": "Run your first authenticated agent journey"
+    },
+    "/overview/": {
+      "applicability": "AAC platform \u00b7 developer beta",
+      "content_sha256": "56d121f4d6721978fb9ffeb6346cb449684dfbf29d750b653d33311abaa11e05",
+      "description": "Delegated authority, local verification and the limits of receipts.",
+      "metadata_sha256": "070f83234ce4c5545745ffc0efeaac1819abd517e11d65b04424dbe2140c764b",
+      "route": "/overview/",
+      "section": "Overview",
+      "source": "content/sidecar/overview.md",
+      "title": "Overview"
+    },
+    "/overview/keys-and-certificates/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
+      "description": "Trust material, custody and lifecycle.",
+      "metadata_sha256": "04ace89d8f243eaf1bdd9ab58d8477f01a7b201e956dbeb1d02d5265b918014e",
+      "route": "/overview/keys-and-certificates/",
+      "section": "Overview",
+      "source": "content/sidecar/keys-and-certificates.md",
+      "title": "Keys and certificates"
+    },
+    "/release-notes/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "aeff593ca61beaf350d5e2663900a37236801236c2469b37c331b47276f865b5",
+      "description": "Changes and upgrade guidance by component.",
+      "metadata_sha256": "0ac4930ecbd28724fdd154266ef9f534399d23ecd0e413765c934756570a57fc",
+      "route": "/release-notes/",
+      "section": "Release notes",
+      "source": "content/sidecar/release-notes.md",
+      "title": "Release notes"
+    },
+    "/sidecar/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "8d6cfedb879a58206d2d3d18e18d112653ccfd14fd898f4c41b32841de667192",
+      "description": "Install a sidecar beside your agent and connect it to AAC.",
+      "metadata_sha256": "214fa46ebd2183e180b7ac8ff521182d0f1d0f8cb6752ea7f142cbef3ed93862",
+      "route": "/sidecar/",
+      "section": "Sidecar",
+      "source": "content/sidecar/sidecar.md",
+      "title": "AAC Sidecar"
+    },
+    "/sidecar/configuration/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "c176ed11c97de161012557b3dcbdc3fc9a2ea50488d17483541cd05d2a820cf9",
+      "description": "Configure agents, ingress, trust and durable state.",
+      "metadata_sha256": "2841f2983418ac89484c1cbfbf6debbe3c7d806f583bcf210e323172208cd949",
+      "route": "/sidecar/configuration/",
+      "section": "Sidecar",
+      "source": "content/sidecar/deployment.md",
+      "title": "Configure the sidecar"
+    },
+    "/sidecar/install/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "9bc8c03aa993a9e032a3828543543db5f1e4b31bf2cdedb2c79436383698960c",
+      "description": "Get the sidecar container or standalone binary, then connect it to your agent.",
+      "metadata_sha256": "c36d2fbfe2a2c99de247bc00397197ca57f3d7c46588045d23c1011de469e7a5",
+      "route": "/sidecar/install/",
+      "section": "Sidecar",
+      "source": "content/sidecar/artifacts.md",
+      "title": "Download and install the sidecar"
+    },
+    "/sidecar/integration/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "f5870a40aa051d587b359ae0bf4b474b732e6f99dbe540d883cee7f59d2c4203",
+      "description": "Native AAC, pairing and optional A2A integration.",
+      "metadata_sha256": "7958660cb08b1f0df367248bd7667bc5b8914d7157ca6277eb8f0a86b3a2f069",
+      "route": "/sidecar/integration/",
+      "section": "Sidecar",
+      "source": "content/sidecar/integration.md",
+      "title": "Agent integration"
+    },
+    "/sidecar/operations/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "8bbc98824aab3758eae12836f8181fbbd9813bd3eb3c1e66827d39120d1a5cb3",
+      "description": "Diagnostics, maintenance and evidence verification.",
+      "metadata_sha256": "5a841244d11b83126504caad040e1f7cbb48088a7ecbbd772e7728fefe957ba8",
+      "route": "/sidecar/operations/",
+      "section": "Sidecar",
+      "source": "content/sidecar/operations.md",
+      "title": "Operate and troubleshoot the sidecar"
+    },
+    "/sidecar/reference/verification/": {
+      "applicability": "AAC Sidecar v0.4.4",
+      "content_sha256": "e5a11d335d0bf7c6d6003d883ca540dd4588e271d876e01d0251d071b9b11a74",
+      "description": "Optional signature, checksum and build-provenance checks.",
+      "metadata_sha256": "0de9d4469c5d494673bd0020d444754f92a24dc0025ce20d7e4064a8cf075c33",
+      "route": "/sidecar/reference/verification/",
+      "section": "Sidecar",
+      "source": "content/sidecar/verification.md",
+      "title": "Verify release artifacts"
+    },
+    "/trust-anchor-publisher/": {
+      "applicability": "aac-trust-anchor-publisher 0.2.3",
+      "content_sha256": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
+      "description": "Install, configure and operate your tenant's public-trust publisher.",
+      "metadata_sha256": "272274823eda0284c1c43101f26048c8fc31b0cd744a351abb5d0e40c929dba7",
+      "route": "/trust-anchor-publisher/",
+      "section": "Trust anchor publisher",
+      "source": "content/sidecar/publisher.md",
+      "title": "Install and operate the trust anchor publisher"
+    }
+  },
+  "preview": false,
+  "previous_documentation_revision": null,
+  "release": {
+    "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
+    "documentation_revision": "42797a46037edf5ee429e481115b69646b5a7900",
+    "documentation_source": "reviewed-source",
+    "guide_sha256": "be3adcfe5a1ac8bbd3a82ed96870c0c08109e1cec2be7a57d8276cf5b457ddb9",
+    "image": "docker.io/cascadeauth/aac-sidecar@sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1",
+    "template_sha256": "5754325f733c6687ea9c52bb7dd4e0dcd19c7ab68206eb097b0583b4696df85d",
+    "version": "v0.4.4"
+  },
+  "schema_version": 1
+}
