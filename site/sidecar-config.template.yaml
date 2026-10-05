@@ -8,7 +8,7 @@
 # Replace the example tenant/workload IDs, endpoints and file paths with your
 # own provisioned values. Copy this file to /etc/aac/sidecar-config.yaml, or
 # select another path with `aac-sidecar -config <path>`.
-# Configuration and setup guide: https://cascadeauth.github.io/aac-starter-guide/
+# Configuration and setup guide: https://docs.cascadeauth.com/
 #
 # Configuration is validated at startup. Unknown or duplicate keys, quoted
 # boolean values, empty or incorrectly typed paths, out-of-range ports and
@@ -56,6 +56,34 @@ a2a:
   max_concurrent_requests: 20
   max_json_nesting_depth: 32
   max_json_nodes: 10000
+  # Optional: describe your agent on its public Agent Card. Every field is
+  # optional; anything you leave out uses a neutral default (name
+  # "AAC-enabled agent", version "unspecified", one generic skill). A skills
+  # list you supply replaces the generic skill. The sidecar alone states the
+  # interface, capabilities, security and content types; any other key here
+  # stops startup with a message naming it. Quote every text value, including
+  # a version such as "2.3". Links must start with https:// and are only
+  # printed, never fetched. The card is public: put no credentials or private
+  # operational detail in it. Edits take effect at the next restart; clients
+  # that cached the old card keep it until they fetch again. A sidecar older
+  # than the release that introduced this block refuses the agent_card key.
+  # agent_card:
+  #   name: "Travel booking agent"
+  #   description: "Books unpaid reservations."
+  #   version: "2.3"
+  #   provider:
+  #     organization: "Example Travel"
+  #     url: "https://travel.example.com"
+  #   documentation_url: "https://travel.example.com/docs"
+  #   icon_url: "https://travel.example.com/icon.png"
+  #   skills:
+  #     - id: "reserve"
+  #       name: "Reserve a trip"
+  #       description: "Holds a reservation without payment."
+  #       tags: ["travel"]
+  #       examples: ["Hold two seats to Lisbon"]
+  #       input_modes: ["text/plain"]          # only text/plain, application/json
+  #       output_modes: ["application/json"]
   # Verified inbound authority remains deliberately ephemeral and is scoped by
   # exact pair/task/presenter. It can only be shortened by this required cap.
   continuation_authority:

@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/sidecar/integration/
 
-Applies to: AAC Sidecar v0.4.4
+Applies to: AAC Sidecar v0.5.0
 
-Documentation revision: f67859e36a752fee360979475b3ae7372853bd10
+Documentation revision: 72659d796b173fda6fd8fecbf4862cb2e9e36788
 
 ---
 
@@ -756,7 +756,7 @@ Build the sample **application** image locally and pull the published sidecar:
 cd "$AAC_DEMO_DIR"
 python configure_container.py
 docker build --tag aac-demo-agent "$AAC_DEMO_DIR/container/agent"
-docker pull docker.io/cascadeauth/aac-sidecar:v0.4.4
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.0
 ```
 
 Run from a non-root host account. This local demonstration runs both containers
@@ -777,7 +777,7 @@ docker run --detach --name aac-demo-sidecar --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly" \
   --mount "type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac" \
-  docker.io/cascadeauth/aac-sidecar:v0.4.4 -config /etc/aac/sidecar-config.yaml
+  docker.io/cascadeauth/aac-sidecar:v0.5.0 -config /etc/aac/sidecar-config.yaml
 docker logs --tail 30 aac-demo-agent
 docker logs --tail 30 aac-demo-sidecar
 docker exec aac-demo-agent \

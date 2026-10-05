@@ -12,7 +12,7 @@ published digest against CascadeAuth's GitHub Actions keyless identity:
 
 ```bash
 set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.4.4
+export AAC_SIDECAR_VERSION=v0.5.0
 export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
 export AAC_SIDECAR_DIGEST="$(
   docker buildx imagetools inspect "${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}" |
@@ -36,7 +36,7 @@ docker image inspect "${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}" \
 The final line must print:
 
 ```text
-v0.4.4 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+v0.5.0 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
 ```
 
 ## Verify the standalone bundle
@@ -50,9 +50,9 @@ for offline documentation or deep audit without installing its standalone binary
 verify their signatures. Neither tool is needed to run the sidecar afterward.
 
 ```bash
-mkdir aac-sidecar-v0.4.4
-cd aac-sidecar-v0.4.4
-bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.4.4-bundle
+mkdir aac-sidecar-v0.5.0
+cd aac-sidecar-v0.5.0
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.5.0-bundle
 bundle_digest="$(oras resolve "${bundle_ref}")"
 [[ "${bundle_digest}" =~ ^sha256:[0-9a-f]{64}$ ]]
 
@@ -71,7 +71,7 @@ cosign verify-blob \
   --bundle checksums.txt.bundle \
   checksums.txt
 
-bash ./verify-developer-beta.sh . v0.4.4
+bash ./verify-developer-beta.sh . v0.5.0
 ```
 
 ## Deep artifact audit
@@ -84,7 +84,7 @@ this **after** the Cosign verification above:
 ```bash
 python3 --version
 go version
-bash ./verify-developer-beta.sh . v0.4.4 --deep-audit
+bash ./verify-developer-beta.sh . v0.5.0 --deep-audit
 ```
 
 Go reads embedded build metadata from each binary; it does not execute foreign-platform

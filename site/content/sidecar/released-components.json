@@ -15,9 +15,9 @@
   },
   "schema_version": 1,
   "sidecar": {
-    "bundle_digest": "sha256:6f9d9d053932ada4353ee4f34bd70bdb578cb85314e2c885cbf2d233d793bfdd",
-    "image_digest": "sha256:60fa9e0726485fabbb94b9314bda1b1840337181a60760e29c36cf964998bce1",
+    "bundle_digest": "sha256:cc36904cf471efce1b75d1d439be5a07769bec4394cafafa68e1e9d07b2db0b2",
+    "image_digest": "sha256:2febc0a4b404e2fe15c966ab76c19307d54a3c73fb5f76b5f708c9583e2a0ee3",
     "url": "https://hub.docker.com/r/cascadeauth/aac-sidecar/",
-    "version": "v0.4.4"
+    "version": "v0.5.0"
   }
 }
