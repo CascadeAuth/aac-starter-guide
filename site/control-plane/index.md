@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/control-plane/
 
 Applies to: Hosted AAC Control Plane · developer beta
 
-Documentation revision: 72659d796b173fda6fd8fecbf4862cb2e9e36788
+Documentation revision: 8686b6b10b0df9c1a16068400a8ef44d4a50131b
 
 ---
 

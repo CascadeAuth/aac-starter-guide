@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.0
 
-Documentation revision: 72659d796b173fda6fd8fecbf4862cb2e9e36788
+Documentation revision: 8686b6b10b0df9c1a16068400a8ef44d4a50131b
 
 ---
 
@@ -89,3 +89,14 @@ wording. The sidecar still states the interface, capabilities, security and
 content types itself. Existing configurations load unchanged; authorization
 and wire behavior are the same as v0.4.4. See "Describe your agent on its A2A
 Agent Card" in the configuration reference.
+
+## 0.5.1
+
+A sidecar whose `a2a` block leaves out both `continuation_authority` and
+`egress_idempotency` now receives verified A2A messages normally. In v0.5.0 and
+earlier that configuration started cleanly and served its Agent Card, but every
+authenticated message failed with a dropped connection. Such a sidecar is
+receive-only: its agent cannot send A2A messages until both blocks are added.
+A configuration that has both blocks, as the published template does, was not
+affected and behaves as before. See "Receive A2A messages without sending" in
+the configuration reference.

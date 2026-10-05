@@ -175,7 +175,7 @@ liveness check, not proof that your tenant, trust material, or sidecar is ready.
 | Root and terminal signing | File-backed Ed25519/P-256, or explicit Azure Key Vault Standard software-protected non-exportable P-256 keys |
 | Workload DPoP | Local file-backed key matching the SVID; remote DPoP is unsupported |
 | Replay | Basic: explicit memory/`basic`, process-local and lost on restart. Shared durable: qualified authenticated-TLS Valkey `ha-retained-write-safe`; no fallback |
-| A2A retry state | Retained private bbolt file, one process owner; storage must be qualified for your deployment |
+| A2A retry state | Needed only when your agent sends A2A messages. Retained private bbolt file, one process owner; storage must be qualified for your deployment |
 | Service level | Developer evaluation/integration beta; no production SLA or production-rate claim |
 
 The sidecar is provider-neutral. AWS/GCP/HSM/PKCS#11 signer adapters, general
@@ -232,6 +232,18 @@ an adjustment.
 
 Set authority duration with `valid_for` on the class or destination. Business
 dates in the payload do not extend that authority or the request timeout.
+
+### Receive A2A messages without sending
+
+An agent that only receives A2A messages can leave out both
+`a2a.continuation_authority` and `a2a.egress_idempotency`. The sidecar then
+verifies and delivers incoming messages and publishes the Agent Card as usual.
+Your agent cannot send A2A messages through the sidecar in this mode:
+`POST /v1/agent/a2a/dispatch` answers 404, and no retry-state file is needed.
+
+To let your agent send, add both blocks as shown in the configuration
+template. Supplying only one of the two stops startup with a message naming
+both.
 
 ### Describe your agent on its A2A Agent Card
 

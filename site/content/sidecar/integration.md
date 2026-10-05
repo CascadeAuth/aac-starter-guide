@@ -115,7 +115,9 @@ meaning for the other registered fields; a recognized name is not a general
 business-policy engine. Unknown predicate names fail closed.
 
 For unary A2A, the paired agent signs `POST /v1/agent/a2a/dispatch` using the
-published invoke-auth API. The envelope requires `schema_version`, a UUID
+published invoke-auth API. The route exists only when both
+`a2a.continuation_authority` and `a2a.egress_idempotency` are configured; a
+receive-only sidecar answers 404. The envelope requires `schema_version`, a UUID
 `dispatch_id`, named `destination_profile`, `task_ref`, `authority`,
 `additional_predicates`, and `a2a_request`. The demonstrated authority mode is
 `originate`; `continue` is reserved for verified inbound authority belonging to
