@@ -232,6 +232,75 @@ an adjustment.
 
 Set authority duration with `valid_for` on the class or destination. Business
 dates in the payload do not extend that authority or the request timeout.
+
+### Describe your agent on its A2A Agent Card
+
+When the `a2a` block is present, the sidecar publishes an Agent Card at
+`/.well-known/agent-card.json` on its external listener. Other organizations'
+agents and directories read it to learn what your agent is. You can describe
+your agent in an optional `a2a.agent_card` block:
+
+```yaml
+a2a:
+  # ...your existing a2a settings...
+  agent_card:
+    name: "Travel booking agent"
+    description: "Books unpaid reservations."
+    version: "2.3"
+    provider:
+      organization: "Example Travel"
+      url: "https://travel.example.com"
+    documentation_url: "https://travel.example.com/docs"
+    icon_url: "https://travel.example.com/icon.png"
+    skills:
+      - id: "reserve"
+        name: "Reserve a trip"
+        description: "Holds a reservation without payment."
+        tags: ["travel"]
+        examples: ["Hold two seats to Lisbon"]
+        input_modes: ["text/plain"]
+        output_modes: ["application/json"]
+```
+
+| Setting | Meaning | Limit |
+|---|---|---|
+| `name` | Your agent's name. Default `AAC-enabled agent` | 128 bytes |
+| `description` | What your agent does. May span lines | 4096 bytes |
+| `version` | Your agent's own version label. Default `unspecified` | 64 bytes |
+| `provider` | Your organization: `organization` (128 bytes) and `url`, both required when you give a provider | — |
+| `documentation_url`, `icon_url`, `provider.url` | Links shown on the card | 2048 bytes each |
+| `skills` | What your agent can do. Replaces the one generic default skill | 32 skills |
+| `skills[].id`, `skills[].name` | Required. Ids must be unique | 128 bytes each |
+| `skills[].description` | Required. May span lines | 4096 bytes |
+| `skills[].tags` | Required, at least one | 32 tags of 64 bytes |
+| `skills[].examples` | Optional sample requests. May span lines | 16 examples of 1024 bytes |
+| `skills[].input_modes`, `skills[].output_modes` | Optional. Only `text/plain` and `application/json` | — |
+
+Every setting is optional, and an existing configuration needs no change.
+Lengths are counted in UTF-8 bytes, and all the text you supply may total at
+most 64 KiB. A sidecar older than the release that introduced this block
+refuses the `agent_card` key at startup; the release notes say which release
+that is.
+
+- **Quote every text value.** An unquoted number, date, `true` or `false`,
+  such as `version: 2.3`, stops startup; write `version: "2.3"`.
+- **Leave out what you do not want.** An empty or whitespace-only text value,
+  or an empty list, is refused rather than guessed at; a key left with no
+  value counts as omitted. Tab and line-break characters are allowed only in
+  descriptions and examples.
+- **Links must start with `https://`**, name a host and carry no username or
+  password. The sidecar prints them on the card and never fetches them.
+- **You describe; the sidecar states what it enforces.** The interface
+  address, capabilities, security requirements and admitted content types
+  always come from the sidecar. Any other key, such as `capabilities`, stops
+  startup with a message that names it. Listing a content type on a skill only
+  describes that skill; it turns nothing on.
+- **The card is public.** Put no credentials or private operational detail in
+  it. AAC does not verify your descriptive text.
+- **Changes need a restart.** The sidecar builds the card once when it
+  starts. A client or directory that already fetched the old card keeps its
+  copy until it fetches again; a restart cannot make it do so.
+
 ## Optional Azure qualification worksheet
 
 Complete this before relying on the Azure adapter or a particular storage

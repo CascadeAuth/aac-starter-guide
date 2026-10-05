@@ -6,9 +6,9 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
 <h1 id="release-notes">Release notes</h1>
-<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs d9080525c18d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs f67859e36a75</span></div>
 <h2 id="0-4-0">0.4.0</h2>
 <p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
 in earlier releases.</p>
@@ -63,6 +63,16 @@ signed bundle. Runtime behavior and configuration remain the same as v0.4.2.</p>
 <p>The configuration template links to the standalone AAC developer documentation
 site. Current guide corrections can publish independently of sidecar releases.
 Runtime behavior, configuration and authorization remain unchanged from v0.4.3.</p>
+<h2 id="0-5-0">0.5.0</h2>
+<p>You can now describe your agent on its public A2A Agent Card. An optional
+<code>a2a.agent_card</code> block in the sidecar configuration sets the name, description,
+version, provider, documentation and icon links, and skills. An agent without
+the block now presents the neutral name <code>AAC-enabled agent</code>, version
+<code>unspecified</code> and one generic skill, in place of the earlier fixed pilot
+wording. The sidecar still states the interface, capabilities, security and
+content types itself. Existing configurations load unchanged; authorization
+and wire behavior are the same as v0.4.4. See &quot;Describe your agent on its A2A
+Agent Card&quot; in the configuration reference.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
 <p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

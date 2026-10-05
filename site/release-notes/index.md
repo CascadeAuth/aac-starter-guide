@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.4.4
 
-Documentation revision: d9080525c18de9527631a4702a71536345a3b31b
+Documentation revision: f67859e36a752fee360979475b3ae7372853bd10
 
 ---
 
@@ -77,3 +77,15 @@ signed bundle. Runtime behavior and configuration remain the same as v0.4.2.
 The configuration template links to the standalone AAC developer documentation
 site. Current guide corrections can publish independently of sidecar releases.
 Runtime behavior, configuration and authorization remain unchanged from v0.4.3.
+
+## 0.5.0
+
+You can now describe your agent on its public A2A Agent Card. An optional
+`a2a.agent_card` block in the sidecar configuration sets the name, description,
+version, provider, documentation and icon links, and skills. An agent without
+the block now presents the neutral name `AAC-enabled agent`, version
+`unspecified` and one generic skill, in place of the earlier fixed pilot
+wording. The sidecar still states the interface, capabilities, security and
+content types itself. Existing configurations load unchanged; authorization
+and wire behavior are the same as v0.4.4. See "Describe your agent on its A2A
+Agent Card" in the configuration reference.

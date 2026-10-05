@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/" aria-current="page">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Configure the sidecar</span></nav>
 <h1 id="configure-the-sidecar">Configure the sidecar</h1>
-<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/configuration/index.md" download="sidecar-configuration.md">Markdown</a><span class="revision">Docs d9080525c18d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.4.4</span><a href="/sidecar/configuration/index.md" download="sidecar-configuration.md">Markdown</a><span class="revision">Docs f67859e36a75</span></div>
 <p><a href="/get-started/">Start the AAC journey</a> · <a href="/sidecar/configuration/">All references</a></p>
 <p>This reference is for a deployment or integration you have chosen to configure.
 For the first authenticated reservation, use the packaged Compose journey above.</p>
@@ -406,6 +406,122 @@ deadline. Leave these settings at their defaults unless your application needs
 an adjustment.</p>
 <p>Set authority duration with <code>valid_for</code> on the class or destination. Business
 dates in the payload do not extend that authority or the request timeout.</p>
+<h3 id="describe-your-agent-on-its-a2a-agent-card">Describe your agent on its A2A Agent Card</h3>
+<p>When the <code>a2a</code> block is present, the sidecar publishes an Agent Card at
+<code>/.well-known/agent-card.json</code> on its external listener. Other organizations'
+agents and directories read it to learn what your agent is. You can describe
+your agent in an optional <code>a2a.agent_card</code> block:</p>
+<pre><code class="language-yaml">a2a:
+  # ...your existing a2a settings...
+  agent_card:
+    name: &quot;Travel booking agent&quot;
+    description: &quot;Books unpaid reservations.&quot;
+    version: &quot;2.3&quot;
+    provider:
+      organization: &quot;Example Travel&quot;
+      url: &quot;https://travel.example.com&quot;
+    documentation_url: &quot;https://travel.example.com/docs&quot;
+    icon_url: &quot;https://travel.example.com/icon.png&quot;
+    skills:
+      - id: &quot;reserve&quot;
+        name: &quot;Reserve a trip&quot;
+        description: &quot;Holds a reservation without payment.&quot;
+        tags: [&quot;travel&quot;]
+        examples: [&quot;Hold two seats to Lisbon&quot;]
+        input_modes: [&quot;text/plain&quot;]
+        output_modes: [&quot;application/json&quot;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Meaning</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>Your agent's name. Default <code>AAC-enabled agent</code></td>
+<td>128 bytes</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>What your agent does. May span lines</td>
+<td>4096 bytes</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Your agent's own version label. Default <code>unspecified</code></td>
+<td>64 bytes</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td>Your organization: <code>organization</code> (128 bytes) and <code>url</code>, both required when you give a provider</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>documentation_url</code>, <code>icon_url</code>, <code>provider.url</code></td>
+<td>Links shown on the card</td>
+<td>2048 bytes each</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>What your agent can do. Replaces the one generic default skill</td>
+<td>32 skills</td>
+</tr>
+<tr>
+<td><code>skills[].id</code>, <code>skills[].name</code></td>
+<td>Required. Ids must be unique</td>
+<td>128 bytes each</td>
+</tr>
+<tr>
+<td><code>skills[].description</code></td>
+<td>Required. May span lines</td>
+<td>4096 bytes</td>
+</tr>
+<tr>
+<td><code>skills[].tags</code></td>
+<td>Required, at least one</td>
+<td>32 tags of 64 bytes</td>
+</tr>
+<tr>
+<td><code>skills[].examples</code></td>
+<td>Optional sample requests. May span lines</td>
+<td>16 examples of 1024 bytes</td>
+</tr>
+<tr>
+<td><code>skills[].input_modes</code>, <code>skills[].output_modes</code></td>
+<td>Optional. Only <code>text/plain</code> and <code>application/json</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Every setting is optional, and an existing configuration needs no change.
+Lengths are counted in UTF-8 bytes, and all the text you supply may total at
+most 64 KiB. A sidecar older than the release that introduced this block
+refuses the <code>agent_card</code> key at startup; the release notes say which release
+that is.</p>
+<ul>
+<li><strong>Quote every text value.</strong> An unquoted number, date, <code>true</code> or <code>false</code>,
+such as <code>version: 2.3</code>, stops startup; write <code>version: &quot;2.3&quot;</code>.</li>
+<li><strong>Leave out what you do not want.</strong> An empty or whitespace-only text value,
+or an empty list, is refused rather than guessed at; a key left with no
+value counts as omitted. Tab and line-break characters are allowed only in
+descriptions and examples.</li>
+<li><strong>Links must start with <code>https://</code></strong>, name a host and carry no username or
+password. The sidecar prints them on the card and never fetches them.</li>
+<li><strong>You describe; the sidecar states what it enforces.</strong> The interface
+address, capabilities, security requirements and admitted content types
+always come from the sidecar. Any other key, such as <code>capabilities</code>, stops
+startup with a message that names it. Listing a content type on a skill only
+describes that skill; it turns nothing on.</li>
+<li><strong>The card is public.</strong> Put no credentials or private operational detail in
+it. AAC does not verify your descriptive text.</li>
+<li><strong>Changes need a restart.</strong> The sidecar builds the card once when it
+starts. A client or directory that already fetched the old card keeps its
+copy until it fetches again; a restart cannot make it do so.</li>
+</ul>
 <h2 id="optional-azure-qualification-worksheet">Optional Azure qualification worksheet</h2>
 <p>Complete this before relying on the Azure adapter or a particular storage
 class. The local example does not supply these results. Keep identifiers and
@@ -774,4 +890,4 @@ key/certificate pairs are valid. A successful registration by itself does not
 complete this preparation.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
-<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#one-tenant-with-many-production-agents" class="toc-h2">One tenant with many production agents</a><a href="#publisher-ownership-with-multiple-domains" class="toc-h3">Publisher ownership with multiple domains</a><a href="#installation-artifacts-inventory" class="toc-h2">Installation artifacts inventory</a><a href="#installing-current-releases" class="toc-h3">Installing current releases</a><a href="#aac-stage-endpoints" class="toc-h2">AAC stage endpoints</a><a href="#supported-deployments-and-endpoint-allowlist" class="toc-h2">Supported deployments and endpoint allowlist</a><a href="#configuration-and-workflow-state" class="toc-h2">Configuration and workflow state</a><a href="#optional-azure-qualification-worksheet" class="toc-h2">Optional Azure qualification worksheet</a><a href="#advanced-installation-guide-container" class="toc-h2">Advanced installation guide — container</a><a href="#1-place-the-sidecar-beside-the-workload" class="toc-h3">1. Place the sidecar beside the workload</a><a href="#2-verify-process-identity-and-readiness" class="toc-h3">2. Verify process identity and readiness</a><a href="#companion-developer-tools" class="toc-h2">Companion developer tools</a><a href="#register-your-developer-tenant" class="toc-h3">Register your developer tenant</a><a href="#bind-your-trust-domain-and-register-the-workload" class="toc-h3">Bind your trust domain and register the workload</a><a href="#keep-credential-roles-separate" class="toc-h3">Keep credential roles separate</a><a href="#optional-development-integration-fixture" class="toc-h3">Optional development integration fixture</a><a href="#publish-public-trust-material" class="toc-h3">Publish public trust material</a></aside></div></body></html>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#one-tenant-with-many-production-agents" class="toc-h2">One tenant with many production agents</a><a href="#publisher-ownership-with-multiple-domains" class="toc-h3">Publisher ownership with multiple domains</a><a href="#installation-artifacts-inventory" class="toc-h2">Installation artifacts inventory</a><a href="#installing-current-releases" class="toc-h3">Installing current releases</a><a href="#aac-stage-endpoints" class="toc-h2">AAC stage endpoints</a><a href="#supported-deployments-and-endpoint-allowlist" class="toc-h2">Supported deployments and endpoint allowlist</a><a href="#configuration-and-workflow-state" class="toc-h2">Configuration and workflow state</a><a href="#describe-your-agent-on-its-a2a-agent-card" class="toc-h3">Describe your agent on its A2A Agent Card</a><a href="#optional-azure-qualification-worksheet" class="toc-h2">Optional Azure qualification worksheet</a><a href="#advanced-installation-guide-container" class="toc-h2">Advanced installation guide — container</a><a href="#1-place-the-sidecar-beside-the-workload" class="toc-h3">1. Place the sidecar beside the workload</a><a href="#2-verify-process-identity-and-readiness" class="toc-h3">2. Verify process identity and readiness</a><a href="#companion-developer-tools" class="toc-h2">Companion developer tools</a><a href="#register-your-developer-tenant" class="toc-h3">Register your developer tenant</a><a href="#bind-your-trust-domain-and-register-the-workload" class="toc-h3">Bind your trust domain and register the workload</a><a href="#keep-credential-roles-separate" class="toc-h3">Keep credential roles separate</a><a href="#optional-development-integration-fixture" class="toc-h3">Optional development integration fixture</a><a href="#publish-public-trust-material" class="toc-h3">Publish public trust material</a></aside></div></body></html>
