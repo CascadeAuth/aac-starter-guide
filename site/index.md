@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: 3067581123946406008c1657632018474962c987
+Documentation revision: b7e0bf78604db57f9974eee317f6c1baf3056e78
 
 ---
 
@@ -76,7 +76,8 @@ framework-independent helpers.
 **Runs inside:** your Python agent application.
 
 [Get it on PyPI](https://pypi.org/project/aac-invoke-auth/) ·
-[Connect your agent](https://docs.cascadeauth.com/sidecar/integration/)
+[Connect your agent](https://docs.cascadeauth.com/sidecar/integration/) ·
+[Integrate over A2A](https://docs.cascadeauth.com/sidecar/a2a/)
 
 ## Documentation policy
 

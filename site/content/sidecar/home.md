@@ -68,7 +68,8 @@ framework-independent helpers.
 **Runs inside:** your Python agent application.
 
 [Get it on PyPI](https://pypi.org/project/aac-invoke-auth/) ·
-[Connect your agent](/sidecar/integration/)
+[Connect your agent](/sidecar/integration/) ·
+[Integrate over A2A](/sidecar/a2a/)
 
 ## Documentation policy
 

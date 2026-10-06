@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/
 
 Applies to: AAC Sidecar v0.5.1
 
-Documentation revision: 3067581123946406008c1657632018474962c987
+Documentation revision: b7e0bf78604db57f9974eee317f6c1baf3056e78
 
 ---
 
@@ -39,7 +39,8 @@ container or a standalone Linux/macOS binary. For a complete first example,
 4. Add pairing authentication to the agent. Python applications can install
    [aac-invoke-auth from PyPI](https://pypi.org/project/aac-invoke-auth/), which
    documents its FastAPI integration and framework-independent helpers.
-   See [agent integration](https://docs.cascadeauth.com/sidecar/integration/) for the request/response flow.
+   See [agent integration](https://docs.cascadeauth.com/sidecar/integration/) for the request/response flow,
+   or [A2A integration](https://docs.cascadeauth.com/sidecar/a2a/) to receive and send A2A messages.
 
 The sidecar uses the [Control Plane](https://docs.cascadeauth.com/control-plane/) for configured identity,
 trust and telemetry services. Business requests travel between the tenant's

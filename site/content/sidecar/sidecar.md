@@ -31,7 +31,8 @@ container or a standalone Linux/macOS binary. For a complete first example,
 4. Add pairing authentication to the agent. Python applications can install
    [aac-invoke-auth from PyPI](https://pypi.org/project/aac-invoke-auth/), which
    documents its FastAPI integration and framework-independent helpers.
-   See [agent integration](/sidecar/integration/) for the request/response flow.
+   See [agent integration](/sidecar/integration/) for the request/response flow,
+   or [A2A integration](/sidecar/a2a/) to receive and send A2A messages.
 
 The sidecar uses the [Control Plane](/control-plane/) for configured identity,
 trust and telemetry services. Business requests travel between the tenant's

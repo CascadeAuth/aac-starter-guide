@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A2A integration - AAC Docs</title>
+<meta name="description" content="Receive and send A2A messages under verified delegated authority."><link rel="canonical" href="https://docs.cascadeauth.com/sidecar/a2a/">
+<link rel="stylesheet" href="/assets/docs.css"><script src="/assets/docs.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/" aria-current="true">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
+<div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
+<div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/" aria-current="page">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">A2A integration</span></nav>
+<h1 id="a2a-integration">A2A integration</h1>
+<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs b7e0bf78604d</span></div>
+<p>Agent-to-Agent (A2A) is an open protocol for one agent to send a message to
+another over HTTPS, using JSON-RPC 2.0 and a published Agent Card that says
+how to reach the agent. AAC supports A2A: the sidecar beside your agent
+receives A2A messages from other organizations' agents, verifies the sender's
+delegated authority before your handler sees the message, and sends your
+agent's A2A messages to configured peers under authority it mints and signs.</p>
+<p>This page is the home for A2A on this site. It explains what is supported,
+walks through enabling A2A for one agent and sending a first message, and
+documents the <code>a2a</code> configuration block, the dispatch envelope, the Agent Card
+and the A2A errors and audit events.</p>
+<h2 id="what-aac-adds-to-a2a">What AAC adds to A2A</h2>
+<p>A plain A2A call proves nothing about who authorized it. With AAC, every A2A
+request between two sidecars carries a delegated authority chain and a
+proof-of-possession signature. The receiving sidecar checks both against the
+public trust material of the sender's tenant, confirms that its own agent is
+the intended recipient, and only then hands the unchanged A2A message to your
+handler together with verified context: which tenant started the task, which
+workload is presenting, and the task reference. Your handler never sees or
+handles the credentials.</p>
+<p>Choose A2A when the other agent speaks A2A, or when your agent already exposes
+an A2A handler. Choose <a href="/sidecar/integration/">native AAC delivery</a> when both
+sides are AAC sidecars and you want the forward, settle and refuse decision
+flow with signed terminal receipts. One sidecar can do both; the native example
+on the integration page runs the two side by side.</p>
+<h2 id="what-is-supported">What is supported</h2>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Supported profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol</td>
+<td>A2A 1.0 over JSON-RPC 2.0; exactly one <code>A2A-Version: 1.0</code> header; no extensions</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>Unary <code>SendMessage</code> only</td>
+</tr>
+<tr>
+<td>Message parts</td>
+<td><code>text</code>, and <code>data</code> with <code>mediaType: application/json</code>; <code>acceptedOutputModes</code> limited to <code>text/plain</code> and <code>application/json</code></td>
+</tr>
+<tr>
+<td>Reply</td>
+<td>One <code>message</code> from the agent, or one task in a terminal state</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td><code>GET /.well-known/agent-card.json</code> on the sidecar's external listener</td>
+</tr>
+<tr>
+<td>Sending</td>
+<td>Your paired agent asks its own sidecar to dispatch to a configured destination; the sidecar never fetches a peer's card or follows a redirect</td>
+</tr>
+<tr>
+<td>Retries</td>
+<td>A dispatch has an identifier; an identical retry returns the retained outcome and never repeats the operation</td>
+</tr>
+<tr>
+<td>Not supported</td>
+<td>Streaming, server-sent events, task lifecycle and multi-turn tasks, push notifications, extended cards, file, raw or URL parts, gRPC, HTTP+JSON binding, A2A 0.3 compatibility</td>
+</tr>
+</tbody>
+</table>
+<p>An unsupported method is answered with a JSON-RPC error, not with a fallback.</p>
+<h2 id="how-a-message-travels">How a message travels</h2>
+<p>Receiving, from a peer's sidecar to your handler:</p>
+<pre><code class="language-text">peer sidecar ──HTTPS: POST /a2a/v1──▶ your sidecar (external listener)
+                                     verifies the AAC authority and DPoP proof,
+                                     checks you are the intended recipient,
+                                     admits the body within configured limits
+                                   ──HTTP: POST /a2a/v1──▶ your handler
+                                     unchanged A2A body + verified X-AAC-* headers,
+                                     signed with the pairing secret
+                                   ◀── your JSON-RPC reply ──
+peer sidecar ◀── the same reply, after the sidecar checks it fits the profile
+</code></pre>
+<p>Sending, from your agent to a peer:</p>
+<pre><code class="language-text">your agent ──HTTP: POST /v1/agent/a2a/dispatch──▶ your sidecar (loopback listener)
+            signed envelope naming a destination,     mints the authority,
+            an authority mode and the A2A request     claims the dispatch id
+                                                 ──HTTPS: POST /a2a/v1──▶ peer sidecar
+                                                 ◀── peer's reply ──
+your agent ◀── {&quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;} ──
+</code></pre>
+<p>The sidecar validates the peer's reply against the profile and retains the
+outcome for the retry window. It returns an acknowledgement to your agent, not
+the peer's reply content. Treat a dispatch as a one-way message with
+confirmation of delivery; if your workflow needs the peer's answer, the peer's
+agent sends it as its own message to you.</p>
+<h2 id="set-up-a2a-for-your-agent">Set up A2A for your agent</h2>
+<p>You need a registered tenant and agent and a sidecar running beside the
+agent. If you have neither, <a href="/get-started/">start the AAC journey</a> first; the
+<a href="/cli/guide/">CLI guide</a> covers tenant and agent
+registration. The steps below add A2A to an agent prepared with the CLI's init command.</p>
+<h3 id="1-enable-a2a-in-the-configuration">1. Enable A2A in the configuration</h3>
+<p>Add an <code>a2a</code> section to the agent's configuration file, the YAML you pass to
+the init command's <code>--agent-config</code> option. Two values are yours to choose: the HTTPS address at
+which peers reach your sidecar, and the local address of your handler.</p>
+<pre><code class="language-yaml">a2a:
+  public_base_url: &quot;https://orders.example.com&quot;
+  local_handler_url: &quot;http://127.0.0.1:8000/a2a/v1&quot;
+</code></pre>
+<p>Then run the same init command you used for the agent, for example:</p>
+<pre><code class="language-bash">aac init --profile stage --agent orders --agent-config orders.yaml
+</code></pre>
+<p>The CLI writes a complete <code>a2a</code> block into the agent's sidecar configuration
+with the request limits, a 60-second deadline, and both sending blocks
+(<code>continuation_authority</code> and <code>egress_idempotency</code>) with managed state paths.
+The public address must be <code>https://</code> with no path; the handler address must
+end in exactly <code>/a2a/v1</code>. The field table on the
+<a href="https://pypi.org/project/aac-cli/">CLI package page</a> lists the accepted
+values. Restart the sidecar after the command finishes.</p>
+<p>If you maintain the sidecar YAML yourself, copy the <code>a2a</code> section of the
+<a href="/sidecar-config.template.yaml">configuration template</a> and set every value;
+the <a href="#the-a2a-configuration-block"><code>a2a</code> settings</a> below give each bound. An
+agent that only receives A2A messages can leave out both sending blocks; see
+<a href="/sidecar/configuration/#receive-a2a-messages-without-sending">receive A2A messages without sending</a>.
+In either form, <code>sidecar.agent_invoke_auth.secret_file</code> is required whenever an
+<code>a2a</code> block is present, because the sidecar signs every call to your handler.</p>
+<h3 id="2-write-the-a2a-handler">2. Write the A2A handler</h3>
+<p>Your agent serves <code>POST /a2a/v1</code> on the local handler address. The sidecar
+calls it with the peer's A2A request body unchanged and these verified
+headers, all covered by the pairing signature:</p>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-AAC-Context-Schema</code></td>
+<td>Always <code>aac.a2a.ingress-context.v1</code></td>
+</tr>
+<tr>
+<td><code>X-AAC-Task-Ref</code></td>
+<td>The task the sender's authority is restricted to</td>
+</tr>
+<tr>
+<td><code>X-AAC-Presenter-Spiffe-Id</code></td>
+<td>The verified workload identity that sent the message</td>
+</tr>
+<tr>
+<td><code>X-AAC-Originator-Tenant-Id</code></td>
+<td>The tenant whose agent started the task</td>
+</tr>
+<tr>
+<td><code>X-AAC-Root-Token-Id</code>, <code>X-AAC-Presenter-Token-Id</code>, <code>X-AAC-Hop-Index</code></td>
+<td>Correlation with the authority chain; the presenter token id is also the handle for continuing the authority when you send onward</td>
+</tr>
+<tr>
+<td><code>X-AAC-Invoke-Timestamp</code>, <code>X-AAC-Invoke-Signature</code></td>
+<td>The pairing signature your handler must verify before trusting any of the above</td>
+</tr>
+</tbody>
+</table>
+<p>Verify the pairing signature first, so that only your sidecar can reach the
+handler. Python agents can use the published
+<a href="https://pypi.org/project/aac-invoke-auth/">aac-invoke-auth</a> package, as this
+example does; other languages implement the
+<a href="/sidecar/integration/#pairing-authentication-for-any-language">pairing protocol</a>.
+Save this as <code>a2a_agent.py</code>:</p>
+<pre><code class="language-python">from fastapi import FastAPI, Request
+from aac_invoke_auth.fastapi import InvokeAuthGuard, InvokeAuthMiddleware
+
+app = FastAPI()
+app.add_middleware(
+    InvokeAuthMiddleware,
+    guard=InvokeAuthGuard.from_env(),
+    protected_paths=(&quot;/a2a/v1&quot;,),
+)
+
+
+@app.post(&quot;/a2a/v1&quot;)
+async def a2a(request: Request):
+    body = await request.json()
+    message = body[&quot;params&quot;][&quot;message&quot;]
+    # The sidecar verified these before calling; they are context, not credentials.
+    sender = request.headers[&quot;X-AAC-Presenter-Spiffe-Id&quot;]
+    task = request.headers[&quot;X-AAC-Task-Ref&quot;]
+    text = &quot; &quot;.join(part.get(&quot;text&quot;, &quot;&quot;) for part in message[&quot;parts&quot;])
+    return {
+        &quot;jsonrpc&quot;: &quot;2.0&quot;,
+        &quot;id&quot;: body[&quot;id&quot;],
+        &quot;result&quot;: {
+            &quot;message&quot;: {
+                &quot;messageId&quot;: message[&quot;messageId&quot;] + &quot;-reply&quot;,
+                &quot;contextId&quot;: task,
+                &quot;role&quot;: &quot;ROLE_AGENT&quot;,
+                &quot;parts&quot;: [{&quot;text&quot;: f&quot;Received {len(text)} characters from {sender} for {task}&quot;}],
+            }
+        },
+    }
+</code></pre>
+<p>The handler and the send script in step 4 run in a Python environment of
+your own on the agent's host. Installing the CLI does not provide their
+packages, so create the environment once and install them:</p>
+<pre><code class="language-bash">python -m venv &quot;$HOME/.aac/a2a-env&quot;
+source &quot;$HOME/.aac/a2a-env/bin/activate&quot;
+python -m pip install --upgrade 'aac-invoke-auth[fastapi]' uvicorn httpx
+</code></pre>
+<p>Then start the handler in that environment with the pairing secret the CLI
+placed in the agent folder, in the same network namespace as the sidecar:</p>
+<pre><code class="language-bash">export AAC_INVOKE_AUTH_SECRET_FILE=&quot;$HOME/.aac/agents/orders/agent/pairing.secret&quot;
+python -m uvicorn a2a_agent:app --host 127.0.0.1 --port 8000
+</code></pre>
+<p>The handler must answer within the configured deadline with HTTP 200,
+<code>Content-Type: application/json</code>, no compression, and a JSON-RPC 2.0 response
+that preserves the request <code>id</code> and contains exactly one <code>result</code> or <code>error</code>.
+A <code>result</code> holds exactly one <code>message</code> (nonempty <code>messageId</code> and <code>contextId</code>,
+<code>role</code> <code>ROLE_AGENT</code>, at least one <code>text</code> or <code>data</code> part) or one <code>task</code> in a
+terminal state (<code>id</code>, <code>contextId</code>, <code>status.state</code>). An <code>error</code> has an integer
+<code>code</code> and a nonempty <code>message</code>. A response outside this profile is refused by
+the sidecar and reported to the peer as <code>ERR_INVALID_AGENT_RESPONSE</code>. Values
+shaped like AAC credentials are refused anywhere in the response.</p>
+<p>A handler that serves only <code>/a2a/v1</code> is enough for A2A. The sidecar also has an
+<code>agent_invoke_url</code> for native delivery; if no native message is ever sent to
+this agent, that path is never called.</p>
+<h3 id="3-name-the-destination-and-the-authority">3. Name the destination and the authority</h3>
+<p>Sending needs two more entries in the agent configuration: a destination that
+names the peer, and a class of action that describes the authority your agent
+will mint for the message. Both use the same fields as native delivery.</p>
+<pre><code class="language-yaml">destinations:
+  partner_a2a:
+    url: &quot;https://partner.example.net/a2a/v1&quot;
+    audience_pattern: &quot;spiffe://partner.example.net/agents/approvals&quot;
+    predicates: {action: &quot;request_quote&quot;}
+    valid_for: &quot;+5m&quot;
+    timeout_ms: 10000
+classes_of_action:
+  request_quote:
+    predicates: {action: &quot;request_quote&quot;}
+    valid_for: &quot;+10m&quot;
+</code></pre>
+<p>The destination <code>url</code> is the peer's public base URL plus <code>/a2a/v1</code>, the
+address its Agent Card advertises, and <code>audience_pattern</code> is the peer agent's
+exact registered SPIFFE ID: the peer's sidecar refuses a message whose
+audience is not its own identity. Predicates come from the
+<a href="/sidecar/integration/#authority-predicates-and-a2a-integration">registered vocabulary</a>;
+agree their business meaning with the peer. When sending is enabled, every
+destination's <code>timeout_ms</code> must be positive and no greater than the A2A
+deadline. Run the init command again to apply the change, then restart the
+sidecar.</p>
+<p>Your sidecar must also trust the peer, and the peer must trust you: each
+receiver lists the sender's tenant under <code>trust_anchors.tenant_ids</code> and the
+sender's trust domain under <code>spiffe_bundles.trust_domains</code>, and both tenants
+publish their trust material with the
+<a href="/trust-anchor-publisher/">trust anchor publisher</a>.
+<a href="#two-agents-across-tenants">Two agents across tenants</a> lists everything the
+two sides exchange.</p>
+<h3 id="4-send-a-message">4. Send a message</h3>
+<p>Your agent sends by posting a signed envelope to its own sidecar's loopback
+listener. The envelope names the destination, states how the sidecar should
+obtain authority, and carries the A2A request. Save this as <code>a2a_send.py</code>:</p>
+<pre><code class="language-python">import json
+import os
+import sys
+import time
+import uuid
+from pathlib import Path
+
+import httpx
+from aac_invoke_auth import sign_invoke_request
+
+DISPATCH_PATH = &quot;/v1/agent/a2a/dispatch&quot;
+
+
+def send_message(client, secret, destination_profile, class_of_action, human_originator, text):
+    task_ref = &quot;a2a-&quot; + str(uuid.uuid4())
+    envelope = {
+        &quot;schema_version&quot;: &quot;aac.a2a.egress.v1&quot;,
+        &quot;dispatch_id&quot;: str(uuid.uuid4()),
+        &quot;destination_profile&quot;: destination_profile,
+        &quot;task_ref&quot;: task_ref,
+        &quot;authority&quot;: {
+            &quot;mode&quot;: &quot;originate&quot;,
+            &quot;class_of_action&quot;: class_of_action,
+            &quot;human_originator&quot;: human_originator,
+        },
+        &quot;additional_predicates&quot;: {},
+        &quot;a2a_request&quot;: {
+            &quot;jsonrpc&quot;: &quot;2.0&quot;,
+            &quot;id&quot;: task_ref,
+            &quot;method&quot;: &quot;SendMessage&quot;,
+            &quot;params&quot;: {
+                &quot;message&quot;: {
+                    &quot;messageId&quot;: str(uuid.uuid4()),
+                    &quot;role&quot;: &quot;ROLE_USER&quot;,
+                    &quot;parts&quot;: [{&quot;text&quot;: text}],
+                }
+            },
+        },
+    }
+    body = json.dumps(envelope, separators=(&quot;,&quot;, &quot;:&quot;)).encode()
+
+    def post():
+        headers = {&quot;Content-Type&quot;: &quot;application/json&quot;, &quot;X-AAC-Envelope-Schema&quot;: &quot;aac.a2a.egress.v1&quot;}
+        headers.update(
+            sign_invoke_request(secret=secret, method=&quot;POST&quot;, path=DISPATCH_PATH, headers=headers, body=body)
+        )
+        return client.post(DISPATCH_PATH, headers=headers, content=body)
+
+    response = post()
+    if response.status_code != 200:
+        raise RuntimeError(f&quot;dispatch refused: HTTP {response.status_code} {response.text}&quot;)
+    # A retry keeps the dispatch_id and the exact bytes; the sidecar answers from
+    # the retained outcome instead of sending the message again.
+    retry = post()
+    if retry.content != response.content:
+        raise RuntimeError(&quot;an identical retry returned a different outcome&quot;)
+    return response.json()
+
+
+if __name__ == &quot;__main__&quot;:
+    secret = Path(os.environ[&quot;AAC_INVOKE_AUTH_SECRET_FILE&quot;]).read_bytes().strip()
+    # A real agent takes these claims from the signed-in user's session.
+    human = {&quot;iss&quot;: &quot;https://synthetic.invalid&quot;, &quot;sub&quot;: &quot;demo-only&quot;, &quot;auth_time_unix_seconds&quot;: int(time.time())}
+    with httpx.Client(base_url=&quot;http://127.0.0.1:8080&quot;, timeout=65, trust_env=False) as client:
+        result = send_message(
+            client,
+            secret,
+            os.environ.get(&quot;AAC_A2A_DESTINATION&quot;, &quot;partner_a2a&quot;),
+            os.environ.get(&quot;AAC_A2A_CLASS&quot;, &quot;request_quote&quot;),
+            human,
+            &quot; &quot;.join(sys.argv[1:]) or &quot;Hello from an AAC-enabled agent&quot;,
+        )
+        print(json.dumps(result, indent=2))
+</code></pre>
+<p>In a second terminal with the same environment active:</p>
+<pre><code class="language-bash">source &quot;$HOME/.aac/a2a-env/bin/activate&quot;
+export AAC_INVOKE_AUTH_SECRET_FILE=&quot;$HOME/.aac/agents/orders/agent/pairing.secret&quot;
+python a2a_send.py &quot;Please quote two seats to Lisbon&quot;
+</code></pre>
+<p>The <code>human_originator</code> claims identify the person on whose behalf the agent
+acts. The example uses synthetic values; a real agent fills them from its own
+authenticated session, and AAC does not turn them into an authentication.</p>
+<h3 id="5-what-success-looks-like">5. What success looks like</h3>
+<p>A delivered message prints the acknowledgement:</p>
+<pre><code class="language-json">{
+  &quot;dispatch_id&quot;: &quot;6f1c0a8e-3b2d-4c7e-9a1f-2d3e4f5a6b7c&quot;,
+  &quot;status&quot;: &quot;dispatched&quot;
+}
+</code></pre>
+<p>Behind that line, the peer's sidecar verified your authority, the peer's
+handler answered, and your sidecar checked the answer against the profile.
+The second, identical post in the example returned the same bytes without a
+second delivery. In your sidecar's telemetry sink, the <code>a2a_egress</code> event
+records <code>result: accepted</code>; on the peer, <code>a2a_ingress</code> records <code>accepted</code> and
+the handler's log shows one <code>POST /a2a/v1</code>. See
+<a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a> for the
+event fields.</p>
+<p>A refusal prints the sidecar's error envelope with a <code>code</code> from the
+<a href="#errors-and-audit-events">error table</a> below. Three kinds of answer need
+different handling. A refusal that happened before the sidecar claimed your
+identifier (a bad pairing signature or schema header, a malformed envelope, an
+oversized or compressed body, or exhausted retained capacity) leaves nothing
+behind: nothing was sent, no record exists, and the same identifier and bytes
+may be retried after you fix the cause or back off. An in-progress answer
+means your first attempt holds the claim and may be delivering right now, or
+still after a sidecar restart: back off and retry the same identifier and
+bytes, and do not conclude that nothing was sent. Every outcome decided after
+the claim, including a delivered message, a refused destination or class, and
+an uncertain or timed-out delivery, is retained under that identifier: an
+identical retry returns the same answer without sending again. For an
+uncertain or timed-out delivery, reconcile with the peer and issue a new
+<code>dispatch_id</code> only once you know the operation was not performed. The
+<a href="#the-dispatch-envelope">responses table</a> says which is which.</p>
+<p>To exercise both directions on one machine before you have a peer, the
+integration page's <a href="/sidecar/integration/#optional-runnable-paired-agent-example">runnable example</a>
+runs an agent that handles native and A2A calls and a client that sends an A2A
+message to the agent's own sidecar.</p>
+<h2 id="the-dispatch-envelope">The dispatch envelope</h2>
+<p><code>POST /v1/agent/a2a/dispatch</code> exists on the loopback listener only when both
+sending blocks are configured; a receive-only sidecar answers 404. The request
+needs <code>Content-Type: application/json</code>, a body within
+<code>a2a.max_request_body_bytes</code>, the pairing signature headers exactly once each,
+and exactly one <code>X-AAC-Envelope-Schema: aac.a2a.egress.v1</code> header, which the
+signature covers. The body is a JSON object with these fields and no others;
+only <code>additional_predicates</code> may be omitted:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td><code>aac.a2a.egress.v1</code></td>
+</tr>
+<tr>
+<td><code>dispatch_id</code></td>
+<td>A lowercase UUID version 4, generated by your agent for this operation and kept for every retry</td>
+</tr>
+<tr>
+<td><code>destination_profile</code></td>
+<td>The name of a configured destination, 1–128 characters of <code>a-z</code>, digits, <code>_</code>, <code>.</code> and <code>-</code>, starting with a letter; never a URL</td>
+</tr>
+<tr>
+<td><code>task_ref</code></td>
+<td>1–256 printable ASCII characters naming the task, with no leading or trailing whitespace; the receiving handler sees it as <code>X-AAC-Task-Ref</code></td>
+</tr>
+<tr>
+<td><code>authority</code></td>
+<td>One of the two modes below</td>
+</tr>
+<tr>
+<td><code>additional_predicates</code></td>
+<td>A JSON object, possibly empty, of registered predicate names that narrow the authority; at most 64 keys; a <code>task_ref</code> predicate must equal the envelope's <code>task_ref</code></td>
+</tr>
+<tr>
+<td><code>a2a_request</code></td>
+<td>The JSON-RPC 2.0 <code>SendMessage</code> request itself, within the same body, depth and node limits as inbound requests</td>
+</tr>
+</tbody>
+</table>
+<p>Authority modes:</p>
+<ul>
+<li><strong><code>originate</code></strong> starts a new task. The object holds exactly <code>mode</code>,
+<code>class_of_action</code> (a configured class) and <code>human_originator</code> with <code>iss</code>,
+<code>sub</code> and <code>auth_time_unix_seconds</code>. The sidecar mints root authority under
+the class, then delegates it to the destination with the destination's
+predicates and validity.</li>
+<li><strong><code>continue</code></strong> carries an inbound message's authority onward. The object
+holds exactly <code>mode</code> and <code>presenter_token_id</code>, the value your handler
+received as <code>X-AAC-Presenter-Token-Id</code>, and the envelope's <code>task_ref</code> must be
+the inbound <code>X-AAC-Task-Ref</code>. The sidecar resolves the verified authority it
+retained when it delivered that message to your handler, scoped to this
+pair, task and presenter, and valid for the shorter of the chain's expiry
+and <code>continuation_authority.retention_seconds</code>. The handle is not a
+credential: a different pair, task or presenter, an expired lease or a
+restarted sidecar all answer <code>ERR_CONTINUATION_AUTHORITY_UNAVAILABLE</code>.</li>
+</ul>
+<p>Responses:</p>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>Body</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td><code>{&quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;}</code></td>
+<td>Delivered; the peer's reply passed the profile check</td>
+</tr>
+<tr>
+<td>200, 4xx or 5xx</td>
+<td>The retained first outcome</td>
+<td>An identical retry of a dispatch whose outcome was decided after the claim; same status and bytes as the first time</td>
+</tr>
+<tr>
+<td>409 <code>ERR_EGRESS_DISPATCH_IN_PROGRESS</code></td>
+<td>error envelope</td>
+<td>Not retained. The first attempt is still running; back off and retry the same identifier and bytes</td>
+</tr>
+<tr>
+<td>409 <code>ERR_EGRESS_IDEMPOTENCY_CONFLICT</code></td>
+<td>error envelope</td>
+<td>Not retained. The identifier was reused with a different body; the first claim still governs it, so keep the original bytes or start a new operation</td>
+</tr>
+<tr>
+<td>503 <code>ERR_EGRESS_IDEMPOTENCY_SATURATED</code></td>
+<td>error envelope</td>
+<td>Not retained and not claimed: nothing was sent. Retained capacity for the pair is full; back off and retry the same identifier and bytes once entries expire, or raise the capacity settings</td>
+</tr>
+<tr>
+<td>401 <code>ERR_INVALID_REQUEST</code></td>
+<td>error envelope</td>
+<td>Before the claim: the pairing signature or the schema header is missing or wrong</td>
+</tr>
+<tr>
+<td>413 <code>ERR_REQUEST_TOO_LARGE</code>, 415 <code>ERR_INVALID_REQUEST</code></td>
+<td>error envelope</td>
+<td>Before the claim: the envelope exceeds <code>max_request_body_bytes</code>, is not <code>application/json</code>, or is compressed</td>
+</tr>
+<tr>
+<td>400 <code>ERR_INVALID_REQUEST</code> (malformed envelope)</td>
+<td>error envelope</td>
+<td>Before the claim: the envelope fails the field rules above</td>
+</tr>
+<tr>
+<td>400 <code>ERR_INVALID_REQUEST</code> (predicates)</td>
+<td>error envelope</td>
+<td>Retained: <code>additional_predicates</code> do not narrow the destination's authority</td>
+</tr>
+<tr>
+<td>404 <code>ERR_DESTINATION_NOT_FOUND</code>, <code>ERR_CLASS_OF_ACTION_NOT_FOUND</code></td>
+<td>error envelope</td>
+<td>Retained: the envelope named something not configured</td>
+</tr>
+<tr>
+<td>409 <code>ERR_CONTINUATION_AUTHORITY_UNAVAILABLE</code></td>
+<td>error envelope</td>
+<td>Retained: no live retained authority for this pair, task and presenter</td>
+</tr>
+<tr>
+<td>502 <code>ERR_A2A_REMOTE_REJECTED</code>, <code>ERR_INVALID_AGENT_RESPONSE</code></td>
+<td>error envelope</td>
+<td>Retained: the peer answered with a non-200 status, or with a reply outside the profile</td>
+</tr>
+<tr>
+<td>502 <code>ERR_A2A_DISPATCH_UNCERTAIN</code>, 504 <code>ERR_A2A_DISPATCH_TIMEOUT</code></td>
+<td>error envelope</td>
+<td>Retained: the outcome is unknown; an identical retry returns this same answer and does not resend. Reconcile with the peer, and issue a new <code>dispatch_id</code> only once you have confirmed the operation was not performed</td>
+</tr>
+<tr>
+<td>503 <code>ERR_CONFIG_ERROR</code></td>
+<td>error envelope</td>
+<td>Retained: the named class or destination has invalid settings</td>
+</tr>
+</tbody>
+</table>
+<p>A refusal marked &quot;before the claim&quot;, and a saturation refusal, sent nothing
+and left no record, so the same identifier and bytes may be used again once the
+cause is fixed. An in-progress answer is different: the first claim stands and
+may still be delivering, so keep the same identifier and bytes and back off.
+Retained
+outcomes are kept for <code>egress_idempotency.retention_seconds</code> from the first
+claim, across sidecar restarts, in the <code>state_file</code>. Retention is a bounded
+guarantee, not permanent deduplication: after it expires the same identifier
+is accepted as a new operation.</p>
+<h2 id="the-a2a-configuration-block">The <code>a2a</code> configuration block</h2>
+<p>Every value is explicit; there is no default body size and no unlimited mode.
+Size the limits for your deployment and test them before use.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Meaning</th>
+<th>Accepted values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public_base_url</code></td>
+<td>The HTTPS origin at which peers reach your sidecar's external listener; printed on the Agent Card as <code>&lt;public_base_url&gt;/a2a/v1</code></td>
+<td><code>https://</code> URL with a host and no path other than <code>/</code>, no query, fragment or credentials</td>
+</tr>
+<tr>
+<td><code>local_handler_url</code></td>
+<td>Your agent's A2A handler, called with the unchanged verified body</td>
+<td><code>http://</code> or <code>https://</code> URL whose path is exactly <code>/a2a/v1</code></td>
+</tr>
+<tr>
+<td><code>max_request_body_bytes</code></td>
+<td>Bound on an inbound request body, a dispatch envelope and the replies the sidecar reads from your handler and from peers</td>
+<td>Positive integer; required</td>
+</tr>
+<tr>
+<td><code>deadline_seconds</code></td>
+<td>End-to-end budget for an inbound request, from admission to the written response, and for each dispatch; when sending is enabled, every destination <code>timeout_ms</code> must fit within it</td>
+<td>1–60</td>
+</tr>
+<tr>
+<td><code>max_concurrent_requests</code></td>
+<td>Inbound requests admitted at once; beyond it the sidecar answers 503 <code>ERR_A2A_OVERLOADED</code></td>
+<td>Positive integer</td>
+</tr>
+<tr>
+<td><code>max_json_nesting_depth</code></td>
+<td>Deepest JSON nesting accepted in any A2A body</td>
+<td>1–32</td>
+</tr>
+<tr>
+<td><code>max_json_nodes</code></td>
+<td>Most JSON values accepted in any A2A body</td>
+<td>1–10000</td>
+</tr>
+<tr>
+<td><code>agent_card</code></td>
+<td>Optional description of your agent for the public card</td>
+<td>See <a href="/sidecar/configuration/#describe-your-agent-on-its-a2a-agent-card">describe your agent on its A2A Agent Card</a></td>
+</tr>
+<tr>
+<td><code>continuation_authority.retention_seconds</code></td>
+<td>How long a verified inbound authority may be continued by a <code>continue</code> dispatch; it can only shorten the chain's own expiry</td>
+<td>Positive integer; present together with <code>egress_idempotency</code></td>
+</tr>
+<tr>
+<td><code>egress_idempotency.state_file</code></td>
+<td>The retained dispatch-outcome database, opened before either listener binds</td>
+<td>Absolute path on storage that survives the process or container replacement you rely on; missing parents, an unusable file or a second owner stop startup</td>
+</tr>
+<tr>
+<td><code>egress_idempotency.retention_seconds</code></td>
+<td>How long a dispatch outcome supports safe retries</td>
+<td>120–86400, and at least twice <code>deadline_seconds</code></td>
+</tr>
+<tr>
+<td><code>egress_idempotency.max_entries_per_pair</code></td>
+<td>Live dispatch identifiers retained for this agent pair; saturation refuses new dispatches rather than evicting live ones</td>
+<td>Positive integer</td>
+</tr>
+<tr>
+<td><code>egress_idempotency.max_cached_response_body_bytes</code></td>
+<td>Largest outcome body retained for a dispatch; a larger one is replaced by <code>ERR_EGRESS_RESPONSE_TOO_LARGE</code></td>
+<td>At least 203</td>
+</tr>
+<tr>
+<td><code>egress_idempotency.max_reserved_cached_bytes_per_pair</code></td>
+<td>Total outcome bytes reserved for the pair</td>
+<td>At least <code>max_cached_response_body_bytes</code></td>
+</tr>
+</tbody>
+</table>
+<p>Supply both sending blocks or neither; one without the other stops startup.
+Without them the sidecar is receive-only. Size <code>max_entries_per_pair</code> for peak
+new dispatches per second multiplied by <code>retention_seconds</code>, then reserve that
+count multiplied by <code>max_cached_response_body_bytes</code>, plus storage overhead; the
+template's values suit a small test, not a busy agent. Local or remote
+redirects are never followed, so every URL must name its final endpoint. The
+<a href="/sidecar/configuration/#configuration-and-workflow-state">configuration reference</a>
+explains how the A2A deadline interacts with the other timeouts.</p>
+<h2 id="agent-card-and-discovery">Agent Card and discovery</h2>
+<p>When an <code>a2a</code> block is present, the sidecar serves your agent's card at
+<code>GET /.well-known/agent-card.json</code> on its external listener, so a peer that
+knows your public base URL can discover how to call you. The card advertises:</p>
+<ul>
+<li>one interface: <code>&lt;public_base_url&gt;/a2a/v1</code>, binding <code>JSONRPC</code>, protocol
+version <code>1.0</code>;</li>
+<li>capabilities with streaming, push notifications and the extended card all
+<code>false</code>;</li>
+<li>two required security schemes, an <code>Authorization</code> header carrying the AAC
+authority credential and a <code>DPoP</code> header carrying the proof; a plain A2A
+client without an AAC sidecar cannot satisfy them;</li>
+<li><code>text/plain</code> and <code>application/json</code> as the default input and output modes;</li>
+<li>your description: name, description, version, provider, documentation and
+icon links and skills, from the optional <code>agent_card</code> settings, with neutral
+defaults (<code>AAC-enabled agent</code>, version <code>unspecified</code>, one generic
+<code>unary-message</code> skill) when you give none. The card is built once at startup
+and is public; see
+<a href="/sidecar/configuration/#describe-your-agent-on-its-a2a-agent-card">describe your agent on its A2A Agent Card</a>
+for the fields and limits.</li>
+</ul>
+<p>Check it from any machine that can reach the listener:</p>
+<pre><code class="language-bash">curl --fail --silent --show-error https://orders.example.com/.well-known/agent-card.json
+</code></pre>
+<p>Discovery is one-directional. Your sidecar publishes a card, but when sending
+it never fetches the peer's card: it delivers to the configured destination
+URL and audience, and refuses redirects. Read a peer's card to learn their
+address and skills, then write what you learned into your destination entry.</p>
+<h2 id="two-agents-across-tenants">Two agents across tenants</h2>
+<p>Each side is an independent tenant with its own CA, agents and trust
+publication. Exchange the following with the peer organization before the
+first message; nothing private crosses the boundary.</p>
+<table>
+<thead>
+<tr>
+<th>You give the peer</th>
+<th>The peer gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Your tenant ID and trust domain, so their sidecar can list them under <code>trust_anchors.tenant_ids</code> and <code>spiffe_bundles.trust_domains</code></td>
+<td>Their tenant ID and trust domain, for your sidecar's two lists</td>
+</tr>
+<tr>
+<td>Your sidecar's <code>public_base_url</code>, or simply your Agent Card address</td>
+<td>Their public base URL, which becomes your destination <code>url</code> with <code>/a2a/v1</code> appended</td>
+</tr>
+<tr>
+<td>Your agent's exact SPIFFE ID, which they set as <code>audience_pattern</code></td>
+<td>Their agent's exact SPIFFE ID, for your <code>audience_pattern</code></td>
+</tr>
+<tr>
+<td>The predicates and values you will send, and what they mean</td>
+<td>The predicates they accept, and the skills their card lists</td>
+</tr>
+</tbody>
+</table>
+<p>Both tenants publish their root keys and CA certificates with the trust anchor
+publisher; a sidecar polls the public trust material of every tenant it lists
+and refuses a message from a tenant or domain it does not trust. Each side's
+ingress must allow the other's sidecar to reach the external listener over
+HTTPS at the final URL, with no redirect. Then:</p>
+<ol>
+<li>Peer A adds the destination and class of action for B to its agent
+configuration and runs the init command; both restart their sidecars.</li>
+<li>A's agent sends one message with <code>a2a_send.py</code>; it prints <code>dispatched</code>.</li>
+<li>B's handler log shows one <code>POST /a2a/v1</code> carrying A's tenant and agent in
+the <code>X-AAC-Originator-Tenant-Id</code> and <code>X-AAC-Presenter-Spiffe-Id</code> headers;
+B's <code>a2a_ingress</code> event records <code>accepted</code>.</li>
+<li>B answers A the same way, with its own destination for A and its own class
+of action, or continues A's authority with a <code>continue</code> dispatch inside the
+retention window.</li>
+</ol>
+<p>A refusal at step 2 or 3 names its cause: <code>ERR_UNKNOWN_TENANT_KEY</code> or
+<code>ERR_DPOP_CHAIN</code> on B means B does not yet trust A's published material;
+<code>ERR_RECIPIENT_NOT_AUTHORIZED</code> means A's <code>audience_pattern</code> is not B's exact
+SPIFFE ID; <code>ERR_A2A_REMOTE_REJECTED</code> on A reports B's refusal. For a
+same-tenant run of two agents on one machine, the integration page's
+<a href="/sidecar/integration/#work-through-two-agents">two-agent example</a> sets up
+both processes and sends an A2A message between them.</p>
+<h2 id="errors-and-audit-events">Errors and audit events</h2>
+<p>The sidecar writes two A2A event types to its telemetry sink: <code>a2a_ingress</code>
+for every inbound request, with the protocol diagnostics <code>method</code>,
+<code>protocol_version</code>, <code>result_kind</code> and <code>error_category</code> and the request size
+against the configured limit, and <code>a2a_egress</code> for every dispatch, with the
+retained-state pressure counters (<code>egress_entries</code>,
+<code>egress_reserved_cached_bytes</code> and the cumulative reclaimed, saturation,
+oversize, conflict, in-progress and cached-hit totals). A2A events use
+<code>result</code> values <code>accepted</code>, <code>rejected</code>, <code>failed</code> or, for a caller that gave up
+mid-request, <code>canceled</code>. The field list is in
+<a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a>.</p>
+<p>Errors before authority is verified use the sidecar's error envelope with a
+stable <code>code</code>. The A2A-specific codes are:</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Where</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ERR_A2A_OVERLOADED</code></td>
+<td>inbound</td>
+<td>The concurrency limit is reached; the peer backs off</td>
+</tr>
+<tr>
+<td><code>ERR_MISSING_AAC_MACAROON</code>, <code>ERR_MISSING_DPOP_PROOF</code></td>
+<td>inbound</td>
+<td>The caller is not an AAC sidecar, or sent the credential headers wrongly</td>
+</tr>
+<tr>
+<td><code>ERR_REQUEST_TOO_LARGE</code>; <code>ERR_INVALID_REQUEST</code> with HTTP 415</td>
+<td>inbound and dispatch</td>
+<td>The body exceeds <code>max_request_body_bytes</code>; the content type is not JSON or the body is compressed</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_AUTHORITY_REGISTRATION_FAILED</code></td>
+<td>inbound</td>
+<td>The verified authority could not be retained for continuation</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_AGENT_RESPONSE</code>, <code>ERR_AGENT_UNREACHABLE</code>, <code>ERR_AGENT_TIMEOUT</code></td>
+<td>inbound</td>
+<td>Your handler answered outside the profile, was not reachable, or exceeded the deadline</td>
+</tr>
+<tr>
+<td><code>ERR_A2A_DISPATCH_FAILED</code>, <code>ERR_A2A_DISPATCH_TIMEOUT</code>, <code>ERR_A2A_DISPATCH_UNCERTAIN</code>, <code>ERR_A2A_REMOTE_REJECTED</code></td>
+<td>dispatch</td>
+<td>Delivery to the peer failed, timed out, has an unknown outcome, or was refused by the peer</td>
+</tr>
+<tr>
+<td><code>ERR_EGRESS_DISPATCH_IN_PROGRESS</code>, <code>ERR_EGRESS_IDEMPOTENCY_CONFLICT</code>, <code>ERR_EGRESS_IDEMPOTENCY_SATURATED</code>, <code>ERR_EGRESS_RESPONSE_TOO_LARGE</code></td>
+<td>dispatch</td>
+<td>Retained-state outcomes described in the envelope responses above</td>
+</tr>
+<tr>
+<td><code>ERR_CONTINUATION_AUTHORITY_UNAVAILABLE</code></td>
+<td>dispatch</td>
+<td>No live retained authority for a <code>continue</code> dispatch</td>
+</tr>
+</tbody>
+</table>
+<p>After authority is verified, A2A protocol errors are JSON-RPC errors under
+HTTP 200, with the request <code>id</code> preserved: <code>-32700</code> parse error, <code>-32600</code>
+invalid request, <code>-32601</code> unknown method, <code>-32602</code> invalid parameters,
+<code>-32004</code> unsupported operation and <code>-32009</code> unsupported version. Inspect the
+JSON body even when the transport succeeded. The full
+<a href="/sidecar/operations/#sidecar-error-reference">error reference</a> covers every
+code with its next action, including the authority and recipient refusals
+that A2A shares with native delivery.</p>
+<footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
+<p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#what-aac-adds-to-a2a" class="toc-h2">What AAC adds to A2A</a><a href="#what-is-supported" class="toc-h2">What is supported</a><a href="#how-a-message-travels" class="toc-h2">How a message travels</a><a href="#set-up-a2a-for-your-agent" class="toc-h2">Set up A2A for your agent</a><a href="#1-enable-a2a-in-the-configuration" class="toc-h3">1. Enable A2A in the configuration</a><a href="#2-write-the-a2a-handler" class="toc-h3">2. Write the A2A handler</a><a href="#3-name-the-destination-and-the-authority" class="toc-h3">3. Name the destination and the authority</a><a href="#4-send-a-message" class="toc-h3">4. Send a message</a><a href="#5-what-success-looks-like" class="toc-h3">5. What success looks like</a><a href="#the-dispatch-envelope" class="toc-h2">The dispatch envelope</a><a href="#the-a2a-configuration-block" class="toc-h2">The a2a configuration block</a><a href="#agent-card-and-discovery" class="toc-h2">Agent Card and discovery</a><a href="#two-agents-across-tenants" class="toc-h2">Two agents across tenants</a><a href="#errors-and-audit-events" class="toc-h2">Errors and audit events</a></aside></div></body></html>

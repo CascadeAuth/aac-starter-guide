@@ -114,25 +114,13 @@ maximum 24-hour root-relative lifetime. The agent must still enforce its busines
 meaning for the other registered fields; a recognized name is not a general
 business-policy engine. Unknown predicate names fail closed.
 
-For unary A2A, the paired agent signs `POST /v1/agent/a2a/dispatch` using the
-published invoke-auth API. The route exists only when both
-`a2a.continuation_authority` and `a2a.egress_idempotency` are configured; a
-receive-only sidecar answers 404. The envelope requires `schema_version`, a UUID
-`dispatch_id`, named `destination_profile`, `task_ref`, `authority`,
-`additional_predicates`, and `a2a_request`. The demonstrated authority mode is
-`originate`; `continue` is reserved for verified inbound authority belonging to
-the same pair/task/presenter and its retention window. Never derive continued
-authority from caller-supplied identity strings. The external sidecar verifies
-AAC/DPoP before forwarding the supported A2A body to the authenticated local
-handler. The handler receives verified context rather than raw bearer/DPoP
-credentials.
+A2A messages travel under the same authority. A paired agent sends one by
+posting a signed envelope to `POST /v1/agent/a2a/dispatch` on the loopback
+listener, and receives verified messages at its `/a2a/v1` handler. The
+supported profile, the envelope, the `a2a` settings, the Agent Card and the
+retry rules are on the [A2A integration page](/sidecar/a2a/). The runnable
+example below exercises native delivery and one A2A dispatch side by side.
 
-A retry must preserve the dispatch ID and exact envelope. Changed content
-under an existing ID is a conflict. An in-progress or outcome-unknown response
-is not permission to issue a new ID and repeat a business action: follow the
-returned status and reconcile with your operation before retrying. Retain the
-bbolt file through process/container replacement for the configured retention
-window. Expiry is a bounded guarantee, not permanent deduplication.
 ### Generate development PKI
 
 **Optional advanced manual recipe.** The preferred [aac init](https://docs.cascadeauth.com/cli/) path generates
@@ -820,8 +808,9 @@ python demo_client.py
 The client prints only correlation identifiers and outcomes. The native chain
 mints a root and initial holder authority, invokes the agent, forwards to
 `self_receive` with the same task restriction, then settles with a signed
-terminal attestation. The separate A2A call returns the sample reply; its identical
-retry uses the retained result rather than repeating the operation.
+terminal attestation. The separate A2A dispatch returns `{"dispatch_id": …, "status":
+"dispatched"}` once the sample reply passes the sidecar's checks; its identical
+retry returns the retained acknowledgement rather than repeating the operation.
 
 A successful HTTP response is only part of the evidence. Match the returned
 `root_token_id` in the local telemetry file and check the mint, dispatch,

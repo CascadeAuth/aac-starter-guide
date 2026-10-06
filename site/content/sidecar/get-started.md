@@ -301,7 +301,8 @@ identity validation or replay checks.
 AAC carries delegated authority between agents with workload identity, local
 verification and auditable receipts. Applications retain their business policy.
 The [authority and integration reference](https://docs.cascadeauth.com/sidecar/integration/)
-explains chains, receipts, predicates, pairing and the separate A2A example.
+explains chains, receipts, predicates and pairing; the
+[A2A integration page](https://docs.cascadeauth.com/sidecar/a2a/) covers A2A.
 
 ## Deploy beyond the example
 
@@ -328,7 +329,8 @@ hosted and custom domains may use separate processes without competing writers.
 | Tenant and agent deployment, concrete ingress/PKI/storage requirements | [Deployment](https://docs.cascadeauth.com/sidecar/configuration/) |
 | Keys, certificates, pairing secrets and custody | [Keys and certificates](https://docs.cascadeauth.com/overview/keys-and-certificates/) |
 | CLI user journeys and generated command reference | [CLI documentation](https://docs.cascadeauth.com/cli/) |
-| Protocol and optional A2A integration | [Integration](https://docs.cascadeauth.com/sidecar/integration/) |
+| Protocol and native agent integration | [Integration](https://docs.cascadeauth.com/sidecar/integration/) |
+| Receive and send A2A messages | [A2A integration](https://docs.cascadeauth.com/sidecar/a2a/) |
 | Diagnostics, audit, credential lifecycle and rollback | [Operations](https://docs.cascadeauth.com/sidecar/operations/) |
 | Verify a container or audit artifacts — optional; standalone installation | [Artifacts](https://docs.cascadeauth.com/sidecar/install/) |
 
