@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/integration/
 
 Applies to: AAC Sidecar v0.5.1
 
-Documentation revision: b7e0bf78604db57f9974eee317f6c1baf3056e78
+Documentation revision: 088c76638ef36e3b8f73da99e90ae15259c81ec9
 
 ---
 
@@ -446,8 +446,8 @@ config = {
             "state_file": str(base / "state/a2a-egress.db"),
             "retention_seconds": 86400,
             "max_entries_per_pair": 4096,
-            "max_cached_response_body_bytes": 4096,
-            "max_reserved_cached_bytes_per_pair": 16777216,
+            "max_cached_response_body_bytes": 262236,
+            "max_reserved_cached_bytes_per_pair": 1074118656,
         },
     },
     "classes_of_action": {
@@ -816,8 +816,9 @@ python demo_client.py
 The client prints only correlation identifiers and outcomes. The native chain
 mints a root and initial holder authority, invokes the agent, forwards to
 `self_receive` with the same task restriction, then settles with a signed
-terminal attestation. The separate A2A dispatch returns `{"dispatch_id": …, "status":
-"dispatched"}` once the sample reply passes the sidecar's checks; its identical
+terminal attestation. The separate A2A dispatch returns `{"a2a_response": …,
+"dispatch_id": …, "status": "dispatched"}` once the sample reply passes the
+sidecar's checks, with the sample reply itself in `a2a_response`; its identical
 retry returns the retained acknowledgement rather than repeating the operation.
 
 A successful HTTP response is only part of the evidence. Match the returned

@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.1
 
-Documentation revision: b7e0bf78604db57f9974eee317f6c1baf3056e78
+Documentation revision: 088c76638ef36e3b8f73da99e90ae15259c81ec9
 
 ---
 
@@ -100,3 +100,15 @@ receive-only: its agent cannot send A2A messages until both blocks are added.
 A configuration that has both blocks, as the published template does, was not
 affected and behaves as before. See "Receive A2A messages without sending" in
 the configuration reference.
+## 0.5.2
+
+The acknowledgement your agent receives from `POST /v1/agent/a2a/dispatch`
+now carries the peer's reply: `a2a_response` holds the peer's validated
+JSON-RPC answer, as the peer sent it, next to `dispatch_id` and `status`. The
+whole acknowledgement is retained for the retry window, so an identical retry
+returns the reply too. To make that possible the sidecar requires
+`a2a.egress_idempotency.max_cached_response_body_bytes` to be at least
+`a2a.max_request_body_bytes` plus 92; a configuration below that stops at
+startup with a message naming both settings, and re-running the init command
+for the agent writes a block that satisfies it. The retry database now holds
+peer replies for the retention window. See the A2A integration page.

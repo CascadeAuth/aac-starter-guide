@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/" aria-current="page">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">A2A integration</span></nav>
 <h1 id="a2a-integration">A2A integration</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs b7e0bf78604d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs 088c76638ef3</span></div>
 <p>Agent-to-Agent (A2A) is an open protocol for one agent to send a message to
 another over HTTPS, using JSON-RPC 2.0 and a published Agent Card that says
 how to reach the agent. AAC supports A2A: the sidecar beside your agent
@@ -95,13 +95,13 @@ peer sidecar ◀── the same reply, after the sidecar checks it fits the prof
             an authority mode and the A2A request     claims the dispatch id
                                                  ──HTTPS: POST /a2a/v1──▶ peer sidecar
                                                  ◀── peer's reply ──
-your agent ◀── {&quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;} ──
+your agent ◀── {&quot;a2a_response&quot;: &lt;peer's reply&gt;, &quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;} ──
 </code></pre>
-<p>The sidecar validates the peer's reply against the profile and retains the
-outcome for the retry window. It returns an acknowledgement to your agent, not
-the peer's reply content. Treat a dispatch as a one-way message with
-confirmation of delivery; if your workflow needs the peer's answer, the peer's
-agent sends it as its own message to you.</p>
+<p>The sidecar validates the peer's reply against the profile and returns it to
+your agent inside the acknowledgement, as the exact bytes the peer sent. The
+whole acknowledgement is retained for the retry window, so an identical retry
+returns the reply too. A dispatch is therefore a request and its response in
+one call, the same shape as A2A itself.</p>
 <h2 id="set-up-a2a-for-your-agent">Set up A2A for your agent</h2>
 <p>You need a registered tenant and agent and a sidecar running beside the
 agent. If you have neither, <a href="/get-started/">start the AAC journey</a> first; the
@@ -351,16 +351,33 @@ python a2a_send.py &quot;Please quote two seats to Lisbon&quot;
 acts. The example uses synthetic values; a real agent fills them from its own
 authenticated session, and AAC does not turn them into an authentication.</p>
 <h3 id="5-what-success-looks-like">5. What success looks like</h3>
-<p>A delivered message prints the acknowledgement:</p>
+<p>A delivered message prints the acknowledgement with the peer's reply inside it:</p>
 <pre><code class="language-json">{
+  &quot;a2a_response&quot;: {
+    &quot;jsonrpc&quot;: &quot;2.0&quot;,
+    &quot;id&quot;: &quot;a2a-3d9f0c2e-7b41-4e6a-9c58-1f2a3b4c5d6e&quot;,
+    &quot;result&quot;: {
+      &quot;message&quot;: {
+        &quot;messageId&quot;: &quot;7c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f&quot;,
+        &quot;contextId&quot;: &quot;quote-lisbon-2&quot;,
+        &quot;role&quot;: &quot;ROLE_AGENT&quot;,
+        &quot;parts&quot;: [{&quot;text&quot;: &quot;Two seats to Lisbon held until 18:00&quot;}]
+      }
+    }
+  },
   &quot;dispatch_id&quot;: &quot;6f1c0a8e-3b2d-4c7e-9a1f-2d3e4f5a6b7c&quot;,
   &quot;status&quot;: &quot;dispatched&quot;
 }
 </code></pre>
-<p>Behind that line, the peer's sidecar verified your authority, the peer's
-handler answered, and your sidecar checked the answer against the profile.
-The second, identical post in the example returned the same bytes without a
-second delivery. In your sidecar's telemetry sink, the <code>a2a_egress</code> event
+<p>Behind that output, the peer's sidecar verified your authority, the peer's
+handler answered, and your sidecar checked the answer against the profile
+before placing it in <code>a2a_response</code>, byte for byte as the peer sent it. The
+JSON-RPC <code>id</code> matches your request, and the reply holds either <code>result</code>, the
+peer agent's message or terminal task, or a JSON-RPC <code>error</code> the peer
+returned. <code>status: dispatched</code> confirms delivery and a well-formed reply, not
+the peer's success: inspect <code>a2a_response</code> for <code>error</code> before acting on it.
+The second, identical post in the example returned the same bytes, reply
+included, without a second delivery. In your sidecar's telemetry sink, the <code>a2a_egress</code> event
 records <code>result: accepted</code>; on the peer, <code>a2a_ingress</code> records <code>accepted</code> and
 the handler's log shows one <code>POST /a2a/v1</code>. See
 <a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a> for the
@@ -460,8 +477,8 @@ restarted sidecar all answer <code>ERR_CONTINUATION_AUTHORITY_UNAVAILABLE</code>
 <tbody>
 <tr>
 <td>200</td>
-<td><code>{&quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;}</code></td>
-<td>Delivered; the peer's reply passed the profile check</td>
+<td><code>{&quot;a2a_response&quot;: &lt;peer's reply&gt;, &quot;dispatch_id&quot;: &quot;…&quot;, &quot;status&quot;: &quot;dispatched&quot;}</code></td>
+<td>Delivered; the peer's reply passed the profile check and is returned as the peer sent it, whether it carries <code>result</code> or a JSON-RPC <code>error</code></td>
 </tr>
 <tr>
 <td>200, 4xx or 5xx</td>
@@ -613,22 +630,33 @@ Size the limits for your deployment and test them before use.</p>
 </tr>
 <tr>
 <td><code>egress_idempotency.max_cached_response_body_bytes</code></td>
-<td>Largest outcome body retained for a dispatch; a larger one is replaced by <code>ERR_EGRESS_RESPONSE_TOO_LARGE</code></td>
-<td>At least 203</td>
+<td>Largest outcome body retained for a dispatch, including the acknowledgement that carries the peer's reply</td>
+<td>At least <code>max_request_body_bytes</code> + 92 (the acknowledgement framing), and at least 203; the sidecar refuses to start below either</td>
 </tr>
 <tr>
 <td><code>egress_idempotency.max_reserved_cached_bytes_per_pair</code></td>
-<td>Total outcome bytes reserved for the pair</td>
+<td>Total outcome bytes reserved for the pair; usable dispatches are the smaller of <code>max_entries_per_pair</code> and this value divided by <code>max_cached_response_body_bytes</code></td>
 <td>At least <code>max_cached_response_body_bytes</code></td>
 </tr>
 </tbody>
 </table>
 <p>Supply both sending blocks or neither; one without the other stops startup.
 Without them the sidecar is receive-only. Size <code>max_entries_per_pair</code> for peak
-new dispatches per second multiplied by <code>retention_seconds</code>, then reserve that
-count multiplied by <code>max_cached_response_body_bytes</code>, plus storage overhead; the
-template's values suit a small test, not a busy agent. Local or remote
-redirects are never followed, so every URL must name its final endpoint. The
+new dispatches per second multiplied by <code>retention_seconds</code>, then set
+<code>max_reserved_cached_bytes_per_pair</code> to that count multiplied by
+<code>max_cached_response_body_bytes</code>; a smaller reservation lowers the usable
+count to the reserved bytes divided by the per-dispatch maximum, whatever the
+entry limit says. The reservation is an accounting bound, not allocated
+storage: the database holds only the outcomes actually retained, so size the
+file for the replies you expect plus storage overhead. The template's values
+suit a small test, not a busy agent.</p>
+<p>The retry database holds every delivered dispatch's acknowledgement, and with
+it the peer's reply, for <code>retention_seconds</code>. Treat the file as business data:
+restrict access to the sidecar's user, include it in the same backup and
+retention decisions as the agent's own records, and expect its contents to
+survive until expiry reclaims them. Expiry is reclamation, not secure erasure.</p>
+<p>Local or remote redirects are never followed, so every URL must name its final
+endpoint. The
 <a href="/sidecar/configuration/#configuration-and-workflow-state">configuration reference</a>
 explains how the A2A deadline interacts with the other timeouts.</p>
 <h2 id="agent-card-and-discovery">Agent Card and discovery</h2>
@@ -697,7 +725,7 @@ HTTPS at the final URL, with no redirect. Then:</p>
 <ol>
 <li>Peer A adds the destination and class of action for B to its agent
 configuration and runs the init command; both restart their sidecars.</li>
-<li>A's agent sends one message with <code>a2a_send.py</code>; it prints <code>dispatched</code>.</li>
+<li>A's agent sends one message with <code>a2a_send.py</code>; it prints the acknowledgement with B's reply in <code>a2a_response</code> (its <code>result</code>, or a JSON-RPC <code>error</code> B returned) and <code>status</code> <code>dispatched</code>.</li>
 <li>B's handler log shows one <code>POST /a2a/v1</code> carrying A's tenant and agent in
 the <code>X-AAC-Originator-Tenant-Id</code> and <code>X-AAC-Presenter-Spiffe-Id</code> headers;
 B's <code>a2a_ingress</code> event records <code>accepted</code>.</li>

@@ -1,5 +1,5 @@
 {
-  "base_site_sha256": "84c7183c685054c09753f2b0ff1e5ab1ecfb63efc56da2c3e01bbe520c679114",
+  "base_site_sha256": "4a4f9767b20369204d92f027ca7f897cdb84029dc790973633254e5f1e036853",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "404.html": "585e67a9b17dbbbe222ea741108d670490509c0b69c35d577fcda68769b27129",
@@ -209,56 +209,56 @@
     "content/aac-cli/reference/aeg-list.md": "f24fa3a8ef110f67be483de56fdb3a31eb8eb2db40beaef6fbea66e38c284b6d",
     "content/aac-cli/reference/aeg-render.md": "4d5e7a0f78d2fbadcaab89152acb106f79901f50d0a668ed912de04b0435f03f",
     "content/aac-cli/reference/index.md": "0c69edb8c05ea2f6a051c09d21d2a1761b53a4906b5b72612c86c934cc1e312a",
-    "content/sidecar/a2a.md": "16460e514c1c84108e104481ffd535eb2455cd1b50d373cc224adb855f7c0d2a",
+    "content/sidecar/a2a.md": "18d48c2cd0171103c56d3f98abde2c5eadec4ac882ba63f3fa29c171678147b3",
     "content/sidecar/artifacts.md": "14bb39079fb566fa9263306321d553232d1dcde05ea5440480df84640db00fed",
     "content/sidecar/control-plane.md": "c29030563ce57a3262c9d5f9e286e68274a2b6024981a3a60e952c9b134c6ccc",
-    "content/sidecar/deployment.md": "d45f2b4591ad224d78dd3b2dc050b1888f9acf651ba172868603206c012542d4",
+    "content/sidecar/deployment.md": "291399ed93834f414ab117fc7dc5587742fc1b8fc65e8c876186eb9e08716fd0",
     "content/sidecar/get-started.md": "c8f55647e64d1b5019603ff7a9e33f2398fe9b84965ad06bccf90b6e039e5069",
     "content/sidecar/home.md": "262dfa6ec2b1a75bbc582e8509aa606c8db03e1697ef57cfd98ffa3eb2291e55",
-    "content/sidecar/integration.md": "645a44860119ecccd9b32edca72fb77dc7a5151f63b681f74c5e6c4447ec7b99",
+    "content/sidecar/integration.md": "3dab6c55650a337fb241c4cd91adb57a566e4698ae41767fd1399974df327642",
     "content/sidecar/keys-and-certificates.md": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
     "content/sidecar/operations.md": "60dfe60ac030992b57f3a3753c72ab41fbede6453a97e13467d966a55bd6fbd7",
     "content/sidecar/overview.md": "56d121f4d6721978fb9ffeb6346cb449684dfbf29d750b653d33311abaa11e05",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
-    "content/sidecar/release-notes.md": "551cf0816c565bd85889bb2fc2bf4989e6f30d721859042676f931281242e257",
+    "content/sidecar/release-notes.md": "768aad41f8b90bad15a8f3a4fe0bb90c25aa6ced5ef33153d09f2b7b21f1002e",
     "content/sidecar/released-components.json": "40e35c05556f7db899a8b5dcffadcd28831c93ec565cbba721c478586fac73e6",
     "content/sidecar/sidecar.md": "330367fbdb5875dfd03f2773c44c48df7e93c4d1b092232be1508c595d17fb6b",
     "content/sidecar/verification.md": "eea1624597dbdb17465c2c8e68db570934592e7cdd71601129914842a9ca46af",
-    "control-plane/index.html": "f139af2d3c350c27fb0a42f9ce48e5f244fa2ac0fd047e6deeee4d83d3f253f8",
-    "control-plane/index.md": "5cce6bd4caf4eddd465313354a284e5482708134843525b3e9d0969b48c1e678",
-    "get-started/index.html": "507aca90b0ac742dd4c5f42af7814801d21247a60bc225c10d99d831d398e4db",
-    "get-started/index.md": "6811ae3b6f9d549542f512f8b7b19ae401334543d5f183c4a61276574b95f926",
-    "index.html": "56bb0af3155c17672827456a501a5344cdff9580c89e6c51180088a73d69ea88",
-    "index.md": "9020edfe43d7a3c3ed3a7561df2f558a08745e7262108a4bc1c5bc361990233e",
-    "overview/index.html": "d9efcf7481bd6f295875c8c20620ad15c5f7a3a51fd1081e82938419984ec05c",
-    "overview/index.md": "081856d2bfb6d353a3fc3329786e02ec1414cb632775a43f25bbdd453b02bb2a",
-    "overview/keys-and-certificates/index.html": "31e1ae4d81cbdd9a65bb349eb9da94fe62087410be4a575a741ad79b276a0146",
-    "overview/keys-and-certificates/index.md": "1f3c3a22b096c4038831494183da17cdb601aaeb60038ebdf557d075c2d59bd6",
-    "release-notes/index.html": "87732a5d8d956c86d2f670ea9bf4c870d74159e5af0e72f3c8559ccca42c7292",
-    "release-notes/index.md": "4e2fcb9bd2f976f6e3583f77112ee39bdab7e3fb38433fd5671859b02feb5156",
-    "release.json": "0b476ac5fc154c615371e1bcf88cf64e674107aacdc440aafd1ec10eb17ab28f",
+    "control-plane/index.html": "4e72dd31abae57bda5d3a9823bbe26281a5e8d4c3b36b6ebf4d220c8d2f3b4fe",
+    "control-plane/index.md": "7d35af8a655f6b4fdac9d32579c2d4b2bd188a4542cb81551cba40582f7cf4fd",
+    "get-started/index.html": "9d40d704692fddac6fe16ef7e365f0e0ca2e3d104fa320db2b490ea848009098",
+    "get-started/index.md": "36d87aef51e3e08ed78e1e4758b77f91014fc3a4423019006d53863a2f16a4c3",
+    "index.html": "bbd1ce309699cba1c4c28e272f664d2689a16e0ae8508e3972b98ae90735a58f",
+    "index.md": "8bf34f04d4d6716c8aa5182602fe32bc534b445bf4ce2cfeae44e06944c63c10",
+    "overview/index.html": "056bbac53b2de6dc9620305ecbd33fc53e7b57d1faefc6cf8c6a37183fb95981",
+    "overview/index.md": "080c23bdec0196cd558f3ae76c63dba0ab0e7fc5e6e13152da1e0b4cadc434b6",
+    "overview/keys-and-certificates/index.html": "8a617312a71423a219a995e820b9fa2dd84a24a853dcf973077debe1dea33845",
+    "overview/keys-and-certificates/index.md": "475f3566f18705a8ec66a4dfa2f9335ed9fbe772a466fc6f5fda762a7bc124a9",
+    "release-notes/index.html": "00c1d02b806f1022af91f4805f63a3f60108effb64f19013faab29f2c44c7f73",
+    "release-notes/index.md": "b55031c92818f714e9b04ef817aed211c8a84953ca54b3130e7ab9c458c77119",
+    "release.json": "c3bba48565c000077249ae4e571086461eda29bd78718eb2388bef86e0f45a29",
     "released-components.json": "14a211e914d8051fe4d8882729cb9206e9ea9416ed65bc752452214aff9136e6",
     "robots.txt": "2b0a7f3b153c9d45f753fa8701f8d6db58bac09dab0462c6d09dd1bc0b7dcbd4",
-    "search-index.json": "7489d4ad063e8ecfb7f468e8ffbbf189ce3520557c5aae4621bd2a3ea782b904",
-    "sidecar-component.json": "a6dd1f8026f27d3d6aa577868f1766d6d12bc8528da17dc29356b2ce1af27238",
+    "search-index.json": "2efefee64b0ac7833278caf7df9a6eb6251ea277795fa160cddc96d29159b4d2",
+    "sidecar-component.json": "420d71e32cfb22365dc5cb4ef8945d2a558ea22df117fca87ce7beed2384ce13",
     "sidecar-config.template.yaml": "b16f3077b00d536dbbf79185a30641b5d392d8208c18e2e33bb9015b4744ec4e",
-    "sidecar/a2a/index.html": "f04ba3922e14a063f23068ed30912b2c3478fc9a4d1a63e8f3e3b60a067f8c34",
-    "sidecar/a2a/index.md": "2ae9c846a80b9df7c72b8aea5f8b12a3fe881920c803039ddedb98b9b6491816",
-    "sidecar/configuration/index.html": "b46b9872890bd0231515383a4e4d57406315fa00bc606bb1283ae0327f0fdff5",
-    "sidecar/configuration/index.md": "ab5dfec008ca4677ecdd76d5b08066e64901ccac41cd4709d0ae316716e769cf",
-    "sidecar/index.html": "091735cfb05826eaae3f1d35c222aeebb623310bdf9ebad89262405b63542e81",
-    "sidecar/index.md": "cbf8a0dd7ab3f69ea9da99684d2ccef52b710fd82c647cc9d0ec7734cbfa0c06",
-    "sidecar/install/index.html": "fcc416f559470f778022317363e083f3153acaaa82f39cab5bd6d7f5b3a84c3f",
-    "sidecar/install/index.md": "728fe4b28e719b4e29cddd9c01831980672ce2eecd0b0a236df06e872e4cc3ee",
-    "sidecar/integration/index.html": "1e42a9b6711974d657d858c2c82446e8f60d038c0e2255b262523b23cae22b86",
-    "sidecar/integration/index.md": "eba82a3d6d63d2e7f18b03cac08737f26447c7be2f4946b68ee0849a4eed1401",
-    "sidecar/operations/index.html": "b5bc36bbdd78a8fc6976432de5d0f8c9f747870806553d0dd06466abbcc8b081",
-    "sidecar/operations/index.md": "a1b6e60515f0b1d69d73f6a3df01e044e4cc953ac1b4e7c8a001ecac47c63b6b",
-    "sidecar/reference/verification/index.html": "ccb7e56f43eab84cc46119a01a214f5aec5b908cd2d6a0cad0fac09d0e2c37d6",
-    "sidecar/reference/verification/index.md": "56ada4159a5805229f1dde3352ed0f6833dd5db48af8f1cb6a52bd46fbb238ad",
+    "sidecar/a2a/index.html": "57dccced3856a6ecce073ca0731b688c26c8a60839cbf9117b37134ab397cc93",
+    "sidecar/a2a/index.md": "263a30f2e9c6bf8349f1614cad2089e780f9084649100f635ed905c39a33bbee",
+    "sidecar/configuration/index.html": "e7b96fa78a01f9cbbe901663c9858e4ca03dc59761ee97e93fb61ce23e6e855b",
+    "sidecar/configuration/index.md": "e40093aef0b6d5db905b4c73c609632e77a1f993212b9c5189af4962efa940e3",
+    "sidecar/index.html": "2acf3d5b6386512ad8066790d52b0c01b1e1c7522a56f5efc7029c14d75a5d6a",
+    "sidecar/index.md": "1bcbf87c5fdfd107fd9ce8e15c4af8a16a0f004f1246bc2e00c4e5b948cedf3b",
+    "sidecar/install/index.html": "178379c1dcdf30f7d4ab72fd060580f5edb37a42ac1612a00d295140d96318be",
+    "sidecar/install/index.md": "c7af5aea44097ec124184f66c65499d3e8c54b27d6f20931b731a1383012c717",
+    "sidecar/integration/index.html": "b8f4b7ea9ae6925ef3b1bcf21089614fdd913934d2044cae9e6b520dfeca74da",
+    "sidecar/integration/index.md": "fb73929c98782841503fe8993e2ffed9f5419dc390985c23da47a708c5033969",
+    "sidecar/operations/index.html": "cea8de60dc7fbd639afd40420ee1d356e5b1246f3c71ef7d288d9b048d28fc83",
+    "sidecar/operations/index.md": "8803c00b25402d5deeb7df289dd7ee6ea00f178ac080fb46e5d20ea80b94c9d1",
+    "sidecar/reference/verification/index.html": "2e26386e0795095d617f62211a818284ba346cda029ad3dda86ee0a8b3624e6c",
+    "sidecar/reference/verification/index.md": "ae01a62ea14017377ad9bc4bb5844816026ce8d9694a3189a1dccd21504065d3",
     "sitemap.xml": "8ec9bfbca94b48e389d8e37682acfb83c8b710f417a48653cb7f64928a27462f",
-    "trust-anchor-publisher/index.html": "faa31f44b252295c64c40caa57279838d4c9b07f640a1c99b07cf1e42b778ef7",
-    "trust-anchor-publisher/index.md": "37c94ea274f1441a09b7896c3b1cf2acc92f71a805fe3671a6c2b801bfb256ac"
+    "trust-anchor-publisher/index.html": "1b962434eb09226fe7f11fa1803e6a873bc8660e707e853cad18115e171270ca",
+    "trust-anchor-publisher/index.md": "611562fbc13f88470d524058b514a55d7844e8d18d66eacdaad71423422a0fc9"
   },
   "forwarding": {},
   "pages": {
@@ -268,8 +268,8 @@
       "description": "Learn AAC, configure a tenant and investigate an execution.",
       "metadata_sha256": "25d2c2da3547c3ef6bc97532a35aa92aea5151b3d981e75185e2ae8eefba2545",
       "output_sha256": {
-        "html": "56bb0af3155c17672827456a501a5344cdff9580c89e6c51180088a73d69ea88",
-        "md": "9020edfe43d7a3c3ed3a7561df2f558a08745e7262108a4bc1c5bc361990233e"
+        "html": "bbd1ce309699cba1c4c28e272f664d2689a16e0ae8508e3972b98ae90735a58f",
+        "md": "8bf34f04d4d6716c8aa5182602fe32bc534b445bf4ce2cfeae44e06944c63c10"
       },
       "route": "/",
       "section": "Home",
@@ -1192,8 +1192,8 @@
       "description": "Connect to AAC's shared API service for identity, public trust and execution queries.",
       "metadata_sha256": "c32e8541eb9be36bb4b272244595ef37179c1d3dc09de342571e68bd4a974b02",
       "output_sha256": {
-        "html": "f139af2d3c350c27fb0a42f9ce48e5f244fa2ac0fd047e6deeee4d83d3f253f8",
-        "md": "5cce6bd4caf4eddd465313354a284e5482708134843525b3e9d0969b48c1e678"
+        "html": "4e72dd31abae57bda5d3a9823bbe26281a5e8d4c3b36b6ebf4d220c8d2f3b4fe",
+        "md": "7d35af8a655f6b4fdac9d32579c2d4b2bd188a4542cb81551cba40582f7cf4fd"
       },
       "route": "/control-plane/",
       "section": "Control Plane",
@@ -1206,8 +1206,8 @@
       "description": "Run a first authenticated reservation with Docker.",
       "metadata_sha256": "4e5df82c84bc75c12eb6f79487a933c9b4a8ed1a7890602b7d1d595459da3433",
       "output_sha256": {
-        "html": "507aca90b0ac742dd4c5f42af7814801d21247a60bc225c10d99d831d398e4db",
-        "md": "6811ae3b6f9d549542f512f8b7b19ae401334543d5f183c4a61276574b95f926"
+        "html": "9d40d704692fddac6fe16ef7e365f0e0ca2e3d104fa320db2b490ea848009098",
+        "md": "36d87aef51e3e08ed78e1e4758b77f91014fc3a4423019006d53863a2f16a4c3"
       },
       "route": "/get-started/",
       "section": "Get started",
@@ -1220,8 +1220,8 @@
       "description": "Delegated authority, local verification and the limits of receipts.",
       "metadata_sha256": "070f83234ce4c5545745ffc0efeaac1819abd517e11d65b04424dbe2140c764b",
       "output_sha256": {
-        "html": "d9efcf7481bd6f295875c8c20620ad15c5f7a3a51fd1081e82938419984ec05c",
-        "md": "081856d2bfb6d353a3fc3329786e02ec1414cb632775a43f25bbdd453b02bb2a"
+        "html": "056bbac53b2de6dc9620305ecbd33fc53e7b57d1faefc6cf8c6a37183fb95981",
+        "md": "080c23bdec0196cd558f3ae76c63dba0ab0e7fc5e6e13152da1e0b4cadc434b6"
       },
       "route": "/overview/",
       "section": "Overview",
@@ -1234,8 +1234,8 @@
       "description": "Trust material, custody and lifecycle.",
       "metadata_sha256": "91e8505f06881379892ed2ba43bdad36cc65fe28d52269d1c07e14fe3efa9f56",
       "output_sha256": {
-        "html": "31e1ae4d81cbdd9a65bb349eb9da94fe62087410be4a575a741ad79b276a0146",
-        "md": "1f3c3a22b096c4038831494183da17cdb601aaeb60038ebdf557d075c2d59bd6"
+        "html": "8a617312a71423a219a995e820b9fa2dd84a24a853dcf973077debe1dea33845",
+        "md": "475f3566f18705a8ec66a4dfa2f9335ed9fbe772a466fc6f5fda762a7bc124a9"
       },
       "route": "/overview/keys-and-certificates/",
       "section": "Overview",
@@ -1244,12 +1244,12 @@
     },
     "/release-notes/": {
       "applicability": "AAC Sidecar v0.5.1",
-      "content_sha256": "551cf0816c565bd85889bb2fc2bf4989e6f30d721859042676f931281242e257",
+      "content_sha256": "768aad41f8b90bad15a8f3a4fe0bb90c25aa6ced5ef33153d09f2b7b21f1002e",
       "description": "Changes and upgrade guidance by component.",
       "metadata_sha256": "b8f1782e52a090bdfb56baca9530f2856eb1123f00bceb1c6d1926a43f816085",
       "output_sha256": {
-        "html": "87732a5d8d956c86d2f670ea9bf4c870d74159e5af0e72f3c8559ccca42c7292",
-        "md": "4e2fcb9bd2f976f6e3583f77112ee39bdab7e3fb38433fd5671859b02feb5156"
+        "html": "00c1d02b806f1022af91f4805f63a3f60108effb64f19013faab29f2c44c7f73",
+        "md": "b55031c92818f714e9b04ef817aed211c8a84953ca54b3130e7ab9c458c77119"
       },
       "route": "/release-notes/",
       "section": "Release notes",
@@ -1262,8 +1262,8 @@
       "description": "Install a sidecar beside your agent and connect it to AAC.",
       "metadata_sha256": "c9cb5aa2f7302446bf14b0be328f1cddd7a7b32732e8ed4e573916d5e269b74c",
       "output_sha256": {
-        "html": "091735cfb05826eaae3f1d35c222aeebb623310bdf9ebad89262405b63542e81",
-        "md": "cbf8a0dd7ab3f69ea9da99684d2ccef52b710fd82c647cc9d0ec7734cbfa0c06"
+        "html": "2acf3d5b6386512ad8066790d52b0c01b1e1c7522a56f5efc7029c14d75a5d6a",
+        "md": "1bcbf87c5fdfd107fd9ce8e15c4af8a16a0f004f1246bc2e00c4e5b948cedf3b"
       },
       "route": "/sidecar/",
       "section": "Sidecar",
@@ -1272,12 +1272,12 @@
     },
     "/sidecar/a2a/": {
       "applicability": "AAC Sidecar v0.5.1",
-      "content_sha256": "16460e514c1c84108e104481ffd535eb2455cd1b50d373cc224adb855f7c0d2a",
+      "content_sha256": "18d48c2cd0171103c56d3f98abde2c5eadec4ac882ba63f3fa29c171678147b3",
       "description": "Receive and send A2A messages under verified delegated authority.",
       "metadata_sha256": "69183cf048cad4227d699f321787f2a06d9d4cd6e2dd6487ac0de32c547e5c27",
       "output_sha256": {
-        "html": "f04ba3922e14a063f23068ed30912b2c3478fc9a4d1a63e8f3e3b60a067f8c34",
-        "md": "2ae9c846a80b9df7c72b8aea5f8b12a3fe881920c803039ddedb98b9b6491816"
+        "html": "57dccced3856a6ecce073ca0731b688c26c8a60839cbf9117b37134ab397cc93",
+        "md": "263a30f2e9c6bf8349f1614cad2089e780f9084649100f635ed905c39a33bbee"
       },
       "route": "/sidecar/a2a/",
       "section": "Sidecar",
@@ -1286,12 +1286,12 @@
     },
     "/sidecar/configuration/": {
       "applicability": "AAC Sidecar v0.5.1",
-      "content_sha256": "d45f2b4591ad224d78dd3b2dc050b1888f9acf651ba172868603206c012542d4",
+      "content_sha256": "291399ed93834f414ab117fc7dc5587742fc1b8fc65e8c876186eb9e08716fd0",
       "description": "Configure agents, ingress, trust and durable state.",
       "metadata_sha256": "5ec580d9f6911ab587d70bef73ef99776b40c4db460beffe441252f2e173595d",
       "output_sha256": {
-        "html": "b46b9872890bd0231515383a4e4d57406315fa00bc606bb1283ae0327f0fdff5",
-        "md": "ab5dfec008ca4677ecdd76d5b08066e64901ccac41cd4709d0ae316716e769cf"
+        "html": "e7b96fa78a01f9cbbe901663c9858e4ca03dc59761ee97e93fb61ce23e6e855b",
+        "md": "e40093aef0b6d5db905b4c73c609632e77a1f993212b9c5189af4962efa940e3"
       },
       "route": "/sidecar/configuration/",
       "section": "Sidecar",
@@ -1304,8 +1304,8 @@
       "description": "Get the sidecar container or standalone binary, then connect it to your agent.",
       "metadata_sha256": "39f980f0dacb0b6c270076906cae51ce0bcd2f6fb74822368feeae96629ba326",
       "output_sha256": {
-        "html": "fcc416f559470f778022317363e083f3153acaaa82f39cab5bd6d7f5b3a84c3f",
-        "md": "728fe4b28e719b4e29cddd9c01831980672ce2eecd0b0a236df06e872e4cc3ee"
+        "html": "178379c1dcdf30f7d4ab72fd060580f5edb37a42ac1612a00d295140d96318be",
+        "md": "c7af5aea44097ec124184f66c65499d3e8c54b27d6f20931b731a1383012c717"
       },
       "route": "/sidecar/install/",
       "section": "Sidecar",
@@ -1314,12 +1314,12 @@
     },
     "/sidecar/integration/": {
       "applicability": "AAC Sidecar v0.5.1",
-      "content_sha256": "645a44860119ecccd9b32edca72fb77dc7a5151f63b681f74c5e6c4447ec7b99",
+      "content_sha256": "3dab6c55650a337fb241c4cd91adb57a566e4698ae41767fd1399974df327642",
       "description": "Native AAC delivery, agent decisions and pairing authentication.",
       "metadata_sha256": "4d5161a6583c2d6c0c20f12ab9deea8c36be8c2e571ecba96da467a8752b3be2",
       "output_sha256": {
-        "html": "1e42a9b6711974d657d858c2c82446e8f60d038c0e2255b262523b23cae22b86",
-        "md": "eba82a3d6d63d2e7f18b03cac08737f26447c7be2f4946b68ee0849a4eed1401"
+        "html": "b8f4b7ea9ae6925ef3b1bcf21089614fdd913934d2044cae9e6b520dfeca74da",
+        "md": "fb73929c98782841503fe8993e2ffed9f5419dc390985c23da47a708c5033969"
       },
       "route": "/sidecar/integration/",
       "section": "Sidecar",
@@ -1332,8 +1332,8 @@
       "description": "Diagnostics, maintenance and evidence verification.",
       "metadata_sha256": "8e2114988e4329d265de125f8cc6ca7d900be165965d74affa98b3d4117a34bc",
       "output_sha256": {
-        "html": "b5bc36bbdd78a8fc6976432de5d0f8c9f747870806553d0dd06466abbcc8b081",
-        "md": "a1b6e60515f0b1d69d73f6a3df01e044e4cc953ac1b4e7c8a001ecac47c63b6b"
+        "html": "cea8de60dc7fbd639afd40420ee1d356e5b1246f3c71ef7d288d9b048d28fc83",
+        "md": "8803c00b25402d5deeb7df289dd7ee6ea00f178ac080fb46e5d20ea80b94c9d1"
       },
       "route": "/sidecar/operations/",
       "section": "Sidecar",
@@ -1346,8 +1346,8 @@
       "description": "Optional signature, checksum and build-provenance checks.",
       "metadata_sha256": "5322d1ee6626d23491729d7ad7428dc8a37c3a8d5157889cfdf556086fc3bda2",
       "output_sha256": {
-        "html": "ccb7e56f43eab84cc46119a01a214f5aec5b908cd2d6a0cad0fac09d0e2c37d6",
-        "md": "56ada4159a5805229f1dde3352ed0f6833dd5db48af8f1cb6a52bd46fbb238ad"
+        "html": "2e26386e0795095d617f62211a818284ba346cda029ad3dda86ee0a8b3624e6c",
+        "md": "ae01a62ea14017377ad9bc4bb5844816026ce8d9694a3189a1dccd21504065d3"
       },
       "route": "/sidecar/reference/verification/",
       "section": "Sidecar",
@@ -1360,8 +1360,8 @@
       "description": "Install, configure and operate your tenant's public-trust publisher.",
       "metadata_sha256": "272274823eda0284c1c43101f26048c8fc31b0cd744a351abb5d0e40c929dba7",
       "output_sha256": {
-        "html": "faa31f44b252295c64c40caa57279838d4c9b07f640a1c99b07cf1e42b778ef7",
-        "md": "37c94ea274f1441a09b7896c3b1cf2acc92f71a805fe3671a6c2b801bfb256ac"
+        "html": "1b962434eb09226fe7f11fa1803e6a873bc8660e707e853cad18115e171270ca",
+        "md": "611562fbc13f88470d524058b514a55d7844e8d18d66eacdaad71423422a0fc9"
       },
       "route": "/trust-anchor-publisher/",
       "section": "Trust anchor publisher",

@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/" aria-current="page">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Agent integration</span></nav>
 <h1 id="agent-integration">Agent integration</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/integration/index.md" download="sidecar-integration.md">Markdown</a><span class="revision">Docs b7e0bf78604d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/integration/index.md" download="sidecar-integration.md">Markdown</a><span class="revision">Docs 088c76638ef3</span></div>
 <p><a href="/overview/">Understand AAC authority and verification</a>.</p>
 <h2 id="authority-predicates-and-a2a-integration">Authority, predicates and A2A integration</h2>
 <p>Native originators call <code>POST /v1/agent/mint-root</code> or <code>/v1/agent/delegations</code>
@@ -407,8 +407,8 @@ config = {
             &quot;state_file&quot;: str(base / &quot;state/a2a-egress.db&quot;),
             &quot;retention_seconds&quot;: 86400,
             &quot;max_entries_per_pair&quot;: 4096,
-            &quot;max_cached_response_body_bytes&quot;: 4096,
-            &quot;max_reserved_cached_bytes_per_pair&quot;: 16777216,
+            &quot;max_cached_response_body_bytes&quot;: 262236,
+            &quot;max_reserved_cached_bytes_per_pair&quot;: 1074118656,
         },
     },
     &quot;classes_of_action&quot;: {
@@ -734,7 +734,8 @@ python demo_client.py
 <p>The client prints only correlation identifiers and outcomes. The native chain
 mints a root and initial holder authority, invokes the agent, forwards to
 <code>self_receive</code> with the same task restriction, then settles with a signed
-terminal attestation. The separate A2A dispatch returns <code>{&quot;dispatch_id&quot;: …, &quot;status&quot;: &quot;dispatched&quot;}</code> once the sample reply passes the sidecar's checks; its identical
+terminal attestation. The separate A2A dispatch returns <code>{&quot;a2a_response&quot;: …, &quot;dispatch_id&quot;: …, &quot;status&quot;: &quot;dispatched&quot;}</code> once the sample reply passes the
+sidecar's checks, with the sample reply itself in <code>a2a_response</code>; its identical
 retry returns the retained acknowledgement rather than repeating the operation.</p>
 <p>A successful HTTP response is only part of the evidence. Match the returned
 <code>root_token_id</code> in the local telemetry file and check the mint, dispatch,

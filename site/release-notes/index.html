@@ -6,9 +6,9 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a><a href="#0-5-1" class="toc-h2">0.5.1</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a><a href="#0-5-1" class="toc-h2">0.5.1</a><a href="#0-5-2" class="toc-h2">0.5.2</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
 <h1 id="release-notes">Release notes</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs b7e0bf78604d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs 088c76638ef3</span></div>
 <h2 id="0-4-0">0.4.0</h2>
 <p>This guidance applies when upgrading to 0.4.0; it also covers behavior introduced
 in earlier releases.</p>
@@ -82,6 +82,17 @@ receive-only: its agent cannot send A2A messages until both blocks are added.
 A configuration that has both blocks, as the published template does, was not
 affected and behaves as before. See &quot;Receive A2A messages without sending&quot; in
 the configuration reference.</p>
+<h2 id="0-5-2">0.5.2</h2>
+<p>The acknowledgement your agent receives from <code>POST /v1/agent/a2a/dispatch</code>
+now carries the peer's reply: <code>a2a_response</code> holds the peer's validated
+JSON-RPC answer, as the peer sent it, next to <code>dispatch_id</code> and <code>status</code>. The
+whole acknowledgement is retained for the retry window, so an identical retry
+returns the reply too. To make that possible the sidecar requires
+<code>a2a.egress_idempotency.max_cached_response_body_bytes</code> to be at least
+<code>a2a.max_request_body_bytes</code> plus 92; a configuration below that stops at
+startup with a message naming both settings, and re-running the init command
+for the agent writes a block that satisfies it. The retry database now holds
+peer replies for the retention window. See the A2A integration page.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
 <p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main></div></body></html>

@@ -68,14 +68,14 @@ your agent ──HTTP: POST /v1/agent/a2a/dispatch──▶ your sidecar (loopba
             an authority mode and the A2A request     claims the dispatch id
                                                  ──HTTPS: POST /a2a/v1──▶ peer sidecar
                                                  ◀── peer's reply ──
-your agent ◀── {"dispatch_id": "…", "status": "dispatched"} ──
+your agent ◀── {"a2a_response": <peer's reply>, "dispatch_id": "…", "status": "dispatched"} ──
 ```
 
-The sidecar validates the peer's reply against the profile and retains the
-outcome for the retry window. It returns an acknowledgement to your agent, not
-the peer's reply content. Treat a dispatch as a one-way message with
-confirmation of delivery; if your workflow needs the peer's answer, the peer's
-agent sends it as its own message to you.
+The sidecar validates the peer's reply against the profile and returns it to
+your agent inside the acknowledgement, as the exact bytes the peer sent. The
+whole acknowledgement is retained for the retry window, so an identical retry
+returns the reply too. A dispatch is therefore a request and its response in
+one call, the same shape as A2A itself.
 
 ## Set up A2A for your agent
 
@@ -344,19 +344,36 @@ authenticated session, and AAC does not turn them into an authentication.
 
 ### 5. What success looks like
 
-A delivered message prints the acknowledgement:
+A delivered message prints the acknowledgement with the peer's reply inside it:
 
 ```json
 {
+  "a2a_response": {
+    "jsonrpc": "2.0",
+    "id": "a2a-3d9f0c2e-7b41-4e6a-9c58-1f2a3b4c5d6e",
+    "result": {
+      "message": {
+        "messageId": "7c1d2e3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f",
+        "contextId": "quote-lisbon-2",
+        "role": "ROLE_AGENT",
+        "parts": [{"text": "Two seats to Lisbon held until 18:00"}]
+      }
+    }
+  },
   "dispatch_id": "6f1c0a8e-3b2d-4c7e-9a1f-2d3e4f5a6b7c",
   "status": "dispatched"
 }
 ```
 
-Behind that line, the peer's sidecar verified your authority, the peer's
-handler answered, and your sidecar checked the answer against the profile.
-The second, identical post in the example returned the same bytes without a
-second delivery. In your sidecar's telemetry sink, the `a2a_egress` event
+Behind that output, the peer's sidecar verified your authority, the peer's
+handler answered, and your sidecar checked the answer against the profile
+before placing it in `a2a_response`, byte for byte as the peer sent it. The
+JSON-RPC `id` matches your request, and the reply holds either `result`, the
+peer agent's message or terminal task, or a JSON-RPC `error` the peer
+returned. `status: dispatched` confirms delivery and a well-formed reply, not
+the peer's success: inspect `a2a_response` for `error` before acting on it.
+The second, identical post in the example returned the same bytes, reply
+included, without a second delivery. In your sidecar's telemetry sink, the `a2a_egress` event
 records `result: accepted`; on the peer, `a2a_ingress` records `accepted` and
 the handler's log shows one `POST /a2a/v1`. See
 [audit your workflows](/sidecar/operations/#audit-your-workflows) for the
@@ -425,7 +442,7 @@ Responses:
 
 | HTTP | Body | Meaning |
 |---|---|---|
-| 200 | `{"dispatch_id": "…", "status": "dispatched"}` | Delivered; the peer's reply passed the profile check |
+| 200 | `{"a2a_response": <peer's reply>, "dispatch_id": "…", "status": "dispatched"}` | Delivered; the peer's reply passed the profile check and is returned as the peer sent it, whether it carries `result` or a JSON-RPC `error` |
 | 200, 4xx or 5xx | The retained first outcome | An identical retry of a dispatch whose outcome was decided after the claim; same status and bytes as the first time |
 | 409 `ERR_EGRESS_DISPATCH_IN_PROGRESS` | error envelope | Not retained. The first attempt is still running; back off and retry the same identifier and bytes |
 | 409 `ERR_EGRESS_IDEMPOTENCY_CONFLICT` | error envelope | Not retained. The identifier was reused with a different body; the first claim still governs it, so keep the original bytes or start a new operation |
@@ -469,15 +486,28 @@ Size the limits for your deployment and test them before use.
 | `egress_idempotency.state_file` | The retained dispatch-outcome database, opened before either listener binds | Absolute path on storage that survives the process or container replacement you rely on; missing parents, an unusable file or a second owner stop startup |
 | `egress_idempotency.retention_seconds` | How long a dispatch outcome supports safe retries | 120–86400, and at least twice `deadline_seconds` |
 | `egress_idempotency.max_entries_per_pair` | Live dispatch identifiers retained for this agent pair; saturation refuses new dispatches rather than evicting live ones | Positive integer |
-| `egress_idempotency.max_cached_response_body_bytes` | Largest outcome body retained for a dispatch; a larger one is replaced by `ERR_EGRESS_RESPONSE_TOO_LARGE` | At least 203 |
-| `egress_idempotency.max_reserved_cached_bytes_per_pair` | Total outcome bytes reserved for the pair | At least `max_cached_response_body_bytes` |
+| `egress_idempotency.max_cached_response_body_bytes` | Largest outcome body retained for a dispatch, including the acknowledgement that carries the peer's reply | At least `max_request_body_bytes` + 92 (the acknowledgement framing), and at least 203; the sidecar refuses to start below either |
+| `egress_idempotency.max_reserved_cached_bytes_per_pair` | Total outcome bytes reserved for the pair; usable dispatches are the smaller of `max_entries_per_pair` and this value divided by `max_cached_response_body_bytes` | At least `max_cached_response_body_bytes` |
 
 Supply both sending blocks or neither; one without the other stops startup.
 Without them the sidecar is receive-only. Size `max_entries_per_pair` for peak
-new dispatches per second multiplied by `retention_seconds`, then reserve that
-count multiplied by `max_cached_response_body_bytes`, plus storage overhead; the
-template's values suit a small test, not a busy agent. Local or remote
-redirects are never followed, so every URL must name its final endpoint. The
+new dispatches per second multiplied by `retention_seconds`, then set
+`max_reserved_cached_bytes_per_pair` to that count multiplied by
+`max_cached_response_body_bytes`; a smaller reservation lowers the usable
+count to the reserved bytes divided by the per-dispatch maximum, whatever the
+entry limit says. The reservation is an accounting bound, not allocated
+storage: the database holds only the outcomes actually retained, so size the
+file for the replies you expect plus storage overhead. The template's values
+suit a small test, not a busy agent.
+
+The retry database holds every delivered dispatch's acknowledgement, and with
+it the peer's reply, for `retention_seconds`. Treat the file as business data:
+restrict access to the sidecar's user, include it in the same backup and
+retention decisions as the agent's own records, and expect its contents to
+survive until expiry reclaims them. Expiry is reclamation, not secure erasure.
+
+Local or remote redirects are never followed, so every URL must name its final
+endpoint. The
 [configuration reference](/sidecar/configuration/#configuration-and-workflow-state)
 explains how the A2A deadline interacts with the other timeouts.
 
@@ -535,7 +565,7 @@ HTTPS at the final URL, with no redirect. Then:
 
 1. Peer A adds the destination and class of action for B to its agent
    configuration and runs the init command; both restart their sidecars.
-2. A's agent sends one message with `a2a_send.py`; it prints `dispatched`.
+2. A's agent sends one message with `a2a_send.py`; it prints the acknowledgement with B's reply in `a2a_response` (its `result`, or a JSON-RPC `error` B returned) and `status` `dispatched`.
 3. B's handler log shows one `POST /a2a/v1` carrying A's tenant and agent in
    the `X-AAC-Originator-Tenant-Id` and `X-AAC-Presenter-Spiffe-Id` headers;
    B's `a2a_ingress` event records `accepted`.
