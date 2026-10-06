@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/" aria-current="page">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Agent integration</span></nav>
 <h1 id="agent-integration">Agent integration</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.1</span><a href="/sidecar/integration/index.md" download="sidecar-integration.md">Markdown</a><span class="revision">Docs 088c76638ef3</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.2</span><a href="/sidecar/integration/index.md" download="sidecar-integration.md">Markdown</a><span class="revision">Docs 8c42821ba0eb</span></div>
 <p><a href="/overview/">Understand AAC authority and verification</a>.</p>
 <h2 id="authority-predicates-and-a2a-integration">Authority, predicates and A2A integration</h2>
 <p>Native originators call <code>POST /v1/agent/mint-root</code> or <code>/v1/agent/delegations</code>
@@ -680,7 +680,7 @@ print(&quot;Created container configuration and sample application build directo
 <pre><code class="language-bash">cd &quot;$AAC_DEMO_DIR&quot;
 python configure_container.py
 docker build --tag aac-demo-agent &quot;$AAC_DEMO_DIR/container/agent&quot;
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.1
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.2
 </code></pre>
 <p>Run from a non-root host account. This local demonstration runs both containers
 with your numeric UID/GID so their staged private files can remain mode 0600;
@@ -698,7 +698,7 @@ docker run --detach --name aac-demo-sidecar --user &quot;$(id -u):$(id -g)&quot;
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/sidecar,dst=/etc/aac,readonly&quot; \
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/pair,dst=/run/secrets,readonly&quot; \
   --mount &quot;type=bind,src=${AAC_DEMO_DIR}/container/state,dst=/var/lib/aac&quot; \
-  docker.io/cascadeauth/aac-sidecar:v0.5.1 -config /etc/aac/sidecar-config.yaml
+  docker.io/cascadeauth/aac-sidecar:v0.5.2 -config /etc/aac/sidecar-config.yaml
 docker logs --tail 30 aac-demo-agent
 docker logs --tail 30 aac-demo-sidecar
 docker exec aac-demo-agent \

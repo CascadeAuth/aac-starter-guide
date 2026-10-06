@@ -100,7 +100,7 @@ remain public.
 
 ## Stage and support
 
-Current version: **`v0.5.1`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.1`.
+Current version: **`v0.5.2`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.2`.
 Use versioned/digest references; there is no mutable `latest` tag.
 The [released-component record](https://docs.cascadeauth.com/released-components.json)
 provides current installation metadata; each demo run retains its exact selection.

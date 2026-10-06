@@ -11,8 +11,8 @@ Get the released container and its operating guide from
 [AAC Sidecar on Docker Hub](https://hub.docker.com/r/cascadeauth/aac-sidecar/):
 
 ```bash
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.1
-docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.1 -version
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.2
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.2 -version
 ```
 
 Continue with [download and installation options](/sidecar/install/) for the

@@ -441,7 +441,7 @@ Developer-binary uninstall:
 
 ```bash
 rm "${HOME}/.local/bin/aac-sidecar"
-rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.5.1"
+rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.5.2"
 ```
 
 Do not use those commands for an operator-owned production directory or state

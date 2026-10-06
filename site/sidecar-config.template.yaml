@@ -99,17 +99,26 @@ a2a:
   # restart. Missing parents, corrupt/insecure files, or concurrent ownership
   # fail startup; there is no memory or central-service fallback.
   # retention_seconds controls how long dispatch results support safe retries.
+  # A delivered dispatch retains its whole acknowledgement, which carries the
+  # peer's reply to your agent, so max_cached_response_body_bytes must be at
+  # least max_request_body_bytes + 92 (the acknowledgement framing); the
+  # sidecar refuses to start otherwise. The database then holds peer replies
+  # for the retention window: protect and back up the file accordingly, and
+  # treat expiry as reclamation, not secure erasure.
   # Size max_entries_per_pair for peak new dispatches/second * retention_seconds.
-  # Reserve that entry count * max_cached_response_body_bytes, then add measured
-  # storage overhead and headroom. The example values below are for a small
-  # test: 20 new dispatches/second retained for 24 hours would need 1,728,000
+  # Usable entries are the smaller of max_entries_per_pair and
+  # max_reserved_cached_bytes_per_pair / max_cached_response_body_bytes, so
+  # reserve that entry count * max_cached_response_body_bytes. The reservation
+  # is an accounting bound, not allocated storage: the file holds only the
+  # outcomes actually retained. The example values below are for a small test:
+  # 20 new dispatches/second retained for 24 hours would need 1,728,000
   # entries, exceeding these limits. Measure your workload before deployment.
   egress_idempotency:
     state_file: "/var/lib/aac/a2a-egress.db"
     retention_seconds: 86400
     max_entries_per_pair: 4096
-    max_cached_response_body_bytes: 4096
-    max_reserved_cached_bytes_per_pair: 16777216
+    max_cached_response_body_bytes: 262236
+    max_reserved_cached_bytes_per_pair: 1074118656
 
 sidecar:
   loopback_port: 8080
