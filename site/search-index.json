@@ -850,7 +850,7 @@
     "title": "Install and operate the trust anchor publisher"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "guide",
     "route": "/aeg/",
     "section": "AEG",
@@ -965,7 +965,7 @@
     "title": "Agent Execution Graphs (AEG)"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/aeg/reference/",
     "section": "AEG",
@@ -980,7 +980,7 @@
     "title": "AEG command reference"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/aeg/reference/list/",
     "section": "AEG",
@@ -1010,7 +1010,7 @@
     "title": "aeg list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/aeg/reference/render/",
     "section": "AEG",
@@ -1040,7 +1040,7 @@
     "title": "aeg render"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "guide",
     "route": "/cli/",
     "section": "AAC CLI",
@@ -1055,7 +1055,7 @@
     "title": "AAC CLI"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "guide",
     "route": "/cli/guide/",
     "section": "AAC CLI",
@@ -1155,7 +1155,7 @@
     "title": "AAC CLI user guide"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/",
     "section": "AAC CLI",
@@ -1195,7 +1195,7 @@
     "title": "Command reference"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-agent-list/",
     "section": "AAC CLI",
@@ -1235,7 +1235,7 @@
     "title": "aac agent list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-agent-renew/",
     "section": "AAC CLI",
@@ -1243,7 +1243,7 @@
       {
         "anchor": "",
         "heading": "aac agent renew",
-        "text": "Replace the short-lived certificates; archive the old material. In \"The CLI creates a development CA\" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In \"I bring my own CA\" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too."
+        "text": "Replace the short-lived certificates; archive the old material. In \"The CLI creates a development CA\" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In \"I bring my own CA certificate\" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too."
       },
       {
         "anchor": "synopsis",
@@ -1256,8 +1256,8 @@
         "text": "Argument Type Required Default Description -h, --help flag no \u2014 show this help message and exit --agent value yes \u2014 Target agent name under ~/.aac/agents/. --output json | table no json Output mode (JSON by default). --profile value no \u2014 Optional check that the agent belongs to this profile; the agent itself records its profile, so the flag is never required. --ca flag no \u2014 Also reissue the development CA now."
       },
       {
-        "anchor": "i-bring-my-own-ca",
-        "heading": "I bring my own CA",
+        "anchor": "i-bring-my-own-ca-certificate",
+        "heading": "I bring my own CA certificate",
         "text": "Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. Pass only what your issuer re-signed: each replacement certificate with its key file, or on its own when the key is unchanged. Add --ca-cert-file only when your CA certificate changed too, and then replace every certificate it did not sign. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener. --ca-cert-file value no \u2014 Use this existing certificate authority certificate. --workload-key-file value no \u2014 Use this existing private key for the agent's identity. --terminal-key-file value no \u2014 Use this existing private key for the agent's receipts. --tls-key-file value no \u2014 Use this existing private key for the agent's HTTPS listener."
       },
       {
@@ -1276,11 +1276,11 @@
         "text": "aac agent aac agent status \u2014 Report what exists, certificate expiry, permission problems and the next command. aac agent list \u2014 List every agent under the CLI home with its tenant, case and state."
       }
     ],
-    "text": "aac agent renew Replace the short-lived certificates; archive the old material. In \"The CLI creates a development CA\" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In \"I bring my own CA\" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too. Synopsis aac agent renew [-h] --agent AGENT [--output {json,table}] [--profile PROFILE] [--ca] [--workload-cert-file PATH] [--terminal-cert-file PATH] [--tls-cert-file PATH] [--ca-cert-file PATH] [--workload-key-file PATH] [--terminal-key-file PATH] [--tls-key-file PATH] Arguments Argument Type Required Default Description -h, --help flag no \u2014 show this help message and exit --agent value yes \u2014 Target agent name under ~/.aac/agents/. --output json | table no json Output mode (JSON by default). --profile value no \u2014 Optional check that the agent belongs to this profile; the agent itself records its profile, so the flag is never required. --ca flag no \u2014 Also reissue the development CA now. I bring my own CA Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. Pass only what your issuer re-signed: each replacement certificate with its key file, or on its own when the key is unchanged. Add --ca-cert-file only when your CA certificate changed too, and then replace every certificate it did not sign. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener. --ca-cert-file value no \u2014 Use this existing certificate authority certificate. --workload-key-file value no \u2014 Use this existing private key for the agent's identity. --terminal-key-file value no \u2014 Use this existing private key for the agent's receipts. --tls-key-file value no \u2014 Use this existing private key for the agent's HTTPS listener. Output --output json (the default) prints one JSON document to standard output; --output table prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable. Exit codes Code Meaning 0 Success. 1 The control plane or the identity provider rejected the request. 2 Usage error: an invalid flag, value or flag combination. 3 A local configuration or state problem: profile, credential file, cached session or agent. 4 Transport failure: an endpoint could not be reached. Related commands aac agent aac agent status \u2014 Report what exists, certificate expiry, permission problems and the next command. aac agent list \u2014 List every agent under the CLI home with its tenant, case and state.",
+    "text": "aac agent renew Replace the short-lived certificates; archive the old material. In \"The CLI creates a development CA\" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In \"I bring my own CA certificate\" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too. Synopsis aac agent renew [-h] --agent AGENT [--output {json,table}] [--profile PROFILE] [--ca] [--workload-cert-file PATH] [--terminal-cert-file PATH] [--tls-cert-file PATH] [--ca-cert-file PATH] [--workload-key-file PATH] [--terminal-key-file PATH] [--tls-key-file PATH] Arguments Argument Type Required Default Description -h, --help flag no \u2014 show this help message and exit --agent value yes \u2014 Target agent name under ~/.aac/agents/. --output json | table no json Output mode (JSON by default). --profile value no \u2014 Optional check that the agent belongs to this profile; the agent itself records its profile, so the flag is never required. --ca flag no \u2014 Also reissue the development CA now. I bring my own CA certificate Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. Pass only what your issuer re-signed: each replacement certificate with its key file, or on its own when the key is unchanged. Add --ca-cert-file only when your CA certificate changed too, and then replace every certificate it did not sign. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener. --ca-cert-file value no \u2014 Use this existing certificate authority certificate. --workload-key-file value no \u2014 Use this existing private key for the agent's identity. --terminal-key-file value no \u2014 Use this existing private key for the agent's receipts. --tls-key-file value no \u2014 Use this existing private key for the agent's HTTPS listener. Output --output json (the default) prints one JSON document to standard output; --output table prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable. Exit codes Code Meaning 0 Success. 1 The control plane or the identity provider rejected the request. 2 Usage error: an invalid flag, value or flag combination. 3 A local configuration or state problem: profile, credential file, cached session or agent. 4 Transport failure: an endpoint could not be reached. Related commands aac agent aac agent status \u2014 Report what exists, certificate expiry, permission problems and the next command. aac agent list \u2014 List every agent under the CLI home with its tenant, case and state.",
     "title": "aac agent renew"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-agent-status/",
     "section": "AAC CLI",
@@ -1320,7 +1320,7 @@
     "title": "aac agent status"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-agent/",
     "section": "AAC CLI",
@@ -1355,7 +1355,7 @@
     "title": "aac agent"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-chain-list/",
     "section": "AAC CLI",
@@ -1400,7 +1400,7 @@
     "title": "aac chain list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-chain-show/",
     "section": "AAC CLI",
@@ -1440,7 +1440,7 @@
     "title": "aac chain show"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-chain/",
     "section": "AAC CLI",
@@ -1475,7 +1475,7 @@
     "title": "aac chain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-init/",
     "section": "AAC CLI",
@@ -1501,8 +1501,8 @@
         "text": "The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass --ca-key-file and --ca-cert-file together; neither one alone. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256. Argument Type Required Default Description --ca-key-file value no \u2014 Use this existing certificate authority key for the CLI to sign with (with --ca-cert-file)."
       },
       {
-        "anchor": "i-bring-my-own-ca",
-        "heading": "I bring my own CA",
+        "anchor": "i-bring-my-own-ca-certificate",
+        "heading": "I bring my own CA certificate",
         "text": "Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. All seven together: --workload-cert-file, --terminal-cert-file and --tls-cert-file, each with its key file (--workload-key-file, --terminal-key-file, --tls-key-file), plus --ca-cert-file. Never --ca-key-file: the CLI does not want your CA key. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener."
       },
       {
@@ -1536,11 +1536,11 @@
         "text": "aac aac agent \u2014 Inspect and maintain an agent created by aac init (status/renew/list). aac profile \u2014 Manage local profiles (list/show/create/update/delete). aac tenant \u2014 Tenant administration. aac trust-anchor \u2014 Inspect YOUR tenant's trust-anchor state (keys + ingest ledger). aac chain \u2014 Discover chains and inspect their audit observations. aac sso \u2014 Platform single sign-on: IdP connections, login, sessions and recovery keys."
       }
     ],
-    "text": "aac init Guided setup: register a developer tenant and create a runnable agent. Signs you in, registers a developer tenant (or reuses the profile's tenant), takes the AAC-assigned hosted trust domain, registers your workload, generates DEVELOPMENT keys and certificates, registers the tenant-admin public key together with a new tenant, and writes a complete sidecar configuration plus the publisher and Compose files. Safe to rerun: it resumes or reports the exact conflict and never overwrites private material. Synopsis aac init [-h] [--profile PROFILE] [--admin-url ADMIN_URL] [--data-plane-url DATA_PLANE_URL] [--trust-url TRUST_URL] [--output {json,table}] --agent AGENT [--workload-path WORKLOAD_PATH] [--workload-display-name WORKLOAD_DISPLAY_NAME] [--agent-config PATH] [--display-name DISPLAY_NAME] [--contact CONTACT] [--idp {github,google}] [--bootstrap-token BOOTSTRAP_TOKEN] [--flow {device,pkce}] [--no-browser] [--create-tenant] [--layout {host,container}] [--ca-key-file PATH] [--workload-cert-file PATH] [--terminal-cert-file PATH] [--tls-cert-file PATH] [--ca-cert-file PATH] [--workload-key-file PATH] [--terminal-key-file PATH] [--tls-key-file PATH] [--tenant-admin-key-file PATH] [--root-signing-key-file PATH] [--pairing-secret-file PATH] Arguments Argument Type Required Default Description -h, --help flag no \u2014 show this help message and exit --profile value no \u2014 Profile to set up under (default: AAC_PROFILE or main). --admin-url value no \u2014 Control-plane admin URL; creates the profile if it does not exist. --data-plane-url value no \u2014 Control-plane data-plane URL (optional). --trust-url value no \u2014 Public trust-material base URL for the sidecar and publisher; required when creating an agent (AAC stage: https://trust.stage.cascadeauth.dev). --output json | table no json Output mode: json (the default) or table. --agent value yes \u2014 Target agent name under ~/.aac/agents/; must match agent_name in the file. --workload-path value no \u2014 Optional SPIFFE path check; must match the configuration file or saved identity. --workload-display-name value no \u2014 Display name for the workload record (default: <agent-name> workload). --agent-config value no \u2014 Apply a tenant YAML configuration; required for a new agent. Refresh uses saved values when omitted. --display-name value no \u2014 New tenant's display name (required to register). --contact value no \u2014 New tenant's contact address (required to register). --idp github | google no \u2014 Developer-tier self-serve registration and sign-in with this identity provider. --bootstrap-token value no \u2014 Ceremony bootstrap token for a control plane that gates registration (local stacks). --flow device | pkce no \u2014 Override the sign-in flow. --no-browser flag no \u2014 Print the sign-in URL instead of opening a browser. --create-tenant flag no \u2014 Acknowledge creating a permanent tenant without a prompt (required when stdin is not a terminal). --layout host | container no \u2014 Path layout for the sidecar configuration: host paths (the default) or the paths inside the containers. Run setup again with another --layout to change it. The CLI creates a development CA The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass --ca-key-file and --ca-cert-file together; neither one alone. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256. Argument Type Required Default Description --ca-key-file value no \u2014 Use this existing certificate authority key for the CLI to sign with (with --ca-cert-file). I bring my own CA Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. All seven together: --workload-cert-file, --terminal-cert-file and --tls-cert-file, each with its key file (--workload-key-file, --terminal-key-file, --tls-key-file), plus --ca-cert-file. Never --ca-key-file: the CLI does not want your CA key. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener. Used by both cases Pass --ca-cert-file with --ca-key-file to reuse a development CA, or on its own with the three certificates above when your issuer signs. Argument Type Required Default Description --ca-cert-file value no \u2014 Use this existing certificate authority certificate. --workload-key-file value no \u2014 Use this existing private key for the agent's identity. --terminal-key-file value no \u2014 Use this existing private key for the agent's receipts. --tls-key-file value no \u2014 Use this existing private key for the agent's HTTPS listener. Other material you can supply Argument Type Required Default Description --tenant-admin-key-file value no \u2014 Use this existing tenant-admin signing key. --root-signing-key-file value no \u2014 Use this existing root-signing key. --pairing-secret-file value no \u2014 Use this existing per-pair invoke-auth secret. Output --output json (the default) prints one JSON document to standard output; --output table prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable. Exit codes Code Meaning 0 Success. 1 The control plane or the identity provider rejected the request. 2 Usage error: an invalid flag, value or flag combination. 3 A local configuration or state problem: profile, credential file, cached session or agent. 4 Transport failure: an endpoint could not be reached. Notes Pass --agent-config to explicitly apply tenant configuration; omit it on a rerun to refresh the last applied values. Restart the sidecar after applying. Sidecar v0.4.0 and later require pairing signatures on /v1/agent/delegations and /v1/agent/mint-root. On older releases, restrict these routes to your authorized originating application at ingress. Related commands aac aac agent \u2014 Inspect and maintain an agent created by aac init (status/renew/list). aac profile \u2014 Manage local profiles (list/show/create/update/delete). aac tenant \u2014 Tenant administration. aac trust-anchor \u2014 Inspect YOUR tenant's trust-anchor state (keys + ingest ledger). aac chain \u2014 Discover chains and inspect their audit observations. aac sso \u2014 Platform single sign-on: IdP connections, login, sessions and recovery keys.",
+    "text": "aac init Guided setup: register a developer tenant and create a runnable agent. Signs you in, registers a developer tenant (or reuses the profile's tenant), takes the AAC-assigned hosted trust domain, registers your workload, generates DEVELOPMENT keys and certificates, registers the tenant-admin public key together with a new tenant, and writes a complete sidecar configuration plus the publisher and Compose files. Safe to rerun: it resumes or reports the exact conflict and never overwrites private material. Synopsis aac init [-h] [--profile PROFILE] [--admin-url ADMIN_URL] [--data-plane-url DATA_PLANE_URL] [--trust-url TRUST_URL] [--output {json,table}] --agent AGENT [--workload-path WORKLOAD_PATH] [--workload-display-name WORKLOAD_DISPLAY_NAME] [--agent-config PATH] [--display-name DISPLAY_NAME] [--contact CONTACT] [--idp {github,google}] [--bootstrap-token BOOTSTRAP_TOKEN] [--flow {device,pkce}] [--no-browser] [--create-tenant] [--layout {host,container}] [--ca-key-file PATH] [--workload-cert-file PATH] [--terminal-cert-file PATH] [--tls-cert-file PATH] [--ca-cert-file PATH] [--workload-key-file PATH] [--terminal-key-file PATH] [--tls-key-file PATH] [--tenant-admin-key-file PATH] [--root-signing-key-file PATH] [--pairing-secret-file PATH] Arguments Argument Type Required Default Description -h, --help flag no \u2014 show this help message and exit --profile value no \u2014 Profile to set up under (default: AAC_PROFILE or main). --admin-url value no \u2014 Control-plane admin URL; creates the profile if it does not exist. --data-plane-url value no \u2014 Control-plane data-plane URL (optional). --trust-url value no \u2014 Public trust-material base URL for the sidecar and publisher; required when creating an agent (AAC stage: https://trust.stage.cascadeauth.dev). --output json | table no json Output mode: json (the default) or table. --agent value yes \u2014 Target agent name under ~/.aac/agents/; must match agent_name in the file. --workload-path value no \u2014 Optional SPIFFE path check; must match the configuration file or saved identity. --workload-display-name value no \u2014 Display name for the workload record (default: <agent-name> workload). --agent-config value no \u2014 Apply a tenant YAML configuration; required for a new agent. Refresh uses saved values when omitted. --display-name value no \u2014 New tenant's display name (required to register). --contact value no \u2014 New tenant's contact address (required to register). --idp github | google no \u2014 Developer-tier self-serve registration and sign-in with this identity provider. --bootstrap-token value no \u2014 Ceremony bootstrap token for a control plane that gates registration (local stacks). --flow device | pkce no \u2014 Override the sign-in flow. --no-browser flag no \u2014 Print the sign-in URL instead of opening a browser. --create-tenant flag no \u2014 Acknowledge creating a permanent tenant without a prompt (required when stdin is not a terminal). --layout host | container no \u2014 Path layout for the sidecar configuration: host paths (the default) or the paths inside the containers. Run setup again with another --layout to change it. The CLI creates a development CA The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass --ca-key-file and --ca-cert-file together; neither one alone. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256. Argument Type Required Default Description --ca-key-file value no \u2014 Use this existing certificate authority key for the CLI to sign with (with --ca-cert-file). I bring my own CA certificate Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. All seven together: --workload-cert-file, --terminal-cert-file and --tls-cert-file, each with its key file (--workload-key-file, --terminal-key-file, --tls-key-file), plus --ca-cert-file. Never --ca-key-file: the CLI does not want your CA key. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it. Argument Type Required Default Description --workload-cert-file value no \u2014 Use this certificate your issuer signed for the agent's identity. --terminal-cert-file value no \u2014 Use this certificate your issuer signed for the agent's receipts. --tls-cert-file value no \u2014 Use this certificate your issuer signed for the agent's HTTPS listener. Used by both cases Pass --ca-cert-file with --ca-key-file to reuse a development CA, or on its own with the three certificates above when your issuer signs. Argument Type Required Default Description --ca-cert-file value no \u2014 Use this existing certificate authority certificate. --workload-key-file value no \u2014 Use this existing private key for the agent's identity. --terminal-key-file value no \u2014 Use this existing private key for the agent's receipts. --tls-key-file value no \u2014 Use this existing private key for the agent's HTTPS listener. Other material you can supply Argument Type Required Default Description --tenant-admin-key-file value no \u2014 Use this existing tenant-admin signing key. --root-signing-key-file value no \u2014 Use this existing root-signing key. --pairing-secret-file value no \u2014 Use this existing per-pair invoke-auth secret. Output --output json (the default) prints one JSON document to standard output; --output table prints a readable table instead. Progress notes and diagnostics go to standard error, so the JSON stays parseable. Exit codes Code Meaning 0 Success. 1 The control plane or the identity provider rejected the request. 2 Usage error: an invalid flag, value or flag combination. 3 A local configuration or state problem: profile, credential file, cached session or agent. 4 Transport failure: an endpoint could not be reached. Notes Pass --agent-config to explicitly apply tenant configuration; omit it on a rerun to refresh the last applied values. Restart the sidecar after applying. Sidecar v0.4.0 and later require pairing signatures on /v1/agent/delegations and /v1/agent/mint-root. On older releases, restrict these routes to your authorized originating application at ingress. Related commands aac aac agent \u2014 Inspect and maintain an agent created by aac init (status/renew/list). aac profile \u2014 Manage local profiles (list/show/create/update/delete). aac tenant \u2014 Tenant administration. aac trust-anchor \u2014 Inspect YOUR tenant's trust-anchor state (keys + ingest ledger). aac chain \u2014 Discover chains and inspect their audit observations. aac sso \u2014 Platform single sign-on: IdP connections, login, sessions and recovery keys.",
     "title": "aac init"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile-create/",
     "section": "AAC CLI",
@@ -1580,7 +1580,7 @@
     "title": "aac profile create"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile-delete/",
     "section": "AAC CLI",
@@ -1620,7 +1620,7 @@
     "title": "aac profile delete"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile-list/",
     "section": "AAC CLI",
@@ -1660,7 +1660,7 @@
     "title": "aac profile list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile-show/",
     "section": "AAC CLI",
@@ -1705,7 +1705,7 @@
     "title": "aac profile show"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile-update/",
     "section": "AAC CLI",
@@ -1745,7 +1745,7 @@
     "title": "aac profile update"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-profile/",
     "section": "AAC CLI",
@@ -1785,7 +1785,7 @@
     "title": "aac profile"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-approve-idp-repair/",
     "section": "AAC CLI",
@@ -1825,7 +1825,7 @@
     "title": "aac sso approve-idp-repair"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-enroll-idp-recovery-key/",
     "section": "AAC CLI",
@@ -1865,7 +1865,7 @@
     "title": "aac sso enroll-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-generate-idp-recovery-key/",
     "section": "AAC CLI",
@@ -1905,7 +1905,7 @@
     "title": "aac sso generate-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-list-idp-recovery-keys/",
     "section": "AAC CLI",
@@ -1945,7 +1945,7 @@
     "title": "aac sso list-idp-recovery-keys"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-list-idp/",
     "section": "AAC CLI",
@@ -1985,7 +1985,7 @@
     "title": "aac sso list-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-login/",
     "section": "AAC CLI",
@@ -2030,7 +2030,7 @@
     "title": "aac sso login"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-logout/",
     "section": "AAC CLI",
@@ -2070,7 +2070,7 @@
     "title": "aac sso logout"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-register-idp/",
     "section": "AAC CLI",
@@ -2115,7 +2115,7 @@
     "title": "aac sso register-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-replace-idp/",
     "section": "AAC CLI",
@@ -2155,7 +2155,7 @@
     "title": "aac sso replace-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-request-idp-repair/",
     "section": "AAC CLI",
@@ -2195,7 +2195,7 @@
     "title": "aac sso request-idp-repair"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-revoke-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2235,7 +2235,7 @@
     "title": "aac sso revoke-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-rotate-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2275,7 +2275,7 @@
     "title": "aac sso rotate-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso-whoami/",
     "section": "AAC CLI",
@@ -2315,7 +2315,7 @@
     "title": "aac sso whoami"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-sso/",
     "section": "AAC CLI",
@@ -2350,7 +2350,7 @@
     "title": "aac sso"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-add-workload/",
     "section": "AAC CLI",
@@ -2395,7 +2395,7 @@
     "title": "aac tenant add-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-issue/",
     "section": "AAC CLI",
@@ -2440,7 +2440,7 @@
     "title": "aac tenant api-key issue"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-list/",
     "section": "AAC CLI",
@@ -2485,7 +2485,7 @@
     "title": "aac tenant api-key list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-retire/",
     "section": "AAC CLI",
@@ -2530,7 +2530,7 @@
     "title": "aac tenant api-key retire"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key/",
     "section": "AAC CLI",
@@ -2570,7 +2570,7 @@
     "title": "aac tenant api-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-assign-hosted-domain/",
     "section": "AAC CLI",
@@ -2615,7 +2615,7 @@
     "title": "aac tenant assign-hosted-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-bind-trust-domain/",
     "section": "AAC CLI",
@@ -2660,7 +2660,7 @@
     "title": "aac tenant bind-trust-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-deactivate-workload/",
     "section": "AAC CLI",
@@ -2705,7 +2705,7 @@
     "title": "aac tenant deactivate-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-describe-workload/",
     "section": "AAC CLI",
@@ -2745,7 +2745,7 @@
     "title": "aac tenant describe-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-describe/",
     "section": "AAC CLI",
@@ -2785,7 +2785,7 @@
     "title": "aac tenant describe"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-issue-domain-challenge/",
     "section": "AAC CLI",
@@ -2830,7 +2830,7 @@
     "title": "aac tenant issue-domain-challenge"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list-trust-domains/",
     "section": "AAC CLI",
@@ -2875,7 +2875,7 @@
     "title": "aac tenant list-trust-domains"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list-workloads/",
     "section": "AAC CLI",
@@ -2920,7 +2920,7 @@
     "title": "aac tenant list-workloads"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list/",
     "section": "AAC CLI",
@@ -2965,7 +2965,7 @@
     "title": "aac tenant list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-reactivate-hosted-domain/",
     "section": "AAC CLI",
@@ -3010,7 +3010,7 @@
     "title": "aac tenant reactivate-hosted-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-register/",
     "section": "AAC CLI",
@@ -3055,7 +3055,7 @@
     "title": "aac tenant register"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-reissue-api-key/",
     "section": "AAC CLI",
@@ -3100,7 +3100,7 @@
     "title": "aac tenant reissue-api-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-release-domain/",
     "section": "AAC CLI",
@@ -3145,7 +3145,7 @@
     "title": "aac tenant release-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-revoke-domain/",
     "section": "AAC CLI",
@@ -3190,7 +3190,7 @@
     "title": "aac tenant revoke-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-revoke-trust-domain/",
     "section": "AAC CLI",
@@ -3235,7 +3235,7 @@
     "title": "aac tenant revoke-trust-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-rotate-admin-key/",
     "section": "AAC CLI",
@@ -3280,7 +3280,7 @@
     "title": "aac tenant rotate-admin-key"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-update-workload/",
     "section": "AAC CLI",
@@ -3325,7 +3325,7 @@
     "title": "aac tenant update-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-update/",
     "section": "AAC CLI",
@@ -3370,7 +3370,7 @@
     "title": "aac tenant update"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-verify-domain/",
     "section": "AAC CLI",
@@ -3415,7 +3415,7 @@
     "title": "aac tenant verify-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-tenant/",
     "section": "AAC CLI",
@@ -3450,7 +3450,7 @@
     "title": "aac tenant"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-describe/",
     "section": "AAC CLI",
@@ -3490,7 +3490,7 @@
     "title": "aac trust-anchor describe"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-ingest-history/",
     "section": "AAC CLI",
@@ -3530,7 +3530,7 @@
     "title": "aac trust-anchor ingest-history"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-list/",
     "section": "AAC CLI",
@@ -3575,7 +3575,7 @@
     "title": "aac trust-anchor list"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-revoke/",
     "section": "AAC CLI",
@@ -3620,7 +3620,7 @@
     "title": "aac trust-anchor revoke"
   },
   {
-    "applicability": "AAC CLI 0.2.8",
+    "applicability": "AAC CLI 0.2.9",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor/",
     "section": "AAC CLI",

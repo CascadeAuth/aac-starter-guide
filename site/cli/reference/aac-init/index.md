@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-init/
 
-Applies to: AAC CLI 0.2.8
+Applies to: AAC CLI 0.2.9
 
-Documentation revision: 6b7d8268ba787d3e9354742259e78153a3a18cae
+Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
 
 ---
 
@@ -78,7 +78,7 @@ The laptop case. The CLI creates a certificate authority on this machine and sig
 |---|---|---|---|---|
 | `--ca-key-file` | value | no | — | Use this existing certificate authority key for the CLI to sign with (with --ca-cert-file). |
 
-### I bring my own CA
+### I bring my own CA certificate
 
 Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. All seven together: `--workload-cert-file`, `--terminal-cert-file` and `--tls-cert-file`, each with its key file (`--workload-key-file`, `--terminal-key-file`, `--tls-key-file`), plus `--ca-cert-file`. Never `--ca-key-file`: the CLI does not want your CA key. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it.
 

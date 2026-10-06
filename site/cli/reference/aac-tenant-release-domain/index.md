@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-tenant-release-domain/
 
-Applies to: AAC CLI 0.2.8
+Applies to: AAC CLI 0.2.9
 
-Documentation revision: 6b7d8268ba787d3e9354742259e78153a3a18cae
+Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
 
 ---
 

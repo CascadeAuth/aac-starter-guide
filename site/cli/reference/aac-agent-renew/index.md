@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-agent-renew/
 
-Applies to: AAC CLI 0.2.8
+Applies to: AAC CLI 0.2.9
 
-Documentation revision: 6b7d8268ba787d3e9354742259e78153a3a18cae
+Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
 
 ---
 
@@ -10,7 +10,7 @@ Documentation revision: 6b7d8268ba787d3e9354742259e78153a3a18cae
 
 Replace the short-lived certificates; archive the old material.
 
-In "The CLI creates a development CA" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In "I bring my own CA" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too.
+In "The CLI creates a development CA" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In "I bring my own CA certificate" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too.
 
 ## Synopsis
 
@@ -40,7 +40,7 @@ aac agent renew
 | `--profile` | value | no | — | Optional check that the agent belongs to this profile; the agent itself records its profile, so the flag is never required. |
 | `--ca` | flag | no | — | Also reissue the development CA now. |
 
-### I bring my own CA
+### I bring my own CA certificate
 
 Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment. Pass only what your issuer re-signed: each replacement certificate with its key file, or on its own when the key is unchanged. Add --ca-cert-file only when your CA certificate changed too, and then replace every certificate it did not sign. Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it.
 
