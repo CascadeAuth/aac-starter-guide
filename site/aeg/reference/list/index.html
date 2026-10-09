@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>AEG</summary><nav aria-label="Section navigation"><a href="/aeg/">Agent Execution Graphs (AEG)</a><a href="/aeg/reference/">AEG command reference</a><a href="/aeg/reference/list/" aria-current="page">aeg list</a><a href="/aeg/reference/render/">aeg render</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/aeg/">AEG</a> / <a href="/aeg/reference/">AEG command reference</a> / <span aria-current="page">aeg list</span></nav>
 <h1 id="aeg-list"><code>aeg list</code></h1>
-<div class="page-actions"><span>AAC CLI 0.2.9</span><a href="/aeg/reference/list/index.md" download="aeg-reference-list.md">Markdown</a><span class="revision">Docs 030a3c3d5e09</span></div>
+<div class="page-actions"><span>AAC CLI 0.2.10</span><a href="/aeg/reference/list/index.md" download="aeg-reference-list.md">Markdown</a><span class="revision">Docs 8ac907aefe6d</span></div>
 <p>List roots from local files, a control-plane profile, or both.</p>
 <h2 id="synopsis">Synopsis</h2>
 <pre><code class="language-text">aeg list
@@ -114,6 +114,7 @@
 <li><strong>0:</strong> completed successfully.</li>
 <li><strong>2:</strong> invalid arguments or evidence, or an unreadable/unwritable local file.</li>
 <li><strong>4:</strong> the requested central query failed; any recoverable graph or listing remains partial.</li>
+<li><strong>130:</strong> interrupted by the operator (Ctrl-C).</li>
 </ul>
 <p><a href="/aeg/">Agent Execution Graphs</a></p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>

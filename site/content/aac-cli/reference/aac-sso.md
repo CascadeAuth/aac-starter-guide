@@ -12,6 +12,7 @@ aac sso [-h] <command> [<args>]
 
 | Command | Description |
 |---|---|
+| [`aac sso describe`](/cli/reference/aac-sso-describe/) | Public SSO login descriptor as JSON; no login needed. |
 | [`aac sso register-idp`](/cli/reference/aac-sso-register-idp/) | Register a tenant↔IdP connection. |
 | [`aac sso generate-idp-recovery-key`](/cli/reference/aac-sso-generate-idp-recovery-key/) | Generate offline tenant IdP recovery-key artifacts. |
 | [`aac sso enroll-idp-recovery-key`](/cli/reference/aac-sso-enroll-idp-recovery-key/) | Enroll a tenant's IdP recovery public verifier. |

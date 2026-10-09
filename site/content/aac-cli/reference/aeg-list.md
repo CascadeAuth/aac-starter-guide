@@ -41,5 +41,6 @@ aeg list
 - **0:** completed successfully.
 - **2:** invalid arguments or evidence, or an unreadable/unwritable local file.
 - **4:** the requested central query failed; any recoverable graph or listing remains partial.
+- **130:** interrupted by the operator (Ctrl-C).
 
 [Agent Execution Graphs](/aeg/)

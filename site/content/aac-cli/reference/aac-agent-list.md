@@ -2,7 +2,7 @@
 
 List every agent under the CLI home with its tenant, case and state.
 
-List every agent; an unreadable or unsupported record is reported in that agent's state without hiding the other agents.
+List every agent; an unreadable or unsupported record is reported in that agent's state without hiding the other agents. Invalid profile bindings are reported per agent: JSON includes profile_binding_consistent and the repair next_command; table output marks inconsistent bindings.
 
 ## Synopsis
 
@@ -30,6 +30,7 @@ aac agent list [-h] [--output {json,table}]
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Related commands
 

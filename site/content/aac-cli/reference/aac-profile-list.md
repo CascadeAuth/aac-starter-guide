@@ -28,11 +28,16 @@ aac profile list [-h] [--output {json,table}]
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
+
+## Notes
+
+A stale binding does not prevent listing or using other profiles. Invalid bindings are labeled invalid in table output; JSON adds binding_error and redacts tenant_id as null. Use `aac profile show NAME` to inspect the profile and `aac profile update NAME --unbind` to clear its local tenant association.
 
 ## Related commands
 
 - [`aac profile`](/cli/reference/aac-profile/)
 - [`aac profile show`](/cli/reference/aac-profile-show/) — Show one profile: stored vs effective values + sources.
 - [`aac profile create`](/cli/reference/aac-profile-create/) — Create a new named profile.
-- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints (materializes `main`).
+- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints or clear its local tenant binding.
 - [`aac profile delete`](/cli/reference/aac-profile-delete/) — Delete a local profile (never the server-side tenant).

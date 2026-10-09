@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/aeg/reference/list/
 
-Applies to: AAC CLI 0.2.9
+Applies to: AAC CLI 0.2.10
 
-Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
+Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
 
 ---
 
@@ -49,5 +49,6 @@ aeg list
 - **0:** completed successfully.
 - **2:** invalid arguments or evidence, or an unreadable/unwritable local file.
 - **4:** the requested central query failed; any recoverable graph or listing remains partial.
+- **130:** interrupted by the operator (Ctrl-C).
 
 [Agent Execution Graphs](https://docs.cascadeauth.com/aeg/)

@@ -2,7 +2,32 @@
 
 Sign in via your tenant's IdP; caches an AAC session.
 
-Signs in against one of the tenant's registered IdP connections (device flow or loopback PKCE, selected per IdP capability), exchanges the ID token at the AAC STS (RFC 8693), and caches the short-lived session token. Success writes the config profile AND the credential in one motion (aws sso login semantics). Sessions are refresh-less by design: on expiry, run login again.
+```text
+Signs in against one of the tenant's registered IdP connections (device
+flow or loopback PKCE, selected per IdP capability), exchanges the ID
+token at the AAC STS (RFC 8693), and caches the short-lived session token.
+Success writes the config profile AND the credential in one motion.
+
+Bind a local profile to an EXISTING tenant by authenticating:
+
+    aac sso login --profile NAME --tenant-id <TENANT_ID>
+
+No separate profile bind command is needed. Clear an invalid stored
+binding first:
+
+    aac profile update NAME --unbind
+
+Sessions last 4 hours by default. Your administrator may configure a
+different lifetime for the deployment or connection.
+
+You can run login again before expiry. Successful authentication
+replaces the cached session with a new one whose lifetime starts at
+that login. Check its expiration with:
+
+    aac sso whoami --profile NAME --output table
+
+Sessions have no refresh token; if a session expires, run login again.
+```
 
 ## Synopsis
 
@@ -51,14 +76,22 @@ At most one of `--idp-url`, `--idp` may be given.
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Notes
 
-Flow selection: device flow by default (works on headless machines — the browser can be anywhere); Google-family connections prefer loopback PKCE (Google's device flow is scope-restricted). Override with --flow. Connections registered with jwks_static carry no flow endpoints and cannot login interactively.
+```text
+Flow selection: device flow by default (works on headless machines —
+the browser can be anywhere); Google-family connections prefer loopback
+PKCE (Google's device flow is scope-restricted). Override with --flow.
+Connections registered with jwks_static carry no flow endpoints and
+cannot login interactively.
+```
 
 ## Related commands
 
 - [`aac sso`](/cli/reference/aac-sso/)
+- [`aac sso describe`](/cli/reference/aac-sso-describe/) — Public SSO login descriptor as JSON; no login needed.
 - [`aac sso register-idp`](/cli/reference/aac-sso-register-idp/) — Register a tenant↔IdP connection.
 - [`aac sso generate-idp-recovery-key`](/cli/reference/aac-sso-generate-idp-recovery-key/) — Generate offline tenant IdP recovery-key artifacts.
 - [`aac sso enroll-idp-recovery-key`](/cli/reference/aac-sso-enroll-idp-recovery-key/) — Enroll a tenant's IdP recovery public verifier.

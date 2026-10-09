@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-list-idp-recovery-keys/
 
-Applies to: AAC CLI 0.2.9
+Applies to: AAC CLI 0.2.10
 
-Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
+Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
 
 ---
 
@@ -46,10 +46,12 @@ aac sso list-idp-recovery-keys
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Related commands
 
 - [`aac sso`](https://docs.cascadeauth.com/cli/reference/aac-sso/)
+- [`aac sso describe`](https://docs.cascadeauth.com/cli/reference/aac-sso-describe/) — Public SSO login descriptor as JSON; no login needed.
 - [`aac sso register-idp`](https://docs.cascadeauth.com/cli/reference/aac-sso-register-idp/) — Register a tenant↔IdP connection.
 - [`aac sso generate-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-generate-idp-recovery-key/) — Generate offline tenant IdP recovery-key artifacts.
 - [`aac sso enroll-idp-recovery-key`](https://docs.cascadeauth.com/cli/reference/aac-sso-enroll-idp-recovery-key/) — Enroll a tenant's IdP recovery public verifier.

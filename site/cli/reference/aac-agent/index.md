@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-agent/
 
-Applies to: AAC CLI 0.2.9
+Applies to: AAC CLI 0.2.10
 
-Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
+Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
 
 ---
 

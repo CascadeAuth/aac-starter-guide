@@ -12,6 +12,7 @@ commands. A documentation update does not change the commands installed on
 your machine; historical release artifacts retain their original provenance.
 
 - [Install and choose an environment](#install-and-choose-an-environment)
+- [Inspect available sign-ins](#inspect-available-sign-ins)
 - [Register a tenant](#register-a-tenant)
 - [Prepare and maintain an agent](#prepare-and-maintain-an-agent)
 - [Supply your own certificates](#supply-your-own-certificates)
@@ -63,6 +64,41 @@ set -euo pipefail
 AAC_PROFILE=stage
 export AAC_PROFILE
 ```
+
+## Inspect available sign-ins
+
+Read the public SSO login descriptor before registration or sign-in. A profile
+supplies the admin endpoint; neither a cached session nor an API key is needed.
+Create an endpoint-only profile if you have not set one up:
+
+```bash
+aac profile create stage --admin-url https://api.stage.cascadeauth.dev \
+  --data-plane-url https://api.stage.cascadeauth.dev
+aac sso describe --profile stage
+aac sso describe --profile stage --tenant-id '<TENANT_ID>'
+```
+
+Use your deployment's endpoint URLs. The command without `--tenant-id` reads
+`GET /v1/sso-descriptor`: shared/platform candidates for pre-registration.
+The explicit flag reads `GET /v1/tenants/<TENANT_ID>/sso-descriptor`: that
+tenant's connections followed by the shared candidates. Replace `<TENANT_ID>`
+with the canonical ID returned by registration or shown by `aac profile show`.
+A stored profile binding or the `AAC_TENANT_ID` environment variable never
+selects the tenant descriptor; pass `--tenant-id` explicitly to select it.
+
+Both forms print the full public descriptor as JSON on stdout: `connections`,
+`count`, and `tenant_id` on the tenant route. Connection entries include issuer,
+family, public client ID and supported flow endpoints. The server's public
+projection can include an installed-app `public_client_secret`; it is
+non-confidential metadata. Empty connections are a successful result.
+`--output json` is optional; table output is unsupported. Errors use stderr.
+
+This read does not sign in, bind a profile or alter credentials. The CLI still
+checks your local configuration and selected profile, including invalid tenant
+IDs from the environment and invalid stored bindings. Use
+[profile repair](#repair-a-stale-profile-binding) when
+the command directs you to `aac profile update NAME --unbind`.
+See [`aac sso describe`](/cli/reference/aac-sso-describe/) for all flags.
 
 ## Register a tenant
 
@@ -117,7 +153,12 @@ aac sso logout --profile stage
 ```
 
 Choose the connection used to register that tenant. `whoami` and `logout`
-work locally. Sessions have no refresh token; sign in again after expiry.
+work locally. Sessions last **4 hours by default**; your administrator may
+configure a different lifetime for the deployment or connection. You can run
+`aac sso login` again before expiry. Successful authentication replaces the
+cached session with a new one whose lifetime starts at that login. Check the
+current expiration with `aac sso whoami --profile stage --output table`.
+Sessions have no refresh token; if a session expires, sign in again.
 AAC operates the shared connections; developers do not register their own
 GitHub or Google OAuth application for these paths.
 
@@ -298,11 +339,77 @@ aac profile delete test
 ```
 
 Selection is the command's `--profile`, then `AAC_PROFILE`, then `main`.
-`profile show NAME` selects its positional name instead. Registration/login
-binds a profile; you cannot edit `tenant_id` through `profile update`.
+`profile show NAME` selects its positional name instead. A **binding** is the
+saved association between a local profile name and an AAC tenant: it makes
+that tenant the profile's stored default. It does not grant tenant membership
+or configure the tenant's identity provider. Registration/login establishes
+the binding; profile management cannot assign a replacement `tenant_id`.
 `show` distinguishes stored and effective settings, including environment
 overrides, and never displays credentials. Deletion affects local profile
 configuration, not the remote tenant; follow its pending-operation checks.
+
+### Repair a stale profile binding
+
+An invalid local tenant binding, such as an old development ID with an obsolete
+format, affects only its profile. `profile list`
+and structured `profile show` remain available, mark the invalid binding and
+redact its value. Healthy profiles remain usable. Operational commands using
+the invalid profile fail locally with exit 3, even when a tenant flag or
+environment override is supplied. Whole-file syntax/name/size checks still apply.
+
+Local `aac agent list` also stays available: its JSON reports
+`profile_binding_consistent` per agent, and table output marks inconsistencies.
+`aac agent status` reports the affected agent as unhealthy and supplies the
+profile repair command. This inspection does not make the invalid profile
+usable by operational commands such as `aac init`.
+
+Use the following sequence when an old stored tenant ID is no longer valid:
+
+```bash
+aac profile show stage --output table
+aac profile update stage --unbind
+```
+
+**Bind profile `stage` to the correct existing tenant** by signing in:
+
+```bash
+aac sso login --profile stage --tenant-id '<TENANT_ID>'
+```
+
+The command is named `sso login`, but it also **binds the profile to the tenant**.
+The binding is saved only after successful authentication, which also caches a
+session. Replace `<TENANT_ID>` with the intended tenant's canonical ID from its
+registration output or your tenant administrator. For a **new** tenant,
+registration instead creates the tenant
+and saves its newly allocated ID; do not register again merely to reconnect to
+an existing tenant. There is no separate `profile bind` command.
+
+`--unbind` removes just `tenant_id` and its associated `hosted_trust_domain`
+from the named section in `~/.aac/config` (or `$AAC_CLI_HOME/config`). For example,
+the following schematic change leaves the endpoint configuration in place:
+
+```diff
+ [stage]
+ admin_url = https://api.stage.cascadeauth.dev
+ data_plane_url = https://api.stage.cascadeauth.dev
+-tenant_id = <PREVIOUS_TENANT_ID>
+-hosted_trust_domain = <PREVIOUS_HOSTED_DOMAIN>
+```
+
+Other profile settings/sections, API-key and session files, existing agent
+records and server-side state remain unchanged. Environment overrides still
+apply: unbinding does not unset `AAC_TENANT_ID` in your shell. Unbinding does not
+log you out or revoke access. Like other profile writes, it atomically replaces the config
+file and may normalize formatting and discard comments.
+
+The flag works on `main` and an already-unbound profile, can accompany endpoint
+flags, and does not prompt for endpoints. It refuses unresolved registration
+or API-key rotation state; finish that recovery first. Fixing an endpoint URL
+or renewing an expired session normally does not require unbinding. A profile
+can remain unbound if you only want to retain its endpoints. See the
+[`profile update` reference](/cli/reference/aac-profile-update/) for the flags.
+
+### Read scalar values
 
 ```bash
 AAC_TENANT_ID=$(aac profile show "$AAC_PROFILE" --field tenant-id)
@@ -317,6 +424,9 @@ aac agent status --agent orders --field workload-spiffe-id
 `profile show --field tenant-id` is read-only and returns the **effective**
 tenant ID: `AAC_TENANT_ID` takes precedence over the stored profile value.
 Unset that environment variable when you intend to inspect the stored binding.
+An invalid stored binding makes scalar inspection fail with exit 3 and empty
+stdout even with a valid environment override; use the structured view for
+diagnosis. Invalid effective IDs are also refused by scalar inspection.
 `assign-hosted-domain` is an operation: it requests/reuses the allocation and
 returns the validated server value, saving it only in the matching bound
 profile. Use read-only `agent status` for already-prepared agent identities;
@@ -528,6 +638,7 @@ and payment; it does not guarantee a price hold.
 |---|---|
 | Exit 2 | Invalid flag/value/combination. Check this version's reference. |
 | Exit 3 | Local profile, credential or agent state needs attention; follow stderr. No scalar value is emitted. |
+| Invalid profile binding | Inspect with `aac profile show NAME`; follow [profile binding repair](#repair-a-stale-profile-binding). Other profiles remain usable. |
 | Exit 4 | Endpoint unreachable. Check the selected endpoints and connectivity; do not blindly replay mutations. |
 | `ERR_SESSION_TOKEN_MISSING`, expired session | Sign in to the intended tenant again. |
 | `ERR_SESSION_TENANT_MISMATCH`, `ERR_SESSION_ROLE_FORBIDDEN` | Check profile, tenant and group-to-role mapping; an API key is not an admin session. |

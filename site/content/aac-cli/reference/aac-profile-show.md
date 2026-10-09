@@ -34,15 +34,16 @@ At most one of `--field`, `--output` may be given.
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Notes
 
-With no name, shows the SELECTED profile (AAC_PROFILE or `main`). Setting-specific env overrides (AAC_ADMIN_URL / AAC_DATA_PLANE_URL / AAC_TENANT_ID) still apply to the effective values and are labeled as their source.
+With no name, shows the SELECTED profile (AAC_PROFILE or `main`). Setting-specific env overrides (AAC_ADMIN_URL / AAC_DATA_PLANE_URL / AAC_TENANT_ID) still apply to the effective values and are labeled as their source. Structured inspection remains available for stale bindings: binding.error identifies the problem, and invalid stored/effective tenant IDs are redacted as null with an error. --field tenant-id fails with exit 3 and empty stdout for an invalid stored binding, even with a valid environment override. Repair the local association with `aac profile update NAME --unbind`, then sign in to the intended tenant.
 
 ## Related commands
 
 - [`aac profile`](/cli/reference/aac-profile/)
 - [`aac profile list`](/cli/reference/aac-profile-list/) — List all profiles (selected/binding/pending state).
 - [`aac profile create`](/cli/reference/aac-profile-create/) — Create a new named profile.
-- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints (materializes `main`).
+- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints or clear its local tenant binding.
 - [`aac profile delete`](/cli/reference/aac-profile-delete/) — Delete a local profile (never the server-side tenant).

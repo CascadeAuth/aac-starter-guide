@@ -46,6 +46,7 @@ aac sso register-idp
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Notes
 
@@ -66,6 +67,7 @@ First-IdP onboarding runs under the ops ceremony (--bootstrap-token / $AAC_BOOTS
 ## Related commands
 
 - [`aac sso`](/cli/reference/aac-sso/)
+- [`aac sso describe`](/cli/reference/aac-sso-describe/) — Public SSO login descriptor as JSON; no login needed.
 - [`aac sso generate-idp-recovery-key`](/cli/reference/aac-sso-generate-idp-recovery-key/) — Generate offline tenant IdP recovery-key artifacts.
 - [`aac sso enroll-idp-recovery-key`](/cli/reference/aac-sso-enroll-idp-recovery-key/) — Enroll a tenant's IdP recovery public verifier.
 - [`aac sso list-idp-recovery-keys`](/cli/reference/aac-sso-list-idp-recovery-keys/) — List IdP recovery-key lifecycle metadata.

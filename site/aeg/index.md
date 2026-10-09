@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/aeg/
 
-Applies to: AAC CLI 0.2.9
+Applies to: AAC CLI 0.2.10
 
-Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
+Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
 
 ---
 
@@ -614,7 +614,8 @@ is included. Self-contained HTML retains the embedded dependency license notices
 
 Exit codes: 0 means the requested operation completed within its fetch bound, 2 means input,
 selection or output failure, and 4 means a central query failed but a partial
-local graph or listing was produced. These codes are not business outcomes.
+local graph or listing was produced. Ctrl-C returns 130 with one interruption
+diagnostic on stderr and no traceback. These codes are not business outcomes.
 
 Choose `--output` explicitly when rendering. The command refuses an output path
 that would overwrite one of its evidence inputs.

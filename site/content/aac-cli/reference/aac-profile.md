@@ -8,8 +8,12 @@ Profiles are LOCAL named configuration contexts stored in
 plus, after a successful registration or login, the
 system-managed tenant binding (tenant_id is
 written only by those workflows, never edited by hand).
+A binding makes that tenant the profile's stored default;
+it does not grant membership or configure an identity provider.
+Use `aac profile update NAME --unbind` to forget this local
+association while retaining endpoints and credentials.
 
-`main` is the reserved baseline profile: always usable, never
+`main` is the reserved baseline profile: always available, never
 created or deleted. Before anything writes it, `main` is
 VIRTUAL — backed by built-in endpoint defaults, with no [main]
 section in ~/.aac/config yet. The first `aac profile update
@@ -43,7 +47,7 @@ aac profile [-h] <command> [<args>]
 | [`aac profile list`](/cli/reference/aac-profile-list/) | List all profiles (selected/binding/pending state). |
 | [`aac profile show`](/cli/reference/aac-profile-show/) | Show one profile: stored vs effective values + sources. |
 | [`aac profile create`](/cli/reference/aac-profile-create/) | Create a new named profile. |
-| [`aac profile update`](/cli/reference/aac-profile-update/) | Update a profile's endpoints (materializes `main`). |
+| [`aac profile update`](/cli/reference/aac-profile-update/) | Update a profile's endpoints or clear its local tenant binding. |
 | [`aac profile delete`](/cli/reference/aac-profile-delete/) | Delete a local profile (never the server-side tenant). |
 
 ## Arguments

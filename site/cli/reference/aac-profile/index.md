@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-profile/
 
-Applies to: AAC CLI 0.2.9
+Applies to: AAC CLI 0.2.10
 
-Documentation revision: 030a3c3d5e097f2b3e4634e28861322e192f5604
+Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
 
 ---
 
@@ -16,8 +16,12 @@ Profiles are LOCAL named configuration contexts stored in
 plus, after a successful registration or login, the
 system-managed tenant binding (tenant_id is
 written only by those workflows, never edited by hand).
+A binding makes that tenant the profile's stored default;
+it does not grant membership or configure an identity provider.
+Use `aac profile update NAME --unbind` to forget this local
+association while retaining endpoints and credentials.
 
-`main` is the reserved baseline profile: always usable, never
+`main` is the reserved baseline profile: always available, never
 created or deleted. Before anything writes it, `main` is
 VIRTUAL — backed by built-in endpoint defaults, with no [main]
 section in ~/.aac/config yet. The first `aac profile update
@@ -51,7 +55,7 @@ aac profile [-h] <command> [<args>]
 | [`aac profile list`](https://docs.cascadeauth.com/cli/reference/aac-profile-list/) | List all profiles (selected/binding/pending state). |
 | [`aac profile show`](https://docs.cascadeauth.com/cli/reference/aac-profile-show/) | Show one profile: stored vs effective values + sources. |
 | [`aac profile create`](https://docs.cascadeauth.com/cli/reference/aac-profile-create/) | Create a new named profile. |
-| [`aac profile update`](https://docs.cascadeauth.com/cli/reference/aac-profile-update/) | Update a profile's endpoints (materializes `main`). |
+| [`aac profile update`](https://docs.cascadeauth.com/cli/reference/aac-profile-update/) | Update a profile's endpoints or clear its local tenant binding. |
 | [`aac profile delete`](https://docs.cascadeauth.com/cli/reference/aac-profile-delete/) | Delete a local profile (never the server-side tenant). |
 
 ## Arguments

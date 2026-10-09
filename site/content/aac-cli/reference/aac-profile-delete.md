@@ -25,6 +25,7 @@ aac profile delete [-h] [--yes] name
 | `2` | Usage error: an invalid flag, value or flag combination. |
 | `3` | A local configuration or state problem: profile, credential file, cached session or agent. |
 | `4` | Transport failure: an endpoint could not be reached. |
+| `130` | Interrupted by the operator (Ctrl-C); a remote change may already have committed. |
 
 ## Notes
 
@@ -36,4 +37,4 @@ Refuses `main` and profiles with unresolved registration state; warns when the p
 - [`aac profile list`](/cli/reference/aac-profile-list/) — List all profiles (selected/binding/pending state).
 - [`aac profile show`](/cli/reference/aac-profile-show/) — Show one profile: stored vs effective values + sources.
 - [`aac profile create`](/cli/reference/aac-profile-create/) — Create a new named profile.
-- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints (materializes `main`).
+- [`aac profile update`](/cli/reference/aac-profile-update/) — Update a profile's endpoints or clear its local tenant binding.
