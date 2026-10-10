@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/get-started/
 
-Applies to: AAC Sidecar v0.5.2
+Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c98313cbcdbd77be7d2230873480ac48b7e8cf09
+Documentation revision: dc7a41b77581b7ce6e83df2629fc2a2af41bc014
 
 ---
 
@@ -357,8 +357,8 @@ For support contact **support@cascadeauth.com**; license questions:
 **legal@cascadeauth.com**. No production support/SLA is implied.
 This beta is for evaluation and integration development, not production or
 safety-critical use. Python companions retain their own licenses.
-Current installation examples select AAC Sidecar **`v0.5.2`** from
-`docker.io/cascadeauth/aac-sidecar:v0.5.2`; the [published component record](https://docs.cascadeauth.com/released-components.json) and
+Current installation examples select AAC Sidecar **`v0.5.3`** from
+`docker.io/cascadeauth/aac-sidecar:v0.5.3`; the [published component record](https://docs.cascadeauth.com/released-components.json) and
 each run's selection retain exact version/digest provenance.
 
 ## Release notes

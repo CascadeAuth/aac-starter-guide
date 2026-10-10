@@ -9,7 +9,7 @@ possession, the authority chain and the evidence.
 
 This image is the **public developer beta** of the sidecar: for evaluation and
 integration development, not production or safety-critical use. Current
-version **`v0.5.3`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.2`. Use
+version **`v0.5.3`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.3`. Use
 versioned or digest references; there is no mutable `latest` tag.
 
 ## Where the sidecar sits in AAC
@@ -60,8 +60,8 @@ for what each component holds and for how long.
 **Container (default).** Pull the released image and confirm the executable:
 
 ```bash
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.2
-docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.2 -version
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.3
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.3 -version
 ```
 
 The sidecar and its agent must share one loopback network environment: the

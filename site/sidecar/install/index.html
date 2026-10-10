@@ -8,13 +8,13 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/" aria-current="page">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Download and install the sidecar</span></nav>
 <h1 id="download-and-install-the-sidecar">Download and install the sidecar</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.2</span><a href="/sidecar/install/index.md" download="sidecar-install.md">Markdown</a><span class="revision">Docs c98313cbcdbd</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.3</span><a href="/sidecar/install/index.md" download="sidecar-install.md">Markdown</a><span class="revision">Docs dc7a41b77581</span></div>
 <p>Get the AAC Sidecar container from
 <a href="https://hub.docker.com/r/cascadeauth/aac-sidecar/">Docker Hub</a>. The repository
 page includes the image tags, pull instructions and the public operating guide.
 Use a released version, then choose how to run it beside your agent.</p>
-<pre><code class="language-bash">docker pull docker.io/cascadeauth/aac-sidecar:v0.5.2
-docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.2 -version
+<pre><code class="language-bash">docker pull docker.io/cascadeauth/aac-sidecar:v0.5.3
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.3 -version
 </code></pre>
 <p>The version command confirms the downloaded executable; it does not start a
 configured sidecar. Next, follow one of these paths:</p>
@@ -31,16 +31,16 @@ Use the <a href="/cli/guide/">CLI guide</a> to prepare tenant and agent material
 <code>linux_amd64</code>, <code>linux_arm64</code>, <code>darwin_amd64</code> and <code>darwin_arm64</code>, with the
 configuration template, license and operating documentation.
 <a href="https://oras.land/docs/installation/">Install ORAS</a> to download the bundle:</p>
-<pre><code class="language-bash">mkdir aac-sidecar-v0.5.2
-cd aac-sidecar-v0.5.2
-oras pull docker.io/cascadeauth/aac-sidecar:v0.5.2-bundle
+<pre><code class="language-bash">mkdir aac-sidecar-v0.5.3
+cd aac-sidecar-v0.5.3
+oras pull docker.io/cascadeauth/aac-sidecar:v0.5.3-bundle
 </code></pre>
 <p>Choose the archive matching your operating system and CPU. On Ubuntu, if
 <code>uname -m</code> returns <code>aarch64</code>, select <code>linux_arm64</code>; Apple Silicon uses
 <code>darwin_arm64</code>. The macOS binaries need macOS 13 Ventura or later. If you need
 to check signatures or checksums before extraction, use the
 <a href="/sidecar/reference/verification/#verify-the-standalone-bundle">release verification procedure</a>.</p>
-<pre><code class="language-bash">version=v0.5.2
+<pre><code class="language-bash">version=v0.5.3
 platform=linux_amd64  # choose the matching platform listed above
 install_root=&quot;${HOME}/.local/lib/aac-sidecar/releases/${version}&quot;
 

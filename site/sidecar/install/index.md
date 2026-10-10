@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/sidecar/install/
 
-Applies to: AAC Sidecar v0.5.2
+Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c98313cbcdbd77be7d2230873480ac48b7e8cf09
+Documentation revision: dc7a41b77581b7ce6e83df2629fc2a2af41bc014
 
 ---
 
@@ -14,8 +14,8 @@ page includes the image tags, pull instructions and the public operating guide.
 Use a released version, then choose how to run it beside your agent.
 
 ```bash
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.2
-docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.2 -version
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.3
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.3 -version
 ```
 
 The version command confirms the downloaded executable; it does not start a
@@ -36,9 +36,9 @@ configuration template, license and operating documentation.
 [Install ORAS](https://oras.land/docs/installation/) to download the bundle:
 
 ```bash
-mkdir aac-sidecar-v0.5.2
-cd aac-sidecar-v0.5.2
-oras pull docker.io/cascadeauth/aac-sidecar:v0.5.2-bundle
+mkdir aac-sidecar-v0.5.3
+cd aac-sidecar-v0.5.3
+oras pull docker.io/cascadeauth/aac-sidecar:v0.5.3-bundle
 ```
 
 Choose the archive matching your operating system and CPU. On Ubuntu, if
@@ -48,7 +48,7 @@ to check signatures or checksums before extraction, use the
 [release verification procedure](https://docs.cascadeauth.com/sidecar/reference/verification/#verify-the-standalone-bundle).
 
 ```bash
-version=v0.5.2
+version=v0.5.3
 platform=linux_amd64  # choose the matching platform listed above
 install_root="${HOME}/.local/lib/aac-sidecar/releases/${version}"
 

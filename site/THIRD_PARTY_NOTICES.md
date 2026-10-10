@@ -8,7 +8,7 @@ license CascadeAuth proprietary source or binary code.
 
 ===============================================================================
 Package: Go standard library
-Version: go1.26.6
+Version: go1.27.2
 Detected license: BSD-3-Clause
 Versioned license source: https://go.dev/LICENSE
 
@@ -733,9 +733,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
 Package: golang.org/x/crypto/pkcs12
-Version: v0.55.0
+Version: v0.57.0
 Detected license: BSD-3-Clause
-Versioned license source: https://cs.opensource.google/go/x/crypto/+/v0.55.0:LICENSE
+Versioned license source: https://cs.opensource.google/go/x/crypto/+/v0.57.0:LICENSE
 
 Copyright 2009 The Go Authors.
 
@@ -767,9 +767,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 Package: golang.org/x/net
-Version: v0.57.0
+Version: v0.60.0
 Detected license: BSD-3-Clause
-Versioned license source: https://cs.opensource.google/go/x/net/+/v0.57.0:LICENSE
+Versioned license source: https://cs.opensource.google/go/x/net/+/v0.60.0:LICENSE
 
 Copyright 2009 The Go Authors.
 
@@ -801,9 +801,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 Package: golang.org/x/sys
-Version: v0.47.0
+Version: v0.48.0
 Detected license: BSD-3-Clause
-Versioned license source: https://cs.opensource.google/go/x/sys/+/v0.47.0:LICENSE
+Versioned license source: https://cs.opensource.google/go/x/sys/+/v0.48.0:LICENSE
 
 Copyright 2009 The Go Authors.
 
@@ -835,9 +835,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 Package: golang.org/x/text
-Version: v0.41.0
+Version: v0.42.0
 Detected license: BSD-3-Clause
-Versioned license source: https://cs.opensource.google/go/x/text/+/v0.41.0:LICENSE
+Versioned license source: https://cs.opensource.google/go/x/text/+/v0.42.0:LICENSE
 
 Copyright 2009 The Go Authors.
 

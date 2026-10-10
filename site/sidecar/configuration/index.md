@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/sidecar/configuration/
 
-Applies to: AAC Sidecar v0.5.2
+Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c98313cbcdbd77be7d2230873480ac48b7e8cf09
+Documentation revision: dc7a41b77581b7ce6e83df2629fc2a2af41bc014
 
 ---
 
@@ -119,7 +119,7 @@ your AAC tenant does require the sign-in described in
 | AAC Sidecar container (default) | [docker.io/cascadeauth/aac-sidecar](https://hub.docker.com/r/cascadeauth/aac-sidecar) | Ready-made Linux container image | Choose this for Docker/Kubernetes. This and the standalone binary below are alternative installations of the same sidecar. |
 | Trust anchor publisher Docker container | [ghcr.io/cascadeauth/aac-trust-anchor-publisher](https://github.com/orgs/CascadeAuth/packages/container/package/aac-trust-anchor-publisher) | Containerized public-trust publisher | Choose this for a container host or orchestrator to publish/manage the tenant's public root keys and SPIFFE CA bundle. Docker or the orchestrator manages its lifecycle. |
 | Trust anchor publisher Python package (alternative) | [aac-trust-anchor-publisher](https://pypi.org/project/aac-trust-anchor-publisher/) on PyPI | Python wheel that installs the publisher daemon command | Choose this for installation in a host/VM's Python virtual environment; use systemd on a managed Linux host where applicable. It requires Python, unlike the sidecar's compiled standalone binary. |
-| AAC Sidecar standalone bundle (alternative) | `oras pull --output ./aac-sidecar-bundle docker.io/cascadeauth/aac-sidecar:v0.5.2-bundle` | Download containing standalone binaries, guide/template and audit evidence | Choose this if you are not using the container. [Install ORAS](https://oras.land/docs/installation/), then follow the [standalone installation steps](https://docs.cascadeauth.com/sidecar/install/#standalone-binary-for-linux-or-macos). Container users can download the template directly from this site. |
+| AAC Sidecar standalone bundle (alternative) | `oras pull --output ./aac-sidecar-bundle docker.io/cascadeauth/aac-sidecar:v0.5.3-bundle` | Download containing standalone binaries, guide/template and audit evidence | Choose this if you are not using the container. [Install ORAS](https://oras.land/docs/installation/), then follow the [standalone installation steps](https://docs.cascadeauth.com/sidecar/install/#standalone-binary-for-linux-or-macos). Container users can download the template directly from this site. |
 | Invoke authentication | [aac-invoke-auth](https://pypi.org/project/aac-invoke-auth/) on PyPI; optional `[fastapi]` extra | Framework-independent Python signing/verification library, with an optional FastAPI/Starlette adapter | Install it in a Python workload that uses these helpers. Use `[fastapi]` for the supplied middleware/dependency integration or the [protocol reference's Python example](https://docs.cascadeauth.com/sidecar/integration/#optional-runnable-paired-agent-example). Other stacks need compatible pairing authentication; they do not need to install this Python package. |
 
 **Image verification does not require the standalone bundle.** The container

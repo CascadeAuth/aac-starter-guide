@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a><a href="/sidecar/reference/verification/" aria-current="page">Verify release artifacts</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Verify release artifacts</span></nav>
 <h1 id="verify-release-artifacts">Verify release artifacts</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.2</span><a href="/sidecar/reference/verification/index.md" download="sidecar-reference-verification.md">Markdown</a><span class="revision">Docs c98313cbcdbd</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.3</span><a href="/sidecar/reference/verification/index.md" download="sidecar-reference-verification.md">Markdown</a><span class="revision">Docs dc7a41b77581</span></div>
 <p>Use these optional checks when your deployment policy calls for signature,
 checksum or build-provenance verification. For ordinary installation, start
 with <a href="/sidecar/install/">Download and install the sidecar</a>.</p>
@@ -16,7 +16,7 @@ with <a href="/sidecar/install/">Download and install the sidecar</a>.</p>
 <p>Install Docker and Cosign. Verify the
 published digest against CascadeAuth's GitHub Actions keyless identity:</p>
 <pre><code class="language-bash">set -euo pipefail
-export AAC_SIDECAR_VERSION=v0.5.2
+export AAC_SIDECAR_VERSION=v0.5.3
 export AAC_SIDECAR_IMAGE=docker.io/cascadeauth/aac-sidecar
 export AAC_SIDECAR_DIGEST=&quot;$(
   docker buildx imagetools inspect &quot;${AAC_SIDECAR_IMAGE}:${AAC_SIDECAR_VERSION}&quot; |
@@ -37,7 +37,7 @@ docker image inspect &quot;${AAC_SIDECAR_IMAGE}@${AAC_SIDECAR_DIGEST}&quot; \
   --format &quot;$image_labels_format&quot;
 </code></pre>
 <p>The final line must print:</p>
-<pre><code class="language-text">v0.5.2 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
+<pre><code class="language-text">v0.5.3 LicenseRef-AAC-Sidecar-Developer-Beta-1.0
 </code></pre>
 <h2 id="verify-the-standalone-bundle">Verify the standalone bundle</h2>
 <p>Use this alternative to the sidecar container for a bare VM, systemd host,
@@ -46,9 +46,9 @@ for offline documentation or deep audit without installing its standalone binary
 <a href="https://oras.land/docs/installation/">Install ORAS</a> to download the files and
 <a href="https://docs.sigstore.dev/cosign/system_config/installation/">install Cosign</a> to
 verify their signatures. Neither tool is needed to run the sidecar afterward.</p>
-<pre><code class="language-bash">mkdir aac-sidecar-v0.5.2
-cd aac-sidecar-v0.5.2
-bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.5.2-bundle
+<pre><code class="language-bash">mkdir aac-sidecar-v0.5.3
+cd aac-sidecar-v0.5.3
+bundle_ref=docker.io/cascadeauth/aac-sidecar:v0.5.3-bundle
 bundle_digest=&quot;$(oras resolve &quot;${bundle_ref}&quot;)&quot;
 [[ &quot;${bundle_digest}&quot; =~ ^sha256:[0-9a-f]{64}$ ]]
 
@@ -67,7 +67,7 @@ cosign verify-blob \
   --bundle checksums.txt.bundle \
   checksums.txt
 
-bash ./verify-developer-beta.sh . v0.5.2
+bash ./verify-developer-beta.sh . v0.5.3
 </code></pre>
 <h2 id="deep-artifact-audit">Deep artifact audit</h2>
 <p>For a reproducible audit beyond signature/checksum verification, install
@@ -75,7 +75,7 @@ Python 3.11+ and Go, then run
 this <strong>after</strong> the Cosign verification above:</p>
 <pre><code class="language-bash">python3 --version
 go version
-bash ./verify-developer-beta.sh . v0.5.2 --deep-audit
+bash ./verify-developer-beta.sh . v0.5.3 --deep-audit
 </code></pre>
 <p>Go reads embedded build metadata from each binary; it does not execute foreign-platform
 binaries. The verifier's final version check executes only your host's binary.
