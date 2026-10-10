@@ -169,7 +169,7 @@ liveness check, not proof that your tenant, trust material, or sidecar is ready.
 | Surface | Supported beta profile |
 |---|---|
 | Container | Linux amd64/arm64; ready-made distroless image; UID/GID 65532 |
-| Standalone | Linux amd64/arm64 and macOS amd64/arm64; non-root process |
+| Standalone | Linux amd64/arm64 and macOS amd64/arm64 (macOS 13 Ventura or later); non-root process |
 | Agent pairing | Same network namespace; local `/invoke` and `/a2a/v1` authenticated with the per-pair secret |
 | Native A2A | A2A 1.0 unary `SendMessage`; JSON-RPC 2.0; no streaming or general-purpose A2A method support |
 | Root and terminal signing | File-backed Ed25519/P-256, or explicit Azure Key Vault Standard software-protected non-exportable P-256 keys |

@@ -104,3 +104,12 @@ returns the reply too. To make that possible the sidecar requires
 startup with a message naming both settings, and re-running the init command
 for the agent writes a block that satisfies it. The retry database now holds
 peer replies for the retention window. See the A2A integration page.
+
+## 0.5.3
+
+A security and toolchain release with no change to routes, configuration or
+signed bytes. The sidecar is built with Go 1.27.2 and `golang.org/x/net`
+v0.60.0, which fix the Go networking and TLS advisories present in v0.5.2's
+build (GO-2026-6603 and eight related advisories). The standalone macOS
+binaries now need macOS 13 Ventura or later; Linux binaries and the container
+image are unaffected.

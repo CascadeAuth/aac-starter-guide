@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/install/
 
 Applies to: AAC Sidecar v0.5.2
 
-Documentation revision: b472c2a40997f0e825a432a1d00babc050f88f88
+Documentation revision: c98313cbcdbd77be7d2230873480ac48b7e8cf09
 
 ---
 
@@ -43,8 +43,9 @@ oras pull docker.io/cascadeauth/aac-sidecar:v0.5.2-bundle
 
 Choose the archive matching your operating system and CPU. On Ubuntu, if
 `uname -m` returns `aarch64`, select `linux_arm64`; Apple Silicon uses
-`darwin_arm64`. If you need to check signatures or checksums before extraction,
-use the [release verification procedure](https://docs.cascadeauth.com/sidecar/reference/verification/#verify-the-standalone-bundle).
+`darwin_arm64`. The macOS binaries need macOS 13 Ventura or later. If you need
+to check signatures or checksums before extraction, use the
+[release verification procedure](https://docs.cascadeauth.com/sidecar/reference/verification/#verify-the-standalone-bundle).
 
 ```bash
 version=v0.5.2

@@ -9,7 +9,7 @@ possession, the authority chain and the evidence.
 
 This image is the **public developer beta** of the sidecar: for evaluation and
 integration development, not production or safety-critical use. Current
-version **`v0.5.2`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.2`. Use
+version **`v0.5.3`**, image `docker.io/cascadeauth/aac-sidecar:v0.5.2`. Use
 versioned or digest references; there is no mutable `latest` tag.
 
 ## Where the sidecar sits in AAC
@@ -69,10 +69,10 @@ same Kubernetes Pod, or a shared Docker network namespace. The
 [container placement guide](https://docs.cascadeauth.com/sidecar/configuration/#advanced-installation-guide-container)
 shows the mounts, identities and readiness check for your own environment.
 
-**Standalone binary.** The `v0.5.2-bundle` tag in this repository carries the
+**Standalone binary.** The `v0.5.3-bundle` tag in this repository carries the
 same release as a signed bundle: binaries for `linux_amd64`, `linux_arm64`,
-`darwin_amd64` and `darwin_arm64`, the configuration template, license and
-documentation. The [download and install page](https://docs.cascadeauth.com/sidecar/install/)
+`darwin_amd64` and `darwin_arm64` (macOS 13 or later), the configuration
+template, license and documentation. The [download and install page](https://docs.cascadeauth.com/sidecar/install/)
 covers pulling the bundle with ORAS, choosing the platform archive and placing
 the executable; the optional
 [release verification page](https://docs.cascadeauth.com/sidecar/reference/verification/)
@@ -188,7 +188,7 @@ file locally. Then stop the containers while keeping credentials and evidence:
 The [released-component record](https://docs.cascadeauth.com/released-components.json)
 names the current sidecar, CLI, publisher and integration package versions;
 [release notes](https://docs.cascadeauth.com/release-notes/) carry upgrade
-guidance for each version, and the `v0.5.2-bundle` ships the starter guide,
+guidance for each version, and the `v0.5.3-bundle` ships the starter guide,
 the key map and the configuration template.
 
 [AAC Sidecar Developer Beta Binary License 1.0](https://docs.cascadeauth.com/LICENSE)
