@@ -168,6 +168,7 @@ liveness check, not proof that your tenant, trust material, or sidecar is ready.
 
 | Surface | Supported beta profile |
 |---|---|
+| Platforms | macOS, Linux and Linux Docker containers. Run the sidecar and its companions on Linux or in Linux containers; the standalone macOS binary serves development machines |
 | Container | Linux amd64/arm64; ready-made distroless image; UID/GID 65532 |
 | Standalone | Linux amd64/arm64 and macOS amd64/arm64 (macOS 13 Ventura or later); non-root process |
 | Agent pairing | Same network namespace; local `/invoke` and `/a2a/v1` authenticated with the per-pair secret |

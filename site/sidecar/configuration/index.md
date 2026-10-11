@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/configuration/
 
 Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: dc7a41b77581b7ce6e83df2629fc2a2af41bc014
+Documentation revision: c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd
 
 ---
 
@@ -176,6 +176,7 @@ liveness check, not proof that your tenant, trust material, or sidecar is ready.
 
 | Surface | Supported beta profile |
 |---|---|
+| Platforms | macOS, Linux and Linux Docker containers. Run the sidecar and its companions on Linux or in Linux containers; the standalone macOS binary serves development machines |
 | Container | Linux amd64/arm64; ready-made distroless image; UID/GID 65532 |
 | Standalone | Linux amd64/arm64 and macOS amd64/arm64 (macOS 13 Ventura or later); non-root process |
 | Agent pairing | Same network namespace; local `/invoke` and `/a2a/v1` authenticated with the per-pair secret |

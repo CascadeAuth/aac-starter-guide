@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/get-started/
 
 Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: dc7a41b77581b7ce6e83df2629fc2a2af41bc014
+Documentation revision: c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd
 
 ---
 
@@ -25,9 +25,9 @@ bounds delegated authority, not a price hold.
 
 ## Before you start
 
-Use macOS or Linux with a Bash-compatible shell, Git, Python **3.11 or later**
-with `venv` and `pip`, and Docker with Compose and Buildx. Start the Docker
-engine. Keep the machine's clock synchronized and its public CA store current.
+Supported platforms are macOS, Linux and Linux Docker containers. Use a
+Bash-compatible shell, Git, Python **3.11 or later** with `venv` and `pip`, and
+Docker with Compose and Buildx. Start the Docker engine. Keep the machine's clock synchronized and its public CA store current.
 Allow outbound HTTPS to GitHub, PyPI, Docker Hub, GHCR and the
 [AAC stage endpoints](https://docs.cascadeauth.com/sidecar/configuration/#aac-stage-endpoints).
 You need a browser for interactive GitHub sign-in and real contact email addresses.

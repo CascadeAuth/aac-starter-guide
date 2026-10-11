@@ -1,6 +1,6 @@
 {
   "component": "sidecar",
-  "documentation_revision": "dc7a41b77581b7ce6e83df2629fc2a2af41bc014",
+  "documentation_revision": "c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "a1a2cd25259e5b29e2c454ca4b3cd3d718489b4861729eba9132c13f6128f6ae",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -9,8 +9,8 @@
     "content/sidecar/a2a.md": "18d48c2cd0171103c56d3f98abde2c5eadec4ac882ba63f3fa29c171678147b3",
     "content/sidecar/artifacts.md": "40a833cdae855caedba28ca9ef534721c016aaf5b8b654f9a05c3f203b58188e",
     "content/sidecar/control-plane.md": "c29030563ce57a3262c9d5f9e286e68274a2b6024981a3a60e952c9b134c6ccc",
-    "content/sidecar/deployment.md": "6d049fb3867d34ecbe4ae1351ddec683dde591d2433219232c1bb8cbfbda98f6",
-    "content/sidecar/get-started.md": "ac3e3f57da11b3d45ee6a84d9b74047d2627a69db86cf43f02f588341e20fc31",
+    "content/sidecar/deployment.md": "2be2c37eba3509264f95dbdbc2ed045ae334728fb658819b9f5d2ea050077837",
+    "content/sidecar/get-started.md": "9e61cc96701d3968040a08337f83797401e635ce6254006d1471cf8ffc8ada09",
     "content/sidecar/home.md": "262dfa6ec2b1a75bbc582e8509aa606c8db03e1697ef57cfd98ffa3eb2291e55",
     "content/sidecar/integration.md": "46c61c238f4dc2be27d5f41e8b540074dc05f38a7c22bed83ce726bd23b30dcf",
     "content/sidecar/keys-and-certificates.md": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
@@ -46,7 +46,7 @@
     },
     "/get-started/": {
       "applicability": "AAC Sidecar v0.5.3",
-      "content_sha256": "ac3e3f57da11b3d45ee6a84d9b74047d2627a69db86cf43f02f588341e20fc31",
+      "content_sha256": "9e61cc96701d3968040a08337f83797401e635ce6254006d1471cf8ffc8ada09",
       "description": "Run a first authenticated reservation with Docker.",
       "metadata_sha256": "ae4e87376b4ae9c393420896480d42634e0d47c4d816e70800cf530fc2e342a9",
       "route": "/get-started/",
@@ -106,7 +106,7 @@
     },
     "/sidecar/configuration/": {
       "applicability": "AAC Sidecar v0.5.3",
-      "content_sha256": "6d049fb3867d34ecbe4ae1351ddec683dde591d2433219232c1bb8cbfbda98f6",
+      "content_sha256": "2be2c37eba3509264f95dbdbc2ed045ae334728fb658819b9f5d2ea050077837",
       "description": "Configure agents, ingress, trust and durable state.",
       "metadata_sha256": "6616bd31bfd6e1a01b0635ce9b39c07d506fea9a14ac8f4d50b0a83fa732bacc",
       "route": "/sidecar/configuration/",
@@ -166,12 +166,12 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": null,
+  "previous_documentation_revision": "dc7a41b77581b7ce6e83df2629fc2a2af41bc014",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:460e858d563ed732764fd645ca1f1f3772411c6b4fc477d371b045b3dc66b2d9",
-    "documentation_revision": "dc7a41b77581b7ce6e83df2629fc2a2af41bc014",
+    "documentation_revision": "c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd",
     "documentation_source": "reviewed-source",
-    "guide_sha256": "ac3e3f57da11b3d45ee6a84d9b74047d2627a69db86cf43f02f588341e20fc31",
+    "guide_sha256": "9e61cc96701d3968040a08337f83797401e635ce6254006d1471cf8ffc8ada09",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:3a9d31b2df34d666830acb973391c4e39006b21f50bdb34246af8f54a2d9680d",
     "template_sha256": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
     "version": "v0.5.3"
