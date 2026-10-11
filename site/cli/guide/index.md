@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/cli/guide/
 
 Applies to: AAC CLI 0.2.11
 
-Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
+Documentation revision: a4b073409b4b2f23d4b22c518a5adfa1d6bd895e
 
 ---
 
@@ -40,7 +40,8 @@ It installs both `aac` and `aeg`. For the other components, use the
 [installation and operations hub](https://docs.cascadeauth.com/), including the
 [trust anchor publisher](https://docs.cascadeauth.com/trust-anchor-publisher/) and [Control Plane](https://docs.cascadeauth.com/control-plane/).
 
-Use Python 3.11–3.14 and a Bash-compatible shell:
+Supported platforms are macOS, Linux and Linux Docker containers. Use Python
+3.11–3.14 and a Bash-compatible shell:
 
 ```bash
 python3 -m venv .aac-tools

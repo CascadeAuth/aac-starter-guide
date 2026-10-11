@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/cli/reference/aac-tenant-update/
 
 Applies to: AAC CLI 0.2.11
 
-Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
+Documentation revision: a4b073409b4b2f23d4b22c518a5adfa1d6bd895e
 
 ---
 

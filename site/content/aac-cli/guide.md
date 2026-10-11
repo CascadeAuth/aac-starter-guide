@@ -32,7 +32,8 @@ It installs both `aac` and `aeg`. For the other components, use the
 [installation and operations hub](/), including the
 [trust anchor publisher](/trust-anchor-publisher/) and [Control Plane](/control-plane/).
 
-Use Python 3.11–3.14 and a Bash-compatible shell:
+Supported platforms are macOS, Linux and Linux Docker containers. Use Python
+3.11–3.14 and a Bash-compatible shell:
 
 ```bash
 python3 -m venv .aac-tools

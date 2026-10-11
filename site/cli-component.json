@@ -2,7 +2,7 @@
   "cli_version": "0.2.11",
   "cli_wheel_sha256": "6ba2d2ce52a81d677e277a865857992e63c6f6b6fc64b51c50b00ec176eee122",
   "component": "aac-cli",
-  "documentation_revision": "5c77b407625370cd7b937cc1a7578edff5f0d0d0",
+  "documentation_revision": "a4b073409b4b2f23d4b22c518a5adfa1d6bd895e",
   "files": {
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
@@ -10,7 +10,7 @@
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
     "content/aac-cli/aeg-reference.md": "e541e23ac1556e5fb50e8b4a4f5619dd16910fac75edc7035380f87160afa83b",
     "content/aac-cli/aeg.md": "cf9e499dae3cdefc55c6d222c41208f46cf5a5aa01c33e35bf8ee4b56fd8bf73",
-    "content/aac-cli/guide.md": "14824f21f9d0e7da2d2dece0b0d90c215a7f7f57695d5c85de7677c802e705dc",
+    "content/aac-cli/guide.md": "5da86e9a64c70c15ec1968215869fd230326cdcfc6aa55370aab10e00be95c1f",
     "content/aac-cli/index.md": "764fd1e9759004a6c8a12ad1ec0ebbaaf001341a09710e505e6aeb6cb902fa79",
     "content/aac-cli/reference/aac-agent-list.md": "cbb3a979b9aae5d2ea340ac521a5534c09e61bafd2333d021d94632a2ce06e55",
     "content/aac-cli/reference/aac-agent-renew.md": "cb20d9993291fb422ea87f3a66ac2da7ecc84187d42df40448d46c5dc7103a68",
@@ -128,7 +128,7 @@
     },
     "/cli/guide/": {
       "applicability": "AAC CLI 0.2.11",
-      "content_sha256": "14824f21f9d0e7da2d2dece0b0d90c215a7f7f57695d5c85de7677c802e705dc",
+      "content_sha256": "5da86e9a64c70c15ec1968215869fd230326cdcfc6aa55370aab10e00be95c1f",
       "description": "Configure tenants, agents, profiles and credentials.",
       "metadata_sha256": "018aa6e935a81c13193664c4b954dfbe12b601a4e3ae63d6979a08f5b163661e",
       "route": "/cli/guide/",
@@ -738,7 +738,7 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": null,
+  "previous_documentation_revision": "5c77b407625370cd7b937cc1a7578edff5f0d0d0",
   "renderer_sha256": "6e8bcd00bd94c415e04af65deb527be4d1581a6a5396d74c95708d6dda97fca4",
   "schema_version": 3
 }
