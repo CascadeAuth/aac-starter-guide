@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/" aria-current="page">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Operate and troubleshoot the sidecar</span></nav>
 <h1 id="operate-and-troubleshoot-the-sidecar">Operate and troubleshoot the sidecar</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.3</span><a href="/sidecar/operations/index.md" download="sidecar-operations.md">Markdown</a><span class="revision">Docs c1c9bfe34df3</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.3</span><a href="/sidecar/operations/index.md" download="sidecar-operations.md">Markdown</a><span class="revision">Docs c47c1de1f955</span></div>
 <p><a href="/get-started/">Start the AAC journey</a> · <a href="/sidecar/configuration/">All references</a></p>
 <p>This reference is for a deployment or integration you have chosen to configure.
 For the first authenticated reservation, use the packaged Compose journey above.</p>
@@ -185,7 +185,60 @@ events. Ellipses indicate omitted values and must not be fed into a verifier:</p
 {&quot;timestamp_unix_seconds&quot;:1700000002,&quot;event_type&quot;:&quot;receive&quot;,&quot;result&quot;:&quot;failure&quot;,&quot;failure_code&quot;:&quot;ERR_RECIPIENT_NOT_AUTHORIZED&quot;}
 {&quot;timestamp_unix_seconds&quot;:1700000003,&quot;event_type&quot;:&quot;respond&quot;,&quot;result&quot;:&quot;success&quot;,&quot;root_token_id&quot;:&quot;...&quot;,&quot;agent_decision_action&quot;:&quot;settle&quot;,&quot;terminal_attestation&quot;:&quot;...&quot;}
 </code></pre>
-<h3 id="investigate-three-common-failures">Investigate three common failures</h3>
+<h3 id="receipt-verification-values">Receipt verification values</h3>
+<p>A successful <code>dispatch</code> record whose peer reported <code>settled</code> carries
+<code>terminal_attestation_verification</code>: the sender's own check of the signed
+receipt the peer returned. The business
+call has already completed when this value is written. Only <code>verified</code>
+confirms the settlement; the sidecar never promotes any other value to a
+success, and none of them fails the dispatch itself.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+<th>Next step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>verified</code></td>
+<td>The receipt's signature, signing workload, owning tenant, audience and chain root all match this dispatch</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>workload_unresolved</code></td>
+<td>The sender could not confirm which tenant owns the signing workload and nothing usable was cached. Causes: the control plane answered that the identity has no active registration; it gave no answer within the lookup budget (the sidecar allows 5 seconds, retries once on a fresh request when the identity is not in its cache, and records this value if both attempts fail); it answered an error status, for example 401 when the sender's tenant API key is wrong; the sender's API key file is unreadable; or the sender has no <code>workload_projection</code> source configured</td>
+<td>Run the workflow again after 30 seconds; the sidecar does not ask the control plane about that identity sooner. If it persists, read the sender's log line that ends in <code>the receipt check records workload_unresolved</code>: it names the cause (<code>could not be fetched after retrying</code>, <code>returned an unexpected HTTP status</code>, <code>answers ERR_WORKLOAD_UNRESOLVED</code> with <code>dropped the cached resolution</code> when the identity was resolved before, <code>failed locally</code>). A sender with no <code>workload_projection</code> source writes no such line: the value itself is the signal, and waiting does not help until a source is configured. Otherwise check the sender's connectivity to the control-plane host, its <code>workload_projection</code> source and API key file, and the peer's registration</td>
+</tr>
+<tr>
+<td><code>identity_mismatch</code></td>
+<td>The signature is genuine, but the signing workload is not the destination this hop dispatched to, or its signed tenant is not the owner the control plane resolved</td>
+<td>Compare <code>destinations.*.audience_pattern</code> with the peer's exact <code>agent.spiffe_id</code>; treat an unexpected identity as a security event</td>
+</tr>
+<tr>
+<td><code>chain_mismatch</code></td>
+<td>The signature is genuine, but the receipt belongs to a different chain root: a cross-chain or replayed receipt</td>
+<td>Treat as a security event; correlate root IDs on both sides</td>
+</tr>
+<tr>
+<td><code>signature_invalid</code></td>
+<td>The receipt could not be verified: bad signature, wrong algorithm or header, malformed claims, a leaf certificate outside its validity window (30-second skew allowed), or a leaf that does not chain to a configured trust bundle</td>
+<td>Check the peer's published bundle and your <code>spiffe_bundles.trust_domains</code>, both clocks, and the peer's certificate rotation; the sender's log does not record which class failed</td>
+</tr>
+<tr>
+<td><code>envelope_unparseable</code></td>
+<td>The peer's acknowledgement body was not a JSON object</td>
+<td>Inspect the peer sidecar; an HTTP 200 alone is not a settlement</td>
+</tr>
+<tr>
+<td><code>absent</code></td>
+<td>The acknowledgement reports <code>settled</code> without a receipt</td>
+<td>Inspect the peer sidecar's <code>respond</code> record</td>
+</tr>
+</tbody>
+</table>
+<h3 id="investigate-common-failures">Investigate common failures</h3>
 <table>
 <thead>
 <tr>
@@ -209,6 +262,11 @@ events. Ellipses indicate omitted values and must not be fed into a verifier:</p
 <td>Bad pairing</td>
 <td>Agent HTTP 401 before its business handler; library reports a missing/malformed header, timestamp skew or signature mismatch. Sidecar delivery can report <code>ERR_AGENT_REJECTED</code></td>
 <td>Compare the two secret files without printing them, check clocks, method/path, covered headers and exact body bytes. Sign once after serialization and transmit those bytes unchanged.</td>
+</tr>
+<tr>
+<td>Receipt not verified</td>
+<td>Sender <code>dispatch</code> success with <code>terminal_attestation_verification: workload_unresolved</code>; receiver <code>receive</code> and <code>respond</code> success; sender log <code>workload projection could not be fetched after retrying and the identity was not found in the cache</code></td>
+<td>The call completed; the receipt is unconfirmed. Retry the workflow after 30 seconds. If it repeats, check the sender's connectivity to the control-plane host and the peer's registration. See the receipt verification values above.</td>
 </tr>
 </tbody>
 </table>
@@ -741,4 +799,4 @@ operator action; this guide does not promise a tenant-account deletion API or
 a complete tenant-offboarding procedure.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
-<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#diagnostics-and-support" class="toc-h2">Diagnostics and support</a><a href="#optional-central-trace-forwarding" class="toc-h2">Optional central trace forwarding</a><a href="#audit-your-workflows" class="toc-h2">Audit your workflows</a><a href="#local-event-fields" class="toc-h3">Local event fields</a><a href="#investigate-three-common-failures" class="toc-h3">Investigate three common failures</a><a href="#retain-and-inspect-safely" class="toc-h3">Retain and inspect safely</a><a href="#verify-terminal-evidence-offline" class="toc-h3">Verify terminal evidence offline</a><a href="#sidecar-error-reference" class="toc-h2">Sidecar error reference</a><a href="#upgrade-rollback-and-uninstall" class="toc-h2">Upgrade, rollback, and uninstall</a><a href="#rotate-or-revoke-credentials-deliberately" class="toc-h3">Rotate or revoke credentials deliberately</a></aside></div></body></html>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#diagnostics-and-support" class="toc-h2">Diagnostics and support</a><a href="#optional-central-trace-forwarding" class="toc-h2">Optional central trace forwarding</a><a href="#audit-your-workflows" class="toc-h2">Audit your workflows</a><a href="#local-event-fields" class="toc-h3">Local event fields</a><a href="#receipt-verification-values" class="toc-h3">Receipt verification values</a><a href="#investigate-common-failures" class="toc-h3">Investigate common failures</a><a href="#retain-and-inspect-safely" class="toc-h3">Retain and inspect safely</a><a href="#verify-terminal-evidence-offline" class="toc-h3">Verify terminal evidence offline</a><a href="#sidecar-error-reference" class="toc-h2">Sidecar error reference</a><a href="#upgrade-rollback-and-uninstall" class="toc-h2">Upgrade, rollback, and uninstall</a><a href="#rotate-or-revoke-credentials-deliberately" class="toc-h3">Rotate or revoke credentials deliberately</a></aside></div></body></html>

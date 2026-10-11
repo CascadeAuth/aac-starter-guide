@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/operations/
 
 Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd
+Documentation revision: c47c1de1f955e130fea5cfa8acf0841bb330586e
 
 ---
 
@@ -123,13 +123,33 @@ events. Ellipses indicate omitted values and must not be fed into a verifier:
 {"timestamp_unix_seconds":1700000003,"event_type":"respond","result":"success","root_token_id":"...","agent_decision_action":"settle","terminal_attestation":"..."}
 ```
 
-### Investigate three common failures
+### Receipt verification values
+
+A successful `dispatch` record whose peer reported `settled` carries
+`terminal_attestation_verification`: the sender's own check of the signed
+receipt the peer returned. The business
+call has already completed when this value is written. Only `verified`
+confirms the settlement; the sidecar never promotes any other value to a
+success, and none of them fails the dispatch itself.
+
+| Value | Meaning | Next step |
+|---|---|---|
+| `verified` | The receipt's signature, signing workload, owning tenant, audience and chain root all match this dispatch | None |
+| `workload_unresolved` | The sender could not confirm which tenant owns the signing workload and nothing usable was cached. Causes: the control plane answered that the identity has no active registration; it gave no answer within the lookup budget (the sidecar allows 5 seconds, retries once on a fresh request when the identity is not in its cache, and records this value if both attempts fail); it answered an error status, for example 401 when the sender's tenant API key is wrong; the sender's API key file is unreadable; or the sender has no `workload_projection` source configured | Run the workflow again after 30 seconds; the sidecar does not ask the control plane about that identity sooner. If it persists, read the sender's log line that ends in `the receipt check records workload_unresolved`: it names the cause (`could not be fetched after retrying`, `returned an unexpected HTTP status`, `answers ERR_WORKLOAD_UNRESOLVED` with `dropped the cached resolution` when the identity was resolved before, `failed locally`). A sender with no `workload_projection` source writes no such line: the value itself is the signal, and waiting does not help until a source is configured. Otherwise check the sender's connectivity to the control-plane host, its `workload_projection` source and API key file, and the peer's registration |
+| `identity_mismatch` | The signature is genuine, but the signing workload is not the destination this hop dispatched to, or its signed tenant is not the owner the control plane resolved | Compare `destinations.*.audience_pattern` with the peer's exact `agent.spiffe_id`; treat an unexpected identity as a security event |
+| `chain_mismatch` | The signature is genuine, but the receipt belongs to a different chain root: a cross-chain or replayed receipt | Treat as a security event; correlate root IDs on both sides |
+| `signature_invalid` | The receipt could not be verified: bad signature, wrong algorithm or header, malformed claims, a leaf certificate outside its validity window (30-second skew allowed), or a leaf that does not chain to a configured trust bundle | Check the peer's published bundle and your `spiffe_bundles.trust_domains`, both clocks, and the peer's certificate rotation; the sender's log does not record which class failed |
+| `envelope_unparseable` | The peer's acknowledgement body was not a JSON object | Inspect the peer sidecar; an HTTP 200 alone is not a settlement |
+| `absent` | The acknowledgement reports `settled` without a receipt | Inspect the peer sidecar's `respond` record |
+
+### Investigate common failures
 
 | Symptom | What to inspect | Next step |
 |---|---|---|
 | Replayed proof | Receiver HTTP 403 with `ERR_DPOP_REPLAY`; local receive failure, possibly without a root ID | Do not resend a captured AAC/DPoP request. Use the originator/paired-agent API to produce a fresh proof; for a business retry preserve the original A2A dispatch ID and body. Never disable replay checks to retry. |
 | Wrong recipient | Receiver `ERR_RECIPIENT_NOT_AUTHORIZED`; sender may record `ERR_DOWNSTREAM_REJECTED` | Compare `destinations.*.audience_pattern` to the receiver's exact `agent.spiffe_id`. A wildcard holder audience does not turn a different final recipient into the intended workload. |
 | Bad pairing | Agent HTTP 401 before its business handler; library reports a missing/malformed header, timestamp skew or signature mismatch. Sidecar delivery can report `ERR_AGENT_REJECTED` | Compare the two secret files without printing them, check clocks, method/path, covered headers and exact body bytes. Sign once after serialization and transmit those bytes unchanged. |
+| Receipt not verified | Sender `dispatch` success with `terminal_attestation_verification: workload_unresolved`; receiver `receive` and `respond` success; sender log `workload projection could not be fetched after retrying and the identity was not found in the cache` | The call completed; the receipt is unconfirmed. Retry the workflow after 30 seconds. If it repeats, check the sender's connectivity to the control-plane host and the peer's registration. See the receipt verification values above. |
 
 Keep access logs or request correlation when a pre-verification failure has no
 root ID. Do not invent a root association from unverified caller headers.

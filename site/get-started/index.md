@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/get-started/
 
 Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd
+Documentation revision: c47c1de1f955e130fea5cfa8acf0841bb330586e
 
 ---
 
@@ -230,7 +230,8 @@ correlated completion; missing evidence or failure exits nonzero.
 
 **Success:** output includes the actual task/root IDs, reservation and signed
 receipt, with `terminal_attestation_verification: verified`. An HTTP 200 or a
-`dispatched` acknowledgement alone does not establish this result.
+`dispatched` acknowledgement alone does not establish this result. The
+operations reference explains every other verification value.
 
 The demo also supplies [fare-change and fresh-authority exercises](https://github.com/CascadeAuth/aac-compose-demo#4-start-and-run)
 and [refusal exercises](https://github.com/CascadeAuth/aac-compose-demo#5-refusals-and-controlled-attacks).

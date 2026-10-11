@@ -1044,7 +1044,9 @@ trust the originator root tenant via `trust_anchors.tenant_ids` and the presente
 CA domain via `spiffe_bundles.trust_domains`; use authenticated workload
 projection for the presenting and terminal identities. The sender's destination
 must name the peer's exact SPIFFE ID. Do not copy a CA private key or another
-workload's private keys between those hosts.
+workload's private keys between those hosts. The sender records its check of
+the peer's receipt as `terminal_attestation_verification`; the operations
+reference lists the values and what to do about each.
 ## Pairing authentication for any language
 
 Implement `AAC1-HMAC-SHA256` before trusting a sidecar's `/invoke` or `/a2a/v1`

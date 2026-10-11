@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.3
 
-Documentation revision: c1c9bfe34df3f9d320174d8f8ae785455dfcf5bd
+Documentation revision: c47c1de1f955e130fea5cfa8acf0841bb330586e
 
 ---
 
@@ -121,3 +121,15 @@ v0.60.0, which fix the Go networking and TLS advisories present in v0.5.2's
 build (GO-2026-6603 and eight related advisories). The standalone macOS
 binaries now need macOS 13 Ventura or later; Linux binaries and the container
 image are unaffected.
+
+## 0.5.4
+
+When the sender's lookup of the peer's identity at the control plane gets no
+answer within its 5-second budget and the identity is not in the sender's
+cache, the sidecar now retries the lookup once on a fresh request before
+recording the receipt as `workload_unresolved`; before, the first failed
+attempt recorded that value directly. The sidecar log states the actual
+outcome of a failed lookup: the cached identity served, or the receipt check
+recording `workload_unresolved`. The operations reference now lists every
+`terminal_attestation_verification` value with its meaning and next step. No
+change to routes, configuration, signed bytes or the verification verdicts.

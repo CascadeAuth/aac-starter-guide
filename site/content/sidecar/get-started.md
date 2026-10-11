@@ -222,7 +222,8 @@ correlated completion; missing evidence or failure exits nonzero.
 
 **Success:** output includes the actual task/root IDs, reservation and signed
 receipt, with `terminal_attestation_verification: verified`. An HTTP 200 or a
-`dispatched` acknowledgement alone does not establish this result.
+`dispatched` acknowledgement alone does not establish this result. The
+operations reference explains every other verification value.
 
 The demo also supplies [fare-change and fresh-authority exercises](https://github.com/CascadeAuth/aac-compose-demo#4-start-and-run)
 and [refusal exercises](https://github.com/CascadeAuth/aac-compose-demo#5-refusals-and-controlled-attacks).
