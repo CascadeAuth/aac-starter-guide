@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-tenant-list/
 
-Applies to: AAC CLI 0.2.10
+Applies to: AAC CLI 0.2.11
 
-Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
+Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
 
 ---
 
@@ -48,7 +48,7 @@ aac tenant list
 
 ## Notes
 
-Answers "which tenant ids exist?" without a 409 probe (ids are the canonical server-allocated tnt-\<uuid\> form). Attribute tier only — `describe` serves workloads and key metadata per tenant. Admin surface; a session lists its own tenant's row only; the ceremony bootstrap token reads the full roster.
+Answers "which tenant ids exist?" without a 409 probe (ids are the canonical server-allocated tnt-\<uuid\> form). Attribute tier only — `describe` serves workloads and key metadata per tenant. Admin surface; needs a cached session (`aac sso login`), which lists its own tenant's row only.
 
 ## Related commands
 

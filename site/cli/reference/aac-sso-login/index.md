@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-login/
 
-Applies to: AAC CLI 0.2.10
+Applies to: AAC CLI 0.2.11
 
-Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
+Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
 
 ---
 
@@ -63,11 +63,11 @@ aac sso login
 | `--data-plane-url` | value | no | — | Data-plane-surface base URL (overrides profile). |
 | `--output` | `json` \| `table` | no | `json` | Output mode: json (the default) or table. |
 | `--tenant-id` | value | no | — | Tenant to sign in TO (default: profile/env tenant). |
-| `--idp-url` | value | no | — | Which IdP connection to use, by the connection's exact URL (its issuer URL, as registered; needed when several are registered — the error lists the exact commands). |
+| `--idp-url` | value | no | — | Which IdP connection to use, by the connection's exact URL (its issuer URL, as registered). With several registered, a terminal asks which one; a script gets exit 3 and the exact commands. |
 | `--idp` | `github` \| `google` | no | — | Short form of --idp-url for the shared developer sign-ins: github or google. |
-| `--flow` | `device` \| `pkce` | no | — | Override the per-IdP flow selection. |
+| `--flow` | `device` \| `pkce` | no | — | Override the per-IdP flow selection (pkce is not available for GitHub). |
 | `--scope` | value | no | — | OAuth scope for the upstream flow (default: per IdP family — 'openid profile email' for OIDC families, none for GitHub). |
-| `--no-browser` | flag | no | — | PKCE flow: print the sign-in URL instead of opening a browser. |
+| `--no-browser` | flag | no | — | Print the sign-in URL instead of opening a browser tab, and do not offer to open the device-flow page. |
 
 At most one of `--idp-url`, `--idp` may be given.
 
@@ -89,9 +89,16 @@ At most one of `--idp-url`, `--idp` may be given.
 ## Notes
 
 ```text
+Choosing a connection: with no --idp/--idp-url, the tenant's own
+connections take precedence over the shared developer sign-ins. When
+several remain, a terminal gets a numbered list to choose from; without
+a terminal (scripts, pipes) login exits 3 and prints one copy-ready
+command per connection.
+
 Flow selection: device flow by default (works on headless machines —
 the browser can be anywhere); Google-family connections prefer loopback
-PKCE (Google's device flow is scope-restricted). Override with --flow.
+PKCE (Google's device flow is scope-restricted). Override with --flow;
+GitHub connections accept the device flow only.
 Connections registered with jwks_static carry no flow endpoints and
 cannot login interactively.
 ```

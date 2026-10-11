@@ -40,7 +40,7 @@ aac tenant list
 
 ## Notes
 
-Answers "which tenant ids exist?" without a 409 probe (ids are the canonical server-allocated tnt-\<uuid\> form). Attribute tier only — `describe` serves workloads and key metadata per tenant. Admin surface; a session lists its own tenant's row only; the ceremony bootstrap token reads the full roster.
+Answers "which tenant ids exist?" without a 409 probe (ids are the canonical server-allocated tnt-\<uuid\> form). Attribute tier only — `describe` serves workloads and key metadata per tenant. Admin surface; needs a cached session (`aac sso login`), which lists its own tenant's row only.
 
 ## Related commands
 

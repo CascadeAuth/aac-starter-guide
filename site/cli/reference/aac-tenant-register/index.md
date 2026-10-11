@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-tenant-register/
 
-Applies to: AAC CLI 0.2.10
+Applies to: AAC CLI 0.2.11
 
-Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
+Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
 
 ---
 
@@ -51,7 +51,7 @@ aac tenant register
 | `--bootstrap-token` | value | no | — | Ceremony bootstrap token for the X-AAC-Bootstrap-Token header (registration is gated: the control plane rejects registration while no ceremony window is open). Falls back to $AAC_BOOTSTRAP_TOKEN. Ignored with --idp (self-serve registration carries federated evidence instead). |
 | `--idp` | `github` \| `google` | no | — | Developer-tier self-serve registration: sign in with this identity provider and register WITHOUT a ceremony token — your verified identity becomes the tenant's first tenant-admin. Requires the deployment to enable self-serve registration and to operate a shared connection for the family. |
 | `--flow` | `device` \| `pkce` | no | — | With --idp: override the per-IdP sign-in flow selection. |
-| `--no-browser` | flag | no | — | With --idp (PKCE): print the sign-in URL instead of opening a browser. |
+| `--no-browser` | flag | no | — | With --idp: print the sign-in URL instead of opening a browser tab, and do not offer to open the device-flow page. |
 
 ## Output
 

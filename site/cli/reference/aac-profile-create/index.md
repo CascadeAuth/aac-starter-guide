@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-profile-create/
 
-Applies to: AAC CLI 0.2.10
+Applies to: AAC CLI 0.2.11
 
-Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
+Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
 
 ---
 

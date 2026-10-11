@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/guide/
 
-Applies to: AAC CLI 0.2.10
+Applies to: AAC CLI 0.2.11
 
-Documentation revision: 8ac907aefe6d0ee5890eb6ea197f8b469306f03c
+Documentation revision: 5c77b407625370cd7b937cc1a7578edff5f0d0d0
 
 ---
 
@@ -160,7 +160,11 @@ aac sso whoami --profile stage --output table
 aac sso logout --profile stage
 ```
 
-Choose the connection used to register that tenant. `whoami` and `logout`
+Choose the connection used to register that tenant. Without `--idp`, a
+terminal lists the shared sign-ins by number and asks which one to use; a
+script gets exit 3 and the exact commands. A sign-in through the other
+provider, or with another account, is refused, and the CLI then names the
+remaining sign-ins. `whoami` and `logout`
 work locally. Sessions last **4 hours by default**; your administrator may
 configure a different lifetime for the deployment or connection. You can run
 `aac sso login` again before expiry. Successful authentication replaces the
@@ -236,7 +240,10 @@ aac tenant describe --profile prod --output table
 ```
 
 `--no-browser` prints the PKCE URL; open it on the machine with the CLI's
-loopback listener. Device flow permits the browser on another machine.
+loopback listener. Device flow permits the browser on another machine; on a
+terminal with a browser at hand (macOS, a desktop session, or `BROWSER` set)
+it offers to open the sign-in page when you press Enter, and `--no-browser`
+turns that offer off too.
 `aac sso list-idp --profile prod` shows safe connection handles even during a
 login failure. Once a tenant-admin session works, omit the bootstrap token
 when registering additional connections. GitHub/Google onboarding and both
@@ -648,7 +655,7 @@ and payment; it does not guarantee a price hold.
 | Exit 3 | Local profile, credential or agent state needs attention; follow stderr. No scalar value is emitted. |
 | Invalid profile binding | Inspect with `aac profile show NAME`; follow [profile binding repair](https://docs.cascadeauth.com/cli/guide/#repair-a-stale-profile-binding). Other profiles remain usable. |
 | Exit 4 | Endpoint unreachable. Check the selected endpoints and connectivity; do not blindly replay mutations. |
-| `ERR_SESSION_TOKEN_MISSING`, expired session | Sign in to the intended tenant again. |
+| No cached session, `ERR_SESSION_TOKEN_MISSING`, expired session | Sign in to the intended tenant again. A command that needs a session stops locally with exit 3 when none is cached, before anything is sent, and prints the sign-in command for the same profile and endpoints; commands that also accept a bootstrap token name that alternative. |
 | `ERR_SESSION_TENANT_MISMATCH`, `ERR_SESSION_ROLE_FORBIDDEN` | Check profile, tenant and group-to-role mapping; an API key is not an admin session. |
 | `ERR_IDP_ALREADY_BOUND` | Registration is create-only; inspect and replace the connection with its current revision. |
 | `ERR_TRACE_NOT_FOUND` | Check the root/token ID and participant visibility; missing telemetry is not proof no execution occurred. |
@@ -657,6 +664,11 @@ and payment; it does not guarantee a price hold.
 | No login flow endpoints | A static test connection cannot perform browser/device login; use discovery for the enterprise connection. |
 
 Remote rejections use exit 1 and preserve the server's stable code on stderr.
+Commands that can present a bootstrap token, and `aac sso login`, report a
+failure of the request that carries the credential by HTTP status and AAC
+error code only, never the server's message, because the message can echo the
+credential; the public sign-in-directory lookup that precedes sign-in or
+federated registration carries no credential and still shows the message.
 Rate limits include the wait interval; retry deliberately. Retain sanitized
 command/version/error details when contacting support@cascadeauth.com; omit
 API keys, tokens, private PEMs and raw business payloads.
