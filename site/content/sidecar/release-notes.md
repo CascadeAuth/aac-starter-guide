@@ -1,5 +1,15 @@
 # Release notes
 
+## AAC Developer Beta service
+
+Changes to the hosted service, [AAC Developer Beta (free)](https://docs.cascadeauth.com/control-plane/#aac-developer-beta-free),
+are listed here, newest first. Tenant contacts also receive an email before a
+breaking change or a reset. Sidecar releases follow, by version.
+
+- **2026-10-17:** The beta's commitments are published: how long tenants and
+  their data are kept, the notice before any reset or deletion, support, and
+  these change announcements. The service itself is unchanged.
+
 ## 0.4.0
 
 This guidance applies when upgrading to 0.4.0; it also covers behavior introduced

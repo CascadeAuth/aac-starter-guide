@@ -6,16 +6,35 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/" aria-current="true">Control Plane</a><a href="/aeg/">AEG</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#what-it-provides" class="toc-h2">What it provides</a><a href="#connect-to-the-developer-beta-service" class="toc-h2">Connect to the developer-beta service</a><a href="#which-component-authenticates-each-request" class="toc-h2">Which component authenticates each request</a><a href="#check-service-and-tenant-state" class="toc-h2">Check service and tenant state</a><a href="#find-an-execution" class="toc-h2">Find an execution</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Using Control Plane</span></nav>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#aac-developer-beta-free" class="toc-h2">AAC Developer Beta (free)</a><a href="#what-it-provides" class="toc-h2">What it provides</a><a href="#connect-to-the-developer-beta-service" class="toc-h2">Connect to the developer-beta service</a><a href="#which-component-authenticates-each-request" class="toc-h2">Which component authenticates each request</a><a href="#check-service-and-tenant-state" class="toc-h2">Check service and tenant state</a><a href="#find-an-execution" class="toc-h2">Find an execution</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Using Control Plane</span></nav>
 <h1 id="using-control-plane">Using Control Plane</h1>
-<div class="page-actions"><span>Hosted AAC Control Plane · developer beta</span><a href="/control-plane/index.md" download="control-plane.md">Markdown</a><span class="revision">Docs 5b3df1070aca</span></div>
+<div class="page-actions"><span>Hosted AAC Control Plane · developer beta</span><a href="/control-plane/index.md" download="control-plane.md">Markdown</a><span class="revision">Docs ba73692a128f</span></div>
 <p>The AAC Control Plane is the shared API service that connects tenant
-administration, identity, public trust and execution queries. The developer
-beta provides it as a hosted service. Your CLI, trust anchor publisher and
+administration, identity, public trust and execution queries. AAC hosts it
+as <strong>AAC Developer Beta (free)</strong>. Your CLI, trust anchor publisher and
 sidecars connect to its endpoints from your own environment.</p>
 <p>Your tenant operates its agents and their sidecars, holds its private signing
 material, and decides what business work to authorize. AAC operates the shared
 Control Plane and public-trust endpoints.</p>
+<h2 id="aac-developer-beta-free">AAC Developer Beta (free)</h2>
+<p>AAC Developer Beta is the hosted Control Plane and public-trust service, free
+of charge while the beta runs. These are its commitments:</p>
+<ul>
+<li><strong>Use:</strong> evaluation and integration development only, not production or
+safety-critical use. There is no service-level agreement. Support is best
+effort, by email to <strong>support@cascadeauth.com</strong>.</li>
+<li><strong>Your tenants and their data:</strong> kept for the life of the beta. Before any
+reset or deletion, the tenant's contact receives at least 30 days' notice by
+email. The only exception is an immediate response to a security incident.</li>
+<li><strong>Changes:</strong> every change to the service is listed in the
+<a href="/release-notes/#aac-developer-beta-service">release notes</a>. Tenant contacts
+also receive an email before a breaking change or a reset.</li>
+</ul>
+<p>A tenant's contact is the address given with <code>--contact</code> when the tenant was
+registered, and AAC's notices go there, so give an email address someone
+reads. An administrator can change it with
+<code>aac tenant update --tenant-id TENANT_ID --contact ADDRESS</code>; see the
+<a href="/cli/reference/">CLI command reference</a>.</p>
 <h2 id="what-it-provides">What it provides</h2>
 <table>
 <thead>
@@ -53,8 +72,9 @@ re-authorize each delegation by contacting all earlier agents. See
 <a href="/overview/#what-local-verification-buys-and-what-it-does-not">the overview</a>
 for the guarantees and limits.</p>
 <h2 id="connect-to-the-developer-beta-service">Connect to the developer-beta service</h2>
-<p>AAC supplies an API endpoint and a public-trust endpoint. For the stage
-environment used by the <a href="/get-started/">AAC journey</a>:</p>
+<p>AAC Developer Beta runs in AAC's stage environment, which the
+<a href="/get-started/">AAC journey</a> uses. It has an API endpoint and a public-trust
+endpoint:</p>
 <table>
 <thead>
 <tr>

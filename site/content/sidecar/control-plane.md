@@ -1,13 +1,34 @@
 # Using Control Plane
 
 The AAC Control Plane is the shared API service that connects tenant
-administration, identity, public trust and execution queries. The developer
-beta provides it as a hosted service. Your CLI, trust anchor publisher and
+administration, identity, public trust and execution queries. AAC hosts it
+as **AAC Developer Beta (free)**. Your CLI, trust anchor publisher and
 sidecars connect to its endpoints from your own environment.
 
 Your tenant operates its agents and their sidecars, holds its private signing
 material, and decides what business work to authorize. AAC operates the shared
 Control Plane and public-trust endpoints.
+
+## AAC Developer Beta (free)
+
+AAC Developer Beta is the hosted Control Plane and public-trust service, free
+of charge while the beta runs. These are its commitments:
+
+- **Use:** evaluation and integration development only, not production or
+  safety-critical use. There is no service-level agreement. Support is best
+  effort, by email to **support@cascadeauth.com**.
+- **Your tenants and their data:** kept for the life of the beta. Before any
+  reset or deletion, the tenant's contact receives at least 30 days' notice by
+  email. The only exception is an immediate response to a security incident.
+- **Changes:** every change to the service is listed in the
+  [release notes](/release-notes/#aac-developer-beta-service). Tenant contacts
+  also receive an email before a breaking change or a reset.
+
+A tenant's contact is the address given with `--contact` when the tenant was
+registered, and AAC's notices go there, so give an email address someone
+reads. An administrator can change it with
+`aac tenant update --tenant-id TENANT_ID --contact ADDRESS`; see the
+[CLI command reference](/cli/reference/).
 
 ## What it provides
 
@@ -27,8 +48,9 @@ for the guarantees and limits.
 
 ## Connect to the developer-beta service
 
-AAC supplies an API endpoint and a public-trust endpoint. For the stage
-environment used by the [AAC journey](/get-started/):
+AAC Developer Beta runs in AAC's stage environment, which the
+[AAC journey](/get-started/) uses. It has an API endpoint and a public-trust
+endpoint:
 
 | Purpose | Endpoint |
 |---|---|

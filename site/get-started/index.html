@@ -6,9 +6,9 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/" aria-current="true">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#before-you-start" class="toc-h2">Before you start</a><a href="#1-install-aac-cli-and-prepare-the-example" class="toc-h2">1. Install AAC CLI and prepare the example</a><a href="#install-aac-cli" class="toc-h3">Install AAC CLI</a><a href="#prepare-the-docker-compose-example" class="toc-h3">Prepare the Docker Compose example</a><a href="#2-register-your-developer-tenant-accounts" class="toc-h2">2. Register your developer tenant accounts</a><a href="#3-connect-the-two-peers" class="toc-h2">3. Connect the two peers</a><a href="#4-run-and-verify-the-reservation" class="toc-h2">4. Run and verify the reservation</a><a href="#5-list-select-and-render-an-execution" class="toc-h2">5. List, select and render an execution</a><a href="#6-stop-the-example-and-keep-your-evidence" class="toc-h2">6. Stop the example and keep your evidence</a><a href="#troubleshooting-your-first-run" class="toc-h2">Troubleshooting your first run</a><a href="#what-aac-is-for" class="toc-h2">What AAC is for</a><a href="#deploy-beyond-the-example" class="toc-h2">Deploy beyond the example</a><a href="#references" class="toc-h2">References</a><a href="#configuration-and-workflow-state" class="toc-h3">Configuration and workflow state</a><a href="#beta-boundary-and-contact" class="toc-h2">Beta boundary and contact</a><a href="#release-notes" class="toc-h2">Release notes</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Run your first authenticated agent journey</span></nav>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#before-you-start" class="toc-h2">Before you start</a><a href="#quickstart" class="toc-h2">Quickstart</a><a href="#1-install-aac-cli-and-prepare-the-example" class="toc-h2">1. Install AAC CLI and prepare the example</a><a href="#install-aac-cli" class="toc-h3">Install AAC CLI</a><a href="#prepare-the-docker-compose-example" class="toc-h3">Prepare the Docker Compose example</a><a href="#2-register-your-developer-tenant-accounts" class="toc-h2">2. Register your developer tenant accounts</a><a href="#3-connect-the-two-peers" class="toc-h2">3. Connect the two peers</a><a href="#4-run-and-verify-the-reservation" class="toc-h2">4. Run and verify the reservation</a><a href="#5-list-select-and-render-an-execution" class="toc-h2">5. List, select and render an execution</a><a href="#6-stop-the-example-and-keep-your-evidence" class="toc-h2">6. Stop the example and keep your evidence</a><a href="#troubleshooting-your-first-run" class="toc-h2">Troubleshooting your first run</a><a href="#what-aac-is-for" class="toc-h2">What AAC is for</a><a href="#deploy-beyond-the-example" class="toc-h2">Deploy beyond the example</a><a href="#references" class="toc-h2">References</a><a href="#configuration-and-workflow-state" class="toc-h3">Configuration and workflow state</a><a href="#beta-boundary-and-contact" class="toc-h2">Beta boundary and contact</a><a href="#release-notes" class="toc-h2">Release notes</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Run your first authenticated agent journey</span></nav>
 <h1 id="run-your-first-authenticated-agent-journey">Run your first authenticated agent journey</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/get-started/index.md" download="get-started.md">Markdown</a><span class="revision">Docs 5b3df1070aca</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/get-started/index.md" download="get-started.md">Markdown</a><span class="revision">Docs ba73692a128f</span></div>
 <p>Marc Sterling, a director at Austin-based private equity firm Vantis Equity,
 needs to oversee an acquisition on-site in Shanghai. He uses Tourfedia's
 corporate travel management platform to organize his trip from Austin (AUS)
@@ -17,14 +17,20 @@ to Shanghai (PVG).</p>
 public <a href="https://github.com/CascadeAuth/aac-compose-demo">Docker Compose demo</a>.
 Vantis Equity's trip-planner delegates to Tourfedia's booking agent. You will
 register both tenants, run their agents and sidecars, verify a signed receipt,
-and inspect the execution graph.</p>
+and inspect the execution graph. To see the whole journey first, run the
+demo's <a href="#quickstart">quickstart</a>: a script that runs steps 1 to 4 for you and
+opens the graph. The numbered steps then explain what each command does.</p>
 <p>The example application creates a reservation result; supplier integration and
 payment are omitted for clarity. The approval is simulated. A 30-minute limit
 bounds delegated authority, not a price hold.</p>
 <h2 id="before-you-start">Before you start</h2>
 <p>Supported platforms are macOS, Linux and Linux Docker containers. Use a
 Bash-compatible shell, Git, Python <strong>3.11 or later</strong> with <code>venv</code> and <code>pip</code>, and
-Docker with Compose and Buildx. Start the Docker engine. Keep the machine's clock synchronized and its public CA store current.
+Docker with Compose and Buildx. Start the Docker engine. On Debian or Ubuntu,
+Python's <code>venv</code> is a separate package: <code>sudo apt install python3-venv</code>. On
+Linux, your user must be able to run <code>docker</code> without <code>sudo</code> (see Docker's
+<a href="https://docs.docker.com/engine/install/linux-postinstall/">post-installation steps</a>).
+Keep the machine's clock synchronized and its public CA store current.
 Allow outbound HTTPS to GitHub, PyPI, Docker Hub, GHCR and the
 <a href="/sidecar/configuration/#aac-stage-endpoints">AAC stage endpoints</a>.
 You need a browser for interactive GitHub sign-in and real contact email addresses.
@@ -66,6 +72,25 @@ places the pairs on an isolated network without publishing host ports.</p>
 <p>No minimum production sizing or fixed first-run duration is implied. Image and
 package downloads, sign-in and local build speed affect elapsed time. Measure
 registration-to-verified-result separately from cached start/run time.</p>
+<h2 id="quickstart">Quickstart</h2>
+<p>The demo's <code>quickstart</code> script runs the commands of steps 1 to 4 below inside
+the clone, printing each one before it runs, then renders the execution graph
+and opens it in your browser where one is available:</p>
+<pre><code class="language-bash">git clone https://github.com/CascadeAuth/aac-compose-demo.git
+cd aac-compose-demo
+VANTIS_CONTACT='you+vantis@example.com' TOURFEDIA_CONTACT='you+tourfedia@example.com' ./quickstart
+</code></pre>
+<p>Use your real contact addresses. You sign in with GitHub four times in your
+browser, two per tenant, and acknowledge each permanent tenant registration.
+If a step fails, fix the cause and run the same command again in the same
+clone: it reuses both registrations, while a new clone registers two more
+tenants. The demo keeps running in Docker until you stop it; the demo's
+<a href="https://github.com/CascadeAuth/aac-compose-demo#quickstart">Quickstart</a>
+section shows how to stop it and run the other scenarios. The numbered steps
+below are the same journey by hand. The quickstart's settings end with the
+script: to continue from step 5 afterwards, run
+<code>. .aac-tools/bin/activate</code> and <code>export AAC_CLI_HOME=&quot;$PWD/.local/aac&quot;</code> in
+the clone.</p>
 <h2 id="1-install-aac-cli-and-prepare-the-example">1. Install AAC CLI and prepare the example</h2>
 <h3 id="install-aac-cli">Install AAC CLI</h3>
 <p>Install <a href="https://pypi.org/project/aac-cli/">aac-cli from PyPI</a> in a virtual
@@ -255,8 +280,8 @@ for source modes, filtering, pagination and interpretation.</p>
 the CLI home, component receipt and <code>.runs/</code> evidence. Tenant registrations
 are permanent; deleting a local profile does not delete a tenant. Protect
 retained keys and use the supported lifecycle commands to retire test workloads.
-For later work, reactivate <code>.venv</code> and set the same <code>AAC_CLI_HOME</code>; follow the
-demo's <a href="https://github.com/CascadeAuth/aac-compose-demo#6-refresh-renew-and-restart">refresh and renewal procedure</a>.</p>
+For later work, reactivate the <code>.aac-tools</code> environment and set the same
+<code>AAC_CLI_HOME</code>; follow the demo's <a href="https://github.com/CascadeAuth/aac-compose-demo#6-refresh-renew-and-restart">refresh and renewal procedure</a>.</p>
 <h2 id="troubleshooting-your-first-run">Troubleshooting your first run</h2>
 <table>
 <thead>

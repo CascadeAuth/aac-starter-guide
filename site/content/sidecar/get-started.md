@@ -9,7 +9,9 @@ Run **AAC: two tenants, one reservation made** from a fresh machine with the
 public [Docker Compose demo](https://github.com/CascadeAuth/aac-compose-demo).
 Vantis Equity's trip-planner delegates to Tourfedia's booking agent. You will
 register both tenants, run their agents and sidecars, verify a signed receipt,
-and inspect the execution graph.
+and inspect the execution graph. To see the whole journey first, run the
+demo's [quickstart](#quickstart): a script that runs steps 1 to 4 for you and
+opens the graph. The numbered steps then explain what each command does.
 
 The example application creates a reservation result; supplier integration and
 payment are omitted for clarity. The approval is simulated. A 30-minute limit
@@ -19,7 +21,11 @@ bounds delegated authority, not a price hold.
 
 Supported platforms are macOS, Linux and Linux Docker containers. Use a
 Bash-compatible shell, Git, Python **3.11 or later** with `venv` and `pip`, and
-Docker with Compose and Buildx. Start the Docker engine. Keep the machine's clock synchronized and its public CA store current.
+Docker with Compose and Buildx. Start the Docker engine. On Debian or Ubuntu,
+Python's `venv` is a separate package: `sudo apt install python3-venv`. On
+Linux, your user must be able to run `docker` without `sudo` (see Docker's
+[post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/)).
+Keep the machine's clock synchronized and its public CA store current.
 Allow outbound HTTPS to GitHub, PyPI, Docker Hub, GHCR and the
 [AAC stage endpoints](https://docs.cascadeauth.com/sidecar/configuration/#aac-stage-endpoints).
 You need a browser for interactive GitHub sign-in and real contact email addresses.
@@ -41,6 +47,30 @@ places the pairs on an isolated network without publishing host ports.
 No minimum production sizing or fixed first-run duration is implied. Image and
 package downloads, sign-in and local build speed affect elapsed time. Measure
 registration-to-verified-result separately from cached start/run time.
+
+## Quickstart
+
+The demo's `quickstart` script runs the commands of steps 1 to 4 below inside
+the clone, printing each one before it runs, then renders the execution graph
+and opens it in your browser where one is available:
+
+```bash
+git clone https://github.com/CascadeAuth/aac-compose-demo.git
+cd aac-compose-demo
+VANTIS_CONTACT='you+vantis@example.com' TOURFEDIA_CONTACT='you+tourfedia@example.com' ./quickstart
+```
+
+Use your real contact addresses. You sign in with GitHub four times in your
+browser, two per tenant, and acknowledge each permanent tenant registration.
+If a step fails, fix the cause and run the same command again in the same
+clone: it reuses both registrations, while a new clone registers two more
+tenants. The demo keeps running in Docker until you stop it; the demo's
+[Quickstart](https://github.com/CascadeAuth/aac-compose-demo#quickstart)
+section shows how to stop it and run the other scenarios. The numbered steps
+below are the same journey by hand. The quickstart's settings end with the
+script: to continue from step 5 afterwards, run
+`. .aac-tools/bin/activate` and `export AAC_CLI_HOME="$PWD/.local/aac"` in
+the clone.
 
 ## 1. Install AAC CLI and prepare the example
 
@@ -279,8 +309,8 @@ This removes local containers/network while retaining `.local/` credentials,
 the CLI home, component receipt and `.runs/` evidence. Tenant registrations
 are permanent; deleting a local profile does not delete a tenant. Protect
 retained keys and use the supported lifecycle commands to retire test workloads.
-For later work, reactivate `.venv` and set the same `AAC_CLI_HOME`; follow the
-demo's [refresh and renewal procedure](https://github.com/CascadeAuth/aac-compose-demo#6-refresh-renew-and-restart).
+For later work, reactivate the `.aac-tools` environment and set the same
+`AAC_CLI_HOME`; follow the demo's [refresh and renewal procedure](https://github.com/CascadeAuth/aac-compose-demo#6-refresh-renew-and-restart).
 
 ## Troubleshooting your first run
 

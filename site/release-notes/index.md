@@ -2,11 +2,21 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.4
 
-Documentation revision: 5b3df1070aca4c9daf1600f457191e17a5e4a4dd
+Documentation revision: ba73692a128f225bff44b58cfd61996ddbec5918
 
 ---
 
 # Release notes
+
+## AAC Developer Beta service
+
+Changes to the hosted service, [AAC Developer Beta (free)](https://docs.cascadeauth.com/control-plane/#aac-developer-beta-free),
+are listed here, newest first. Tenant contacts also receive an email before a
+breaking change or a reset. Sidecar releases follow, by version.
+
+- **2026-10-17:** The beta's commitments are published: how long tenants and
+  their data are kept, the notice before any reset or deletion, support, and
+  these change announcements. The service itself is unchanged.
 
 ## 0.4.0
 
