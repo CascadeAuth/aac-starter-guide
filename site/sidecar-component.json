@@ -1,6 +1,6 @@
 {
   "component": "sidecar",
-  "documentation_revision": "ba73692a128f225bff44b58cfd61996ddbec5918",
+  "documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "3eaa4a1e835aed3e612912c44441e712d936ac3411f3ed03777aef8774836939",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -11,11 +11,11 @@
     "content/sidecar/control-plane.md": "a63db8b22157c7f800e406603f6cb49b64f6dbd99e5b4f8cb5f96b28c38c4672",
     "content/sidecar/deployment.md": "6643a9d8d9ce2671bc5836624aa2c182536b4f9e39eb57804ff34d2f0279f583",
     "content/sidecar/get-started.md": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
-    "content/sidecar/home.md": "cd81f12e8de1c89c3d88ed5fa606f8e7b1d15c8c8188302da47c0f22a687ca5f",
+    "content/sidecar/home.md": "47dbaab43aaecabaab94519b797107dd54ad2f8593fcb3a6050e772e46cc89ed",
     "content/sidecar/integration.md": "80bca73381018c2d77b3642abd14a691e6fb5664fb98e83d36fdc40d09f49c35",
-    "content/sidecar/keys-and-certificates.md": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
+    "content/sidecar/keys-and-certificates.md": "da362b364c320e55cd0b6741046845ac8b986f2537f3287b00f7705c97b5e3da",
     "content/sidecar/operations.md": "425f7cb5cbcc67fc4244193ecad52cbd97c694d47c00ea737e8be264b21ae228",
-    "content/sidecar/overview.md": "56d121f4d6721978fb9ffeb6346cb449684dfbf29d750b653d33311abaa11e05",
+    "content/sidecar/overview.md": "ba141880bff4bd48814642176b06b03d0109653ada98f92bb43647ca3b0254e1",
     "content/sidecar/privacy.md": "feb2ca9686844c68b5c17122e666b83d13f55207c5a3ae9e61a555de1e8ee495",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
     "content/sidecar/release-notes.md": "cabb4b177e45862d52ccbcaf78cacaeaa987a5e02a9f60017c7449720663bca5",
@@ -27,7 +27,7 @@
   "pages": {
     "/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "cd81f12e8de1c89c3d88ed5fa606f8e7b1d15c8c8188302da47c0f22a687ca5f",
+      "content_sha256": "47dbaab43aaecabaab94519b797107dd54ad2f8593fcb3a6050e772e46cc89ed",
       "description": "Learn AAC, configure a tenant and investigate an execution.",
       "metadata_sha256": "25d2c2da3547c3ef6bc97532a35aa92aea5151b3d981e75185e2ae8eefba2545",
       "route": "/",
@@ -57,7 +57,7 @@
     },
     "/overview/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "56d121f4d6721978fb9ffeb6346cb449684dfbf29d750b653d33311abaa11e05",
+      "content_sha256": "ba141880bff4bd48814642176b06b03d0109653ada98f92bb43647ca3b0254e1",
       "description": "Delegated authority, local verification and the limits of receipts.",
       "metadata_sha256": "070f83234ce4c5545745ffc0efeaac1819abd517e11d65b04424dbe2140c764b",
       "route": "/overview/",
@@ -67,7 +67,7 @@
     },
     "/overview/keys-and-certificates/": {
       "applicability": "AAC Sidecar v0.5.4",
-      "content_sha256": "c6ad012b5eb922b1477ae0eb264405a606f643da8bb6ae9a7409682f9ca731b3",
+      "content_sha256": "da362b364c320e55cd0b6741046845ac8b986f2537f3287b00f7705c97b5e3da",
       "description": "Trust material, custody and lifecycle.",
       "metadata_sha256": "deb8e9d34c6256e7baa4074f91d5d9297984194e543a6a7259b6d6488cdb29a9",
       "route": "/overview/keys-and-certificates/",
@@ -177,10 +177,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "5b3df1070aca4c9daf1600f457191e17a5e4a4dd",
+  "previous_documentation_revision": "ba73692a128f225bff44b58cfd61996ddbec5918",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:d2da5794a8a2f45520a382ff4010645689c233d528ac7fb89dbe5cae2f4e0c89",
-    "documentation_revision": "ba73692a128f225bff44b58cfd61996ddbec5918",
+    "documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
     "documentation_source": "reviewed-source",
     "guide_sha256": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:0f107b7e4f54978274bec33c8c79d6b43b94a708ccb1953b0b21e6e324fe879e",

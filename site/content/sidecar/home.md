@@ -1,9 +1,22 @@
 # AAC documentation
 
-AAC carries a person's approval from one AI agent to the next, including to
-agents run by other organizations. Each agent can narrow what the approval
-allows but never widen it, each hop is checked where it arrives, and the work
-ends in a signed receipt and an execution graph you can inspect.
+AAC is the authorization layer for networks of AI agents. When agents hand work
+to one another, inside one organization and across company boundaries, from a
+simple two-agent exchange to a network of thousands of agents, AAC sends the
+authority with every agent-to-agent request: who authorized the work, what it
+permits, and which agent may act next. Each agent-to-agent hop can narrow that
+authority but never widen it, every receiving agent verifies the authority on
+the spot, and the work ends in a signed receipt and an execution graph you can
+inspect.
+
+A sidecar beside each agent holds the agent's identity, signs the authority the
+agent passes on, and checks every agent-to-agent request before the agent sees
+it: that the sender is the agent the authority names, and that the authority
+itself is valid and was never widened along the way. The sidecar proves
+identity and verifies authority. Transport encryption stays with your
+deployment. Your agents, in any language or framework, keep their business
+logic and leave to AAC the proof of who is calling and what they are allowed to
+do.
 
 [See it work](#see-it-work-in-ten-minutes) · [Understand AAC](/overview/) ·
 [Start the AAC journey](/get-started/)

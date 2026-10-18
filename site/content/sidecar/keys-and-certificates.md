@@ -7,10 +7,10 @@ it says what the item proves, where it lives, who gets a copy, and how long it
 lasts.
 
 Read it once before you create your first agent, and come back when something
-expires or when you move from a development machine to your organisation's own
+expires or when you move from a development machine to your organization's own
 certificate authority.
 
-Two words used throughout. A **tenant** is one organisation registered with AAC.
+Two words used throughout. A **tenant** is one organization registered with AAC.
 An **agent** is one of your workloads, running beside its own AAC sidecar.
 
 ## How keys and certificates connect your tenant and agents
@@ -74,7 +74,7 @@ NEVER LEAVES YOU
 ## Who signs your agents' certificates
 
 **Your CA certificate belongs to the issuer, not to an individual agent.**
-One organisation-wide CA can sign certificates for many agents; those agents
+One organization-wide CA can sign certificates for many agents; those agents
 can all use the same public CA certificate. Bring the CA certificates that
 issued the agent certificates you intend to use. If all agents share one issuer,
 one CA certificate is enough. If you use separate issuing CAs for different
@@ -84,14 +84,14 @@ simply because you add another agent.
 The CLI's development setup is different: by default it creates one development
 CA per agent. In either setup, AAC publishes a trust-anchor entry per agent
 (`<agent>-dev-ca` or `<agent>-ca`), even when several entries contain the same
-organisation CA certificate. The number of published entries is therefore not
+organization CA certificate. The number of published entries is therefore not
 the number of distinct CAs. Only the public certificate is published; an issuer's
 private CA key stays with that issuer.
 
 Everything else on this page follows from one choice, and AAC's control plane is
 not part of it: **AAC issues no certificates and never holds a private key of
 yours.** Either the `aac` command-line tool creates a development certificate
-authority on your own machine, or your organisation's issuer signs your agents'
+authority on your own machine, or your organization's issuer signs your agents'
 certificates and the tool never sees that authority's private key.
 
 <!-- material-cases:start -->
@@ -132,7 +132,7 @@ Your choice stays visible after setup, in two places.
 
 **In the name your tenant publishes.** An authority the tool created is published
 as the trust anchor `<agent>-dev-ca`; your own issuer's is published as
-`<agent>-ca`. Another organisation's operator can therefore tell, before trusting
+`<agent>-ca`. Another organization's operator can therefore tell, before trusting
 you, whether they are trusting a disposable seven-day development authority or a
 company issuer. An agent's root key id does not follow that choice — it is always
 `<agent>-root-v1`, derived from the agent's name.
@@ -140,8 +140,8 @@ company issuer. An agent's root key id does not follow that choice — it is alw
 **In how many authorities you have — and how many entries they publish.** The
 command-line tool creates **one development authority per agent by default**,
 so three agents normally have three authorities unless you reuse a development
-CA explicitly. An organisation using its own issuer
-commonly has **one authority for the whole organisation**; that is a choice its
+CA explicitly. An organization using its own issuer
+commonly has **one authority for the whole organization**; that is a choice its
 own certificate authority makes, and it is not the same as publishing one entry.
 The anchor id is derived from the agent's name, so `payments` and `booking`
 publish `payments-ca` and `booking-ca` even when the same issuer signed both
@@ -195,7 +195,7 @@ the same identity and the same issuer. So treat both keys as one blast radius:
 whoever holds an agent's identity key can also produce a receipt that verifies
 for that agent.
 
-Other organisations' agents fetch your published authority certificates and root
+Other organizations' agents fetch your published authority certificates and root
 public keys from AAC's trust URL. **Public certificates are meant to travel** —
 they are presented on calls, carried in receipts and served to TLS clients. What
 never leaves you are the private keys and the pairing secret.
@@ -258,7 +258,7 @@ rotate it:
 
 * **as soon as you suspect it leaked**, or see tenant activity you cannot account
   for;
-* **when someone with access to it leaves** your organisation or changes role;
+* **when someone with access to it leaves** your organization or changes role;
 * **once a year**, as routine, even when nothing has gone wrong.
 
 Create the key pair yourself first — AAC only ever receives the public half, and

@@ -3,7 +3,7 @@
 ## What AAC is for
 
 AAC lets a network of AI agents — tens, hundreds or thousands of them, inside one
-organisation and across organisations — carry **delegated authority** from agent
+organization and across organizations — carry **delegated authority** from agent
 to agent, with provable identity, local verification and auditable receipts.
 
 Authority starts with a decision your own application makes. Your application
@@ -47,7 +47,7 @@ already holds: the root signature, the certificate chain, the proof of possessio
 and the chain's own conditions. Nothing on the request path asks the earlier
 agents, or their identity providers, to re-authorize the hop — the person signs in
 once, at the start, and the chain carries that decision onward. That is what keeps
-authority affordable as a network grows: a chain crossing ten organisations makes
+authority affordable as a network grows: a chain crossing ten organizations makes
 no fan-out of token-introspection calls to ten identity providers.
 
 Three limits are worth knowing before you design around it:

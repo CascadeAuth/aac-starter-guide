@@ -6,13 +6,25 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="/">AAC Docs</a><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout landing"><main id="content">
+<div class="layout home"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#what-aac-adds-to-oauth-and-api-keys" class="toc-h2">What AAC adds to OAuth and API keys</a><a href="#who-it-is-for" class="toc-h2">Who it is for</a><a href="#see-it-work-in-ten-minutes" class="toc-h2">See it work in ten minutes</a><a href="#aac-developer-beta-free" class="toc-h2">AAC Developer Beta (free)</a><a href="#components" class="toc-h2">Components</a><a href="#aac-cli" class="toc-h3">AAC CLI</a><a href="#sidecar" class="toc-h3">Sidecar</a><a href="#trust-anchor-publisher" class="toc-h3">Trust anchor publisher</a><a href="#control-plane" class="toc-h3">Control Plane</a><a href="#agent-execution-graphs-aeg" class="toc-h3">Agent Execution Graphs (AEG)</a><a href="#agent-integration" class="toc-h3">Agent integration</a><a href="#documentation-policy" class="toc-h2">Documentation policy</a></nav></details></aside><main id="content">
 <h1 id="aac-documentation">AAC documentation</h1>
-<div class="page-actions"><span>AAC platform · developer beta</span><a href="/index.md" download="aac-documentation.md">Markdown</a><span class="revision">Docs ba73692a128f</span></div>
-<p>AAC carries a person's approval from one AI agent to the next, including to
-agents run by other organizations. Each agent can narrow what the approval
-allows but never widen it, each hop is checked where it arrives, and the work
-ends in a signed receipt and an execution graph you can inspect.</p>
+<div class="page-actions"><span>AAC platform · developer beta</span><a href="/index.md" download="aac-documentation.md">Markdown</a><span class="revision">Docs 2cad77e25dc5</span></div>
+<p>AAC is the authorization layer for networks of AI agents. When agents hand work
+to one another, inside one organization and across company boundaries, from a
+simple two-agent exchange to a network of thousands of agents, AAC sends the
+authority with every agent-to-agent request: who authorized the work, what it
+permits, and which agent may act next. Each agent-to-agent hop can narrow that
+authority but never widen it, every receiving agent verifies the authority on
+the spot, and the work ends in a signed receipt and an execution graph you can
+inspect.</p>
+<p>A sidecar beside each agent holds the agent's identity, signs the authority the
+agent passes on, and checks every agent-to-agent request before the agent sees
+it: that the sender is the agent the authority names, and that the authority
+itself is valid and was never widened along the way. The sidecar proves
+identity and verifies authority. Transport encryption stays with your
+deployment. Your agents, in any language or framework, keep their business
+logic and leave to AAC the proof of who is calling and what they are allowed to
+do.</p>
 <p><a href="#see-it-work-in-ten-minutes">See it work</a> · <a href="/overview/">Understand AAC</a> ·
 <a href="/get-started/">Start the AAC journey</a></p>
 <h2 id="what-aac-adds-to-oauth-and-api-keys">What AAC adds to OAuth and API keys</h2>
