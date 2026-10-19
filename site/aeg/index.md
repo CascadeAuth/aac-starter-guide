@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/aeg/
 
-Applies to: AAC CLI 0.2.11
+Applies to: AAC CLI 0.2.12
 
-Documentation revision: a4b073409b4b2f23d4b22c518a5adfa1d6bd895e
+Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
 
 ---
 
@@ -453,13 +453,20 @@ to pan the graph instead.
 
 The legend includes recipients as well as token creators. In the
 travel example, **Vantis** and **Tourfedia** are the two tenants; **trip-planner**
-and **booking** are their respective agents. The Tourfedia booking node is the
-**intended recipient**, derived from the leaf token's audience constraint. That
+and **booking** are their respective agents. The Tourfedia booking node reads
+**Addressed to**, derived from the leaf token's audience constraint. That
 constraint identifies who may receive the token. It does not, by itself, prove
-that delivery, receipt verification or the business action occurred; those
-claims require their own observations. Token creator and recipient are distinct
-roles, so a Vantis-created token does not become a Tourfedia-created token merely
-because it names Tourfedia as its recipient.
+that delivery, receipt verification or the business action occurred; the node
+adds **received and acted** only when Tourfedia's own action records show the
+action, and its details keep the receipt and who took the action. Token creator
+and recipient are distinct roles, so a Vantis-created token does not become a
+Tourfedia-created token merely because it names Tourfedia as its recipient.
+
+The originator node names where the person signed in (**signed in at
+login.vantis.example** in the demo), taken from the sidecar's mint record. AAC
+seals a hash of the person's sign-in into the root token and never stores the
+name; the node reads **identity not recorded** only when the records carry
+neither the hash nor the issuer.
 
 Colors identify participants consistently across their token and recipient
 nodes. Vantis is blue and Tourfedia is orange in the travel example. Nodes belonging to

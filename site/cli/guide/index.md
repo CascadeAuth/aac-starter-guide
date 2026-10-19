@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/guide/
 
-Applies to: AAC CLI 0.2.11
+Applies to: AAC CLI 0.2.12
 
-Documentation revision: a4b073409b4b2f23d4b22c518a5adfa1d6bd895e
+Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
 
 ---
 
@@ -111,7 +111,7 @@ See [`aac sso describe`](https://docs.cascadeauth.com/cli/reference/aac-sso-desc
 
 ## Register a tenant
 
-A tenant is one organisation. Register it once, then add its workloads.
+A tenant is one organization. Register it once, then add its workloads.
 Developer tenants use AAC's shared GitHub or Google connections; enterprise
 tenants use their own Microsoft Entra ID connection. Registering a tenant is
 permanent. Use a separate unbound profile for a new tenant.
@@ -178,7 +178,7 @@ GitHub or Google OAuth application for these paths.
 ### Enterprise registration and Microsoft Entra ID
 
 AAC operations registers an enterprise tenant during an onboarding ceremony.
-Provide your organisation's name, contact and tenant-admin **public** key.
+Provide your organization's name, contact and tenant-admin **public** key.
 Operations supplies the approved endpoints and the allocated tenant ID.
 The bootstrap token remains under the ceremony's custody; an ordinary tenant
 administrator does not need it after onboarding. The optional manual route

@@ -103,7 +103,7 @@ See [`aac sso describe`](/cli/reference/aac-sso-describe/) for all flags.
 
 ## Register a tenant
 
-A tenant is one organisation. Register it once, then add its workloads.
+A tenant is one organization. Register it once, then add its workloads.
 Developer tenants use AAC's shared GitHub or Google connections; enterprise
 tenants use their own Microsoft Entra ID connection. Registering a tenant is
 permanent. Use a separate unbound profile for a new tenant.
@@ -170,7 +170,7 @@ GitHub or Google OAuth application for these paths.
 ### Enterprise registration and Microsoft Entra ID
 
 AAC operations registers an enterprise tenant during an onboarding ceremony.
-Provide your organisation's name, contact and tenant-admin **public** key.
+Provide your organization's name, contact and tenant-admin **public** key.
 Operations supplies the approved endpoints and the allocated tenant ID.
 The bootstrap token remains under the ceremony's custody; an ordinary tenant
 administrator does not need it after onboarding. The optional manual route

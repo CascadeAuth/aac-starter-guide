@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-enroll-idp-recovery-key/
 
-Applies to: AAC CLI 0.2.11
+Applies to: AAC CLI 0.2.12
 
-Documentation revision: a4b073409b4b2f23d4b22c518a5adfa1d6bd895e
+Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
 
 ---
 
