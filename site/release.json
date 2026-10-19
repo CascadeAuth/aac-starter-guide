@@ -79,7 +79,7 @@
     "content/sidecar/control-plane.md": "a63db8b22157c7f800e406603f6cb49b64f6dbd99e5b4f8cb5f96b28c38c4672",
     "content/sidecar/deployment.md": "6643a9d8d9ce2671bc5836624aa2c182536b4f9e39eb57804ff34d2f0279f583",
     "content/sidecar/get-started.md": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
-    "content/sidecar/home.md": "47dbaab43aaecabaab94519b797107dd54ad2f8593fcb3a6050e772e46cc89ed",
+    "content/sidecar/home.md": "232e2115e3c287660293eae843f4493f8d528820a3311f524b40e35dcb5767b4",
     "content/sidecar/integration.md": "80bca73381018c2d77b3642abd14a691e6fb5664fb98e83d36fdc40d09f49c35",
     "content/sidecar/keys-and-certificates.md": "da362b364c320e55cd0b6741046845ac8b986f2537f3287b00f7705c97b5e3da",
     "content/sidecar/operations.md": "425f7cb5cbcc67fc4244193ecad52cbd97c694d47c00ea737e8be264b21ae228",
@@ -91,11 +91,11 @@
     "content/sidecar/sidecar.md": "038aa19d450cd96914e667ca8f80f315678aa0aae146ac64a23dc68de49781b2",
     "content/sidecar/verification.md": "1e293bc4a2b54af20718313c80dda75883f832aad7426c52e44585af0895ca9b"
   },
-  "documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
+  "documentation_revision": "78cfaee84063eaf5b1c4a286810e5a179ffdb26a",
   "documentation_source": "reviewed-source",
   "guide_sha256": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
   "image": "docker.io/cascadeauth/aac-sidecar@sha256:0f107b7e4f54978274bec33c8c79d6b43b94a708ccb1953b0b21e6e324fe879e",
-  "template_revision": "09d4c6ab65f2a4fbd7b0dfc16a97dfef3d538945949317afe9ad5ebb9801427a",
+  "template_revision": "1e1d6cb0647675b19e2bdfadcc7e018eac1f1490eedb55fe9a6852b933fdb297",
   "template_sha256": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
   "version": "v0.5.4"
 }

@@ -15,6 +15,7 @@ table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;margin
 
 .layout.landing{display:block;max-width:1050px}.layout.single-page{grid-template-columns:220px minmax(0,850px);max-width:1220px}
 .layout.home{grid-template-columns:220px minmax(0,900px);max-width:1250px}
+.graph-image{margin:24px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.graph-image img{display:block;width:100%;height:auto}
 .section-nav .toc-h3,.outline .toc-h3{padding-left:22px;font-size:12px}
 .section-nav .command-group>summary{margin:0;padding:3px 0;cursor:pointer;font-weight:500}
 .section-nav .command-group>summary a{display:inline;padding:3px 4px}

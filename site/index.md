@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: 2cad77e25dc501195d94ea806e4c56770496d598
+Documentation revision: 78cfaee84063eaf5b1c4a286810e5a179ffdb26a
 
 ---
 
@@ -77,6 +77,11 @@ runs that reservation. Its quickstart installs the AAC CLI, registers the two
 companies as tenants in the AAC Developer Beta, starts both agents with their
 sidecars, makes the reservation and opens its execution graph in your browser:
 the chain of agents, the limits each one set, and the signed receipt.
+
+![Execution graph of a recorded quickstart run: the originator signed in at login.vantis.example, Vantis Equity's trip-planner tokens narrowing the authority hop by hop, and the Tourfedia booking agent the authority was addressed to, which received and acted](https://docs.cascadeauth.com/assets/quickstart-graph.png)
+
+That graph is a recorded run. Your own run opens the interactive version, where
+every node and edge shows the records behind it.
 
 On macOS or Linux you need Python 3.11 or later, Docker with Compose and
 Buildx, Git, and a browser for the GitHub sign-ins. On Linux, your user must be

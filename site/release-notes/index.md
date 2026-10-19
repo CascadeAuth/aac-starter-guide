@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.4
 
-Documentation revision: 2cad77e25dc501195d94ea806e4c56770496d598
+Documentation revision: 78cfaee84063eaf5b1c4a286810e5a179ffdb26a
 
 ---
 

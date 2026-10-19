@@ -1,17 +1,18 @@
 {
   "component": "sidecar",
-  "documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
+  "documentation_revision": "78cfaee84063eaf5b1c4a286810e5a179ffdb26a",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "3eaa4a1e835aed3e612912c44441e712d936ac3411f3ed03777aef8774836939",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
     "THIRD_PARTY_NOTICES.md": "818248753b29656af088245522f7fa8e309ab7175effb0c0b3a1715c00faeefe",
     "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
+    "assets/quickstart-graph.png": "9969652ddaa259471d5cb2a73c4d13b9e4739edcbb00900bdb6eb836248ee9b2",
     "content/sidecar/a2a.md": "18d48c2cd0171103c56d3f98abde2c5eadec4ac882ba63f3fa29c171678147b3",
     "content/sidecar/artifacts.md": "3fb6276594abac5e969a462a3d89837aba618aaa6c97c07e21bf933ce0bdff20",
     "content/sidecar/control-plane.md": "a63db8b22157c7f800e406603f6cb49b64f6dbd99e5b4f8cb5f96b28c38c4672",
     "content/sidecar/deployment.md": "6643a9d8d9ce2671bc5836624aa2c182536b4f9e39eb57804ff34d2f0279f583",
     "content/sidecar/get-started.md": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
-    "content/sidecar/home.md": "47dbaab43aaecabaab94519b797107dd54ad2f8593fcb3a6050e772e46cc89ed",
+    "content/sidecar/home.md": "232e2115e3c287660293eae843f4493f8d528820a3311f524b40e35dcb5767b4",
     "content/sidecar/integration.md": "80bca73381018c2d77b3642abd14a691e6fb5664fb98e83d36fdc40d09f49c35",
     "content/sidecar/keys-and-certificates.md": "da362b364c320e55cd0b6741046845ac8b986f2537f3287b00f7705c97b5e3da",
     "content/sidecar/operations.md": "425f7cb5cbcc67fc4244193ecad52cbd97c694d47c00ea737e8be264b21ae228",
@@ -27,7 +28,7 @@
   "pages": {
     "/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "47dbaab43aaecabaab94519b797107dd54ad2f8593fcb3a6050e772e46cc89ed",
+      "content_sha256": "232e2115e3c287660293eae843f4493f8d528820a3311f524b40e35dcb5767b4",
       "description": "Learn AAC, configure a tenant and investigate an execution.",
       "metadata_sha256": "25d2c2da3547c3ef6bc97532a35aa92aea5151b3d981e75185e2ae8eefba2545",
       "route": "/",
@@ -177,10 +178,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "ba73692a128f225bff44b58cfd61996ddbec5918",
+  "previous_documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:d2da5794a8a2f45520a382ff4010645689c233d528ac7fb89dbe5cae2f4e0c89",
-    "documentation_revision": "2cad77e25dc501195d94ea806e4c56770496d598",
+    "documentation_revision": "78cfaee84063eaf5b1c4a286810e5a179ffdb26a",
     "documentation_source": "reviewed-source",
     "guide_sha256": "eb905049b26dfb7598b62a043a725bab22edde53e9d0281078c84375bb5299f4",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:0f107b7e4f54978274bec33c8c79d6b43b94a708ccb1953b0b21e6e324fe879e",

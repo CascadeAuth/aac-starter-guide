@@ -70,6 +70,11 @@ companies as tenants in the AAC Developer Beta, starts both agents with their
 sidecars, makes the reservation and opens its execution graph in your browser:
 the chain of agents, the limits each one set, and the signed receipt.
 
+![Execution graph of a recorded quickstart run: the originator signed in at login.vantis.example, Vantis Equity's trip-planner tokens narrowing the authority hop by hop, and the Tourfedia booking agent the authority was addressed to, which received and acted](/assets/quickstart-graph.png)
+
+That graph is a recorded run. Your own run opens the interactive version, where
+every node and edge shows the records behind it.
+
 On macOS or Linux you need Python 3.11 or later, Docker with Compose and
 Buildx, Git, and a browser for the GitHub sign-ins. On Linux, your user must be
 able to run `docker` without `sudo`; on Debian or Ubuntu, also install the
