@@ -1,16 +1,16 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-agent-renew/
 
-Applies to: AAC CLI 0.2.12
+Applies to: AAC CLI 0.2.13
 
-Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
+Documentation revision: 3a905055c259cee7fe4a058dc9ad06d318296495
 
 ---
 
 # `aac agent renew`
 
-Replace the short-lived certificates; archive the old material.
+Replace the agent's certificates; archive the old material.
 
-In "The CLI creates a development CA" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within one day of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In "I bring my own CA certificate" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too.
+In "The CLI creates a development CA" mode, reissues the workload, receipt and HTTPS certificates with new keys; the development CA is reissued only when expired or within 90 days of expiry, or with --ca, and a new CA needs the publisher to publish the new anchor. In "I bring my own CA certificate" mode nothing is reissued: pass the replacement certificates your issuer produced, each with its key file, and --ca-cert-file if your CA certificate changed too.
 
 ## Synopsis
 

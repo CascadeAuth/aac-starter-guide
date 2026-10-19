@@ -15,7 +15,7 @@ aac agent [-h] <command> [<args>]
 | Command | Description |
 |---|---|
 | [`aac agent status`](/cli/reference/aac-agent-status/) | Report what exists, certificate expiry, permission problems and the next command. |
-| [`aac agent renew`](/cli/reference/aac-agent-renew/) | Replace the short-lived certificates; archive the old material. |
+| [`aac agent renew`](/cli/reference/aac-agent-renew/) | Replace the agent's certificates; archive the old material. |
 | [`aac agent list`](/cli/reference/aac-agent-list/) | List every agent under the CLI home with its tenant, case and state. |
 
 ## Arguments

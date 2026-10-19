@@ -310,7 +310,8 @@ republication and peer trust refresh; verify both communication directions.
 
 ### Supply your own certificates
 
-Generated development CAs and one-day leaf certificates are for development.
+Generated development CAs (365 days) and leaf certificates (90 days) are for
+development.
 For supplied PKI, your issuer must sign the workload/receipt SPIFFE identity
 and the HTTPS names clients actually connect to. Supply the complete set:
 

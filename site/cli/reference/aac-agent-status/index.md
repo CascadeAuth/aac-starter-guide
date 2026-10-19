@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-agent-status/
 
-Applies to: AAC CLI 0.2.12
+Applies to: AAC CLI 0.2.13
 
-Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
+Documentation revision: 3a905055c259cee7fe4a058dc9ad06d318296495
 
 ---
 
@@ -54,5 +54,5 @@ At most one of `--field`, `--output` may be given.
 ## Related commands
 
 - [`aac agent`](https://docs.cascadeauth.com/cli/reference/aac-agent/)
-- [`aac agent renew`](https://docs.cascadeauth.com/cli/reference/aac-agent-renew/) — Replace the short-lived certificates; archive the old material.
+- [`aac agent renew`](https://docs.cascadeauth.com/cli/reference/aac-agent-renew/) — Replace the agent's certificates; archive the old material.
 - [`aac agent list`](https://docs.cascadeauth.com/cli/reference/aac-agent-list/) — List every agent under the CLI home with its tenant, case and state.

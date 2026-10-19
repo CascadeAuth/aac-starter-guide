@@ -46,5 +46,5 @@ At most one of `--field`, `--output` may be given.
 ## Related commands
 
 - [`aac agent`](/cli/reference/aac-agent/)
-- [`aac agent renew`](/cli/reference/aac-agent-renew/) — Replace the short-lived certificates; archive the old material.
+- [`aac agent renew`](/cli/reference/aac-agent-renew/) — Replace the agent's certificates; archive the old material.
 - [`aac agent list`](/cli/reference/aac-agent-list/) — List every agent under the CLI home with its tenant, case and state.

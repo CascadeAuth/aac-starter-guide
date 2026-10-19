@@ -64,7 +64,7 @@ aac init
 
 ### The CLI creates a development CA
 
-The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass `--ca-key-file` and `--ca-cert-file` together; neither one alone. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.
+The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it. No flags are needed. To reuse a development CA across agents, pass `--ca-key-file` and `--ca-cert-file` together; neither one alone. A CA that expires before the certificates it would sign is refused. The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.
 
 | Argument | Type | Required | Default | Description |
 |---|---|---|---|---|

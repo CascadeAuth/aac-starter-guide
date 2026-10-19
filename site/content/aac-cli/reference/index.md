@@ -22,7 +22,7 @@ aac [-h] [--version] <command> [<args>]
 - [`aac init`](/cli/reference/aac-init/) — Guided setup: register a developer tenant and create a runnable agent.
 - [`aac agent`](/cli/reference/aac-agent/) — Inspect and maintain an agent created by `aac init` (status/renew/list).
   - [`aac agent status`](/cli/reference/aac-agent-status/) — Report what exists, certificate expiry, permission problems and the next command.
-  - [`aac agent renew`](/cli/reference/aac-agent-renew/) — Replace the short-lived certificates; archive the old material.
+  - [`aac agent renew`](/cli/reference/aac-agent-renew/) — Replace the agent's certificates; archive the old material.
   - [`aac agent list`](/cli/reference/aac-agent-list/) — List every agent under the CLI home with its tenant, case and state.
 - [`aac profile`](/cli/reference/aac-profile/) — Manage local profiles (list/show/create/update/delete).
   - [`aac profile list`](/cli/reference/aac-profile-list/) — List all profiles (selected/binding/pending state).

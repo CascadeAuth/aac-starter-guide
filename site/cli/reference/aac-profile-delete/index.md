@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-profile-delete/
 
-Applies to: AAC CLI 0.2.12
+Applies to: AAC CLI 0.2.13
 
-Documentation revision: 831344ebce700cff35e5bfb6b9eb50810a69dd98
+Documentation revision: 3a905055c259cee7fe4a058dc9ad06d318296495
 
 ---
 
