@@ -380,8 +380,8 @@ For support contact **support@cascadeauth.com**; license questions:
 **legal@cascadeauth.com**. No production support/SLA is implied.
 This beta is for evaluation and integration development, not production or
 safety-critical use. Python companions retain their own licenses.
-Current installation examples select AAC Sidecar **`v0.5.4`** from
-`docker.io/cascadeauth/aac-sidecar:v0.5.4`; the [published component record](https://docs.cascadeauth.com/released-components.json) and
+Current installation examples select AAC Sidecar **`v0.5.5`** from
+`docker.io/cascadeauth/aac-sidecar:v0.5.5`; the [published component record](https://docs.cascadeauth.com/released-components.json) and
 each run's selection retain exact version/digest provenance.
 
 ## Release notes
