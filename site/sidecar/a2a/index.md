@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/a2a/
 
 Applies to: AAC Sidecar v0.5.4
 
-Documentation revision: b000f647c0a43239f8bb41abd95ce4172fe4392a
+Documentation revision: a3e644e8eed4ca6b1f8de7c2b2832d17e6c1b9f6
 
 ---
 
@@ -381,10 +381,17 @@ peer agent's message or terminal task, or a JSON-RPC `error` the peer
 returned. `status: dispatched` confirms delivery and a well-formed reply, not
 the peer's success: inspect `a2a_response` for `error` before acting on it.
 The second, identical post in the example returned the same bytes, reply
-included, without a second delivery. In your sidecar's telemetry sink, the `a2a_egress` event
-records `result: accepted`; on the peer, `a2a_ingress` records `accepted` and
-the handler's log shows one `POST /a2a/v1`. See
-[audit your workflows](https://docs.cascadeauth.com/sidecar/operations/#audit-your-workflows) for the
+included, without a second delivery. Your sidecar's telemetry sink records
+the same chain events a native delivery does: a `mint` for the authority it
+created for you and a `dispatch` for the message it delivered, linked by
+`root_token_id`, `parent_token_id` and `task_ref`, beside the `a2a_egress`
+diagnostic with `result: accepted`. On the peer, a `receive` event records
+the admitted authority and the delivery to the handler, beside `a2a_ingress`
+with `accepted`, and the handler's log shows one `POST /a2a/v1`. Because
+these are the ordinary chain events, central telemetry receives the exchange
+like any other workflow, and the execution graph renderer draws it once you
+give it the chain rows alone ([step 6](https://docs.cascadeauth.com/sidecar/a2a/#6-render-the-exchange-as-a-graph)).
+See [audit your workflows](https://docs.cascadeauth.com/sidecar/operations/#audit-your-workflows) for the
 event fields.
 
 A refusal prints the sidecar's error envelope with a `code` from the
@@ -408,6 +415,35 @@ To exercise both directions on one machine before you have a peer, the
 integration page's [runnable example](https://docs.cascadeauth.com/sidecar/integration/#optional-runnable-paired-agent-example)
 runs an agent that handles native and A2A calls and a client that sends an A2A
 message to the agent's own sidecar.
+
+### 6. Render the exchange as a graph
+
+The `aeg` command in `aac-cli` ([Execution graphs](https://docs.cascadeauth.com/aeg/)) draws a run from
+chain events only and refuses a file that also holds the `a2a_ingress` and
+`a2a_egress` diagnostics, and your sink holds both. Keep the sink as the
+sidecar wrote it and give the renderer a copy with the chain rows alone. The
+sidecar writes one compact JSON object per line, so the event type is matched
+as a fixed string; the sink is the file your configuration's `telemetry.sink`
+names. For an agent the CLI set up it sits under that agent's `state`
+directory in the CLI home, `~/.aac` unless `AAC_CLI_HOME` points elsewhere:
+
+<!-- a2a-graph-example:start -->
+```bash
+SINK="${AAC_CLI_HOME:-$HOME/.aac}/agents/<agent>/state/telemetry.jsonl"
+grep -E '"event_type":"(mint|dispatch|receive|composite_mint|respond)"' "$SINK" > a2a-chain-events.jsonl
+aeg list --events a2a-chain-events.jsonl --output table
+aeg render --events a2a-chain-events.jsonl --root-token-id ROOT_ID --output a2a-run.html
+```
+<!-- a2a-graph-example:end -->
+
+`aeg list` prints each root with its task reference; replace `ROOT_ID` with
+the root of the exchange you want and open `a2a-run.html` in a browser (it is
+self-contained). Your sink holds the `mint` and `dispatch` rows of a message
+you sent and the peer's sink the `receive` row of the same root: to draw both
+hops, extract the peer's sink the same way and pass both files with
+`--events`. Application action records are optional `--actions` inputs, as on
+the starter guide. The graph of an A2A exchange ends at the peer's receive:
+A2A has no signed receipt, so there is no settlement node.
 
 ## The dispatch envelope
 
@@ -573,10 +609,10 @@ HTTPS at the final URL, with no redirect. Then:
 
 1. Peer A adds the destination and class of action for B to its agent
    configuration and runs the init command; both restart their sidecars.
-2. A's agent sends one message with `a2a_send.py`; it prints the acknowledgement with B's reply in `a2a_response` (its `result`, or a JSON-RPC `error` B returned) and `status` `dispatched`.
+2. A's agent sends one message with `a2a_send.py`; it prints the acknowledgement with B's reply in `a2a_response` (its `result`, or a JSON-RPC `error` B returned) and `status` `dispatched`. A's sink records `mint` and `dispatch` for the exchange.
 3. B's handler log shows one `POST /a2a/v1` carrying A's tenant and agent in
    the `X-AAC-Originator-Tenant-Id` and `X-AAC-Presenter-Spiffe-Id` headers;
-   B's `a2a_ingress` event records `accepted`.
+   B's sink records `receive` and `a2a_ingress` with `accepted`.
 4. B answers A the same way, with its own destination for A and its own class
    of action, or continues A's authority with a `continue` dispatch inside the
    retention window.
@@ -601,6 +637,25 @@ oversize, conflict, in-progress and cached-hit totals). A2A events use
 `result` values `accepted`, `rejected`, `failed` or, for a caller that gave up
 mid-request, `canceled`. The field list is in
 [audit your workflows](https://docs.cascadeauth.com/sidecar/operations/#audit-your-workflows).
+
+A dispatch also writes the chain events of its hop, shaped as the native
+delivery paths write them. On the sender, an `originate` dispatch records
+`mint` with `success` for the authority it created, and every dispatch
+records `dispatch`: `success` once the peer's reply passed the profile, or
+`failure` with the sidecar's code when the message left but the outcome did
+not hold (`ERR_A2A_REMOTE_REJECTED`, `ERR_A2A_DISPATCH_TIMEOUT`,
+`ERR_A2A_DISPATCH_UNCERTAIN`, `ERR_INVALID_AGENT_RESPONSE`). A `continue`
+dispatch records only the `dispatch`, parented on the token it extends. On
+the receiver, `receive` records `success` once the handler answered, or
+`failure` with the sidecar's code for a fault after verification (the handler
+unreachable, timed out or answering outside the profile, the continuation
+authority not registered, a chain without a valid task reference); a message
+the verifier refused records `receive` `failure` with the verifier's code and
+no chain identifiers, as the native receive route does. A refusal before any
+message leaves (a configuration error, a retained outcome served to a retry,
+a request outside the A2A profile) records only the diagnostic. There is no
+`respond` event: A2A has no signed receipt, so the chain ends at the
+receiver's `receive`.
 
 Errors before authority is verified use the sidecar's error envelope with a
 stable `code`. The A2A-specific codes are:

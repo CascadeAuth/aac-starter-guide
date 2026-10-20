@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/privacy/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: b000f647c0a43239f8bb41abd95ce4172fe4392a
+Documentation revision: a3e644e8eed4ca6b1f8de7c2b2832d17e6c1b9f6
 
 ---
 

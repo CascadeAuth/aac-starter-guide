@@ -135,3 +135,18 @@ outcome of a failed lookup: the cached identity served, or the receipt check
 recording `workload_unresolved`. The operations reference now lists every
 `terminal_attestation_verification` value with its meaning and next step. No
 change to routes, configuration, signed bytes or the verification verdicts.
+
+## 0.5.5
+
+An A2A exchange now records the same chain events as a native delivery: the
+sender's sidecar writes `mint` (for an `originate` dispatch) and `dispatch`,
+and the receiver's sidecar writes `receive`, linked by the root, parent and
+task identifiers, beside the existing `a2a_egress` and `a2a_ingress`
+diagnostics. An A2A run therefore forwards its chain events to central
+telemetry like a native one and renders as an execution graph once the chain
+rows are extracted from the sink (the A2A page's step 6 shows the two
+commands; the renderer refuses a file that still holds the diagnostics). A
+dispatch whose
+message left but ended in a remote rejection, a timeout, an uncertain
+delivery or an invalid reply records a `dispatch` failure with that code. No
+change to routes, configuration, signed bytes or the verification verdicts.

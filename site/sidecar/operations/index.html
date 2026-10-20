@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/">A2A integration</a><a href="/sidecar/operations/" aria-current="page">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">Operate and troubleshoot the sidecar</span></nav>
 <h1 id="operate-and-troubleshoot-the-sidecar">Operate and troubleshoot the sidecar</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/sidecar/operations/index.md" download="sidecar-operations.md">Markdown</a><span class="revision">Docs b000f647c0a4</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/sidecar/operations/index.md" download="sidecar-operations.md">Markdown</a><span class="revision">Docs a3e644e8eed4</span></div>
 <p><a href="/get-started/">Start the AAC journey</a> · <a href="/sidecar/configuration/">All references</a></p>
 <p>This reference is for a deployment or integration you have chosen to configure.
 For the first authenticated reservation, use the packaged Compose journey above.</p>
@@ -43,8 +43,10 @@ URL and a private tenant API-key file:</p>
 <p>The parent directory must exist. The sidecar exchanges that API key for a
 short-lived <code>telemetry-ingest</code> session and sends only the allowed central
 metadata. Business payloads, task references, human claims, raw AAC/DPoP
-credentials and terminal attestations remain local. A2A protocol diagnostics
-without chain identifiers also remain local. Local <code>sink: &quot;none&quot;</code> may be used
+credentials and terminal attestations remain local. The A2A protocol
+diagnostics (<code>a2a_ingress</code>, <code>a2a_egress</code>) also remain local; the <code>mint</code>,
+<code>dispatch</code> and <code>receive</code> events an A2A dispatch records are forwarded like
+native ones. Local <code>sink: &quot;none&quot;</code> may be used
 with central forwarding when local retention is intentionally disabled.</p>
 <p>Forwarding uses a bounded background queue and never waits on the authorization
 path. Outages, queue saturation or shutdown can lose central events; retain
@@ -91,11 +93,11 @@ Wall-clock arrival order across hosts is not a causal guarantee.</p>
 </tr>
 <tr>
 <td><code>a2a_ingress</code></td>
-<td>Protocol/body/admission diagnostics for a unary A2A request</td>
+<td>Protocol/body/admission diagnostics for a unary A2A request. A verified request also records <code>receive</code> with the chain identifiers once its handler answered (success) or a service fault followed verification (the fault's code); a message the verifier refused records a tenant-only <code>receive</code> failure with the verifier's code; a request rejected by the A2A profile after verification, or canceled by its caller, records only this diagnostic</td>
 </tr>
 <tr>
 <td><code>a2a_egress</code></td>
-<td>Paired-agent A2A dispatch outcome and retained-state pressure</td>
+<td>Paired-agent A2A dispatch outcome and retained-state pressure; a dispatch whose message left also records <code>dispatch</code>, preceded by <code>mint</code> when it originated the authority</td>
 </tr>
 </tbody>
 </table>

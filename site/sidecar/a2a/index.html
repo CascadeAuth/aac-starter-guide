@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/" aria-current="page">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">A2A integration</span></nav>
 <h1 id="a2a-integration">A2A integration</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs b000f647c0a4</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs a3e644e8eed4</span></div>
 <p>Agent-to-Agent (A2A) is an open protocol for one agent to send a message to
 another over HTTPS, using JSON-RPC 2.0 and a published Agent Card that says
 how to reach the agent. AAC supports A2A: the sidecar beside your agent
@@ -377,10 +377,17 @@ peer agent's message or terminal task, or a JSON-RPC <code>error</code> the peer
 returned. <code>status: dispatched</code> confirms delivery and a well-formed reply, not
 the peer's success: inspect <code>a2a_response</code> for <code>error</code> before acting on it.
 The second, identical post in the example returned the same bytes, reply
-included, without a second delivery. In your sidecar's telemetry sink, the <code>a2a_egress</code> event
-records <code>result: accepted</code>; on the peer, <code>a2a_ingress</code> records <code>accepted</code> and
-the handler's log shows one <code>POST /a2a/v1</code>. See
-<a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a> for the
+included, without a second delivery. Your sidecar's telemetry sink records
+the same chain events a native delivery does: a <code>mint</code> for the authority it
+created for you and a <code>dispatch</code> for the message it delivered, linked by
+<code>root_token_id</code>, <code>parent_token_id</code> and <code>task_ref</code>, beside the <code>a2a_egress</code>
+diagnostic with <code>result: accepted</code>. On the peer, a <code>receive</code> event records
+the admitted authority and the delivery to the handler, beside <code>a2a_ingress</code>
+with <code>accepted</code>, and the handler's log shows one <code>POST /a2a/v1</code>. Because
+these are the ordinary chain events, central telemetry receives the exchange
+like any other workflow, and the execution graph renderer draws it once you
+give it the chain rows alone (<a href="#6-render-the-exchange-as-a-graph">step 6</a>).
+See <a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a> for the
 event fields.</p>
 <p>A refusal prints the sidecar's error envelope with a <code>code</code> from the
 <a href="#errors-and-audit-events">error table</a> below. Three kinds of answer need
@@ -402,6 +409,28 @@ uncertain or timed-out delivery, reconcile with the peer and issue a new
 integration page's <a href="/sidecar/integration/#optional-runnable-paired-agent-example">runnable example</a>
 runs an agent that handles native and A2A calls and a client that sends an A2A
 message to the agent's own sidecar.</p>
+<h3 id="6-render-the-exchange-as-a-graph">6. Render the exchange as a graph</h3>
+<p>The <code>aeg</code> command in <code>aac-cli</code> (<a href="/aeg/">Execution graphs</a>) draws a run from
+chain events only and refuses a file that also holds the <code>a2a_ingress</code> and
+<code>a2a_egress</code> diagnostics, and your sink holds both. Keep the sink as the
+sidecar wrote it and give the renderer a copy with the chain rows alone. The
+sidecar writes one compact JSON object per line, so the event type is matched
+as a fixed string; the sink is the file your configuration's <code>telemetry.sink</code>
+names. For an agent the CLI set up it sits under that agent's <code>state</code>
+directory in the CLI home, <code>~/.aac</code> unless <code>AAC_CLI_HOME</code> points elsewhere:</p>
+<pre><code class="language-bash">SINK=&quot;${AAC_CLI_HOME:-$HOME/.aac}/agents/&lt;agent&gt;/state/telemetry.jsonl&quot;
+grep -E '&quot;event_type&quot;:&quot;(mint|dispatch|receive|composite_mint|respond)&quot;' &quot;$SINK&quot; &gt; a2a-chain-events.jsonl
+aeg list --events a2a-chain-events.jsonl --output table
+aeg render --events a2a-chain-events.jsonl --root-token-id ROOT_ID --output a2a-run.html
+</code></pre>
+<p><code>aeg list</code> prints each root with its task reference; replace <code>ROOT_ID</code> with
+the root of the exchange you want and open <code>a2a-run.html</code> in a browser (it is
+self-contained). Your sink holds the <code>mint</code> and <code>dispatch</code> rows of a message
+you sent and the peer's sink the <code>receive</code> row of the same root: to draw both
+hops, extract the peer's sink the same way and pass both files with
+<code>--events</code>. Application action records are optional <code>--actions</code> inputs, as on
+the starter guide. The graph of an A2A exchange ends at the peer's receive:
+A2A has no signed receipt, so there is no settlement node.</p>
 <h2 id="the-dispatch-envelope">The dispatch envelope</h2>
 <p><code>POST /v1/agent/a2a/dispatch</code> exists on the loopback listener only when both
 sending blocks are configured; a receive-only sidecar answers 404. The request
@@ -725,10 +754,10 @@ HTTPS at the final URL, with no redirect. Then:</p>
 <ol>
 <li>Peer A adds the destination and class of action for B to its agent
 configuration and runs the init command; both restart their sidecars.</li>
-<li>A's agent sends one message with <code>a2a_send.py</code>; it prints the acknowledgement with B's reply in <code>a2a_response</code> (its <code>result</code>, or a JSON-RPC <code>error</code> B returned) and <code>status</code> <code>dispatched</code>.</li>
+<li>A's agent sends one message with <code>a2a_send.py</code>; it prints the acknowledgement with B's reply in <code>a2a_response</code> (its <code>result</code>, or a JSON-RPC <code>error</code> B returned) and <code>status</code> <code>dispatched</code>. A's sink records <code>mint</code> and <code>dispatch</code> for the exchange.</li>
 <li>B's handler log shows one <code>POST /a2a/v1</code> carrying A's tenant and agent in
 the <code>X-AAC-Originator-Tenant-Id</code> and <code>X-AAC-Presenter-Spiffe-Id</code> headers;
-B's <code>a2a_ingress</code> event records <code>accepted</code>.</li>
+B's sink records <code>receive</code> and <code>a2a_ingress</code> with <code>accepted</code>.</li>
 <li>B answers A the same way, with its own destination for A and its own class
 of action, or continues A's authority with a <code>continue</code> dispatch inside the
 retention window.</li>
@@ -751,6 +780,24 @@ oversize, conflict, in-progress and cached-hit totals). A2A events use
 <code>result</code> values <code>accepted</code>, <code>rejected</code>, <code>failed</code> or, for a caller that gave up
 mid-request, <code>canceled</code>. The field list is in
 <a href="/sidecar/operations/#audit-your-workflows">audit your workflows</a>.</p>
+<p>A dispatch also writes the chain events of its hop, shaped as the native
+delivery paths write them. On the sender, an <code>originate</code> dispatch records
+<code>mint</code> with <code>success</code> for the authority it created, and every dispatch
+records <code>dispatch</code>: <code>success</code> once the peer's reply passed the profile, or
+<code>failure</code> with the sidecar's code when the message left but the outcome did
+not hold (<code>ERR_A2A_REMOTE_REJECTED</code>, <code>ERR_A2A_DISPATCH_TIMEOUT</code>,
+<code>ERR_A2A_DISPATCH_UNCERTAIN</code>, <code>ERR_INVALID_AGENT_RESPONSE</code>). A <code>continue</code>
+dispatch records only the <code>dispatch</code>, parented on the token it extends. On
+the receiver, <code>receive</code> records <code>success</code> once the handler answered, or
+<code>failure</code> with the sidecar's code for a fault after verification (the handler
+unreachable, timed out or answering outside the profile, the continuation
+authority not registered, a chain without a valid task reference); a message
+the verifier refused records <code>receive</code> <code>failure</code> with the verifier's code and
+no chain identifiers, as the native receive route does. A refusal before any
+message leaves (a configuration error, a retained outcome served to a retry,
+a request outside the A2A profile) records only the diagnostic. There is no
+<code>respond</code> event: A2A has no signed receipt, so the chain ends at the
+receiver's <code>receive</code>.</p>
 <p>Errors before authority is verified use the sidecar's error envelope with a
 stable <code>code</code>. The A2A-specific codes are:</p>
 <table>
@@ -814,4 +861,4 @@ code with its next action, including the authority and recipient refusals
 that A2A shares with native delivery.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/privacy/">Privacy</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
-<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#what-aac-adds-to-a2a" class="toc-h2">What AAC adds to A2A</a><a href="#what-is-supported" class="toc-h2">What is supported</a><a href="#how-a-message-travels" class="toc-h2">How a message travels</a><a href="#set-up-a2a-for-your-agent" class="toc-h2">Set up A2A for your agent</a><a href="#1-enable-a2a-in-the-configuration" class="toc-h3">1. Enable A2A in the configuration</a><a href="#2-write-the-a2a-handler" class="toc-h3">2. Write the A2A handler</a><a href="#3-name-the-destination-and-the-authority" class="toc-h3">3. Name the destination and the authority</a><a href="#4-send-a-message" class="toc-h3">4. Send a message</a><a href="#5-what-success-looks-like" class="toc-h3">5. What success looks like</a><a href="#the-dispatch-envelope" class="toc-h2">The dispatch envelope</a><a href="#the-a2a-configuration-block" class="toc-h2">The a2a configuration block</a><a href="#agent-card-and-discovery" class="toc-h2">Agent Card and discovery</a><a href="#two-agents-across-tenants" class="toc-h2">Two agents across tenants</a><a href="#errors-and-audit-events" class="toc-h2">Errors and audit events</a></aside></div></body></html>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#what-aac-adds-to-a2a" class="toc-h2">What AAC adds to A2A</a><a href="#what-is-supported" class="toc-h2">What is supported</a><a href="#how-a-message-travels" class="toc-h2">How a message travels</a><a href="#set-up-a2a-for-your-agent" class="toc-h2">Set up A2A for your agent</a><a href="#1-enable-a2a-in-the-configuration" class="toc-h3">1. Enable A2A in the configuration</a><a href="#2-write-the-a2a-handler" class="toc-h3">2. Write the A2A handler</a><a href="#3-name-the-destination-and-the-authority" class="toc-h3">3. Name the destination and the authority</a><a href="#4-send-a-message" class="toc-h3">4. Send a message</a><a href="#5-what-success-looks-like" class="toc-h3">5. What success looks like</a><a href="#6-render-the-exchange-as-a-graph" class="toc-h3">6. Render the exchange as a graph</a><a href="#the-dispatch-envelope" class="toc-h2">The dispatch envelope</a><a href="#the-a2a-configuration-block" class="toc-h2">The a2a configuration block</a><a href="#agent-card-and-discovery" class="toc-h2">Agent Card and discovery</a><a href="#two-agents-across-tenants" class="toc-h2">Two agents across tenants</a><a href="#errors-and-audit-events" class="toc-h2">Errors and audit events</a></aside></div></body></html>

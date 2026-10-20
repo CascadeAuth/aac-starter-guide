@@ -43,8 +43,10 @@ sidecar:
 The parent directory must exist. The sidecar exchanges that API key for a
 short-lived `telemetry-ingest` session and sends only the allowed central
 metadata. Business payloads, task references, human claims, raw AAC/DPoP
-credentials and terminal attestations remain local. A2A protocol diagnostics
-without chain identifiers also remain local. Local `sink: "none"` may be used
+credentials and terminal attestations remain local. The A2A protocol
+diagnostics (`a2a_ingress`, `a2a_egress`) also remain local; the `mint`,
+`dispatch` and `receive` events an A2A dispatch records are forwarded like
+native ones. Local `sink: "none"` may be used
 with central forwarding when local retention is intentionally disabled.
 
 Forwarding uses a bounded background queue and never waits on the authorization
@@ -72,8 +74,8 @@ Wall-clock arrival order across hosts is not a causal guarantee.
 | `dispatch` | Outbound delegation/result, including downstream failure |
 | `respond` | Local terminal response; a successful settlement includes the compact JWS |
 | `composite_mint` | A supported composite authority was created from multiple arrivals |
-| `a2a_ingress` | Protocol/body/admission diagnostics for a unary A2A request |
-| `a2a_egress` | Paired-agent A2A dispatch outcome and retained-state pressure |
+| `a2a_ingress` | Protocol/body/admission diagnostics for a unary A2A request. A verified request also records `receive` with the chain identifiers once its handler answered (success) or a service fault followed verification (the fault's code); a message the verifier refused records a tenant-only `receive` failure with the verifier's code; a request rejected by the A2A profile after verification, or canceled by its caller, records only this diagnostic |
+| `a2a_egress` | Paired-agent A2A dispatch outcome and retained-state pressure; a dispatch whose message left also records `dispatch`, preceded by `mint` when it originated the authority |
 
 Native events use `result: success` or `failure`; A2A diagnostics may use
 `accepted`, `rejected` or `failed`. Event availability depends on how far the
