@@ -102,17 +102,17 @@ certificates and the tool never sees that authority's private key.
 
 The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it.
 
-**Flags.** No flags are needed. To reuse a development CA across agents, pass `--ca-key-file` and `--ca-cert-file` together; neither one alone.
+**Flags.** No flags are needed. To reuse a development CA across agents, pass `--ca-key-file` and `--ca-cert-file` together; neither one alone. A CA that expires before the certificates it would sign is refused.
 
 **Keys and signatures.** The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.
 
-**The CLI** creates a 7-day certificate authority and keeps its private key in the agent's keep/ folder; issues the workload, receipt and HTTPS certificates; publishes the CA certificate as a trust anchor named `<agent>-dev-ca`.
+**The CLI** creates a 365-day certificate authority and keeps its private key in the agent's keep/ folder; issues the workload, receipt and HTTPS certificates; publishes the CA certificate as a trust anchor named `<agent>-dev-ca`.
 
 **The CLI does not** ask you for anything from your own certificate authority.
 
 **Renewal.** `aac agent renew --agent <name>` issues fresh certificates from the same CA.
 
-### I bring my own CA
+### I bring my own CA certificate
 
 Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment.
 
@@ -133,8 +133,8 @@ Your choice stays visible after setup, in two places.
 **In the name your tenant publishes.** An authority the tool created is published
 as the trust anchor `<agent>-dev-ca`; your own issuer's is published as
 `<agent>-ca`. Another organization's operator can therefore tell, before trusting
-you, whether they are trusting a disposable seven-day development authority or a
-company issuer. An agent's root key id does not follow that choice — it is always
+you, whether they are trusting a disposable development authority (it lasts a
+year) or a company issuer. An agent's root key id does not follow that choice — it is always
 `<agent>-root-v1`, derived from the agent's name.
 
 **In how many authorities you have — and how many entries they publish.** The
@@ -155,7 +155,7 @@ supported. Where the rest of this page differs between them, it says so.
 | Tenant API key | that a caller is acting for your tenant on AAC's data calls | on the machine that runs the `aac` command, and on each sidecar that reads your workload records or reports telemetry | every sidecar that needs one | until you reissue it with `aac tenant reissue-api-key` |
 | Administrator sign-in session | that a tenant administrator is signed in right now | only the machine you signed in on | nobody | hours; sign in again with `aac sso login` |
 | Administrator signing key | that published trust material really came from your tenant — the publisher signs every upload request with it | the machine that runs the publisher | nobody. AAC received only its public half, when you registered | until you rotate it, on the schedule below |
-| Your certificate authority | that an agent holding a certificate it signed is one of yours. A receiving sidecar fetches your authority's certificate from AAC and checks the certificate the calling agent presents | the **certificate** sits with each agent and in your tenant's publish folder. The **private key** stays with your issuer, or — when the tool made the authority — in that agent's `keep/` folder | only the certificate leaves. AAC serves it to anyone at your tenant's trust URL; the private key never leaves you | your issuer decides; a development authority the tool created lasts 7 days |
+| Your certificate authority | that an agent holding a certificate it signed is one of yours. A receiving sidecar fetches your authority's certificate from AAC and checks the certificate the calling agent presents | the **certificate** sits with each agent and in your tenant's publish folder. The **private key** stays with your issuer, or — when the tool made the authority — in that agent's `keep/` folder | only the certificate leaves. AAC serves it to anyone at your tenant's trust URL; the private key never leaves you | your issuer decides; a development authority the tool created lasts 365 days |
 | Publisher settings | not a key: where the publisher finds your public material and where to send it | the machine that runs the publisher | — | rewritten whenever you run setup again |
 
 **The trust anchor publisher is a process, not a key.** It watches the two folders
@@ -177,9 +177,9 @@ publishing enabled in exactly one of them.
 
 | What | What it proves | Where it lives | Who gets a copy | How long it lasts |
 |---|---|---|---|---|
-| Identity key and certificate | that this workload is `spiffe://<your trust domain>/<agent>`. Its sidecar signs a proof of possession with the key on every call, so holding the certificate is not enough | its own sidecar | **the key: nobody.** The certificate is public and travels — the sidecar presents it to every workload it calls, inside the proof of possession | 1 day, when the tool issues it |
-| Receipt key and certificate | that this agent finished the work, in a receipt others can check afterwards. Setup gives it its own key, separate from the identity key, so the two signing jobs stay separate on disk and in the configuration | its own sidecar | **the key: nobody.** The certificate travels inside every receipt this agent signs, so whoever checks the receipt gets it | 1 day, when the tool issues it |
-| HTTPS key and certificate | lets callers reach this sidecar over HTTPS. Its certificate has to name the address the sidecar is actually served on | its own sidecar | **the key: nobody.** The certificate is what every TLS client sees when it connects | 1 day, when the tool issues it |
+| Identity key and certificate | that this workload is `spiffe://<your trust domain>/<agent>`. Its sidecar signs a proof of possession with the key on every call, so holding the certificate is not enough | its own sidecar | **the key: nobody.** The certificate is public and travels — the sidecar presents it to every workload it calls, inside the proof of possession | 90 days, when the tool issues it |
+| Receipt key and certificate | that this agent finished the work, in a receipt others can check afterwards. Setup gives it its own key, separate from the identity key, so the two signing jobs stay separate on disk and in the configuration | its own sidecar | **the key: nobody.** The certificate travels inside every receipt this agent signs, so whoever checks the receipt gets it | 90 days, when the tool issues it |
+| HTTPS key and certificate | lets callers reach this sidecar over HTTPS. Its certificate has to name the address the sidecar is actually served on | its own sidecar | **the key: nobody.** The certificate is what every TLS client sees when it connects | 90 days, when the tool issues it |
 | Root signing key | that a chain of authority started here. It signs the first block of every chain this agent begins | its sidecar holds the private half | the **public** half is published: setup copies it into your tenant's publish folder, the publisher uploads it, and AAC serves it under the key id `<agent>-root-v1` | until you retire that key id |
 | Pairing secret | that a call really came from your own application, and from its own sidecar — in both directions. It is **one shared secret, not a key pair**: the same bytes sit in both processes and there is no public half | its sidecar and authorized processes within that tenant application’s trusted boundary | never another pair or tenant; this is not a mint-only credential | until you regenerate it |
 | List of trusted authorities | which authorities this sidecar accepts on the calls it makes | its own sidecar | nobody else | rebuilt each time you renew |
@@ -233,11 +233,12 @@ available, not what every deployment exercises.
 
 ## How long things last, and what to do when they run out
 
-**Short-lived, and replaced by one command.** An agent's identity, receipt and
-HTTPS certificates last a day when the tool issues them, and a development
-authority lasts seven days. `aac agent renew --agent <name>` replaces the
-certificates; add `--ca` to replace the development authority as well, which also
-puts the new authority certificate in your publish folder. When your own issuer
+**Limited in life, and replaced by one command.** An agent's identity, receipt
+and HTTPS certificates last 90 days when the tool issues them, and a development
+authority lasts 365 days. `aac agent renew --agent <name>` replaces the
+certificates, and the development authority too once it is within 90 days of
+expiry; add `--ca` to replace the authority now. Either way the new authority
+certificate lands in your publish folder. When your own issuer
 signed them, that issuer produces the replacements and `renew` takes them — it
 cannot reissue what it did not sign.
 
@@ -248,7 +249,7 @@ valid until you deliberately replace it, so treat them as things you hold and lo
 after, not as material that ages out.
 
 That distinction matters when a machine is lost or a secret may have leaked. The
-short-lived material is genuinely disposable — reissue it and move on. The
+material that expires is genuinely disposable — reissue it and move on. The
 persistent material is not, and needs a deliberate decision each time.
 
 ## Rotating the tenant administrator key
@@ -294,7 +295,7 @@ not automatic, and it needs three things you keep yourself:
 
 1. **the trust material that was published at the time** — AAC serves what is
    current, not an archive, and a development certificate may have been valid for
-   only a day;
+   only 90 days;
 2. **an observation time you trust independently**, rather than the time written
    inside the evidence being checked;
 3. **your own workflow and authorization records**, which are what connect a

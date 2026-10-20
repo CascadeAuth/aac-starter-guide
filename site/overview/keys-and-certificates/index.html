@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Overview</summary><nav aria-label="Section navigation"><a href="/overview/">Overview</a><a href="/overview/keys-and-certificates/" aria-current="page">Keys and certificates</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/overview/">Overview</a> / <span aria-current="page">Keys and certificates</span></nav>
 <h1 id="keys-and-certificates">Keys and certificates</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/overview/keys-and-certificates/index.md" download="overview-keys-and-certificates.md">Markdown</a><span class="revision">Docs 78cfaee84063</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.4</span><a href="/overview/keys-and-certificates/index.md" download="overview-keys-and-certificates.md">Markdown</a><span class="revision">Docs b000f647c0a4</span></div>
 <p>Setting up AAC means creating a small web of key pairs, certificates and shared
 secrets, putting each one where it belongs, and replacing it before it runs out.
 That web is the real work of onboarding, and this page is its map. For every item
@@ -277,12 +277,12 @@ authority on your own machine, or your organization's issuer signs your agents'
 certificates and the tool never sees that authority's private key.</p>
 <h3 id="the-cli-creates-a-development-ca">The CLI creates a development CA</h3>
 <p>The laptop case. The CLI creates a certificate authority on this machine and signs the agent's identity, receipt and HTTPS certificates with it.</p>
-<p><strong>Flags.</strong> No flags are needed. To reuse a development CA across agents, pass <code>--ca-key-file</code> and <code>--ca-cert-file</code> together; neither one alone.</p>
+<p><strong>Flags.</strong> No flags are needed. To reuse a development CA across agents, pass <code>--ca-key-file</code> and <code>--ca-cert-file</code> together; neither one alone. A CA that expires before the certificates it would sign is refused.</p>
 <p><strong>Keys and signatures.</strong> The CA and the two identity keys are Ed25519; the HTTPS key is EC P-256.</p>
-<p><strong>The CLI</strong> creates a 7-day certificate authority and keeps its private key in the agent's keep/ folder; issues the workload, receipt and HTTPS certificates; publishes the CA certificate as a trust anchor named <code>&lt;agent&gt;-dev-ca</code>.</p>
+<p><strong>The CLI</strong> creates a 365-day certificate authority and keeps its private key in the agent's keep/ folder; issues the workload, receipt and HTTPS certificates; publishes the CA certificate as a trust anchor named <code>&lt;agent&gt;-dev-ca</code>.</p>
 <p><strong>The CLI does not</strong> ask you for anything from your own certificate authority.</p>
 <p><strong>Renewal.</strong> <code>aac agent renew --agent &lt;name&gt;</code> issues fresh certificates from the same CA.</p>
-<h3 id="i-bring-my-own-ca">I bring my own CA</h3>
+<h3 id="i-bring-my-own-ca-certificate">I bring my own CA certificate</h3>
 <p>Your own issuer has signed the agent's certificates, and your CA private key never reaches this machine. Certificate source alone does not qualify a production deployment.</p>
 <p><strong>Flags.</strong> All seven together: <code>--workload-cert-file</code>, <code>--terminal-cert-file</code> and <code>--tls-cert-file</code>, each with its key file (<code>--workload-key-file</code>, <code>--terminal-key-file</code>, <code>--tls-key-file</code>), plus <code>--ca-cert-file</code>. Never <code>--ca-key-file</code>: the CLI does not want your CA key.</p>
 <p><strong>Keys and signatures.</strong> Your CA's key must be Ed25519 or EC P-256, and it must have signed each certificate with Ed25519 or ECDSA-with-SHA-256. The two identity keys may be Ed25519 or EC P-256; the HTTPS key must be EC P-256. RSA is not supported: the sidecar cannot verify against it.</p>
@@ -293,8 +293,8 @@ certificates and the tool never sees that authority's private key.</p>
 <p><strong>In the name your tenant publishes.</strong> An authority the tool created is published
 as the trust anchor <code>&lt;agent&gt;-dev-ca</code>; your own issuer's is published as
 <code>&lt;agent&gt;-ca</code>. Another organization's operator can therefore tell, before trusting
-you, whether they are trusting a disposable seven-day development authority or a
-company issuer. An agent's root key id does not follow that choice — it is always
+you, whether they are trusting a disposable development authority (it lasts a
+year) or a company issuer. An agent's root key id does not follow that choice — it is always
 <code>&lt;agent&gt;-root-v1</code>, derived from the agent's name.</p>
 <p><strong>In how many authorities you have — and how many entries they publish.</strong> The
 command-line tool creates <strong>one development authority per agent by default</strong>,
@@ -344,7 +344,7 @@ supported. Where the rest of this page differs between them, it says so.</p>
 <td>that an agent holding a certificate it signed is one of yours. A receiving sidecar fetches your authority's certificate from AAC and checks the certificate the calling agent presents</td>
 <td>the <strong>certificate</strong> sits with each agent and in your tenant's publish folder. The <strong>private key</strong> stays with your issuer, or — when the tool made the authority — in that agent's <code>keep/</code> folder</td>
 <td>only the certificate leaves. AAC serves it to anyone at your tenant's trust URL; the private key never leaves you</td>
-<td>your issuer decides; a development authority the tool created lasts 7 days</td>
+<td>your issuer decides; a development authority the tool created lasts 365 days</td>
 </tr>
 <tr>
 <td>Publisher settings</td>
@@ -385,21 +385,21 @@ publishing enabled in exactly one of them.</p>
 <td>that this workload is <code>spiffe://&lt;your trust domain&gt;/&lt;agent&gt;</code>. Its sidecar signs a proof of possession with the key on every call, so holding the certificate is not enough</td>
 <td>its own sidecar</td>
 <td><strong>the key: nobody.</strong> The certificate is public and travels — the sidecar presents it to every workload it calls, inside the proof of possession</td>
-<td>1 day, when the tool issues it</td>
+<td>90 days, when the tool issues it</td>
 </tr>
 <tr>
 <td>Receipt key and certificate</td>
 <td>that this agent finished the work, in a receipt others can check afterwards. Setup gives it its own key, separate from the identity key, so the two signing jobs stay separate on disk and in the configuration</td>
 <td>its own sidecar</td>
 <td><strong>the key: nobody.</strong> The certificate travels inside every receipt this agent signs, so whoever checks the receipt gets it</td>
-<td>1 day, when the tool issues it</td>
+<td>90 days, when the tool issues it</td>
 </tr>
 <tr>
 <td>HTTPS key and certificate</td>
 <td>lets callers reach this sidecar over HTTPS. Its certificate has to name the address the sidecar is actually served on</td>
 <td>its own sidecar</td>
 <td><strong>the key: nobody.</strong> The certificate is what every TLS client sees when it connects</td>
-<td>1 day, when the tool issues it</td>
+<td>90 days, when the tool issues it</td>
 </tr>
 <tr>
 <td>Root signing key</td>
@@ -469,11 +469,12 @@ means an agent can begin starting work later without another setup pass.</p>
 <p>Read the two tables above the same way. They list what a complete agent has
 available, not what every deployment exercises.</p>
 <h2 id="how-long-things-last-and-what-to-do-when-they-run-out">How long things last, and what to do when they run out</h2>
-<p><strong>Short-lived, and replaced by one command.</strong> An agent's identity, receipt and
-HTTPS certificates last a day when the tool issues them, and a development
-authority lasts seven days. <code>aac agent renew --agent &lt;name&gt;</code> replaces the
-certificates; add <code>--ca</code> to replace the development authority as well, which also
-puts the new authority certificate in your publish folder. When your own issuer
+<p><strong>Limited in life, and replaced by one command.</strong> An agent's identity, receipt
+and HTTPS certificates last 90 days when the tool issues them, and a development
+authority lasts 365 days. <code>aac agent renew --agent &lt;name&gt;</code> replaces the
+certificates, and the development authority too once it is within 90 days of
+expiry; add <code>--ca</code> to replace the authority now. Either way the new authority
+certificate lands in your publish folder. When your own issuer
 signed them, that issuer produces the replacements and <code>renew</code> takes them — it
 cannot reissue what it did not sign.</p>
 <p><strong>Persistent, and not covered by that.</strong> Your root signing keys, your pairing
@@ -482,7 +483,7 @@ settings do not expire on their own. Waiting does not retire them. Each one stay
 valid until you deliberately replace it, so treat them as things you hold and look
 after, not as material that ages out.</p>
 <p>That distinction matters when a machine is lost or a secret may have leaked. The
-short-lived material is genuinely disposable — reissue it and move on. The
+material that expires is genuinely disposable — reissue it and move on. The
 persistent material is not, and needs a deliberate decision each time.</p>
 <h2 id="rotating-the-tenant-administrator-key">Rotating the tenant administrator key</h2>
 <p>Your administrator signing key is what makes published trust material yours, so
@@ -519,7 +520,7 @@ not automatic, and it needs three things you keep yourself:</p>
 <ol>
 <li><strong>the trust material that was published at the time</strong> — AAC serves what is
 current, not an archive, and a development certificate may have been valid for
-only a day;</li>
+only 90 days;</li>
 <li><strong>an observation time you trust independently</strong>, rather than the time written
 inside the evidence being checked;</li>
 <li><strong>your own workflow and authorization records</strong>, which are what connect a
@@ -531,4 +532,4 @@ that the real-world action happened. The developer guide's &quot;Verify terminal
 evidence offline&quot; section has the procedure and its limits in full.</p>
 <footer><p>Public developer beta · <a href="mailto:support@cascadeauth.com">support@cascadeauth.com</a></p>
 <p><a href="/release-notes/">Release notes</a> · <a href="/privacy/">Privacy</a> · <a href="/LICENSE">Sidecar license</a> · <a href="/THIRD_PARTY_NOTICES.md">Notices</a> · <a href="/AEG_LICENSE">CLI license</a> · <a href="/AEG_THIRD_PARTY_NOTICES.md">CLI notices</a></p>
-<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#how-keys-and-certificates-connect-your-tenant-and-agents" class="toc-h2">How keys and certificates connect your tenant and agents</a><a href="#who-signs-your-agents-certificates" class="toc-h2">Who signs your agents&#x27; certificates</a><a href="#the-cli-creates-a-development-ca" class="toc-h3">The CLI creates a development CA</a><a href="#i-bring-my-own-ca" class="toc-h3">I bring my own CA</a><a href="#what-exists-once-for-the-whole-tenant" class="toc-h2">What exists once for the whole tenant</a><a href="#what-exists-for-each-agent" class="toc-h2">What exists for each agent</a><a href="#what-stays-with-you-and-what-your-application-receives" class="toc-h2">What stays with you, and what your application receives</a><a href="#what-setup-prepares-and-what-the-runtime-actually-uses" class="toc-h2">What setup prepares, and what the runtime actually uses</a><a href="#how-long-things-last-and-what-to-do-when-they-run-out" class="toc-h2">How long things last, and what to do when they run out</a><a href="#rotating-the-tenant-administrator-key" class="toc-h2">Rotating the tenant administrator key</a><a href="#the-exact-file-names" class="toc-h2">The exact file names</a><a href="#keeping-a-receipt-verifiable-months-later" class="toc-h2">Keeping a receipt verifiable months later</a></aside></div></body></html>
+<p>Latest supported releases. <a href="/release.json">Release and documentation provenance</a></p></footer></main><aside class="outline" aria-label="On this page"><p>On this page</p><a href="#how-keys-and-certificates-connect-your-tenant-and-agents" class="toc-h2">How keys and certificates connect your tenant and agents</a><a href="#who-signs-your-agents-certificates" class="toc-h2">Who signs your agents&#x27; certificates</a><a href="#the-cli-creates-a-development-ca" class="toc-h3">The CLI creates a development CA</a><a href="#i-bring-my-own-ca-certificate" class="toc-h3">I bring my own CA certificate</a><a href="#what-exists-once-for-the-whole-tenant" class="toc-h2">What exists once for the whole tenant</a><a href="#what-exists-for-each-agent" class="toc-h2">What exists for each agent</a><a href="#what-stays-with-you-and-what-your-application-receives" class="toc-h2">What stays with you, and what your application receives</a><a href="#what-setup-prepares-and-what-the-runtime-actually-uses" class="toc-h2">What setup prepares, and what the runtime actually uses</a><a href="#how-long-things-last-and-what-to-do-when-they-run-out" class="toc-h2">How long things last, and what to do when they run out</a><a href="#rotating-the-tenant-administrator-key" class="toc-h2">Rotating the tenant administrator key</a><a href="#the-exact-file-names" class="toc-h2">The exact file names</a><a href="#keeping-a-receipt-verifiable-months-later" class="toc-h2">Keeping a receipt verifiable months later</a></aside></div></body></html>
