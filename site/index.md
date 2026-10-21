@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: abf97915000a609e419ffea45e20c27b88a4289c
+Documentation revision: 34e822d9423a0eee7af28f48f4d6ed5942ca5069
 
 ---
 
@@ -103,7 +103,9 @@ downloads partly cached, took two to five minutes; on the timed Linux run most
 of that was the four sign-ins ([recorded runs](https://github.com/CascadeAuth/aac-compose-demo/blob/main/docs/evidence/README.md)).
 The demo's [Quickstart](https://github.com/CascadeAuth/aac-compose-demo#quickstart)
 section covers reruns, the other scenarios and stopping the demo;
-[Get started](https://docs.cascadeauth.com/get-started/) explains each step.
+[Get started](https://docs.cascadeauth.com/get-started/) explains each step. The
+[Examples](https://docs.cascadeauth.com/examples/) page lists every runnable example, including the same
+reservation made by two Google ADK agents over A2A.
 
 ## AAC Developer Beta (free)
 

@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/a2a/
 
 Applies to: AAC Sidecar v0.5.5
 
-Documentation revision: abf97915000a609e419ffea45e20c27b88a4289c
+Documentation revision: 34e822d9423a0eee7af28f48f4d6ed5942ca5069
 
 ---
 
@@ -623,7 +623,10 @@ A refusal at step 2 or 3 names its cause: `ERR_UNKNOWN_TENANT_KEY` or
 SPIFFE ID; `ERR_A2A_REMOTE_REJECTED` on A reports B's refusal. For a
 same-tenant run of two agents on one machine, the integration page's
 [two-agent example](https://docs.cascadeauth.com/sidecar/integration/#work-through-two-agents) sets up
-both processes and sends an A2A message between them.
+both processes and sends an A2A message between them. To see two agents in
+two tenants do this exchange end to end, clone the
+[ADK over A2A demo](https://docs.cascadeauth.com/examples/#two-google-adk-agents-over-a2a) and run its
+quickstart.
 
 ## Errors and audit events
 

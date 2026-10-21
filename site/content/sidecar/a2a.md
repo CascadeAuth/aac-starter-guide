@@ -615,7 +615,10 @@ A refusal at step 2 or 3 names its cause: `ERR_UNKNOWN_TENANT_KEY` or
 SPIFFE ID; `ERR_A2A_REMOTE_REJECTED` on A reports B's refusal. For a
 same-tenant run of two agents on one machine, the integration page's
 [two-agent example](/sidecar/integration/#work-through-two-agents) sets up
-both processes and sends an A2A message between them.
+both processes and sends an A2A message between them. To see two agents in
+two tenants do this exchange end to end, clone the
+[ADK over A2A demo](/examples/#two-google-adk-agents-over-a2a) and run its
+quickstart.
 
 ## Errors and audit events
 

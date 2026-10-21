@@ -95,7 +95,9 @@ downloads partly cached, took two to five minutes; on the timed Linux run most
 of that was the four sign-ins ([recorded runs](https://github.com/CascadeAuth/aac-compose-demo/blob/main/docs/evidence/README.md)).
 The demo's [Quickstart](https://github.com/CascadeAuth/aac-compose-demo#quickstart)
 section covers reruns, the other scenarios and stopping the demo;
-[Get started](/get-started/) explains each step.
+[Get started](/get-started/) explains each step. The
+[Examples](/examples/) page lists every runnable example, including the same
+reservation made by two Google ADK agents over A2A.
 
 ## AAC Developer Beta (free)
 
