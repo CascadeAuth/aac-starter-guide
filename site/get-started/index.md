@@ -2,16 +2,24 @@ Canonical: https://docs.cascadeauth.com/get-started/
 
 Applies to: AAC Sidecar v0.5.5
 
-Documentation revision: 34e822d9423a0eee7af28f48f4d6ed5942ca5069
+Documentation revision: 48f893b704eb69d521622c78ba51e762cf00c3fd
 
 ---
 
 # Run your first authenticated agent journey
 
 Marc Sterling, a director at Austin-based private equity firm Vantis Equity,
-needs to oversee an acquisition on-site in Shanghai. He uses Tourfedia's
-corporate travel management platform to organize his trip from Austin (AUS)
-to Shanghai (PVG).
+needs to travel to Shanghai to oversee an acquisition. He asks Vantis Equity's
+trip-planning AI agent to book his trip from Austin (AUS) to Shanghai (PVG)
+through Tourfedia's corporate travel booking AI agent, under a $10,000 approval
+that expires in 30 minutes. The planner agent does not hand Tourfedia a
+credential; it hands over Marc's approval itself. Vantis Equity's sidecar signs
+that approval as the root of a chain, the planner agent narrows it to this one
+booking and names Tourfedia's booking agent as the only agent allowed to act,
+and Tourfedia's sidecar verifies the whole chain locally before its booking
+agent sees the request. The booking ends in a signed receipt and an execution
+graph showing who authorized what, hop by hop. This page runs that journey on
+your machine.
 
 Run **AAC: two tenants, one reservation made** from a fresh machine with the
 public [Docker Compose demo](https://github.com/CascadeAuth/aac-compose-demo).
