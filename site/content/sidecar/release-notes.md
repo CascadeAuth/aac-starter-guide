@@ -6,6 +6,11 @@ Changes to the hosted service, [AAC Developer Beta (free)](https://docs.cascadea
 are listed here, newest first. Tenant contacts also receive an email before a
 breaking change or a reset. Sidecar releases follow, by version.
 
+- **2026-10-22:** The commitments are clarified: recovery from a failed change
+  is not a reset. The service may be restored from a backup taken before the
+  change, and AAC takes reasonable measures to avoid losing tenant data in that
+  case but does not guarantee it during the beta, telling the affected tenant
+  contacts afterwards which period was lost. The service itself is unchanged.
 - **2026-10-17:** The beta's commitments are published: how long tenants and
   their data are kept, the notice before any reset or deletion, support, and
   these change announcements. The service itself is unchanged.

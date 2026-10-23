@@ -20,6 +20,10 @@ of charge while the beta runs. These are its commitments:
 - **Your tenants and their data:** kept for the life of the beta. Before any
   reset or deletion, the tenant's contact receives at least 30 days' notice by
   email. The only exception is an immediate response to a security incident.
+  Recovery from a failed change is not a reset: the service may be restored
+  from a backup taken before the change, and AAC takes reasonable measures to
+  avoid losing tenant data in that case but does not guarantee it during the
+  beta, telling the affected tenant contacts afterwards which period was lost.
 - **Changes:** every change to the service is listed in the
   [release notes](/release-notes/#aac-developer-beta-service). Tenant contacts
   also receive an email before a breaking change or a reset.

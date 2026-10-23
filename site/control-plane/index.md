@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/control-plane/
 
 Applies to: Hosted AAC Control Plane · developer beta
 
-Documentation revision: 4e76e40fd2a288a986509321ebb236d172b3f773
+Documentation revision: b0c0454e4b747f27ae11b3ff52b65daa41012f3e
 
 ---
 
@@ -28,6 +28,10 @@ of charge while the beta runs. These are its commitments:
 - **Your tenants and their data:** kept for the life of the beta. Before any
   reset or deletion, the tenant's contact receives at least 30 days' notice by
   email. The only exception is an immediate response to a security incident.
+  Recovery from a failed change is not a reset: the service may be restored
+  from a backup taken before the change, and AAC takes reasonable measures to
+  avoid losing tenant data in that case but does not guarantee it during the
+  beta, telling the affected tenant contacts afterwards which period was lost.
 - **Changes:** every change to the service is listed in the
   [release notes](https://docs.cascadeauth.com/release-notes/#aac-developer-beta-service). Tenant contacts
   also receive an email before a breaking change or a reset.
