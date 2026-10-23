@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/trust-anchor-publisher/
 
 Applies to: aac-trust-anchor-publisher 0.2.3
 
-Documentation revision: 48f893b704eb69d521622c78ba51e762cf00c3fd
+Documentation revision: 4e76e40fd2a288a986509321ebb236d172b3f773
 
 ---
 

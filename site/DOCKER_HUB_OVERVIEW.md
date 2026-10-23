@@ -123,6 +123,10 @@ payment are omitted for clarity. It is the same journey as
 
 Before you start, use macOS or Linux, Git, a Bash-compatible shell,
 Python **3.11 or later** with `venv`/`pip`, and Docker with Compose and Buildx.
+On Debian or Ubuntu, Python's `venv` is a separate package:
+`sudo apt install python3-venv`. On Linux, your user must be able to run
+`docker` without `sudo` (see Docker's
+[post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/)).
 Allow outbound HTTPS for public packages and images, AAC stage and interactive
 GitHub sign-in. Use real contact emails; the same person may own both tenants.
 AAC assigns a hosted trust domain to each tenant; a tenant can instead
