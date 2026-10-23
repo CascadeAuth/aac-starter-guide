@@ -2,20 +2,21 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: b0c0454e4b747f27ae11b3ff52b65daa41012f3e
+Documentation revision: 579e43cbd01dc29f85511b5f086537b80e43c37b
 
 ---
 
 # AAC documentation
 
-AAC is the authorization layer for networks of AI agents. When agents hand work
-to one another, inside one organization and across company boundaries, from a
-simple two-agent exchange to a network of thousands of agents, AAC sends the
-authority with every agent-to-agent request: who authorized the work, what it
-permits, and which agent may act next. Each agent-to-agent hop can narrow that
-authority but never widen it, every receiving agent verifies the authority on
-the spot, and the work ends in a signed receipt and an execution graph you can
-inspect.
+AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
+plus a sidecar you run beside each agent, together the authorization layer for
+networks of AI agents. When agents hand work to one another, inside one
+organization and across company boundaries, from a simple two-agent exchange to
+a network of thousands of agents, AAC sends the authority with every
+agent-to-agent request: who authorized the work, what it permits, and which
+agent may act next. Each agent-to-agent hop can narrow that authority but never
+widen it, every receiving agent verifies the authority on the spot, and the
+work ends in a signed receipt and an execution graph you can inspect.
 
 A sidecar beside each agent holds the agent's identity, signs the authority the
 agent passes on, and checks every agent-to-agent request before the agent sees

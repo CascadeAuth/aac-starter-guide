@@ -2,9 +2,10 @@
 
 ## What AAC is for
 
-AAC lets a network of AI agents — tens, hundreds or thousands of them, inside one
-organization and across organizations — carry **delegated authority** from agent
-to agent, with provable identity, local verification and auditable receipts.
+AAC, the Agent Authority Cloud from CascadeAuth, lets a network of AI agents —
+tens, hundreds or thousands of them, inside one organization and across
+organizations — carry **delegated authority** from agent to agent, with provable
+identity, local verification and auditable receipts.
 
 Authority starts with a decision your own application makes. Your application
 authenticates the person, or obtains the approved service identity, and decides

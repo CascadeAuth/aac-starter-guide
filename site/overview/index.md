@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/overview/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: b0c0454e4b747f27ae11b3ff52b65daa41012f3e
+Documentation revision: 579e43cbd01dc29f85511b5f086537b80e43c37b
 
 ---
 
@@ -10,9 +10,10 @@ Documentation revision: b0c0454e4b747f27ae11b3ff52b65daa41012f3e
 
 ## What AAC is for
 
-AAC lets a network of AI agents — tens, hundreds or thousands of them, inside one
-organization and across organizations — carry **delegated authority** from agent
-to agent, with provable identity, local verification and auditable receipts.
+AAC, the Agent Authority Cloud from CascadeAuth, lets a network of AI agents —
+tens, hundreds or thousands of them, inside one organization and across
+organizations — carry **delegated authority** from agent to agent, with provable
+identity, local verification and auditable receipts.
 
 Authority starts with a decision your own application makes. Your application
 authenticates the person, or obtains the approved service identity, and decides
