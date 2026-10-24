@@ -1,12 +1,12 @@
 {
-  "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:a8496810314f7b90cbb94214604ce903dc724a9c248f8ba8dad18a31873055e8",
+  "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
   "cli_artifacts": {
     "cli_wheel_sha256": "d15ca2e595a414ca9e0c1b7142610cdef11d44a80f500085b85441df3a9a09c0",
     "renderer_sha256": "f45099fcfa1d1ceca5f31244dfa526ea096094ced6cfc7faf27cc1babe482163"
   },
   "cli_documentation_revision": "3a905055c259cee7fe4a058dc9ad06d318296495",
   "cli_version": "0.2.13",
-  "components_sha256": "57d04ff69585ad1c8caeead02e4f6b526807ddf20b2cbe0cbc79c5c39ab3bf30",
+  "components_sha256": "22baa92eef6fb1881a9597b88804c7430ea3bcb6798d8a8e3696821185699b14",
   "document_sha256": {
     "content/aac-cli/aeg-reference.md": "e541e23ac1556e5fb50e8b4a4f5619dd16910fac75edc7035380f87160afa83b",
     "content/aac-cli/aeg.md": "f9419ac620f1e3214a57ebe237ac6f389b2d7c4e1808c03a4a2234ae4ee8860b",
@@ -75,28 +75,28 @@
     "content/aac-cli/reference/aeg-render.md": "0d7ce8bc18fd3de3536e69c3d85e931474437e2536e676af46781cc7876060e6",
     "content/aac-cli/reference/index.md": "f3621af70e21b9c96309b5e79ad0629cfbdd7d58b91fd40589bddf5bfba376b9",
     "content/sidecar/a2a.md": "092e43f6feddd4a91b96ca84d3e34bed0f6a2aae1a5d8eb8ee94ce82297580fa",
-    "content/sidecar/artifacts.md": "91216505af38f486c1a0446c0f6846c776578ad8abcd5f9daf69a36f5721e0c9",
+    "content/sidecar/artifacts.md": "a083d834fa6864ff1cceb624c9c74d390cde0bfc7aaa6da6fa7f0c302f2eeac1",
     "content/sidecar/control-plane.md": "8b4d6980432f95b76726480c6ea621ae93c49e314170cd578d985eaaa1a5be24",
-    "content/sidecar/deployment.md": "f2a59470572b54a8e31b9d0d8872dff816badade465adee8011b88a11c669495",
+    "content/sidecar/deployment.md": "8f731b970cc1ae9e548623f8b2e8e004d2d09ca619fc3f7efe910370813a1da1",
     "content/sidecar/examples.md": "ca677f203e4cd78e458f29faaa6986022a3d9190455dba28bc9efd290f327dd3",
-    "content/sidecar/get-started.md": "e1856e50ba636bac0b1f6c7ff0448291ed2296f48e7862dff99f9d88c6d26c32",
+    "content/sidecar/get-started.md": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
     "content/sidecar/home.md": "a839ae0e571d8676dfefa2ba8fb74bdfd82d454c466dee969b963126e8fb36dc",
-    "content/sidecar/integration.md": "19fc269eb8372aa4f406eaca2657ba9c6575f24138d6e47204bd451aa3a89030",
+    "content/sidecar/integration.md": "838f36cdbbc19784ce08d054f45d3fe20aa8f9844647e568735ba8056c3018c3",
     "content/sidecar/keys-and-certificates.md": "031be1ae066989fcb5da5ccd854a6adcc106d3bef5c3db4b4dfb1b4f88ec4cbc",
-    "content/sidecar/operations.md": "66fd6b60efdff3f28080c3dbb7ee075caf6b1fbd5f80b1852ec57f721cef03b8",
+    "content/sidecar/operations.md": "1c249e87c5f975b8e158c2dd995828b9aa4ddac19f4a8e64ee1fe93276c7077d",
     "content/sidecar/overview.md": "d62eb96e97159ee0ea284958191a7167572f95ddb325602c090a1f7553b40ddd",
     "content/sidecar/privacy.md": "feb2ca9686844c68b5c17122e666b83d13f55207c5a3ae9e61a555de1e8ee495",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
     "content/sidecar/release-notes.md": "859244b21dc2801784305b55fb13ba4d96283effc426b57a65c5d9b7f4ed83ec",
-    "content/sidecar/released-components.json": "6a6ee5ec103807642d810cdff43265c49c2af117dddb1053040f366eb4a425ca",
-    "content/sidecar/sidecar.md": "a9ccd0511f70ad8166297bf0a395ae49fb420360f840ebbb56c18633401bea81",
-    "content/sidecar/verification.md": "c5c4b8271b652aacddeabb0b83d3d0fabe19fbd068c65e5dff0455bf0c064776"
+    "content/sidecar/released-components.json": "4073e71d1b4e9e9d2d5edbfe06f831accea93d55b5574ba6d13e368140bcb569",
+    "content/sidecar/sidecar.md": "14960b4136774ac1ef305fc22d829fb327b6dcebe9772c929e2a6fda88e9dbbc",
+    "content/sidecar/verification.md": "e2ee95b049df71920194311f439b6e85f9f3f8da6545e1835074b2460a1d3ebf"
   },
-  "documentation_revision": "fe484af9e21059d4b6f15267b34d25357ca08e37",
+  "documentation_revision": "dbbcb603853d58f5604e07a0c45220ff745ab169",
   "documentation_source": "reviewed-source",
-  "guide_sha256": "e1856e50ba636bac0b1f6c7ff0448291ed2296f48e7862dff99f9d88c6d26c32",
-  "image": "docker.io/cascadeauth/aac-sidecar@sha256:ffafe07f12747b4dab0ab0d2479d37d7fb4dbe5391b0469881e4beff7c7aaf45",
+  "guide_sha256": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
+  "image": "docker.io/cascadeauth/aac-sidecar@sha256:6486e1b4f78395d6e503b57d98bdc86058e33362e73e06b3673395ef92d5e974",
   "template_revision": "0847606e02be8083c655dce1f92a76348e18d7e600a167e891762bb88c524da1",
   "template_sha256": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
-  "version": "v0.5.5"
+  "version": "v0.5.6"
 }

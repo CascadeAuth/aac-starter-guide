@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/sidecar/operations/
 
-Applies to: AAC Sidecar v0.5.5
+Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: fe484af9e21059d4b6f15267b34d25357ca08e37
+Documentation revision: dbbcb603853d58f5604e07a0c45220ff745ab169
 
 ---
 
@@ -471,7 +471,7 @@ Developer-binary uninstall:
 
 ```bash
 rm "${HOME}/.local/bin/aac-sidecar"
-rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.5.5"
+rm -rf "${HOME}/.local/lib/aac-sidecar/releases/v0.5.6"
 ```
 
 Do not use those commands for an operator-owned production directory or state

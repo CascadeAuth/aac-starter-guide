@@ -8,7 +8,7 @@ license CascadeAuth proprietary source or binary code.
 
 ===============================================================================
 Package: Go standard library
-Version: go1.27.2
+Version: go1.27.3
 Detected license: BSD-3-Clause
 Versioned license source: https://go.dev/LICENSE
 
