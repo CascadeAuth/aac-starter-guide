@@ -197,12 +197,18 @@ python -m uvicorn a2a_agent:app --host 127.0.0.1 --port 8000
 The handler must answer within the configured deadline with HTTP 200,
 `Content-Type: application/json`, no compression, and a JSON-RPC 2.0 response
 that preserves the request `id` and contains exactly one `result` or `error`.
-A `result` holds exactly one `message` (nonempty `messageId` and `contextId`,
-`role` `ROLE_AGENT`, at least one `text` or `data` part) or one `task` in a
-terminal state (`id`, `contextId`, `status.state`). An `error` has an integer
-`code` and a nonempty `message`. A response outside this profile is refused by
-the sidecar and reported to the peer as `ERR_INVALID_AGENT_RESPONSE`. Values
-shaped like AAC credentials are refused anywhere in the response.
+A `result` holds exactly one `message` (nonempty `messageId`, `role`
+`ROLE_AGENT`, at least one `text` or `data` part) or one `task` in a terminal
+state (`id`, `contextId`, `status.state`). The sidecar accepts a reply message
+without a `contextId`: the A2A 1.0 Message table marks the field optional
+while the specification's prose asks servers to provide it, and common agent
+frameworks leave it off their own messages. This is AAC's acceptance policy,
+not a statement about other A2A implementations; when the field is present
+it must be a nonempty string. The same rule applies to a task's
+`status.message` and to each `history` entry. An `error` has an integer
+`code` and a nonempty `message`. A response outside this profile is refused by the sidecar and
+reported to the peer as `ERR_INVALID_AGENT_RESPONSE`. Values shaped like AAC
+credentials are refused anywhere in the response.
 
 A handler that serves only `/a2a/v1` is enough for A2A. The sidecar also has an
 `agent_invoke_url` for native delivery; if no native message is ever sent to

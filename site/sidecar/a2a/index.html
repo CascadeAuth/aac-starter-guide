@@ -8,7 +8,7 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout "><aside class="section-nav"><details class="section-menu" open><summary>Sidecar</summary><nav aria-label="Section navigation"><a href="/sidecar/">AAC Sidecar</a><a href="/sidecar/install/">Download and install the sidecar</a><a href="/sidecar/configuration/">Configure the sidecar</a><a href="/sidecar/integration/">Agent integration</a><a href="/sidecar/a2a/" aria-current="page">A2A integration</a><a href="/sidecar/operations/">Operate and troubleshoot the sidecar</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <a href="/sidecar/">Sidecar</a> / <span aria-current="page">A2A integration</span></nav>
 <h1 id="a2a-integration">A2A integration</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.5</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs 579e43cbd01d</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.5</span><a href="/sidecar/a2a/index.md" download="sidecar-a2a.md">Markdown</a><span class="revision">Docs fe484af9e210</span></div>
 <p>Agent-to-Agent (A2A) is an open protocol for one agent to send a message to
 another over HTTPS, using JSON-RPC 2.0 and a published Agent Card that says
 how to reach the agent. AAC supports A2A: the sidecar beside your agent
@@ -223,12 +223,18 @@ python -m uvicorn a2a_agent:app --host 127.0.0.1 --port 8000
 <p>The handler must answer within the configured deadline with HTTP 200,
 <code>Content-Type: application/json</code>, no compression, and a JSON-RPC 2.0 response
 that preserves the request <code>id</code> and contains exactly one <code>result</code> or <code>error</code>.
-A <code>result</code> holds exactly one <code>message</code> (nonempty <code>messageId</code> and <code>contextId</code>,
-<code>role</code> <code>ROLE_AGENT</code>, at least one <code>text</code> or <code>data</code> part) or one <code>task</code> in a
-terminal state (<code>id</code>, <code>contextId</code>, <code>status.state</code>). An <code>error</code> has an integer
-<code>code</code> and a nonempty <code>message</code>. A response outside this profile is refused by
-the sidecar and reported to the peer as <code>ERR_INVALID_AGENT_RESPONSE</code>. Values
-shaped like AAC credentials are refused anywhere in the response.</p>
+A <code>result</code> holds exactly one <code>message</code> (nonempty <code>messageId</code>, <code>role</code>
+<code>ROLE_AGENT</code>, at least one <code>text</code> or <code>data</code> part) or one <code>task</code> in a terminal
+state (<code>id</code>, <code>contextId</code>, <code>status.state</code>). The sidecar accepts a reply message
+without a <code>contextId</code>: the A2A 1.0 Message table marks the field optional
+while the specification's prose asks servers to provide it, and common agent
+frameworks leave it off their own messages. This is AAC's acceptance policy,
+not a statement about other A2A implementations; when the field is present
+it must be a nonempty string. The same rule applies to a task's
+<code>status.message</code> and to each <code>history</code> entry. An <code>error</code> has an integer
+<code>code</code> and a nonempty <code>message</code>. A response outside this profile is refused by the sidecar and
+reported to the peer as <code>ERR_INVALID_AGENT_RESPONSE</code>. Values shaped like AAC
+credentials are refused anywhere in the response.</p>
 <p>A handler that serves only <code>/a2a/v1</code> is enough for A2A. The sidecar also has an
 <code>agent_invoke_url</code> for native delivery; if no native message is ever sent to
 this agent, that path is never called.</p>

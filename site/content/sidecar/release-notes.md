@@ -155,3 +155,16 @@ dispatch whose
 message left but ended in a remote rejection, a timeout, an uncertain
 delivery or an invalid reply records a `dispatch` failure with that code. No
 change to routes, configuration, signed bytes or the verification verdicts.
+
+## 0.5.6
+
+A reply message no longer needs a `contextId`. The sidecar required one on
+every message in a peer's reply (the direct message, a task's status message
+and each history entry). The A2A 1.0 specification marks the field optional
+in its Message table while its prose asks servers to provide it, and a common
+agent framework such as Google ADK sets the id on the task and leaves it off
+its own messages, so its reply was refused with `ERR_INVALID_AGENT_RESPONSE`.
+As its own acceptance policy the sidecar now accepts a reply message without
+the field; when present it must still be a nonempty string, and the task's
+own `id` and `contextId` stay required. No change to routes, configuration,
+signed bytes or the verification verdicts.

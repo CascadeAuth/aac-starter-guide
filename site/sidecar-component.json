@@ -1,13 +1,13 @@
 {
   "component": "sidecar",
-  "documentation_revision": "579e43cbd01dc29f85511b5f086537b80e43c37b",
+  "documentation_revision": "fe484af9e21059d4b6f15267b34d25357ca08e37",
   "files": {
-    "DOCKER_HUB_OVERVIEW.md": "b003a280907c32260abdeaa44de7b3a54fe39cffb84518ecda735e292d6c0d89",
+    "DOCKER_HUB_OVERVIEW.md": "cf0a7036ee0aa186fb307f99fe55293bcb1b4c1a8e7b0c9393305bf5124e6d5b",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
     "THIRD_PARTY_NOTICES.md": "818248753b29656af088245522f7fa8e309ab7175effb0c0b3a1715c00faeefe",
     "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
     "assets/quickstart-graph.png": "9969652ddaa259471d5cb2a73c4d13b9e4739edcbb00900bdb6eb836248ee9b2",
-    "content/sidecar/a2a.md": "d60d019385f7766600b7d6663f5f2e6d1d6d74da45f5387f0bd154977ac99f33",
+    "content/sidecar/a2a.md": "092e43f6feddd4a91b96ca84d3e34bed0f6a2aae1a5d8eb8ee94ce82297580fa",
     "content/sidecar/artifacts.md": "91216505af38f486c1a0446c0f6846c776578ad8abcd5f9daf69a36f5721e0c9",
     "content/sidecar/control-plane.md": "8b4d6980432f95b76726480c6ea621ae93c49e314170cd578d985eaaa1a5be24",
     "content/sidecar/deployment.md": "f2a59470572b54a8e31b9d0d8872dff816badade465adee8011b88a11c669495",
@@ -20,7 +20,7 @@
     "content/sidecar/overview.md": "d62eb96e97159ee0ea284958191a7167572f95ddb325602c090a1f7553b40ddd",
     "content/sidecar/privacy.md": "feb2ca9686844c68b5c17122e666b83d13f55207c5a3ae9e61a555de1e8ee495",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
-    "content/sidecar/release-notes.md": "0a0761fa452d731a52b44a82cb37f811086071353509068bccbb07e3eb88aeb9",
+    "content/sidecar/release-notes.md": "859244b21dc2801784305b55fb13ba4d96283effc426b57a65c5d9b7f4ed83ec",
     "content/sidecar/released-components.json": "6a6ee5ec103807642d810cdff43265c49c2af117dddb1053040f366eb4a425ca",
     "content/sidecar/sidecar.md": "a9ccd0511f70ad8166297bf0a395ae49fb420360f840ebbb56c18633401bea81",
     "content/sidecar/verification.md": "c5c4b8271b652aacddeabb0b83d3d0fabe19fbd068c65e5dff0455bf0c064776",
@@ -99,7 +99,7 @@
     },
     "/release-notes/": {
       "applicability": "AAC Sidecar v0.5.5",
-      "content_sha256": "0a0761fa452d731a52b44a82cb37f811086071353509068bccbb07e3eb88aeb9",
+      "content_sha256": "859244b21dc2801784305b55fb13ba4d96283effc426b57a65c5d9b7f4ed83ec",
       "description": "Changes and upgrade guidance by component.",
       "metadata_sha256": "284b378e4c484224259a1e0c0635037b2960ac80225ada1d4b5269248b131f5e",
       "route": "/release-notes/",
@@ -119,7 +119,7 @@
     },
     "/sidecar/a2a/": {
       "applicability": "AAC Sidecar v0.5.5",
-      "content_sha256": "d60d019385f7766600b7d6663f5f2e6d1d6d74da45f5387f0bd154977ac99f33",
+      "content_sha256": "092e43f6feddd4a91b96ca84d3e34bed0f6a2aae1a5d8eb8ee94ce82297580fa",
       "description": "Receive and send A2A messages under verified delegated authority.",
       "metadata_sha256": "e19e9fa7de264378c2b7263d89772d070715368e947d02b8259569c8563ed390",
       "route": "/sidecar/a2a/",
@@ -189,10 +189,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "b0c0454e4b747f27ae11b3ff52b65daa41012f3e",
+  "previous_documentation_revision": "579e43cbd01dc29f85511b5f086537b80e43c37b",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:a8496810314f7b90cbb94214604ce903dc724a9c248f8ba8dad18a31873055e8",
-    "documentation_revision": "579e43cbd01dc29f85511b5f086537b80e43c37b",
+    "documentation_revision": "fe484af9e21059d4b6f15267b34d25357ca08e37",
     "documentation_source": "reviewed-source",
     "guide_sha256": "e1856e50ba636bac0b1f6c7ff0448291ed2296f48e7862dff99f9d88c6d26c32",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:ffafe07f12747b4dab0ab0d2479d37d7fb4dbe5391b0469881e4beff7c7aaf45",
