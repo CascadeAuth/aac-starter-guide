@@ -1,12 +1,12 @@
 {
   "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
   "cli_artifacts": {
-    "cli_wheel_sha256": "d15ca2e595a414ca9e0c1b7142610cdef11d44a80f500085b85441df3a9a09c0",
+    "cli_wheel_sha256": "3791be601e8c35be3033093bf69294ae5cc6f845ece91bdc32fe892ba99fb9da",
     "renderer_sha256": "f45099fcfa1d1ceca5f31244dfa526ea096094ced6cfc7faf27cc1babe482163"
   },
-  "cli_documentation_revision": "3a905055c259cee7fe4a058dc9ad06d318296495",
-  "cli_version": "0.2.13",
-  "components_sha256": "22baa92eef6fb1881a9597b88804c7430ea3bcb6798d8a8e3696821185699b14",
+  "cli_documentation_revision": "5cb16d90f4e3d6799fb60705539c02367abd4025",
+  "cli_version": "0.2.14",
+  "components_sha256": "6eb819aaa0c1f5599a1afd2be9da9ec66d7c1250820a9ccf106028a85c9dc782",
   "document_sha256": {
     "content/aac-cli/aeg-reference.md": "e541e23ac1556e5fb50e8b4a4f5619dd16910fac75edc7035380f87160afa83b",
     "content/aac-cli/aeg.md": "f9419ac620f1e3214a57ebe237ac6f389b2d7c4e1808c03a4a2234ae4ee8860b",

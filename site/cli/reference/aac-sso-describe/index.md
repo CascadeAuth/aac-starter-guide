@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-describe/
 
-Applies to: AAC CLI 0.2.13
+Applies to: AAC CLI 0.2.14
 
-Documentation revision: 3a905055c259cee7fe4a058dc9ad06d318296495
+Documentation revision: 5cb16d90f4e3d6799fb60705539c02367abd4025
 
 ---
 

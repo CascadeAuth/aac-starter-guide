@@ -985,7 +985,7 @@
     "title": "Install and operate the trust anchor publisher"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "guide",
     "route": "/aeg/",
     "section": "AEG",
@@ -1100,7 +1100,7 @@
     "title": "Agent Execution Graphs (AEG)"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/aeg/reference/",
     "section": "AEG",
@@ -1115,7 +1115,7 @@
     "title": "AEG command reference"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/aeg/reference/list/",
     "section": "AEG",
@@ -1145,7 +1145,7 @@
     "title": "aeg list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/aeg/reference/render/",
     "section": "AEG",
@@ -1175,7 +1175,7 @@
     "title": "aeg render"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "guide",
     "route": "/cli/",
     "section": "AAC CLI",
@@ -1190,7 +1190,7 @@
     "title": "AAC CLI"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "guide",
     "route": "/cli/guide/",
     "section": "AAC CLI",
@@ -1305,7 +1305,7 @@
     "title": "AAC CLI user guide"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/",
     "section": "AAC CLI",
@@ -1345,7 +1345,7 @@
     "title": "Command reference"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-agent-list/",
     "section": "AAC CLI",
@@ -1385,7 +1385,7 @@
     "title": "aac agent list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-agent-renew/",
     "section": "AAC CLI",
@@ -1430,7 +1430,7 @@
     "title": "aac agent renew"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-agent-status/",
     "section": "AAC CLI",
@@ -1470,7 +1470,7 @@
     "title": "aac agent status"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-agent/",
     "section": "AAC CLI",
@@ -1505,7 +1505,7 @@
     "title": "aac agent"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-chain-list/",
     "section": "AAC CLI",
@@ -1550,7 +1550,7 @@
     "title": "aac chain list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-chain-show/",
     "section": "AAC CLI",
@@ -1590,7 +1590,7 @@
     "title": "aac chain show"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-chain/",
     "section": "AAC CLI",
@@ -1625,7 +1625,7 @@
     "title": "aac chain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-init/",
     "section": "AAC CLI",
@@ -1690,7 +1690,7 @@
     "title": "aac init"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile-create/",
     "section": "AAC CLI",
@@ -1730,7 +1730,7 @@
     "title": "aac profile create"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile-delete/",
     "section": "AAC CLI",
@@ -1770,7 +1770,7 @@
     "title": "aac profile delete"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile-list/",
     "section": "AAC CLI",
@@ -1815,7 +1815,7 @@
     "title": "aac profile list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile-show/",
     "section": "AAC CLI",
@@ -1860,7 +1860,7 @@
     "title": "aac profile show"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile-update/",
     "section": "AAC CLI",
@@ -1900,7 +1900,7 @@
     "title": "aac profile update"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-profile/",
     "section": "AAC CLI",
@@ -1940,7 +1940,7 @@
     "title": "aac profile"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-approve-idp-repair/",
     "section": "AAC CLI",
@@ -1980,7 +1980,7 @@
     "title": "aac sso approve-idp-repair"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-describe/",
     "section": "AAC CLI",
@@ -2025,7 +2025,7 @@
     "title": "aac sso describe"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-enroll-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2065,7 +2065,7 @@
     "title": "aac sso enroll-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-generate-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2105,7 +2105,7 @@
     "title": "aac sso generate-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-list-idp-recovery-keys/",
     "section": "AAC CLI",
@@ -2145,7 +2145,7 @@
     "title": "aac sso list-idp-recovery-keys"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-list-idp/",
     "section": "AAC CLI",
@@ -2185,7 +2185,7 @@
     "title": "aac sso list-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-login/",
     "section": "AAC CLI",
@@ -2230,7 +2230,7 @@
     "title": "aac sso login"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-logout/",
     "section": "AAC CLI",
@@ -2270,7 +2270,7 @@
     "title": "aac sso logout"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-register-idp/",
     "section": "AAC CLI",
@@ -2315,7 +2315,7 @@
     "title": "aac sso register-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-replace-idp/",
     "section": "AAC CLI",
@@ -2355,7 +2355,7 @@
     "title": "aac sso replace-idp"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-request-idp-repair/",
     "section": "AAC CLI",
@@ -2395,7 +2395,7 @@
     "title": "aac sso request-idp-repair"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-revoke-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2435,7 +2435,7 @@
     "title": "aac sso revoke-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-rotate-idp-recovery-key/",
     "section": "AAC CLI",
@@ -2475,7 +2475,7 @@
     "title": "aac sso rotate-idp-recovery-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso-whoami/",
     "section": "AAC CLI",
@@ -2515,7 +2515,7 @@
     "title": "aac sso whoami"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-sso/",
     "section": "AAC CLI",
@@ -2550,7 +2550,7 @@
     "title": "aac sso"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-add-workload/",
     "section": "AAC CLI",
@@ -2595,7 +2595,7 @@
     "title": "aac tenant add-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-issue/",
     "section": "AAC CLI",
@@ -2640,7 +2640,7 @@
     "title": "aac tenant api-key issue"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-list/",
     "section": "AAC CLI",
@@ -2685,7 +2685,7 @@
     "title": "aac tenant api-key list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key-retire/",
     "section": "AAC CLI",
@@ -2730,7 +2730,7 @@
     "title": "aac tenant api-key retire"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-api-key/",
     "section": "AAC CLI",
@@ -2770,7 +2770,7 @@
     "title": "aac tenant api-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-assign-hosted-domain/",
     "section": "AAC CLI",
@@ -2815,7 +2815,7 @@
     "title": "aac tenant assign-hosted-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-bind-trust-domain/",
     "section": "AAC CLI",
@@ -2860,7 +2860,7 @@
     "title": "aac tenant bind-trust-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-deactivate-workload/",
     "section": "AAC CLI",
@@ -2905,7 +2905,7 @@
     "title": "aac tenant deactivate-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-describe-workload/",
     "section": "AAC CLI",
@@ -2945,7 +2945,7 @@
     "title": "aac tenant describe-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-describe/",
     "section": "AAC CLI",
@@ -2985,7 +2985,7 @@
     "title": "aac tenant describe"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-issue-domain-challenge/",
     "section": "AAC CLI",
@@ -3030,7 +3030,7 @@
     "title": "aac tenant issue-domain-challenge"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list-trust-domains/",
     "section": "AAC CLI",
@@ -3075,7 +3075,7 @@
     "title": "aac tenant list-trust-domains"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list-workloads/",
     "section": "AAC CLI",
@@ -3120,7 +3120,7 @@
     "title": "aac tenant list-workloads"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-list/",
     "section": "AAC CLI",
@@ -3165,7 +3165,7 @@
     "title": "aac tenant list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-reactivate-hosted-domain/",
     "section": "AAC CLI",
@@ -3210,7 +3210,7 @@
     "title": "aac tenant reactivate-hosted-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-register/",
     "section": "AAC CLI",
@@ -3255,7 +3255,7 @@
     "title": "aac tenant register"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-reissue-api-key/",
     "section": "AAC CLI",
@@ -3300,7 +3300,7 @@
     "title": "aac tenant reissue-api-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-release-domain/",
     "section": "AAC CLI",
@@ -3345,7 +3345,7 @@
     "title": "aac tenant release-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-revoke-domain/",
     "section": "AAC CLI",
@@ -3390,7 +3390,7 @@
     "title": "aac tenant revoke-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-revoke-trust-domain/",
     "section": "AAC CLI",
@@ -3435,7 +3435,7 @@
     "title": "aac tenant revoke-trust-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-rotate-admin-key/",
     "section": "AAC CLI",
@@ -3480,7 +3480,7 @@
     "title": "aac tenant rotate-admin-key"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-update-workload/",
     "section": "AAC CLI",
@@ -3525,7 +3525,7 @@
     "title": "aac tenant update-workload"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-update/",
     "section": "AAC CLI",
@@ -3570,7 +3570,7 @@
     "title": "aac tenant update"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant-verify-domain/",
     "section": "AAC CLI",
@@ -3615,7 +3615,7 @@
     "title": "aac tenant verify-domain"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-tenant/",
     "section": "AAC CLI",
@@ -3650,7 +3650,7 @@
     "title": "aac tenant"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-describe/",
     "section": "AAC CLI",
@@ -3690,7 +3690,7 @@
     "title": "aac trust-anchor describe"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-ingest-history/",
     "section": "AAC CLI",
@@ -3730,7 +3730,7 @@
     "title": "aac trust-anchor ingest-history"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-list/",
     "section": "AAC CLI",
@@ -3775,7 +3775,7 @@
     "title": "aac trust-anchor list"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor-revoke/",
     "section": "AAC CLI",
@@ -3820,7 +3820,7 @@
     "title": "aac trust-anchor revoke"
   },
   {
-    "applicability": "AAC CLI 0.2.13",
+    "applicability": "AAC CLI 0.2.14",
     "kind": "command",
     "route": "/cli/reference/aac-trust-anchor/",
     "section": "AAC CLI",
