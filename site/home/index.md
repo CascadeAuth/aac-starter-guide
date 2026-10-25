@@ -2,7 +2,7 @@ Canonical: https://cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: 6e61b5100d7f77cfeff663aa0dfb6ab666e45d21
+Documentation revision: 83b54022f755bd55c23806bf02e235349150ebeb
 
 ---
 
@@ -46,9 +46,8 @@ provider's identity token.
 
 A tenant can connect its own identity provider so its people sign in with
 their work identity. AAC supports the OpenID Connect protocol. Microsoft Entra
-ID and Okta are supported out of the box; Auth0 is in the supported family.
-A sample connection file and a console walkthrough for each supported
-provider are in
+ID, Okta and Auth0 are supported out of the box. A sample connection file and
+a console walkthrough for each supported provider are in
 [aac-idp-connection-examples](https://github.com/CascadeAuth/aac-idp-connection-examples).
 
 ## See it work in ten minutes
