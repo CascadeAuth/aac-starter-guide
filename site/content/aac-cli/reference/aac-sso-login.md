@@ -58,7 +58,7 @@ aac sso login
 | `--idp-url` | value | no | — | Which IdP connection to use, by the connection's exact URL (its issuer URL, as registered). With several registered, a terminal asks which one; a script gets exit 3 and the exact commands. |
 | `--idp` | `github` \| `google` | no | — | Short form of --idp-url for the shared developer sign-ins: github or google. |
 | `--flow` | `device` \| `pkce` | no | — | Override the per-IdP flow selection (pkce is not available for GitHub). |
-| `--scope` | value | no | — | OAuth scope for the upstream flow (default: per IdP family — 'openid profile email' for OIDC families, none for GitHub). |
+| `--scope` | value | no | — | OAuth scope for the upstream flow (default: per IdP family — 'openid profile email' for OIDC families, plus 'groups' for Okta, none for GitHub). |
 | `--no-browser` | flag | no | — | Print the sign-in URL instead of opening a browser tab, and do not offer to open the device-flow page. |
 
 At most one of `--idp-url`, `--idp` may be given.

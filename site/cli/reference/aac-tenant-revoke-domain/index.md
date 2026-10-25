@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-tenant-revoke-domain/
 
-Applies to: AAC CLI 0.2.14
+Applies to: AAC CLI 0.2.15
 
-Documentation revision: 5cb16d90f4e3d6799fb60705539c02367abd4025
+Documentation revision: 315cad5d7d55180bdf1984f31aa58bfba9d2c087
 
 ---
 

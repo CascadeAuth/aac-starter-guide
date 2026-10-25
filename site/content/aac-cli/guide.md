@@ -105,8 +105,8 @@ See [`aac sso describe`](/cli/reference/aac-sso-describe/) for all flags.
 
 A tenant is one organization. Register it once, then add its workloads.
 Developer tenants use AAC's shared GitHub or Google connections; enterprise
-tenants use their own Microsoft Entra ID connection. Registering a tenant is
-permanent. Use a separate unbound profile for a new tenant.
+tenants use their own identity provider (Microsoft Entra ID or Okta).
+Registering a tenant is permanent. Use a separate unbound profile for a new tenant.
 
 ### Developer setup with shared GitHub
 
@@ -184,6 +184,18 @@ aac sso generate-idp-recovery-key \
   --private-key-file offline-idp-recovery.pem --enrollment-file recovery-enrollment.json
 ```
 
+Describe the identity-provider connection in a JSON file, `connection.json`
+below. [aac-idp-connection-examples](https://github.com/CascadeAuth/aac-idp-connection-examples)
+holds one sample file per supported provider, with `<PLACEHOLDER>` values to
+replace, and a console walkthrough beside it; `aac sso register-idp --help`
+lists every field. Do not add `jwks_static`: AAC
+performs OIDC discovery to obtain signing keys and flow endpoints; static keys
+are a local test facility and do not enable interactive login. `role_map` can
+map groups to `tenant-admin`, `key-admin`, `policy-admin` or `auditor-read`. A
+token without a mapped group cannot obtain an AAC role.
+
+#### Microsoft Entra ID
+
 In Microsoft Entra ID, register a single-directory public-client application.
 Record its **Application (client) ID**, the **Directory (tenant) ID** and the
 Object ID of the security group containing your AAC administrators. Enable
@@ -203,11 +215,38 @@ security-group IDs in ID tokens. Save `connection.json`:
 ```
 
 Use the client ID GUID, not the application's display name. Use your exact
-directory issuer, not `common`, `organizations` or `consumers`. Do not add
-`jwks_static`: AAC performs OIDC discovery to obtain signing keys and flow
-endpoints; static keys are a local test facility and do not enable interactive
-login. `role_map` can map groups to `tenant-admin`, `key-admin`, `policy-admin`
-or `auditor-read`. A token without a mapped group cannot obtain an AAC role.
+directory issuer, not `common`, `organizations` or `consumers`.
+
+#### Okta
+
+In the Okta Admin Console, create an OIDC **Native Application** with the
+**Device Authorization** grant enabled (leave the DPoP option unchecked) and
+assign the Okta group that holds your AAC administrators. On the application's
+Sign On tab, under Token claims → Show legacy configuration → Group Claims,
+set the **Groups claim filter** (`groups`, matches regex `.*`) so the
+`groups` claim lists that group by name. Record the **Client ID**. The issuer
+is your org's Okta URL (the Org Authorization Server). Okta sign-in uses the
+device flow: Okta requires a fixed port in a loopback redirect URI, and the
+CLI's browser PKCE flow listens on a port chosen at run time, so `--flow pkce`
+does not work for Okta connections. Save `connection.json`:
+
+```json
+{
+  "issuer": "https://<OKTA_ORG>.okta.com",
+  "family": "okta",
+  "expected_audience": "<OKTA_CLIENT_ID>",
+  "groups_claim": "groups",
+  "role_map": {"<OKTA_ADMIN_GROUP_NAME>": ["tenant-admin"]}
+}
+```
+
+`aac sso login` asks Okta for the `groups` scope by default; the Org
+Authorization Server returns the `groups` claim only when that scope is
+requested. A Custom Authorization Server (`https://<OKTA_ORG>.okta.com/oauth2/<ID>`)
+configures the claim itself and may refuse the extra scope: register its
+issuer and pass `--scope 'openid profile email'` at sign-in.
+
+#### Register the connection and sign in
 
 Operations enrolls the compared public recovery key before registering the
 first connection, using its protected ceremony environment:
@@ -228,6 +267,7 @@ aac sso login --profile prod --tenant-id '<TENANT_ID>' \
   --idp-url 'https://login.microsoftonline.com/<ENTRA_DIRECTORY_ID>/v2.0' --flow device
 aac sso login --profile prod \
   --idp-url 'https://login.microsoftonline.com/<ENTRA_DIRECTORY_ID>/v2.0' --flow pkce --no-browser
+aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp-url 'https://<OKTA_ORG>.okta.com'
 aac sso whoami --profile prod --output table
 aac tenant describe --profile prod --output table
 ```
@@ -240,9 +280,10 @@ turns that offer off too.
 `aac sso list-idp --profile prod` shows safe connection handles even during a
 login failure. Once a tenant-admin session works, omit the bootstrap token
 when registering additional connections. GitHub/Google onboarding and both
-Entra flows have dated stage acceptance from September 2026; that evidence
-does not certify every directory's policies. Other provider recipes are not
-claimed as field-validated here.
+Entra flows have dated stage acceptance from September 2026, and the Okta
+device flow from October 2026; that evidence does not certify every
+directory's or org's policies. Other providers are not claimed as
+field-validated here.
 
 ### Optional manual registration and key preparation
 

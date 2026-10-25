@@ -61,6 +61,17 @@ example connection.json (Entra):
     "role_map": {"<group-object-id>": ["tenant-admin"]}
   }
 
+example connection.json (Okta, Org Authorization Server):
+  {
+    "issuer": "https://<org>.okta.com",
+    "family": "okta",
+    "expected_audience": "<Client ID of the Native application>",
+    "groups_claim": "groups",
+    "role_map": {"<Okta group name>": ["tenant-admin"]}
+  }
+
+Sample files for every supported family: https://github.com/CascadeAuth/aac-idp-connection-examples
+
 First-IdP onboarding runs under the ops ceremony (--bootstrap-token / $AAC_BOOTSTRAP_TOKEN); adding further IdPs self-serve uses your session (aac sso login).
 ```
 
