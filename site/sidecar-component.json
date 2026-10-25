@@ -1,6 +1,6 @@
 {
   "component": "sidecar",
-  "documentation_revision": "601100d1b57b190de93e03e79ef0c53b4cbc5270",
+  "documentation_revision": "6e61b5100d7f77cfeff663aa0dfb6ab666e45d21",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "15028d9ac2d825ea391efd1adfee9dbbf9d3c49fc2796d34766b10fb694a2eaa",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -8,10 +8,10 @@
     "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
     "assets/quickstart-graph.png": "9969652ddaa259471d5cb2a73c4d13b9e4739edcbb00900bdb6eb836248ee9b2",
     "content/sidecar/a2a.md": "092e43f6feddd4a91b96ca84d3e34bed0f6a2aae1a5d8eb8ee94ce82297580fa",
-    "content/sidecar/apex-home.md": "74d7ad14782d56993c891b88bd42ce8eda165748757797d1074fc169960c9797",
+    "content/sidecar/apex-home.md": "2f5621e94b8c71489dcca67197d84871fc7bf396c77465d173b17db0826d52e8",
     "content/sidecar/artifacts.md": "a083d834fa6864ff1cceb624c9c74d390cde0bfc7aaa6da6fa7f0c302f2eeac1",
     "content/sidecar/control-plane.md": "9cc1dea410a3ac26d541d630446223eacc37d1f368041ed24232b329ce3d1c3d",
-    "content/sidecar/deployment.md": "8f731b970cc1ae9e548623f8b2e8e004d2d09ca619fc3f7efe910370813a1da1",
+    "content/sidecar/deployment.md": "08a051961694e04992e8da1b5790fd50ffbc955f00803a253dc7b871657f586d",
     "content/sidecar/examples.md": "145210e43d2bb1791be5b29badc689eda94cdf5f0ce4f7bbaf5f57ffcc2e8c92",
     "content/sidecar/get-started.md": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
     "content/sidecar/home.md": "be44d10f35b79447dec34d05111de07937b8bb0899973727b5e5fe2b777ac0c9",
@@ -70,7 +70,7 @@
     },
     "/home/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "74d7ad14782d56993c891b88bd42ce8eda165748757797d1074fc169960c9797",
+      "content_sha256": "2f5621e94b8c71489dcca67197d84871fc7bf396c77465d173b17db0826d52e8",
       "description": "AAC, the Agent Authority Cloud from CascadeAuth: the authorization layer for networks of AI agents, and where to start.",
       "metadata_sha256": "714a3458a52894690e006f204ce5351b1d9f52685d5379385b18617a09dc2761",
       "route": "/home/",
@@ -140,7 +140,7 @@
     },
     "/sidecar/configuration/": {
       "applicability": "AAC Sidecar v0.5.6",
-      "content_sha256": "8f731b970cc1ae9e548623f8b2e8e004d2d09ca619fc3f7efe910370813a1da1",
+      "content_sha256": "08a051961694e04992e8da1b5790fd50ffbc955f00803a253dc7b871657f586d",
       "description": "Configure agents, ingress, trust and durable state.",
       "metadata_sha256": "eb13b251bb455daccd94672989ca15ba79819b279f8694248045c6ba5d9b48d4",
       "route": "/sidecar/configuration/",
@@ -200,10 +200,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "1a92d1d7bc16aa0132fd9a698700bf7d3bb4f676",
+  "previous_documentation_revision": "601100d1b57b190de93e03e79ef0c53b4cbc5270",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
-    "documentation_revision": "601100d1b57b190de93e03e79ef0c53b4cbc5270",
+    "documentation_revision": "6e61b5100d7f77cfeff663aa0dfb6ab666e45d21",
     "documentation_source": "reviewed-source",
     "guide_sha256": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:6486e1b4f78395d6e503b57d98bdc86058e33362e73e06b3673395ef92d5e974",

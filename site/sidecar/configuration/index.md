@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/configuration/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 601100d1b57b190de93e03e79ef0c53b4cbc5270
+Documentation revision: 6e61b5100d7f77cfeff663aa0dfb6ab666e45d21
 
 ---
 
@@ -523,7 +523,7 @@ messages.
 Prefer [aac init](https://docs.cascadeauth.com/cli/) for supported tenant registration and agent setup. It prepares
 the tenant-admin key, assigned domain, workload, certificates and configuration
 in CLI-managed directories. Start with the [CLI user guide](https://docs.cascadeauth.com/cli/)
-for shared GitHub, shared Google and enterprise Microsoft Entra ID onboarding;
+for shared GitHub, shared Google and enterprise Microsoft Entra ID or Okta onboarding;
 the enterprise first connection and recovery verifier are prerequisites to its
 normal `init` flow. The [complete command reference](https://docs.cascadeauth.com/cli/reference/)
 describes the latest supported released CLI.

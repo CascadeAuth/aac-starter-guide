@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/overview/keys-and-certificates/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 601100d1b57b190de93e03e79ef0c53b4cbc5270
+Documentation revision: 6e61b5100d7f77cfeff663aa0dfb6ab666e45d21
 
 ---
 

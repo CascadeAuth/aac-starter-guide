@@ -38,7 +38,10 @@ provider's identity token.
 
 A tenant can connect its own identity provider so its people sign in with
 their work identity. AAC supports the OpenID Connect protocol. Microsoft Entra
-ID is supported out of the box; Okta and Auth0 are in the supported family.
+ID and Okta are supported out of the box; Auth0 is in the supported family.
+A sample connection file and a console walkthrough for each supported
+provider are in
+[aac-idp-connection-examples](https://github.com/CascadeAuth/aac-idp-connection-examples).
 
 ## See it work in ten minutes
 
