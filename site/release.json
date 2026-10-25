@@ -1,16 +1,16 @@
 {
   "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
   "cli_artifacts": {
-    "cli_wheel_sha256": "a419fa62abd71fe4fc520803236984f2392b9771f238864be3e4631ceae8f307",
+    "cli_wheel_sha256": "6aa78046148a9bb430f72f5f87c7fd122a434efa51911aedf99381a9c46dc564",
     "renderer_sha256": "f45099fcfa1d1ceca5f31244dfa526ea096094ced6cfc7faf27cc1babe482163"
   },
-  "cli_documentation_revision": "315cad5d7d55180bdf1984f31aa58bfba9d2c087",
-  "cli_version": "0.2.15",
-  "components_sha256": "f7444a089f068cca7c7cb81cfbe714f97a44b6a3097e178aa5e0a3b9a6da4723",
+  "cli_documentation_revision": "c081b45bc08b87d4439d966752c59d7e072cd442",
+  "cli_version": "0.2.16",
+  "components_sha256": "123b40e082075edf3815c896d524ea19efb3b927a3b7a5337e422c446552a09f",
   "document_sha256": {
     "content/aac-cli/aeg-reference.md": "e541e23ac1556e5fb50e8b4a4f5619dd16910fac75edc7035380f87160afa83b",
     "content/aac-cli/aeg.md": "f9419ac620f1e3214a57ebe237ac6f389b2d7c4e1808c03a4a2234ae4ee8860b",
-    "content/aac-cli/guide.md": "622c4adc3d063c778dd792c1ddca3ae51beaae9431f731b55bd1508640942724",
+    "content/aac-cli/guide.md": "679abc63549dc1859a67b3225666d595da3cb99fdd6ba4195458a715693113b9",
     "content/aac-cli/index.md": "764fd1e9759004a6c8a12ad1ec0ebbaaf001341a09710e505e6aeb6cb902fa79",
     "content/aac-cli/reference/aac-agent-list.md": "9008211c824ef69abc6ae96da662a48243ddc5ac06711d7298fd38ed9753948e",
     "content/aac-cli/reference/aac-agent-renew.md": "a0b74ed3c15aeb5ab5ba1e5b25aa9c1539d7980eadd09cfd2b023ba6485931ed",
@@ -32,9 +32,9 @@
     "content/aac-cli/reference/aac-sso-generate-idp-recovery-key.md": "eb0bb26bc2514b62590836fb729a3f9f86d83eef8bca322af7c448e8958930aa",
     "content/aac-cli/reference/aac-sso-list-idp-recovery-keys.md": "25a825ee40ad4ed136031d4ffb711505491fabc0c5e4de8ddef16905267729e9",
     "content/aac-cli/reference/aac-sso-list-idp.md": "cf9679c1354a677de41750a821758e59c007662f03d190ecc0fbfbac32ac06cf",
-    "content/aac-cli/reference/aac-sso-login.md": "56389e7c0c176489b7fe58f5ef5018e7d7bfd8ccb460818bb80c98e92b7efc48",
+    "content/aac-cli/reference/aac-sso-login.md": "a64635c4fa9fb062ac6b84b29e2b6c95ac679ed2596cc70eba622747da3659ca",
     "content/aac-cli/reference/aac-sso-logout.md": "9b886318aa3005bedb5acbe052c256cf74a0b53452c6c1963324fa98a6dcc64b",
-    "content/aac-cli/reference/aac-sso-register-idp.md": "9694c845dd443b3b4ed6a904cc24f73f3e2e36de655e75ed2c6c665b4446bb26",
+    "content/aac-cli/reference/aac-sso-register-idp.md": "ad0e8d9045689c99054c25350132f79e4708409d3f298516e1b4487fafe96c29",
     "content/aac-cli/reference/aac-sso-replace-idp.md": "b54a6d95a536e276e451a38457c3be3a222bb70500f5dcde7df955118c20b55a",
     "content/aac-cli/reference/aac-sso-request-idp-repair.md": "89d991207659442a92bf1da8855d08df1dddda600edb914cc70dd7408e478de5",
     "content/aac-cli/reference/aac-sso-revoke-idp-recovery-key.md": "df023e405459c0fb1a261ad62bc8608763962295a18a94ac1be90044bda6c0ff",

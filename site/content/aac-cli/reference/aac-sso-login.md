@@ -55,7 +55,7 @@ aac sso login
 | `--data-plane-url` | value | no | — | Data-plane-surface base URL (overrides profile). |
 | `--output` | `json` \| `table` | no | `json` | Output mode: json (the default) or table. |
 | `--tenant-id` | value | no | — | Tenant to sign in TO (default: profile/env tenant). |
-| `--idp-url` | value | no | — | Which IdP connection to use, by the connection's exact URL (its issuer URL, as registered). With several registered, a terminal asks which one; a script gets exit 3 and the exact commands. |
+| `--idp-url` | value | no | — | Which IdP connection to use, by the connection's URL (its issuer URL, as registered; a trailing slash is ignored when matching). With several registered, a terminal asks which one; a script gets exit 3 and the exact commands. |
 | `--idp` | `github` \| `google` | no | — | Short form of --idp-url for the shared developer sign-ins: github or google. |
 | `--flow` | `device` \| `pkce` | no | — | Override the per-IdP flow selection (pkce is not available for GitHub). |
 | `--scope` | value | no | — | OAuth scope for the upstream flow (default: per IdP family — 'openid profile email' for OIDC families, plus 'groups' for Okta, none for GitHub). |

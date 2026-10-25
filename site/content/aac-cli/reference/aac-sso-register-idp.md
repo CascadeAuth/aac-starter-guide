@@ -70,6 +70,17 @@ example connection.json (Okta, Org Authorization Server):
     "role_map": {"<Okta group name>": ["tenant-admin"]}
   }
 
+example connection.json (Auth0):
+  {
+    "issuer": "https://<tenant>.<region>.auth0.com/",
+    "family": "auth0",
+    "expected_audience": "<Client ID of the Native application>",
+    "groups_claim": "https://cascadeauth.com/roles",
+    "role_map": {"<Auth0 role name>": ["tenant-admin"]}
+  }
+  The issuer keeps the trailing slash Auth0 declares; a post-login
+  Action puts the person's Auth0 role names into the named claim.
+
 Sample files for every supported family: https://github.com/CascadeAuth/aac-idp-connection-examples
 
 First-IdP onboarding runs under the ops ceremony (--bootstrap-token / $AAC_BOOTSTRAP_TOKEN); adding further IdPs self-serve uses your session (aac sso login).

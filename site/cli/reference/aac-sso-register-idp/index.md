@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-sso-register-idp/
 
-Applies to: AAC CLI 0.2.15
+Applies to: AAC CLI 0.2.16
 
-Documentation revision: 315cad5d7d55180bdf1984f31aa58bfba9d2c087
+Documentation revision: c081b45bc08b87d4439d966752c59d7e072cd442
 
 ---
 
@@ -77,6 +77,17 @@ example connection.json (Okta, Org Authorization Server):
     "groups_claim": "groups",
     "role_map": {"<Okta group name>": ["tenant-admin"]}
   }
+
+example connection.json (Auth0):
+  {
+    "issuer": "https://<tenant>.<region>.auth0.com/",
+    "family": "auth0",
+    "expected_audience": "<Client ID of the Native application>",
+    "groups_claim": "https://cascadeauth.com/roles",
+    "role_map": {"<Auth0 role name>": ["tenant-admin"]}
+  }
+  The issuer keeps the trailing slash Auth0 declares; a post-login
+  Action puts the person's Auth0 role names into the named claim.
 
 Sample files for every supported family: https://github.com/CascadeAuth/aac-idp-connection-examples
 

@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/guide/
 
-Applies to: AAC CLI 0.2.15
+Applies to: AAC CLI 0.2.16
 
-Documentation revision: 315cad5d7d55180bdf1984f31aa58bfba9d2c087
+Documentation revision: c081b45bc08b87d4439d966752c59d7e072cd442
 
 ---
 
@@ -113,7 +113,7 @@ See [`aac sso describe`](https://docs.cascadeauth.com/cli/reference/aac-sso-desc
 
 A tenant is one organization. Register it once, then add its workloads.
 Developer tenants use AAC's shared GitHub or Google connections; enterprise
-tenants use their own identity provider (Microsoft Entra ID or Okta).
+tenants use their own identity provider (Microsoft Entra ID, Okta or Auth0).
 Registering a tenant is permanent. Use a separate unbound profile for a new tenant.
 
 ### Developer setup with shared GitHub
@@ -254,6 +254,47 @@ requested. A Custom Authorization Server (`https://<OKTA_ORG>.okta.com/oauth2/<I
 configures the claim itself and may refuse the extra scope: register its
 issuer and pass `--scope 'openid profile email'` at sign-in.
 
+#### Auth0
+
+In the Auth0 Dashboard, create a **Native** application and, under its
+Settings → Advanced Settings → Grant Types, enable **Device Code**. Record the
+application's **Client ID** and **Domain** (for example `acme.us.auth0.com`).
+Auth0 ID tokens carry no group claim, so AAC maps Auth0 **roles**: create a
+role for your AAC administrators (User Management → Roles) and assign it to
+them. Then add a post-login Action (Actions → Library → Build from scratch,
+trigger Login / Post Login) that copies the person's role names into a
+namespaced claim, deploy it, and drag it into the Login flow:
+
+```js
+exports.onExecutePostLogin = async (event, api) => {
+  if (event.authorization) {
+    api.idToken.setCustomClaim("https://cascadeauth.com/roles", event.authorization.roles);
+  }
+};
+```
+
+The issuer is your domain with `https://` and a trailing slash, exactly as
+Auth0's discovery document declares it. Auth0 sign-in uses the device flow:
+Auth0 matches callback URLs exactly, and the CLI's browser PKCE flow listens
+on a port chosen at run time, so `--flow pkce` does not work for Auth0
+connections. The device code can expire before you reach it (its lifetime is
+a tenant setting under Settings → Advanced → Device User Code); approve it
+promptly, and run the sign-in again if the CLI reports an expired code. Save
+`connection.json`:
+
+```json
+{
+  "issuer": "https://<AUTH0_DOMAIN>/",
+  "family": "auth0",
+  "expected_audience": "<AUTH0_CLIENT_ID>",
+  "groups_claim": "https://cascadeauth.com/roles",
+  "role_map": {"<AUTH0_ADMIN_ROLE_NAME>": ["tenant-admin"]}
+}
+```
+
+Any other namespace works as long as the Action and `groups_claim` name the
+same claim; Auth0 rejects its own domains as namespaces.
+
 #### Register the connection and sign in
 
 Operations enrolls the compared public recovery key before registering the
@@ -276,6 +317,7 @@ aac sso login --profile prod --tenant-id '<TENANT_ID>' \
 aac sso login --profile prod \
   --idp-url 'https://login.microsoftonline.com/<ENTRA_DIRECTORY_ID>/v2.0' --flow pkce --no-browser
 aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp-url 'https://<OKTA_ORG>.okta.com'
+aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp-url 'https://<AUTH0_DOMAIN>/'
 aac sso whoami --profile prod --output table
 aac tenant describe --profile prod --output table
 ```
@@ -289,8 +331,8 @@ turns that offer off too.
 login failure. Once a tenant-admin session works, omit the bootstrap token
 when registering additional connections. GitHub/Google onboarding and both
 Entra flows have dated stage acceptance from September 2026, and the Okta
-device flow from October 2026; that evidence does not certify every
-directory's or org's policies. Other providers are not claimed as
+and Auth0 device flows from October 2026; that evidence does not certify
+every directory's, org's or tenant's policies. Other providers are not claimed as
 field-validated here.
 
 ### Optional manual registration and key preparation
