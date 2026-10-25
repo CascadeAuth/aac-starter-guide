@@ -1,5 +1,7 @@
 # AAC documentation
 
+*AAC - Agent Authority Cloud - CascadeAuth*
+
 AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
 plus a sidecar you run beside each agent, together the authorization layer for
 networks of AI agents. When agents hand work to one another, inside one

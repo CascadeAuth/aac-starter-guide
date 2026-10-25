@@ -1,5 +1,7 @@
 # Using Control Plane
 
+*Using AAC Control Plane*
+
 The AAC Control Plane is the shared API service that connects tenant
 administration, identity, public trust and execution queries. AAC hosts it
 as **AAC Developer Beta (free)**. Your CLI, trust anchor publisher and

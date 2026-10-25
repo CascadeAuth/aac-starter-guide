@@ -1,8 +1,8 @@
 {
-  "base_site_sha256": "fded600d7282034070d3b5f5ebe94af80c54bd5381f0f6e820056919138b599d",
+  "base_site_sha256": "87e3940320f201bbe6a3f234986ef7e469c7a7a00dcfcb0af15457e27ae36595",
   "files": {
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "404.html": "b5d3d55622ea6bd2efd01029a32845a3a38599d587d706fea5fd2064b661f038",
+    "404.html": "8c000f469fe4aaac94311a8b498925717a7e4d560e72de05a95933bfa4d0d7bb",
     "AEG_LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "AEG_NOTICE": "19909e42e63e11190d0f935b51eef19e4986425d3cad11f0e2cc1331f6a18d37",
     "AEG_THIRD_PARTY_NOTICES.md": "5f3d127a98f22ddef5f86c053b91329aad65dc6d240198876ae531d3137b1fea",
@@ -10,142 +10,145 @@
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
     "THIRD_PARTY_NOTICES.md": "a4f1e6b14d4d8331664c8606b6e4099013075c35fbb7c2167268a5228a3a6a63",
     "action-taken-v1.json": "d863343afe7f314646a73cf063480a7e650f93857d2ed5ec3a7b1f9838671fdf",
-    "aeg/index.html": "d17649c167bc94d0f9688fae383ab699f371e7293cb160e99155ebc3905b848d",
+    "aeg/index.html": "ee89c3722cf39c0cdcbbd06421fb6603fed0596b14f2b2d36ff4a5fe254fec5b",
     "aeg/index.md": "92c4f1722a73948b3850582cf450994e5c51ae4f55569237ad530860c26470a2",
-    "aeg/reference/index.html": "8892ea3455d82ca7c814640b78989ef05602bbfee739d90feddf871eeb1387b6",
+    "aeg/reference/index.html": "76603dfaeddb3f99c5ecfaf3a6bf844536deef7db1ffc60cdd93f8d2b6238815",
     "aeg/reference/index.md": "7d9b39a2c13d9060a407bc380cc1581964dedab1a529b00a25ec13ddb514fd57",
-    "aeg/reference/list/index.html": "dd2fa43780ecd85f0d2919ed6f7c1772dbbad07660aceca29b9d8c588aad2dca",
+    "aeg/reference/list/index.html": "7e4e8e12d86007621fb29cd7274ca1938381b21524ccf03dec3062b8eddd482f",
     "aeg/reference/list/index.md": "8356383562b007e8aacf9599e5887e9ab5ac4399269f2c2958cc533cd377196e",
-    "aeg/reference/render/index.html": "3f5165567d591502b09634db512e96c8be4db81361f9cbe516112702bcaec82f",
+    "aeg/reference/render/index.html": "e086d98e344a9480c415bb8d60bec537a426adfd4e00b00bf56d20f80fd14240",
     "aeg/reference/render/index.md": "7f30cfef2dcf401873fce79dd721d2c8596e345afabe9491c6ac0ad45cc68a4f",
-    "assets/docs.css": "e3a731873b06891e02ca0a7b08ae3dbb9f07016f34b1e0700fa751141dca7ecb",
+    "assets/apple-touch-icon.png": "d8d8f7d9c4219d92d3acbc2c32099bf07eb95290abedc8275543aa6498e3bc3f",
+    "assets/docs.css": "84f8370df5323b3e9fc120765cdc53cc5ac8e7653035f39f836c3836e00df6c6",
     "assets/docs.js": "144ab59acadd9ada0b1562c6d6a8449b51516e4eff7cf46970974bc948d07663",
+    "assets/favicon-32.png": "2b8e60349360b3f4718f4a59a52a69e367f145188a0f36eba223fce814526fbc",
+    "assets/favicon.svg": "710cb9b3f4b6ab7490bf951e16d0ca90435808bb90e49a3a4337cb579fb467b0",
     "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
     "assets/quickstart-graph.png": "9969652ddaa259471d5cb2a73c4d13b9e4739edcbb00900bdb6eb836248ee9b2",
     "cli-component.json": "9633aae855fbfa1bdc10289de2ef46f3ec9992f6d88691d9a13474990c4981f8",
-    "cli/guide/index.html": "6fdee0d577fbf19cccabd5222c785e8ffa89d8745ad1cd32d630d7edbb4af2a8",
+    "cli/guide/index.html": "fb0da7232ecd3b03ba49ec6995baae25abc8153d16951833fa2095f364a31137",
     "cli/guide/index.md": "6cbcd3c579846f44c1df83a309dbffeb22ef912fd0379de8bfa7352e34b501b5",
-    "cli/index.html": "b1f32c64fb807452e8c65eb84ded303d2c056f65cd0ed8e7a080e52948596353",
+    "cli/index.html": "bad77fe273c83f4ded964afd48f5ff9e2df4d22907380cb69d399be24db95081",
     "cli/index.md": "58e3b1fbd01398b51f03eb84ecb95ef12851afd455091964c7e1cdf549bb57cd",
-    "cli/reference/aac-agent-list/index.html": "a9937989b83dbfebee833585b44d1ba485a6341ee963df357afc7c7a5dfb022b",
+    "cli/reference/aac-agent-list/index.html": "71c8ec6576ac3fe3cd19f4147c81d702d6b184cad5625e38123ec66a44721928",
     "cli/reference/aac-agent-list/index.md": "be5449d93d998d113f5d234bfe2fada5aa784748895ec2e25a54e041d72457b1",
-    "cli/reference/aac-agent-renew/index.html": "c242d699dad1b70d44eb30e3ac2ac1c12a6c49755f8a62fe6ff93763728e73ae",
+    "cli/reference/aac-agent-renew/index.html": "bce2737ddc9399f338496b589aead87fb89fa11bdebbbb22adb2c077f46b6a9f",
     "cli/reference/aac-agent-renew/index.md": "33546f06f61908ac570cc364aa38f263df3b5b4f6d013bd206b9e5ad40824944",
-    "cli/reference/aac-agent-status/index.html": "154ab47cf8b70d6c7eb158f8e4c626b95ec52bdd222287e186c8d29b7302d282",
+    "cli/reference/aac-agent-status/index.html": "3726494d922faee2d0702d70775e7acd246a1d4c15fb7b305da429d59ab7e3f7",
     "cli/reference/aac-agent-status/index.md": "afedbdb1d0399c2be03569064e5a9c0186e1f8813d58ac4a5e5c86cc1c2a472f",
-    "cli/reference/aac-agent/index.html": "d24eaaf5889af422bf631ee55b84640e8b6058343b222a89d1a6cc35870dea4c",
+    "cli/reference/aac-agent/index.html": "9900101ceca401185e66d5cd99946ba65b45a6697ea8e5e08661f9390fc5c47a",
     "cli/reference/aac-agent/index.md": "63286744cb2452acc74c757df5addedf0407dbdae3400140c995ca61b35bccc2",
-    "cli/reference/aac-chain-list/index.html": "203e35ce8f61c584fce80bcef02f143b6f7be3eda052d1991cec0c8dfc26ea43",
+    "cli/reference/aac-chain-list/index.html": "38182461e0913a8adafb7488d8ca0783ab876ccf2079755222fbc1b55c37b737",
     "cli/reference/aac-chain-list/index.md": "c3f38418b591ac5274cd4a8394ad96e21de42e8fe33de356f793c25a67748b59",
-    "cli/reference/aac-chain-show/index.html": "963935fb6b891f209d9816066fddf2ea19a3b0b3abea9310b76527a6321b8f80",
+    "cli/reference/aac-chain-show/index.html": "9b24f1f8a91bbb22b8c343465154ad54192f74f0949ddfc0bfa339567cd68aa2",
     "cli/reference/aac-chain-show/index.md": "38da126fcdc444893b59181c5b9c427ed532c7be900d946a1240ad84d2315d40",
-    "cli/reference/aac-chain/index.html": "7ba802362a6fc692d6bec4bb810ab294f9c506c0e6ebe179c50ccf8f280f2f91",
+    "cli/reference/aac-chain/index.html": "e1c7419285b68faa59b5a877ff91b3aab6056ca319908c1ed66077fc72f164da",
     "cli/reference/aac-chain/index.md": "18ad527333b641ea08e3aa04156e6beba1fefbd317461830a9c1d764ae120d7c",
-    "cli/reference/aac-init/index.html": "d6493d9240ebe37fa8a274f6db032c821e4be4f8b1f68d4a10d1da0ff3c4c59d",
+    "cli/reference/aac-init/index.html": "9f7a85c8511f88572700310636ddd13b5028d9c882ad4d9dc94d22213d1209ee",
     "cli/reference/aac-init/index.md": "995dc50a74f47fd786242279143317c35975cbfe693fbd9485dbb3754b0dad2c",
-    "cli/reference/aac-profile-create/index.html": "bbc997dbfeea547103b964d17f68026fd51b4a5158f10798b07ca78f7210a5af",
+    "cli/reference/aac-profile-create/index.html": "a87bfc5ed06f14fc636306771843d5e7c0d7ffe275845bc150cbb3bf3de01060",
     "cli/reference/aac-profile-create/index.md": "cc587fbee9d50710f2a10e704cca6ad377bac00323d701019a20ae8588d59c43",
-    "cli/reference/aac-profile-delete/index.html": "1e25bb93a6530f6022db79d9efd401888728fa1b144b3df218b62ebd0f3abc93",
+    "cli/reference/aac-profile-delete/index.html": "15e399a5238d42ebedf95cdf693e67d5a9f29f72fc8e1d99f7aea8f4c030959c",
     "cli/reference/aac-profile-delete/index.md": "99af3deea286a8d67198b33d5e4cbec05b1dbae976c0a632944e82258a6fe185",
-    "cli/reference/aac-profile-list/index.html": "443c3174da52b9fcca4c912810360f4aa6a139151dcb3d72574b9b5234977fbc",
+    "cli/reference/aac-profile-list/index.html": "0388a3c17b7e6082278d7b4267ef4a9cb0c1db3a81a5412a17a34aeca178edd9",
     "cli/reference/aac-profile-list/index.md": "cca7ceb2fb5a2f803679be42e6928f6cfc29421e797a3bb2bab3724f22018a1a",
-    "cli/reference/aac-profile-show/index.html": "6bb51c0a591a1fb26c70bf8afaefc48bbe58ef988165f19c65f746e1edfaf644",
+    "cli/reference/aac-profile-show/index.html": "225ac574099089344457ced1dacb2349db4e5413ec04ff1bb2a626399021a5cc",
     "cli/reference/aac-profile-show/index.md": "ab4320886b6604ede743104da66249c2f3587694028c1264ad4f77ad819d4246",
-    "cli/reference/aac-profile-update/index.html": "2e91ea5eae8e4f8204b95e0b264a20f25c5e03ce6aae2a9b2a32bbd248e4ed0a",
+    "cli/reference/aac-profile-update/index.html": "736e014e97059e6f1c6d94e9720021c50526feadfc9d69820806961a0527974b",
     "cli/reference/aac-profile-update/index.md": "a4f0f1fb92bfac41169a50f912d0b776f53367d1899920c112f071ef1cfc5f7c",
-    "cli/reference/aac-profile/index.html": "c6e54fbe08bd062b8eb4c4c8028dc0692218df853413897e7c690332e54e5fe2",
+    "cli/reference/aac-profile/index.html": "c06edfd427659eb936cc784455f880a1ace55d2cd05c4a6dcd7deaecab3b0cc9",
     "cli/reference/aac-profile/index.md": "066ae64fdf35484b13c4b3c7d775577ee100cc13dc79b05e395fbf3d17a04341",
-    "cli/reference/aac-sso-approve-idp-repair/index.html": "e127ab791cf275108c8d0a9f655bc60bba651e49264e4a733d9ff4f92de76013",
+    "cli/reference/aac-sso-approve-idp-repair/index.html": "7d51e30f9d027403d8dfb29f0fa969130501b6d44a33bc1acfe75818161a9678",
     "cli/reference/aac-sso-approve-idp-repair/index.md": "fb81a5715de1427fe9ff9e66be80f8ac9c252f73f5a22e89377b59bc6c5218ee",
-    "cli/reference/aac-sso-describe/index.html": "d3f0c9ea92035c220bf05f6034ba4eb78ce863d958e5169268c3483d1fead182",
+    "cli/reference/aac-sso-describe/index.html": "8dc5f996a19a5196daadb025be5a436d6485b94f80a1e990cca0b8daf72de59e",
     "cli/reference/aac-sso-describe/index.md": "c224683d677d74542fb0150bb5c745c0abea6319c2ddaa2b84b9f56900e2d5af",
-    "cli/reference/aac-sso-enroll-idp-recovery-key/index.html": "1463b2a4cb12846eb4e7d6eac6298b6a1891ed74fcd1ef3987dc4797e2f13c10",
+    "cli/reference/aac-sso-enroll-idp-recovery-key/index.html": "c93ffa3a931cfa9e4e9937f747c860030e24a782293ce7483fdef25429796dbc",
     "cli/reference/aac-sso-enroll-idp-recovery-key/index.md": "59fb2dfba20641d5be64682b454eba256ad65821348d89a1cea6a70f990090c4",
-    "cli/reference/aac-sso-generate-idp-recovery-key/index.html": "3745ecf94561917a55170b19b3913baf2e11a17f258731edb81ade73a2efce0b",
+    "cli/reference/aac-sso-generate-idp-recovery-key/index.html": "0897e27e0f703d1be050506448e123b29038ffd8968c2321b69aee2a1440cc04",
     "cli/reference/aac-sso-generate-idp-recovery-key/index.md": "5917ebd22d518dbc4c74fdab7aa638750f5cf2ca58b6e984897e52cf787fee35",
-    "cli/reference/aac-sso-list-idp-recovery-keys/index.html": "4c2797f631d07170ac80c1da72b492b98a62caff6a4172c3807951b5d26c04e8",
+    "cli/reference/aac-sso-list-idp-recovery-keys/index.html": "4e6e34741eee2a43e2c0c1e6fb90999cf828e89c49c87e1ecbdd918b6bd5d1ec",
     "cli/reference/aac-sso-list-idp-recovery-keys/index.md": "459549e83d57d2127710c673a14ae262e2c36cebc3ffe9ed5615936c23f4d34d",
-    "cli/reference/aac-sso-list-idp/index.html": "b313dcbf8905c37b286150d79a6b04b05d12c8d170e387aa125eddd33db10140",
+    "cli/reference/aac-sso-list-idp/index.html": "a5a799b3af694abcf717f0b6be27c722906e7fde45d6f68f2be145f7890c2f94",
     "cli/reference/aac-sso-list-idp/index.md": "54f5efbad717cbfc7fc038be899f1c2b4559143dc469ff9968cf49c306dc4b8a",
-    "cli/reference/aac-sso-login/index.html": "5a9d0632257168f75ca774c4b80aff4b61583e2082f99ee505033ed48eabcafe",
+    "cli/reference/aac-sso-login/index.html": "dfb79586081bc7cdf64cea615f842d9fcdab33f8cb2dc8ebc234560454f8448a",
     "cli/reference/aac-sso-login/index.md": "c639b3ede2fdf17642fabbccbf90dce46942e2d9e5a72d2f5cd104a2a124668d",
-    "cli/reference/aac-sso-logout/index.html": "94b89f6c0b3ced9a49d344ed6653a217413c0284136100ef1852a88d3dc3acbc",
+    "cli/reference/aac-sso-logout/index.html": "084d6961377d3590bcb02fd5628645df7d99e8c69e52cbc4e62afac98fb477dd",
     "cli/reference/aac-sso-logout/index.md": "d066863195c7b9efd58a8aed2368a9e65c41059e92cb3c40a394a17e2bbff12f",
-    "cli/reference/aac-sso-register-idp/index.html": "41d704c8de74553c4975c4572cd7d1ad2f58fcd34a0674ae2fb7d27d6dba48dc",
+    "cli/reference/aac-sso-register-idp/index.html": "2e128f50d1681fa1a2a6495d9fc352bf26697150973fd187aec617e8d8c41484",
     "cli/reference/aac-sso-register-idp/index.md": "e2acfcd281a6e24f5fa0b28ae1c227a1045bd3be641ecc4ad33625f52dcc1d34",
-    "cli/reference/aac-sso-replace-idp/index.html": "c629626a4f8936d732124274c1c741bd55f3169076d3d567ecf732f28bd7e43d",
+    "cli/reference/aac-sso-replace-idp/index.html": "00f13ecfe60d4187e9d589be82b61f1415383308f90d06e8e1f95dec8359fffe",
     "cli/reference/aac-sso-replace-idp/index.md": "4cecf950009984a710063242201f0fd966e2804eae86b44d4cf4d7584c8ba9be",
-    "cli/reference/aac-sso-request-idp-repair/index.html": "983db4595f91698f593c4f851222223891fff763ba030718ac727852a31b8fef",
+    "cli/reference/aac-sso-request-idp-repair/index.html": "cfc17df77520f7f2d6e0170ea60a6bee11497db4526345bd98ff84b80b919dbe",
     "cli/reference/aac-sso-request-idp-repair/index.md": "fa0f09639bb2d593de01fa58d26b435923d13d53d9c8fb32b8b6c78cea98c11b",
-    "cli/reference/aac-sso-revoke-idp-recovery-key/index.html": "990c4e4209dfd5a9ca5415b76e4469f59f3c4a073939a66ad4711b8c6e6424a3",
+    "cli/reference/aac-sso-revoke-idp-recovery-key/index.html": "eba815cc55e9d6f6f8c37ba85623ade0e27007cec7547bbdcce121397525c8b8",
     "cli/reference/aac-sso-revoke-idp-recovery-key/index.md": "b9b6e931db42b1332c2282bf3c129c1b56db656eea5cfb854f860dd76e5a34db",
-    "cli/reference/aac-sso-rotate-idp-recovery-key/index.html": "0b41e266ce2816325c543cba8ac1372f169696a0afb57810421d0cabbe8dfc05",
+    "cli/reference/aac-sso-rotate-idp-recovery-key/index.html": "aaaf712b83880b4037c275e39a7e8e3557c8f447513344fd7684546b4a15fef4",
     "cli/reference/aac-sso-rotate-idp-recovery-key/index.md": "f9ae61e07aaf7e92b1f15d0014f07433e623234d933aa93e92a839f70d8bb7f5",
-    "cli/reference/aac-sso-whoami/index.html": "fdb1e7687c207d816cafd9b7ac467537f045dce9f3ace47eceb6ad6b40dbabfb",
+    "cli/reference/aac-sso-whoami/index.html": "d7a670eb0483c372238db30f80cdc2e32b862a0faf24160266a751e48e2e33fc",
     "cli/reference/aac-sso-whoami/index.md": "01241977e409740ca4733573726298cc3d122a0b7e752516146e9c871a417f6f",
-    "cli/reference/aac-sso/index.html": "b6a4ed95747c50b7d912517b547f15a0f04b1a665915be53a00681137b388377",
+    "cli/reference/aac-sso/index.html": "1834d04d705cc4b05386d57352c7f079c794dc148e1f5dd27018a044aaaf0f43",
     "cli/reference/aac-sso/index.md": "6a388b9f34ee54fd5e9f89d1f8f47647dd4b7af64004ed47af8f51a031670023",
-    "cli/reference/aac-tenant-add-workload/index.html": "7fc1677a1b6284091b31dbc24a83cb26b166ed1057ed2c8498979c92cbe6f4b9",
+    "cli/reference/aac-tenant-add-workload/index.html": "6439b18a1d0e404b052e58d9a327e87e28fe0d60141f109af46433679566e2d0",
     "cli/reference/aac-tenant-add-workload/index.md": "b86a1f833762846e83d6c35fa67a388d1da229e6e333f95f2191c22a61a76557",
-    "cli/reference/aac-tenant-api-key-issue/index.html": "1aab53c0ff8704fe755cc6eb5e7f8d35e17450ee88c7ede4567ada363fab4bc4",
+    "cli/reference/aac-tenant-api-key-issue/index.html": "b672c731cf2069132fe37e0482819f4895c0ba14d13602b057f68c6b5940d4e2",
     "cli/reference/aac-tenant-api-key-issue/index.md": "aa347531058c5c9ea88fbaccb8f90baf47d15a302152810ff521ca3856d3e089",
-    "cli/reference/aac-tenant-api-key-list/index.html": "00a97af6e6b3f86ccae600d7e75023b772085c69b7c4465e5319c047d6dd0980",
+    "cli/reference/aac-tenant-api-key-list/index.html": "bd6022c489a43260aef4a338550282e6553cf87c5aee9b3b71c8cd7736a18d79",
     "cli/reference/aac-tenant-api-key-list/index.md": "17c426ad64c7912ecc7444ec7fd0f7650a9dd3e4f53eb8e345958ed6b37a506e",
-    "cli/reference/aac-tenant-api-key-retire/index.html": "5f414102787c1cd7bf69a52fa3d397611a3bf7426172604156d27ff9025434d1",
+    "cli/reference/aac-tenant-api-key-retire/index.html": "311554e6c378e4ef1e64f17cd3d6acaa5c2985b1965621f6d319b0949ea3b194",
     "cli/reference/aac-tenant-api-key-retire/index.md": "7e8d09ac21b74af75851231b5cc0e5960dace7cab1f99641f08848e30cf26728",
-    "cli/reference/aac-tenant-api-key/index.html": "a6971418d39bfa8b6295889b6578bd8560f6a2ee8cc9d22e02dbbe83edc973bc",
+    "cli/reference/aac-tenant-api-key/index.html": "e43e34911556dd26d2de1ce66db7075d876e6e5040e4601739c91d77f0dad762",
     "cli/reference/aac-tenant-api-key/index.md": "571dd872b0146e65ababa7459edc0aa49898514ac728054ed4d5aa83dd693c05",
-    "cli/reference/aac-tenant-assign-hosted-domain/index.html": "fefa9d44cbd7b2ecf372fde19187fe70dc2f50ca1e4e805328ebdcd0100ea195",
+    "cli/reference/aac-tenant-assign-hosted-domain/index.html": "a1f9298e3f25934981dc2e3aaffcaa4be60e197f6ff5ec21f15b86812743c69e",
     "cli/reference/aac-tenant-assign-hosted-domain/index.md": "6d40575fd34328a9f33b1f350b953fad4868068d0eb0a271ab3c32bb19217865",
-    "cli/reference/aac-tenant-bind-trust-domain/index.html": "cec894e9c12aac8f4752e81b92ef5b5dfe95422462e6241c597b6e0db69477cb",
+    "cli/reference/aac-tenant-bind-trust-domain/index.html": "4612b15b381b935dba0351737e9a3062d3bbc6935ff1a689b6b2ca53a0c95c90",
     "cli/reference/aac-tenant-bind-trust-domain/index.md": "9313934d1225c6908dbd5ab4400b70372b488246c9f08346ff4ad66f9f0e4bf9",
-    "cli/reference/aac-tenant-deactivate-workload/index.html": "acf3b1307f5327992fa13357b9c1e503b65ad776249b2c4f84cf069d189abdc7",
+    "cli/reference/aac-tenant-deactivate-workload/index.html": "1f8b829a97a437a666c70ad9f1fcc6433f90e1819bb9057d57be6c442330e372",
     "cli/reference/aac-tenant-deactivate-workload/index.md": "de005f44dfec00eb8b654a6e1166e870e8fe49de7242060d8f711ce906efb4cd",
-    "cli/reference/aac-tenant-describe-workload/index.html": "bbc54858cd1b03788acb1fcab6773ed8a473425de1b0a50d95f85c6e3b92acae",
+    "cli/reference/aac-tenant-describe-workload/index.html": "e4c8f430de5941c03d57f81a601c31e8d2eeca04f52585a7762ba5749b545a93",
     "cli/reference/aac-tenant-describe-workload/index.md": "8f5cbf301b9881b87d5f075c03bcd6092d9f552383579c789232b77e58819898",
-    "cli/reference/aac-tenant-describe/index.html": "3d2cfd1c8f260ee9472538fe58b375d7d67077dea1ced067282e407625bb6438",
+    "cli/reference/aac-tenant-describe/index.html": "8a2fdb6092f758cca2d22a59835885ce28ead1f5b21fc1f183ad3f8d927f44ce",
     "cli/reference/aac-tenant-describe/index.md": "d5163370d09d757156f28b98591b6e8e63a7456abf41942f27cd771301012224",
-    "cli/reference/aac-tenant-issue-domain-challenge/index.html": "8e7ff2112a88cc0ccc2818e89a64f3e18fba5c1c0a2db7f8c40cb401d7ec9d82",
+    "cli/reference/aac-tenant-issue-domain-challenge/index.html": "93ca5710a98152c1af277cf76283b9aaf5009f0d213cadbbeecb16bc3a9fc156",
     "cli/reference/aac-tenant-issue-domain-challenge/index.md": "208153da21fc58760ecbb3fa1a5d54273737553f7d5da493d13a1c57d4b42cbe",
-    "cli/reference/aac-tenant-list-trust-domains/index.html": "e3e81695e1ca0d0403ca305cbb5c8f7d634f06c51a7a139ea2529a303aaba36e",
+    "cli/reference/aac-tenant-list-trust-domains/index.html": "4fe2549dacc15043232ff232d15e8c41e186755fd9c3e66607562b3fa6ae2a18",
     "cli/reference/aac-tenant-list-trust-domains/index.md": "f4b7bc56d4c2b2572fb52789c717445058dc311b1c057d762125527fe56bf35a",
-    "cli/reference/aac-tenant-list-workloads/index.html": "869b006f11a55b2bf6628436a2736ebddbac2f7309b521f225a88ea067460181",
+    "cli/reference/aac-tenant-list-workloads/index.html": "8c9eb5281c143f0fcb974deaed8cbd9c9a9a83a80a55a2c56343ec86d932beb1",
     "cli/reference/aac-tenant-list-workloads/index.md": "6597cd030333f48387e0c9cec8fe3a062281640477514d6d47170e6bb162aeaa",
-    "cli/reference/aac-tenant-list/index.html": "abd06a354349196005402092d5fc24134332f11a2e33a2b25bf0d275a016679d",
+    "cli/reference/aac-tenant-list/index.html": "6b27a98ac76f9953a662b6fbb6eeebecedc64f6fffaaf48291cd69fb20cbffd5",
     "cli/reference/aac-tenant-list/index.md": "bdd44f126f531e44d09fc94d284ffc3def90292c7336f57e30ad565a674a447c",
-    "cli/reference/aac-tenant-reactivate-hosted-domain/index.html": "2757efa864cad8bffeade2975df0fdecfba6165441bff30ce4a50c9303880e7b",
+    "cli/reference/aac-tenant-reactivate-hosted-domain/index.html": "d621ba61d8ca33a8712301717088f661c20d24052d93b32465ce4652d62e7459",
     "cli/reference/aac-tenant-reactivate-hosted-domain/index.md": "dedfaab4e47ef0a5bdc1e5247cfa654350304f99b66c7e1c9b7c3d13e8ed7cdf",
-    "cli/reference/aac-tenant-register/index.html": "6f5df419ea71644058a2115f88ba9c89bf3a21b30d8cb029f870812649ffa706",
+    "cli/reference/aac-tenant-register/index.html": "93fe6d60dbeb3eb622ec60d10b020e5996b4c797201e3fdd0076d18be6195bfc",
     "cli/reference/aac-tenant-register/index.md": "fdd7aca54578b35e2a89d4320fe08b915bc11d1d08e35ccad871b89a839e45ad",
-    "cli/reference/aac-tenant-reissue-api-key/index.html": "abfa4f895496006e448da874ac48944646ccc32630e7d11d421d4c2ebf358e12",
+    "cli/reference/aac-tenant-reissue-api-key/index.html": "218daa40b795b6a293f24d30d314cbefd5c7eaf3607b2d88f144b165ff010e28",
     "cli/reference/aac-tenant-reissue-api-key/index.md": "f33c000dcb9dbf1e1738ebe602696c949f1cbf93db7f4cf204f7eded15f31ea4",
-    "cli/reference/aac-tenant-release-domain/index.html": "f2c8bff80c610440ef5fa997fc5dfc5a93c41b1c392faafb22389394ac9993f6",
+    "cli/reference/aac-tenant-release-domain/index.html": "3c4708f8ecb0068347cd067f0541b0c4fa0e663e6963a851c13408d21a98852c",
     "cli/reference/aac-tenant-release-domain/index.md": "979d7b1f8b01a7c0b159affb220938b62762a56a5587112e4de10fd07e79793e",
-    "cli/reference/aac-tenant-revoke-domain/index.html": "74264f7ac26eb8e481b9cc8c67446d3cdac99a39c4e093a9ba850805813f484e",
+    "cli/reference/aac-tenant-revoke-domain/index.html": "c827fc3225821a4e502492721aa46d9204c31abc23bbb69a67cfe7259aa8afe1",
     "cli/reference/aac-tenant-revoke-domain/index.md": "20dd0e7c452aac1a18305a508f9b56d58d787dd9759036404bd46bb500f4a696",
-    "cli/reference/aac-tenant-revoke-trust-domain/index.html": "eb261e3d1415663f25b1576148293222296ac20e09a525a586c656e9de00a6e4",
+    "cli/reference/aac-tenant-revoke-trust-domain/index.html": "ab79aa8f5beedcbfa0fd516f4747aac62cee521fe91790585e84d5e6714685ce",
     "cli/reference/aac-tenant-revoke-trust-domain/index.md": "4f432346fc96989eaf824e0724a66c8cbed8ef4fd492b72bc7cd09c7f2680952",
-    "cli/reference/aac-tenant-rotate-admin-key/index.html": "712d6ef5c04f4c22af3e6d07259e85ff28f2df56314144bdadd648001d2dcd48",
+    "cli/reference/aac-tenant-rotate-admin-key/index.html": "68432d1b941a29824f244ff35649e3e86a3d35fc6e37027e682dc6f4f927278b",
     "cli/reference/aac-tenant-rotate-admin-key/index.md": "69ca40e778f7913a6ba8557f36b5d78bd468c8282642d548f4e68fcda11419ca",
-    "cli/reference/aac-tenant-update-workload/index.html": "a7560a8e267e22d9409eb446b737d4348bc4522125eeb98cd9d40750ac029359",
+    "cli/reference/aac-tenant-update-workload/index.html": "5846eba571564a5c63463ec3b693bd2866e9288cb7c9db25dcff9d75e98fd0aa",
     "cli/reference/aac-tenant-update-workload/index.md": "ef870b7ba3f6938e8063cd4a2a1f8994f9febf57154343bef741126672c5cfce",
-    "cli/reference/aac-tenant-update/index.html": "c13279bae38cb0f119620ba5745a4d6b7a739e54193651722f83f11f89ef2ec2",
+    "cli/reference/aac-tenant-update/index.html": "02d5a2f74e64697c4f589da131ad55e75d1660e375926f780fb58dcee402b3f1",
     "cli/reference/aac-tenant-update/index.md": "b52ceb8124679ec029f3c29a73ecce58a45bfda9918c0fee504f760566691af9",
-    "cli/reference/aac-tenant-verify-domain/index.html": "c983e89eaa2b77053b6fa71202130ded474c1973236f829393861e5c53e5cd40",
+    "cli/reference/aac-tenant-verify-domain/index.html": "fdce17b51e46b5e02c863e232c04e326995f5ce8e7972cec295c30b426ea4151",
     "cli/reference/aac-tenant-verify-domain/index.md": "dd2bfff08d5b52f7e7bcccb61d6b4cff1b53fe4a41295e2ba582647c9396e0a4",
-    "cli/reference/aac-tenant/index.html": "b2d3b412fa4d297e63301487685aa7a286ad204e0fcaceffb23c8fc2d6d25583",
+    "cli/reference/aac-tenant/index.html": "21acc9d770813576867b8ad1fefa4caa1b47c67272bccf1443c58b9464449e26",
     "cli/reference/aac-tenant/index.md": "29f259596e92f46ce30ff47b25d689fa4bd44ceacac74dd88c556bfdac15d499",
-    "cli/reference/aac-trust-anchor-describe/index.html": "98edf88e8873605f4277d595dd74319464bc9c4822cf2aa1538e018245d6c074",
+    "cli/reference/aac-trust-anchor-describe/index.html": "f77330943b116a950a12717f10aedf10644de8b999989e6c22d91b340e83b1c4",
     "cli/reference/aac-trust-anchor-describe/index.md": "67d07d870086a093ecfd78400cb331f3e04aac2e083a187f4109c47ca49aef26",
-    "cli/reference/aac-trust-anchor-ingest-history/index.html": "13a52fd79c70641771960a7a5e8ca59b670238b319f648aaec19f6de90bef250",
+    "cli/reference/aac-trust-anchor-ingest-history/index.html": "989c9c68b9f2b15c766827132889e13b45ff776b102591f4a83729f48c4329e6",
     "cli/reference/aac-trust-anchor-ingest-history/index.md": "84779e4a9a70d49fd489b98342ce1c1f98ba52f255b25427449a9510000892cc",
-    "cli/reference/aac-trust-anchor-list/index.html": "b229b8f2f9992f115bc1eebed2bc518e32af03ee9c59649d9bc5214bdb75360d",
+    "cli/reference/aac-trust-anchor-list/index.html": "ec131a87faa14b454d56c1bb267b6afdfebed18670d189b2694199c1b551ff61",
     "cli/reference/aac-trust-anchor-list/index.md": "53a2c234534445ea18b3a6acad55d9a90321959422254c20acb1a08b5593a11c",
-    "cli/reference/aac-trust-anchor-revoke/index.html": "279c048cbf75c73f5f661bc2005ece1f0654db2f3222b722f97f4d6bb31239a8",
+    "cli/reference/aac-trust-anchor-revoke/index.html": "5c644fae5747c91676137ebe3e7dcb4cd1d6d9c1cfd628362def1572bd94d3b6",
     "cli/reference/aac-trust-anchor-revoke/index.md": "b49954b1260f3f21c805566145d19d854d140245100caf193b74b8d0425f60d0",
-    "cli/reference/aac-trust-anchor/index.html": "6108e69bcebbb4e85e610efb115910c9d8b72d01cdfcef06dfa9e64246ac56eb",
+    "cli/reference/aac-trust-anchor/index.html": "db9dd65d776688bbb42cab2fb3dd31dffefd5943b884f902840656aa8cdb38c4",
     "cli/reference/aac-trust-anchor/index.md": "baea10864fcb7b5c6cb2eed55603c05207502e3efbe1b4a3d21e52f875e13dac",
-    "cli/reference/index.html": "74119258d4bbf7069e201b8ff7eda6e62087390fb9c7292cebe495796ed92a98",
+    "cli/reference/index.html": "5e88c3a6695a62fea22d283cf2ca24a76cd7eaf796e56f67f3b20b406a8c0cd5",
     "cli/reference/index.md": "87e12a40fb3e87fe29d186a14817f5a6cb7398299e0aceac0a566bcc1f69fd94",
     "content/aac-cli/aeg-reference.md": "e541e23ac1556e5fb50e8b4a4f5619dd16910fac75edc7035380f87160afa83b",
     "content/aac-cli/aeg.md": "f9419ac620f1e3214a57ebe237ac6f389b2d7c4e1808c03a4a2234ae4ee8860b",
@@ -214,72 +217,76 @@
     "content/aac-cli/reference/aeg-render.md": "0d7ce8bc18fd3de3536e69c3d85e931474437e2536e676af46781cc7876060e6",
     "content/aac-cli/reference/index.md": "f3621af70e21b9c96309b5e79ad0629cfbdd7d58b91fd40589bddf5bfba376b9",
     "content/sidecar/a2a.md": "092e43f6feddd4a91b96ca84d3e34bed0f6a2aae1a5d8eb8ee94ce82297580fa",
+    "content/sidecar/apex-home.md": "74d7ad14782d56993c891b88bd42ce8eda165748757797d1074fc169960c9797",
     "content/sidecar/artifacts.md": "a083d834fa6864ff1cceb624c9c74d390cde0bfc7aaa6da6fa7f0c302f2eeac1",
-    "content/sidecar/control-plane.md": "8b4d6980432f95b76726480c6ea621ae93c49e314170cd578d985eaaa1a5be24",
+    "content/sidecar/control-plane.md": "9cc1dea410a3ac26d541d630446223eacc37d1f368041ed24232b329ce3d1c3d",
     "content/sidecar/deployment.md": "8f731b970cc1ae9e548623f8b2e8e004d2d09ca619fc3f7efe910370813a1da1",
-    "content/sidecar/examples.md": "ca677f203e4cd78e458f29faaa6986022a3d9190455dba28bc9efd290f327dd3",
+    "content/sidecar/examples.md": "145210e43d2bb1791be5b29badc689eda94cdf5f0ce4f7bbaf5f57ffcc2e8c92",
     "content/sidecar/get-started.md": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
-    "content/sidecar/home.md": "a839ae0e571d8676dfefa2ba8fb74bdfd82d454c466dee969b963126e8fb36dc",
+    "content/sidecar/home.md": "be44d10f35b79447dec34d05111de07937b8bb0899973727b5e5fe2b777ac0c9",
     "content/sidecar/integration.md": "838f36cdbbc19784ce08d054f45d3fe20aa8f9844647e568735ba8056c3018c3",
     "content/sidecar/keys-and-certificates.md": "031be1ae066989fcb5da5ccd854a6adcc106d3bef5c3db4b4dfb1b4f88ec4cbc",
     "content/sidecar/operations.md": "1c249e87c5f975b8e158c2dd995828b9aa4ddac19f4a8e64ee1fe93276c7077d",
-    "content/sidecar/overview.md": "d62eb96e97159ee0ea284958191a7167572f95ddb325602c090a1f7553b40ddd",
-    "content/sidecar/privacy.md": "feb2ca9686844c68b5c17122e666b83d13f55207c5a3ae9e61a555de1e8ee495",
+    "content/sidecar/overview.md": "62832ae5bbe01a26090016cf60955807d057397db7e8015d11fbe8bd175cf099",
+    "content/sidecar/privacy.md": "7a83f7fd1d87d97fcade9465e93c1db3cb5ee70245f1b4693ae5547e9585b45f",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
     "content/sidecar/release-notes.md": "859244b21dc2801784305b55fb13ba4d96283effc426b57a65c5d9b7f4ed83ec",
     "content/sidecar/released-components.json": "4073e71d1b4e9e9d2d5edbfe06f831accea93d55b5574ba6d13e368140bcb569",
     "content/sidecar/sidecar.md": "14960b4136774ac1ef305fc22d829fb327b6dcebe9772c929e2a6fda88e9dbbc",
     "content/sidecar/verification.md": "e2ee95b049df71920194311f439b6e85f9f3f8da6545e1835074b2460a1d3ebf",
-    "control-plane/index.html": "3f0c54fe2e8efa27d37cf6d4283fd708cfcff6ebd43ad47b6839a0a4112c3d7e",
-    "control-plane/index.md": "eedb82453f2bb3c5fb73454039517de93fe7428e16d552589f4f67d4890b1679",
-    "examples/index.html": "e2bce174a7a62b97a67fba7623f19d23bdc748cced1c790d8dd35661a0acdb71",
-    "examples/index.md": "0c49b6db85d41824726215f4d6f14ae514328b848636e0fee21518da4edaddfb",
-    "get-started/index.html": "c01041d1add889315c92c84ea3fa55eff77568da6a41b985c894c7096b3654f0",
-    "get-started/index.md": "9a613ea9d6e38075f9260dbccf9d60d0936c27fd6bcbbb19bd86ce41ac2ed271",
-    "index.html": "91488975295414361e80e83a5c2e900e43605bf20f1058eecb20fcf39ca90861",
-    "index.md": "b854fca5053a714386f25f08f21e3530f1fea9b6291642167387d5ed439ee92c",
-    "overview/index.html": "4a754874f0d84907cf58fdf0c4698df3f763d10b1e69ea68bfd36703a18ea3eb",
-    "overview/index.md": "e44478cfaacdb6d79e339ae4c7cee383173f47e7b7401c828634fdbec07a8436",
-    "overview/keys-and-certificates/index.html": "08ffa16f2502d54eb93eb36f40950c9821cce0f1d010225b32fb87421c4dfd1b",
-    "overview/keys-and-certificates/index.md": "16f2fd69318330425425517b257529f5ee35d8abe49a3866d45a546a7af296eb",
-    "privacy/index.html": "145d2dd2238861164b3fa0978bdf2149de5c1404ee3ad0473a92d53c4923f92e",
-    "privacy/index.md": "d049a722516da27edfb30e95229b9c4438b283fc52c3df1a9abd5b1307165f16",
-    "release-notes/index.html": "4110d89a84082cc908969f65a712478c1c9837545f2e4624f25d36e89ca7fc3d",
-    "release-notes/index.md": "c54029e77046ce694fddbef88a47eae618a5939a8856d07adcfc837074600133",
-    "release.json": "518ee939cbd68846ebaebc4c1f7ee1d7cc0d2bdf6ea0ae64512985e9a862cb18",
+    "control-plane/index.html": "46ef80f506892c51909b11893eb90b70f600bbf59bd148390eaeba4321489d99",
+    "control-plane/index.md": "4fcc09d6e5cc189b562127b4905c732b06f9dee3e818852ed8a5c3333875513c",
+    "examples/index.html": "438f4a7999716f69fbe5526ed8ef34a48d6e23e3a38a4699c9dbc7c8987bde2e",
+    "examples/index.md": "2c2bd7c87bac880d30d12739b3a54004a74d71d201e89db5f4fc36e538719abf",
+    "favicon.ico": "7bffc9bfbde665c6eac8a59ead9364d9ba738868f8b5086d9fed2804bf187d3e",
+    "get-started/index.html": "170cd50822296d7cbff57c36117b06b1bb2b69bd198b035dc2d12d51c61e0050",
+    "get-started/index.md": "9e2472d8a12f3c179235559310645d105b0188bfe9c1b296f3c503731b24ed9f",
+    "home/index.html": "da8ae59ab35391c34a08ac13f28c91150396dfd9c8ef2720cef48c674ea9fa3f",
+    "home/index.md": "1be312096b638892b0cf5e617ca052c94a1f931487a87c1108e23437ac752a40",
+    "index.html": "e505db348d8df8c2e2bc04af7c129f7336ffccabf8a4a703451f4774fa3a303a",
+    "index.md": "ba660db2e901d1ee815890b6f4e3a1c3d2f1354d300b00c599a119cca5f92547",
+    "overview/index.html": "fe30629d14fcdc3bc91b66e1a0b234a84a78b3ba3de1bbb12366a77b01510a0e",
+    "overview/index.md": "a0003db562c1b049b10e628d18e541c8b75fdecb10b8325733be68e3dd6a2d04",
+    "overview/keys-and-certificates/index.html": "9aa30d102774ad7be9672c742025fd776ccb0ce95ef3983ae0ed05f9a248909a",
+    "overview/keys-and-certificates/index.md": "0abd016427c475ba1ceb2830214948e3b098eae9dfd0c4252816753b0e5522ab",
+    "privacy/index.html": "40ff3c78616723bbc1c8757b4aac4363aa5b594384ef15c47f22f3ec3b5cf872",
+    "privacy/index.md": "4890e6f7535ad150a1b7637a943dc7df2991ced18ac03dda264de97d8499ecf4",
+    "release-notes/index.html": "84ce8acf18fe8c56177467cf07e3b811606f03ca78945df37697bdb206977e6b",
+    "release-notes/index.md": "7b3ff3a67285bf432d3bb28e0d0482e9ab5dbab5f2f73ed1a46b85381ba42689",
+    "release.json": "516aa7f0f78eb18951ee9b39717689876000969a1bb8cb1a3fefb13a4a89914e",
     "released-components.json": "6eb819aaa0c1f5599a1afd2be9da9ec66d7c1250820a9ccf106028a85c9dc782",
     "robots.txt": "2b0a7f3b153c9d45f753fa8701f8d6db58bac09dab0462c6d09dd1bc0b7dcbd4",
-    "search-index.json": "f2572f3ca3ec22719b3f73d19bd76f3fd224ae9a6a92370423ca8ce5df485751",
-    "sidecar-component.json": "27f38706a9db012bf4ded1bc65dad7c9199aaee2b523a911ede0d068617bb561",
+    "search-index.json": "7fe5cf23069d17e876958e1dffebd985e2ff2e48d9c84b924beb149fd0541520",
+    "sidecar-component.json": "158c5f1172e49c4b694a4c080db4b3598b02084ac122b373aea0164c0b2282ae",
     "sidecar-config.template.yaml": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
-    "sidecar/a2a/index.html": "cbc3e8f5a9d14351dd7cb0c951f799b91ead52ad09390b7ba56c3fa0e9116b06",
-    "sidecar/a2a/index.md": "27291374e2feff7253bed39ae82064a95baf375274d9928191b1fee6fd0c1b41",
-    "sidecar/configuration/index.html": "651913d76896df4f9832dad7d6a26e4e30d48485a7c0aa8045553fe631b3be1e",
-    "sidecar/configuration/index.md": "9c324877200346fdc8cdb3c139a1c99f51b47a475dad3f995cf708de44c2973f",
-    "sidecar/index.html": "5face58dd2a8326cae2e3264c37828b4ad6209e796125c77ca1693d87df36999",
-    "sidecar/index.md": "4e6f187569b308eaa822762a7a87a9597f000d1dd10399b216ca2f3da02a5407",
-    "sidecar/install/index.html": "b21f23c7b401cfccb11cf29ca54f5ec6072fd73b8dd874faf68187cfc5b2357c",
-    "sidecar/install/index.md": "699325d64dfa76165a61d6879764a9880522909bc9604f251cb28cb0ccdc6724",
-    "sidecar/integration/index.html": "8b7be74be7809865727a4846b8aec62875eb504f213af05bacf3d188d3bca1a0",
-    "sidecar/integration/index.md": "e73886515c9f18da32d9d9db6a405649425abcbce68fe86dd5ce5d991b7cd866",
-    "sidecar/operations/index.html": "66511ba06bba8b25cd3c92af985d9692e8ea4dbbffc5cf7bf6b65c8d6dee6fc0",
-    "sidecar/operations/index.md": "b2f91e0089d6c97cdc6aab01dc17a1863559db1f9f54b429f4bdc5945483a493",
-    "sidecar/reference/verification/index.html": "392d436349cab6ee584eeefbab480f6dbe01639724a400c52008a7e631c7ac69",
-    "sidecar/reference/verification/index.md": "84dc095d7387e8140f7580c854e97b825cb320a40a76ff0352dcf1be7e296614",
+    "sidecar/a2a/index.html": "4eeb3c4868ad814f52c6e64e4ab16e9e5cbbe08ac56333e3a4f86ea097022d8d",
+    "sidecar/a2a/index.md": "38d500476da03509a16808d12bea70fc0a2f72f7850b8cdf65e5a1d7fa401153",
+    "sidecar/configuration/index.html": "f31d7d61669871151ebd4baa818b4bcd84eca700f6509a134a4f4869f33ad5fd",
+    "sidecar/configuration/index.md": "e769fdb5e10cb2c09cf0ab93f73d2f144f41f26e1b5d918e6ad6732c13c05f71",
+    "sidecar/index.html": "ee04903fba647ea3d82b26bde3847ba604b9fdedd3e4cb4088f5d1faff902436",
+    "sidecar/index.md": "10e557b763764c7f3c313b5e817fb42465e46f58182dc513f1284f5ee6835799",
+    "sidecar/install/index.html": "eb01c7bc3a379b3d8c5a1df87431225c2b79ee9e5809c9f1ac568d0234b3ca4d",
+    "sidecar/install/index.md": "fe58f0cfe10932ef3f0ad8edbf7667e5627657a2c8c21858bebd5912b1a72411",
+    "sidecar/integration/index.html": "04d161c51f190691a9655a764e7f515a34d0aaee7ea61895b9601e867c8dd5fe",
+    "sidecar/integration/index.md": "675b131ba212bb8ae871f29f6cfde56fca29dd28f204fe72d097f71b3ad4f96d",
+    "sidecar/operations/index.html": "a7df9cbccda5272668cdeb0c8d94840310e2c948d531f56103b5169111d95e98",
+    "sidecar/operations/index.md": "be20fadb6f260c5bacad76b2ab4ecb1c855641fcdf3abdd90a1cf5b63806790f",
+    "sidecar/reference/verification/index.html": "815633e910da89e10dfd3f9d245d911a2e148033534648ec32d2598e99763969",
+    "sidecar/reference/verification/index.md": "7d999b440530cac1a522a766add53b90945ed281872e700b7f54ace3e68818b2",
     "sitemap.xml": "91d6d4370d5459ed089f4272d235cd5f699a7131f8a56fa4276b4995b28672a5",
-    "trust-anchor-publisher/index.html": "e4b7c81e8d2feecd62dbc01837340c577debc00bd926148c242268f0a3326946",
-    "trust-anchor-publisher/index.md": "e9d93151ab93ebbe2a563ab59b19d042427c13c5ce2e7822d71eb0265b1d4edb"
+    "trust-anchor-publisher/index.html": "9389fb2baab9f29dae11f979864b9127c6027ef7b824c0a4d77657f272d23d05",
+    "trust-anchor-publisher/index.md": "081a9253b11f144f705b51257019bc24ce63c9a4b50519657ae29554dae4ba3a"
   },
   "forwarding": {},
   "pages": {
     "/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "a839ae0e571d8676dfefa2ba8fb74bdfd82d454c466dee969b963126e8fb36dc",
+      "content_sha256": "be44d10f35b79447dec34d05111de07937b8bb0899973727b5e5fe2b777ac0c9",
       "description": "Learn AAC, configure a tenant and investigate an execution.",
       "metadata_sha256": "25d2c2da3547c3ef6bc97532a35aa92aea5151b3d981e75185e2ae8eefba2545",
       "output_sha256": {
-        "html": "91488975295414361e80e83a5c2e900e43605bf20f1058eecb20fcf39ca90861",
-        "md": "b854fca5053a714386f25f08f21e3530f1fea9b6291642167387d5ed439ee92c"
+        "html": "e505db348d8df8c2e2bc04af7c129f7336ffccabf8a4a703451f4774fa3a303a",
+        "md": "ba660db2e901d1ee815890b6f4e3a1c3d2f1354d300b00c599a119cca5f92547"
       },
       "route": "/",
       "section": "Home",
@@ -292,7 +299,7 @@
       "description": "Find executions and interpret observed authority and business evidence.",
       "metadata_sha256": "199a914556dc3d6ecd75ef7933b051fa94723bf4f5dcfcfb0f99476eec4ffda2",
       "output_sha256": {
-        "html": "d17649c167bc94d0f9688fae383ab699f371e7293cb160e99155ebc3905b848d",
+        "html": "ee89c3722cf39c0cdcbbd06421fb6603fed0596b14f2b2d36ff4a5fe254fec5b",
         "md": "92c4f1722a73948b3850582cf450994e5c51ae4f55569237ad530860c26470a2"
       },
       "route": "/aeg/",
@@ -306,7 +313,7 @@
       "description": "Released commands for finding and rendering execution evidence.",
       "metadata_sha256": "4c7bcdcfb3d84cdf28c29ddffb680360ffa26950e282a8fe48c59aa2a099ce4c",
       "output_sha256": {
-        "html": "8892ea3455d82ca7c814640b78989ef05602bbfee739d90feddf871eeb1387b6",
+        "html": "76603dfaeddb3f99c5ecfaf3a6bf844536deef7db1ffc60cdd93f8d2b6238815",
         "md": "7d9b39a2c13d9060a407bc380cc1581964dedab1a529b00a25ec13ddb514fd57"
       },
       "route": "/aeg/reference/",
@@ -320,7 +327,7 @@
       "description": "Released command syntax and options for aeg list.",
       "metadata_sha256": "c8c53070539baf9b2c6b6a878daff717e09463211478d748ecee0bd210149169",
       "output_sha256": {
-        "html": "dd2fa43780ecd85f0d2919ed6f7c1772dbbad07660aceca29b9d8c588aad2dca",
+        "html": "7e4e8e12d86007621fb29cd7274ca1938381b21524ccf03dec3062b8eddd482f",
         "md": "8356383562b007e8aacf9599e5887e9ab5ac4399269f2c2958cc533cd377196e"
       },
       "route": "/aeg/reference/list/",
@@ -334,7 +341,7 @@
       "description": "Released command syntax and options for aeg render.",
       "metadata_sha256": "6009cfc6bcbfc28e45078c8224c4e7a299354df96b3c43f4e7ffde0dccdc5eb4",
       "output_sha256": {
-        "html": "3f5165567d591502b09634db512e96c8be4db81361f9cbe516112702bcaec82f",
+        "html": "e086d98e344a9480c415bb8d60bec537a426adfd4e00b00bf56d20f80fd14240",
         "md": "7f30cfef2dcf401873fce79dd721d2c8596e345afabe9491c6ac0ad45cc68a4f"
       },
       "route": "/aeg/reference/render/",
@@ -348,7 +355,7 @@
       "description": "Install the CLI, configure a tenant and inspect executions.",
       "metadata_sha256": "f89e0cd7928539277f7dee75e95502b21df12224fdfa031e69b33b99f06ab147",
       "output_sha256": {
-        "html": "b1f32c64fb807452e8c65eb84ded303d2c056f65cd0ed8e7a080e52948596353",
+        "html": "bad77fe273c83f4ded964afd48f5ff9e2df4d22907380cb69d399be24db95081",
         "md": "58e3b1fbd01398b51f03eb84ecb95ef12851afd455091964c7e1cdf549bb57cd"
       },
       "route": "/cli/",
@@ -362,7 +369,7 @@
       "description": "Configure tenants, agents, profiles and credentials.",
       "metadata_sha256": "8060f589e0d8aa9a89aa5555817d876e8b11d813e44db28a97e49f239a5ffbe9",
       "output_sha256": {
-        "html": "6fdee0d577fbf19cccabd5222c785e8ffa89d8745ad1cd32d630d7edbb4af2a8",
+        "html": "fb0da7232ecd3b03ba49ec6995baae25abc8153d16951833fa2095f364a31137",
         "md": "6cbcd3c579846f44c1df83a309dbffeb22ef912fd0379de8bfa7352e34b501b5"
       },
       "route": "/cli/guide/",
@@ -376,7 +383,7 @@
       "description": "Released command syntax and options for Command reference.",
       "metadata_sha256": "5a011d0e05d7190455802bebc1cfee906b75d6f48415d8b790a851084c1a2a1f",
       "output_sha256": {
-        "html": "74119258d4bbf7069e201b8ff7eda6e62087390fb9c7292cebe495796ed92a98",
+        "html": "5e88c3a6695a62fea22d283cf2ca24a76cd7eaf796e56f67f3b20b406a8c0cd5",
         "md": "87e12a40fb3e87fe29d186a14817f5a6cb7398299e0aceac0a566bcc1f69fd94"
       },
       "route": "/cli/reference/",
@@ -390,7 +397,7 @@
       "description": "Released command syntax and options for aac agent list.",
       "metadata_sha256": "09e17307d9c93e30644b6aa9671d34498942bcb9f8d47f26027963a1b94767de",
       "output_sha256": {
-        "html": "a9937989b83dbfebee833585b44d1ba485a6341ee963df357afc7c7a5dfb022b",
+        "html": "71c8ec6576ac3fe3cd19f4147c81d702d6b184cad5625e38123ec66a44721928",
         "md": "be5449d93d998d113f5d234bfe2fada5aa784748895ec2e25a54e041d72457b1"
       },
       "route": "/cli/reference/aac-agent-list/",
@@ -404,7 +411,7 @@
       "description": "Released command syntax and options for aac agent renew.",
       "metadata_sha256": "96dc08c342bc5bc1725f3e6228fd4f815810566145edd7e91983585b4db9b2b8",
       "output_sha256": {
-        "html": "c242d699dad1b70d44eb30e3ac2ac1c12a6c49755f8a62fe6ff93763728e73ae",
+        "html": "bce2737ddc9399f338496b589aead87fb89fa11bdebbbb22adb2c077f46b6a9f",
         "md": "33546f06f61908ac570cc364aa38f263df3b5b4f6d013bd206b9e5ad40824944"
       },
       "route": "/cli/reference/aac-agent-renew/",
@@ -418,7 +425,7 @@
       "description": "Released command syntax and options for aac agent status.",
       "metadata_sha256": "2c9559c40696e4d6b65c8253feaf2cd91e82b131a62c74a05fe5945ee3398310",
       "output_sha256": {
-        "html": "154ab47cf8b70d6c7eb158f8e4c626b95ec52bdd222287e186c8d29b7302d282",
+        "html": "3726494d922faee2d0702d70775e7acd246a1d4c15fb7b305da429d59ab7e3f7",
         "md": "afedbdb1d0399c2be03569064e5a9c0186e1f8813d58ac4a5e5c86cc1c2a472f"
       },
       "route": "/cli/reference/aac-agent-status/",
@@ -432,7 +439,7 @@
       "description": "Released command syntax and options for aac agent.",
       "metadata_sha256": "159800271c0a1254477d968e10c34fd6420bb10620750a8de16b3dd15695803d",
       "output_sha256": {
-        "html": "d24eaaf5889af422bf631ee55b84640e8b6058343b222a89d1a6cc35870dea4c",
+        "html": "9900101ceca401185e66d5cd99946ba65b45a6697ea8e5e08661f9390fc5c47a",
         "md": "63286744cb2452acc74c757df5addedf0407dbdae3400140c995ca61b35bccc2"
       },
       "route": "/cli/reference/aac-agent/",
@@ -446,7 +453,7 @@
       "description": "Released command syntax and options for aac chain list.",
       "metadata_sha256": "ff578299b6ce954e899990c3f85e0a1f3e2dba5b2962b676ae65f2f5bd8691a4",
       "output_sha256": {
-        "html": "203e35ce8f61c584fce80bcef02f143b6f7be3eda052d1991cec0c8dfc26ea43",
+        "html": "38182461e0913a8adafb7488d8ca0783ab876ccf2079755222fbc1b55c37b737",
         "md": "c3f38418b591ac5274cd4a8394ad96e21de42e8fe33de356f793c25a67748b59"
       },
       "route": "/cli/reference/aac-chain-list/",
@@ -460,7 +467,7 @@
       "description": "Released command syntax and options for aac chain show.",
       "metadata_sha256": "5aa84bc72438380b44cffe0f90a6ed861d75c6ae4bc3df46cefbfae6c5727471",
       "output_sha256": {
-        "html": "963935fb6b891f209d9816066fddf2ea19a3b0b3abea9310b76527a6321b8f80",
+        "html": "9b24f1f8a91bbb22b8c343465154ad54192f74f0949ddfc0bfa339567cd68aa2",
         "md": "38da126fcdc444893b59181c5b9c427ed532c7be900d946a1240ad84d2315d40"
       },
       "route": "/cli/reference/aac-chain-show/",
@@ -474,7 +481,7 @@
       "description": "Released command syntax and options for aac chain.",
       "metadata_sha256": "3435897fa418015b7c99957c24bba559103a25195c493d777d00151b23c789ac",
       "output_sha256": {
-        "html": "7ba802362a6fc692d6bec4bb810ab294f9c506c0e6ebe179c50ccf8f280f2f91",
+        "html": "e1c7419285b68faa59b5a877ff91b3aab6056ca319908c1ed66077fc72f164da",
         "md": "18ad527333b641ea08e3aa04156e6beba1fefbd317461830a9c1d764ae120d7c"
       },
       "route": "/cli/reference/aac-chain/",
@@ -488,7 +495,7 @@
       "description": "Released command syntax and options for aac init.",
       "metadata_sha256": "fb269955338c86f5965d2c049ea6d5334a752508c008ceb4c84b3c20cba40c94",
       "output_sha256": {
-        "html": "d6493d9240ebe37fa8a274f6db032c821e4be4f8b1f68d4a10d1da0ff3c4c59d",
+        "html": "9f7a85c8511f88572700310636ddd13b5028d9c882ad4d9dc94d22213d1209ee",
         "md": "995dc50a74f47fd786242279143317c35975cbfe693fbd9485dbb3754b0dad2c"
       },
       "route": "/cli/reference/aac-init/",
@@ -502,7 +509,7 @@
       "description": "Released command syntax and options for aac profile create.",
       "metadata_sha256": "a4c9983dc90a8329042516f47dd01d1ff26e61be84e1c8f5f2f7eddf1b76215f",
       "output_sha256": {
-        "html": "bbc997dbfeea547103b964d17f68026fd51b4a5158f10798b07ca78f7210a5af",
+        "html": "a87bfc5ed06f14fc636306771843d5e7c0d7ffe275845bc150cbb3bf3de01060",
         "md": "cc587fbee9d50710f2a10e704cca6ad377bac00323d701019a20ae8588d59c43"
       },
       "route": "/cli/reference/aac-profile-create/",
@@ -516,7 +523,7 @@
       "description": "Released command syntax and options for aac profile delete.",
       "metadata_sha256": "87a8925b41c8f161c3b42fa4837441406c5fd0868a93a751bea58ed7d73c205e",
       "output_sha256": {
-        "html": "1e25bb93a6530f6022db79d9efd401888728fa1b144b3df218b62ebd0f3abc93",
+        "html": "15e399a5238d42ebedf95cdf693e67d5a9f29f72fc8e1d99f7aea8f4c030959c",
         "md": "99af3deea286a8d67198b33d5e4cbec05b1dbae976c0a632944e82258a6fe185"
       },
       "route": "/cli/reference/aac-profile-delete/",
@@ -530,7 +537,7 @@
       "description": "Released command syntax and options for aac profile list.",
       "metadata_sha256": "fe9aa0b174a5865f02a10fbbbb4eba7b8082fdb2e721fe0dfe6f005b17d0aa61",
       "output_sha256": {
-        "html": "443c3174da52b9fcca4c912810360f4aa6a139151dcb3d72574b9b5234977fbc",
+        "html": "0388a3c17b7e6082278d7b4267ef4a9cb0c1db3a81a5412a17a34aeca178edd9",
         "md": "cca7ceb2fb5a2f803679be42e6928f6cfc29421e797a3bb2bab3724f22018a1a"
       },
       "route": "/cli/reference/aac-profile-list/",
@@ -544,7 +551,7 @@
       "description": "Released command syntax and options for aac profile show.",
       "metadata_sha256": "11b8f9b65a9f855a9aa9d454209986d308ec040b86115ab0c9339dad19e35d41",
       "output_sha256": {
-        "html": "6bb51c0a591a1fb26c70bf8afaefc48bbe58ef988165f19c65f746e1edfaf644",
+        "html": "225ac574099089344457ced1dacb2349db4e5413ec04ff1bb2a626399021a5cc",
         "md": "ab4320886b6604ede743104da66249c2f3587694028c1264ad4f77ad819d4246"
       },
       "route": "/cli/reference/aac-profile-show/",
@@ -558,7 +565,7 @@
       "description": "Released command syntax and options for aac profile update.",
       "metadata_sha256": "4b44a145fa37b05fde9b03ca72d61fb20f92a658024f1b316a6b408e6536e557",
       "output_sha256": {
-        "html": "2e91ea5eae8e4f8204b95e0b264a20f25c5e03ce6aae2a9b2a32bbd248e4ed0a",
+        "html": "736e014e97059e6f1c6d94e9720021c50526feadfc9d69820806961a0527974b",
         "md": "a4f0f1fb92bfac41169a50f912d0b776f53367d1899920c112f071ef1cfc5f7c"
       },
       "route": "/cli/reference/aac-profile-update/",
@@ -572,7 +579,7 @@
       "description": "Released command syntax and options for aac profile.",
       "metadata_sha256": "78e82f3d2482024ecd9d1cc9bd10088079481ab54143788e2a50d5e94b89a5bf",
       "output_sha256": {
-        "html": "c6e54fbe08bd062b8eb4c4c8028dc0692218df853413897e7c690332e54e5fe2",
+        "html": "c06edfd427659eb936cc784455f880a1ace55d2cd05c4a6dcd7deaecab3b0cc9",
         "md": "066ae64fdf35484b13c4b3c7d775577ee100cc13dc79b05e395fbf3d17a04341"
       },
       "route": "/cli/reference/aac-profile/",
@@ -586,7 +593,7 @@
       "description": "Released command syntax and options for aac sso approve-idp-repair.",
       "metadata_sha256": "7cb19c4e07ebd785ebe7e668f0a0ab78b1da753a49542cd97920fbade0bbe22e",
       "output_sha256": {
-        "html": "e127ab791cf275108c8d0a9f655bc60bba651e49264e4a733d9ff4f92de76013",
+        "html": "7d51e30f9d027403d8dfb29f0fa969130501b6d44a33bc1acfe75818161a9678",
         "md": "fb81a5715de1427fe9ff9e66be80f8ac9c252f73f5a22e89377b59bc6c5218ee"
       },
       "route": "/cli/reference/aac-sso-approve-idp-repair/",
@@ -600,7 +607,7 @@
       "description": "Released command syntax and options for aac sso describe.",
       "metadata_sha256": "a570932044ad58781b3bfd9396bbf1c9a3fb62b72f057e0cca342d28caae0a0b",
       "output_sha256": {
-        "html": "d3f0c9ea92035c220bf05f6034ba4eb78ce863d958e5169268c3483d1fead182",
+        "html": "8dc5f996a19a5196daadb025be5a436d6485b94f80a1e990cca0b8daf72de59e",
         "md": "c224683d677d74542fb0150bb5c745c0abea6319c2ddaa2b84b9f56900e2d5af"
       },
       "route": "/cli/reference/aac-sso-describe/",
@@ -614,7 +621,7 @@
       "description": "Released command syntax and options for aac sso enroll-idp-recovery-key.",
       "metadata_sha256": "15aff798d245c33712f8ae767e48e65f7fa3ad0572ba59f5eb6a7ef4bad9ed95",
       "output_sha256": {
-        "html": "1463b2a4cb12846eb4e7d6eac6298b6a1891ed74fcd1ef3987dc4797e2f13c10",
+        "html": "c93ffa3a931cfa9e4e9937f747c860030e24a782293ce7483fdef25429796dbc",
         "md": "59fb2dfba20641d5be64682b454eba256ad65821348d89a1cea6a70f990090c4"
       },
       "route": "/cli/reference/aac-sso-enroll-idp-recovery-key/",
@@ -628,7 +635,7 @@
       "description": "Released command syntax and options for aac sso generate-idp-recovery-key.",
       "metadata_sha256": "8b01a78008e86b49582f140be95a7d41791216175aeea0a5675ca713f7a4f382",
       "output_sha256": {
-        "html": "3745ecf94561917a55170b19b3913baf2e11a17f258731edb81ade73a2efce0b",
+        "html": "0897e27e0f703d1be050506448e123b29038ffd8968c2321b69aee2a1440cc04",
         "md": "5917ebd22d518dbc4c74fdab7aa638750f5cf2ca58b6e984897e52cf787fee35"
       },
       "route": "/cli/reference/aac-sso-generate-idp-recovery-key/",
@@ -642,7 +649,7 @@
       "description": "Released command syntax and options for aac sso list-idp-recovery-keys.",
       "metadata_sha256": "b95c84fd4d275ececa8387b288dd33b2305fe08a00231a378b09f65ac21e3cda",
       "output_sha256": {
-        "html": "4c2797f631d07170ac80c1da72b492b98a62caff6a4172c3807951b5d26c04e8",
+        "html": "4e6e34741eee2a43e2c0c1e6fb90999cf828e89c49c87e1ecbdd918b6bd5d1ec",
         "md": "459549e83d57d2127710c673a14ae262e2c36cebc3ffe9ed5615936c23f4d34d"
       },
       "route": "/cli/reference/aac-sso-list-idp-recovery-keys/",
@@ -656,7 +663,7 @@
       "description": "Released command syntax and options for aac sso list-idp.",
       "metadata_sha256": "cb82139f447e86f0bc440da0b239ba5775795fcf5eaf12e6387859fb12ad1cd0",
       "output_sha256": {
-        "html": "b313dcbf8905c37b286150d79a6b04b05d12c8d170e387aa125eddd33db10140",
+        "html": "a5a799b3af694abcf717f0b6be27c722906e7fde45d6f68f2be145f7890c2f94",
         "md": "54f5efbad717cbfc7fc038be899f1c2b4559143dc469ff9968cf49c306dc4b8a"
       },
       "route": "/cli/reference/aac-sso-list-idp/",
@@ -670,7 +677,7 @@
       "description": "Released command syntax and options for aac sso login.",
       "metadata_sha256": "4e5709635fcaf5485263f40a5ddaa08927614de059d89b1aafd83a5fc98c7920",
       "output_sha256": {
-        "html": "5a9d0632257168f75ca774c4b80aff4b61583e2082f99ee505033ed48eabcafe",
+        "html": "dfb79586081bc7cdf64cea615f842d9fcdab33f8cb2dc8ebc234560454f8448a",
         "md": "c639b3ede2fdf17642fabbccbf90dce46942e2d9e5a72d2f5cd104a2a124668d"
       },
       "route": "/cli/reference/aac-sso-login/",
@@ -684,7 +691,7 @@
       "description": "Released command syntax and options for aac sso logout.",
       "metadata_sha256": "9675275581863a465f2c9bea7cbf7f51ca513eeeebb524edb9522894399dcfd1",
       "output_sha256": {
-        "html": "94b89f6c0b3ced9a49d344ed6653a217413c0284136100ef1852a88d3dc3acbc",
+        "html": "084d6961377d3590bcb02fd5628645df7d99e8c69e52cbc4e62afac98fb477dd",
         "md": "d066863195c7b9efd58a8aed2368a9e65c41059e92cb3c40a394a17e2bbff12f"
       },
       "route": "/cli/reference/aac-sso-logout/",
@@ -698,7 +705,7 @@
       "description": "Released command syntax and options for aac sso register-idp.",
       "metadata_sha256": "21c0295b0873dfb9853cfeab856197f5a67e6b0ec622338929b5a1088af74b70",
       "output_sha256": {
-        "html": "41d704c8de74553c4975c4572cd7d1ad2f58fcd34a0674ae2fb7d27d6dba48dc",
+        "html": "2e128f50d1681fa1a2a6495d9fc352bf26697150973fd187aec617e8d8c41484",
         "md": "e2acfcd281a6e24f5fa0b28ae1c227a1045bd3be641ecc4ad33625f52dcc1d34"
       },
       "route": "/cli/reference/aac-sso-register-idp/",
@@ -712,7 +719,7 @@
       "description": "Released command syntax and options for aac sso replace-idp.",
       "metadata_sha256": "88ed73fb8bd83617e60a0c1871cd49d72a4af597aae63babcd0a1f872aa89ee6",
       "output_sha256": {
-        "html": "c629626a4f8936d732124274c1c741bd55f3169076d3d567ecf732f28bd7e43d",
+        "html": "00f13ecfe60d4187e9d589be82b61f1415383308f90d06e8e1f95dec8359fffe",
         "md": "4cecf950009984a710063242201f0fd966e2804eae86b44d4cf4d7584c8ba9be"
       },
       "route": "/cli/reference/aac-sso-replace-idp/",
@@ -726,7 +733,7 @@
       "description": "Released command syntax and options for aac sso request-idp-repair.",
       "metadata_sha256": "418d83ffbb3a97d947cac95458b0571c0fde89adc7d59f39ec0a7bcea33f840a",
       "output_sha256": {
-        "html": "983db4595f91698f593c4f851222223891fff763ba030718ac727852a31b8fef",
+        "html": "cfc17df77520f7f2d6e0170ea60a6bee11497db4526345bd98ff84b80b919dbe",
         "md": "fa0f09639bb2d593de01fa58d26b435923d13d53d9c8fb32b8b6c78cea98c11b"
       },
       "route": "/cli/reference/aac-sso-request-idp-repair/",
@@ -740,7 +747,7 @@
       "description": "Released command syntax and options for aac sso revoke-idp-recovery-key.",
       "metadata_sha256": "adf53f6205f0788d5554bf662971ac30700a34cb114a4111506ec815a511abf1",
       "output_sha256": {
-        "html": "990c4e4209dfd5a9ca5415b76e4469f59f3c4a073939a66ad4711b8c6e6424a3",
+        "html": "eba815cc55e9d6f6f8c37ba85623ade0e27007cec7547bbdcce121397525c8b8",
         "md": "b9b6e931db42b1332c2282bf3c129c1b56db656eea5cfb854f860dd76e5a34db"
       },
       "route": "/cli/reference/aac-sso-revoke-idp-recovery-key/",
@@ -754,7 +761,7 @@
       "description": "Released command syntax and options for aac sso rotate-idp-recovery-key.",
       "metadata_sha256": "4ce4866166f038de0a6c61c905fdf8d523d72de451a001d3e137476930f220ff",
       "output_sha256": {
-        "html": "0b41e266ce2816325c543cba8ac1372f169696a0afb57810421d0cabbe8dfc05",
+        "html": "aaaf712b83880b4037c275e39a7e8e3557c8f447513344fd7684546b4a15fef4",
         "md": "f9ae61e07aaf7e92b1f15d0014f07433e623234d933aa93e92a839f70d8bb7f5"
       },
       "route": "/cli/reference/aac-sso-rotate-idp-recovery-key/",
@@ -768,7 +775,7 @@
       "description": "Released command syntax and options for aac sso whoami.",
       "metadata_sha256": "4e4d4bc1e0312a57704cda5f62b7c6b9b6d74affb910e1dd52334b5a808de0e6",
       "output_sha256": {
-        "html": "fdb1e7687c207d816cafd9b7ac467537f045dce9f3ace47eceb6ad6b40dbabfb",
+        "html": "d7a670eb0483c372238db30f80cdc2e32b862a0faf24160266a751e48e2e33fc",
         "md": "01241977e409740ca4733573726298cc3d122a0b7e752516146e9c871a417f6f"
       },
       "route": "/cli/reference/aac-sso-whoami/",
@@ -782,7 +789,7 @@
       "description": "Released command syntax and options for aac sso.",
       "metadata_sha256": "1d317c3a98a403e11d496034ec0699b722e26c58835b35741090ccccd9a80456",
       "output_sha256": {
-        "html": "b6a4ed95747c50b7d912517b547f15a0f04b1a665915be53a00681137b388377",
+        "html": "1834d04d705cc4b05386d57352c7f079c794dc148e1f5dd27018a044aaaf0f43",
         "md": "6a388b9f34ee54fd5e9f89d1f8f47647dd4b7af64004ed47af8f51a031670023"
       },
       "route": "/cli/reference/aac-sso/",
@@ -796,7 +803,7 @@
       "description": "Released command syntax and options for aac tenant add-workload.",
       "metadata_sha256": "7637694ee9a2b90aacf723d4e2fbd8f278947f0727ea56ed5d8158113782b505",
       "output_sha256": {
-        "html": "7fc1677a1b6284091b31dbc24a83cb26b166ed1057ed2c8498979c92cbe6f4b9",
+        "html": "6439b18a1d0e404b052e58d9a327e87e28fe0d60141f109af46433679566e2d0",
         "md": "b86a1f833762846e83d6c35fa67a388d1da229e6e333f95f2191c22a61a76557"
       },
       "route": "/cli/reference/aac-tenant-add-workload/",
@@ -810,7 +817,7 @@
       "description": "Released command syntax and options for aac tenant api-key issue.",
       "metadata_sha256": "453441c7b5bb259bf053462f84aa52c63f6bd7d79d6ff0ab0160e444abdf6495",
       "output_sha256": {
-        "html": "1aab53c0ff8704fe755cc6eb5e7f8d35e17450ee88c7ede4567ada363fab4bc4",
+        "html": "b672c731cf2069132fe37e0482819f4895c0ba14d13602b057f68c6b5940d4e2",
         "md": "aa347531058c5c9ea88fbaccb8f90baf47d15a302152810ff521ca3856d3e089"
       },
       "route": "/cli/reference/aac-tenant-api-key-issue/",
@@ -824,7 +831,7 @@
       "description": "Released command syntax and options for aac tenant api-key list.",
       "metadata_sha256": "e118ec9ca1cbe11c6f25ef29d916a9a509e4996f27624bf37c948865d2ef8bf9",
       "output_sha256": {
-        "html": "00a97af6e6b3f86ccae600d7e75023b772085c69b7c4465e5319c047d6dd0980",
+        "html": "bd6022c489a43260aef4a338550282e6553cf87c5aee9b3b71c8cd7736a18d79",
         "md": "17c426ad64c7912ecc7444ec7fd0f7650a9dd3e4f53eb8e345958ed6b37a506e"
       },
       "route": "/cli/reference/aac-tenant-api-key-list/",
@@ -838,7 +845,7 @@
       "description": "Released command syntax and options for aac tenant api-key retire.",
       "metadata_sha256": "8037fa655bfb912e65eaff13829757bae2e23199c5ddc67f6b4f45b887fc5080",
       "output_sha256": {
-        "html": "5f414102787c1cd7bf69a52fa3d397611a3bf7426172604156d27ff9025434d1",
+        "html": "311554e6c378e4ef1e64f17cd3d6acaa5c2985b1965621f6d319b0949ea3b194",
         "md": "7e8d09ac21b74af75851231b5cc0e5960dace7cab1f99641f08848e30cf26728"
       },
       "route": "/cli/reference/aac-tenant-api-key-retire/",
@@ -852,7 +859,7 @@
       "description": "Released command syntax and options for aac tenant api-key.",
       "metadata_sha256": "4e103658859a1aa3310de09179147640cd13a01d145d4ec4f70373074f7e4220",
       "output_sha256": {
-        "html": "a6971418d39bfa8b6295889b6578bd8560f6a2ee8cc9d22e02dbbe83edc973bc",
+        "html": "e43e34911556dd26d2de1ce66db7075d876e6e5040e4601739c91d77f0dad762",
         "md": "571dd872b0146e65ababa7459edc0aa49898514ac728054ed4d5aa83dd693c05"
       },
       "route": "/cli/reference/aac-tenant-api-key/",
@@ -866,7 +873,7 @@
       "description": "Released command syntax and options for aac tenant assign-hosted-domain.",
       "metadata_sha256": "5c23a9ff34e09ec97375771a8f744b1653f40daabf35af3c0c5ac8ab3409e5b7",
       "output_sha256": {
-        "html": "fefa9d44cbd7b2ecf372fde19187fe70dc2f50ca1e4e805328ebdcd0100ea195",
+        "html": "a1f9298e3f25934981dc2e3aaffcaa4be60e197f6ff5ec21f15b86812743c69e",
         "md": "6d40575fd34328a9f33b1f350b953fad4868068d0eb0a271ab3c32bb19217865"
       },
       "route": "/cli/reference/aac-tenant-assign-hosted-domain/",
@@ -880,7 +887,7 @@
       "description": "Released command syntax and options for aac tenant bind-trust-domain.",
       "metadata_sha256": "73dc6734b156cf0fb2278a3228b2c484ba2d17957d32c6ae6febf738e4ae03eb",
       "output_sha256": {
-        "html": "cec894e9c12aac8f4752e81b92ef5b5dfe95422462e6241c597b6e0db69477cb",
+        "html": "4612b15b381b935dba0351737e9a3062d3bbc6935ff1a689b6b2ca53a0c95c90",
         "md": "9313934d1225c6908dbd5ab4400b70372b488246c9f08346ff4ad66f9f0e4bf9"
       },
       "route": "/cli/reference/aac-tenant-bind-trust-domain/",
@@ -894,7 +901,7 @@
       "description": "Released command syntax and options for aac tenant deactivate-workload.",
       "metadata_sha256": "494d2c749eaca9d3ed2050d674274a267b0875d255c82ccab4f5de85b5e17618",
       "output_sha256": {
-        "html": "acf3b1307f5327992fa13357b9c1e503b65ad776249b2c4f84cf069d189abdc7",
+        "html": "1f8b829a97a437a666c70ad9f1fcc6433f90e1819bb9057d57be6c442330e372",
         "md": "de005f44dfec00eb8b654a6e1166e870e8fe49de7242060d8f711ce906efb4cd"
       },
       "route": "/cli/reference/aac-tenant-deactivate-workload/",
@@ -908,7 +915,7 @@
       "description": "Released command syntax and options for aac tenant describe-workload.",
       "metadata_sha256": "98a38adb781ca1590d64234fee03d024ac26c0ea7027cc5936fa8a8911114f6a",
       "output_sha256": {
-        "html": "bbc54858cd1b03788acb1fcab6773ed8a473425de1b0a50d95f85c6e3b92acae",
+        "html": "e4c8f430de5941c03d57f81a601c31e8d2eeca04f52585a7762ba5749b545a93",
         "md": "8f5cbf301b9881b87d5f075c03bcd6092d9f552383579c789232b77e58819898"
       },
       "route": "/cli/reference/aac-tenant-describe-workload/",
@@ -922,7 +929,7 @@
       "description": "Released command syntax and options for aac tenant describe.",
       "metadata_sha256": "686a087ecd40bdb7ef912d8a51baa6cb350c57871021738dbcc95a44495b87c2",
       "output_sha256": {
-        "html": "3d2cfd1c8f260ee9472538fe58b375d7d67077dea1ced067282e407625bb6438",
+        "html": "8a2fdb6092f758cca2d22a59835885ce28ead1f5b21fc1f183ad3f8d927f44ce",
         "md": "d5163370d09d757156f28b98591b6e8e63a7456abf41942f27cd771301012224"
       },
       "route": "/cli/reference/aac-tenant-describe/",
@@ -936,7 +943,7 @@
       "description": "Released command syntax and options for aac tenant issue-domain-challenge.",
       "metadata_sha256": "a268725f32e640e6d83d6032ade39bfacc36b570dc214dcd80b6e032bc401676",
       "output_sha256": {
-        "html": "8e7ff2112a88cc0ccc2818e89a64f3e18fba5c1c0a2db7f8c40cb401d7ec9d82",
+        "html": "93ca5710a98152c1af277cf76283b9aaf5009f0d213cadbbeecb16bc3a9fc156",
         "md": "208153da21fc58760ecbb3fa1a5d54273737553f7d5da493d13a1c57d4b42cbe"
       },
       "route": "/cli/reference/aac-tenant-issue-domain-challenge/",
@@ -950,7 +957,7 @@
       "description": "Released command syntax and options for aac tenant list-trust-domains.",
       "metadata_sha256": "6a4e0f90ccaccf7d1115c78f6d80c402542846b18f1f93ce9f73b99260797841",
       "output_sha256": {
-        "html": "e3e81695e1ca0d0403ca305cbb5c8f7d634f06c51a7a139ea2529a303aaba36e",
+        "html": "4fe2549dacc15043232ff232d15e8c41e186755fd9c3e66607562b3fa6ae2a18",
         "md": "f4b7bc56d4c2b2572fb52789c717445058dc311b1c057d762125527fe56bf35a"
       },
       "route": "/cli/reference/aac-tenant-list-trust-domains/",
@@ -964,7 +971,7 @@
       "description": "Released command syntax and options for aac tenant list-workloads.",
       "metadata_sha256": "e7572f11cbc8246dc920e1e26f68f989a37c92f183c9dbcd156cb6be0e580ea5",
       "output_sha256": {
-        "html": "869b006f11a55b2bf6628436a2736ebddbac2f7309b521f225a88ea067460181",
+        "html": "8c9eb5281c143f0fcb974deaed8cbd9c9a9a83a80a55a2c56343ec86d932beb1",
         "md": "6597cd030333f48387e0c9cec8fe3a062281640477514d6d47170e6bb162aeaa"
       },
       "route": "/cli/reference/aac-tenant-list-workloads/",
@@ -978,7 +985,7 @@
       "description": "Released command syntax and options for aac tenant list.",
       "metadata_sha256": "b9eb4fe2fa64c6e69d9ccc87e18402a0e2a7a5c8376e1df5cde74e77fac1e5da",
       "output_sha256": {
-        "html": "abd06a354349196005402092d5fc24134332f11a2e33a2b25bf0d275a016679d",
+        "html": "6b27a98ac76f9953a662b6fbb6eeebecedc64f6fffaaf48291cd69fb20cbffd5",
         "md": "bdd44f126f531e44d09fc94d284ffc3def90292c7336f57e30ad565a674a447c"
       },
       "route": "/cli/reference/aac-tenant-list/",
@@ -992,7 +999,7 @@
       "description": "Released command syntax and options for aac tenant reactivate-hosted-domain.",
       "metadata_sha256": "76418a43ed87ec87127f945adb44b60b15a5361f97e3b6bf01959f98261604d9",
       "output_sha256": {
-        "html": "2757efa864cad8bffeade2975df0fdecfba6165441bff30ce4a50c9303880e7b",
+        "html": "d621ba61d8ca33a8712301717088f661c20d24052d93b32465ce4652d62e7459",
         "md": "dedfaab4e47ef0a5bdc1e5247cfa654350304f99b66c7e1c9b7c3d13e8ed7cdf"
       },
       "route": "/cli/reference/aac-tenant-reactivate-hosted-domain/",
@@ -1006,7 +1013,7 @@
       "description": "Released command syntax and options for aac tenant register.",
       "metadata_sha256": "3e8ef46393d41748ffbe5be0a1a11fd85edc8030747eac410cb41ac7cb141da0",
       "output_sha256": {
-        "html": "6f5df419ea71644058a2115f88ba9c89bf3a21b30d8cb029f870812649ffa706",
+        "html": "93fe6d60dbeb3eb622ec60d10b020e5996b4c797201e3fdd0076d18be6195bfc",
         "md": "fdd7aca54578b35e2a89d4320fe08b915bc11d1d08e35ccad871b89a839e45ad"
       },
       "route": "/cli/reference/aac-tenant-register/",
@@ -1020,7 +1027,7 @@
       "description": "Released command syntax and options for aac tenant reissue-api-key.",
       "metadata_sha256": "ec7619cbde807e94a350d291a3ef2859c0b5ae6bc0ab3511fca89ab227a50649",
       "output_sha256": {
-        "html": "abfa4f895496006e448da874ac48944646ccc32630e7d11d421d4c2ebf358e12",
+        "html": "218daa40b795b6a293f24d30d314cbefd5c7eaf3607b2d88f144b165ff010e28",
         "md": "f33c000dcb9dbf1e1738ebe602696c949f1cbf93db7f4cf204f7eded15f31ea4"
       },
       "route": "/cli/reference/aac-tenant-reissue-api-key/",
@@ -1034,7 +1041,7 @@
       "description": "Released command syntax and options for aac tenant release-domain.",
       "metadata_sha256": "855b52f10b955f3551a9c518b468eff0b0af5c0f51f1af1061960a1f13dc30b0",
       "output_sha256": {
-        "html": "f2c8bff80c610440ef5fa997fc5dfc5a93c41b1c392faafb22389394ac9993f6",
+        "html": "3c4708f8ecb0068347cd067f0541b0c4fa0e663e6963a851c13408d21a98852c",
         "md": "979d7b1f8b01a7c0b159affb220938b62762a56a5587112e4de10fd07e79793e"
       },
       "route": "/cli/reference/aac-tenant-release-domain/",
@@ -1048,7 +1055,7 @@
       "description": "Released command syntax and options for aac tenant revoke-domain.",
       "metadata_sha256": "2208f7ec0218225e909e618ab2f8f0a53dab3d46629bb29f880feb75b1b04b7a",
       "output_sha256": {
-        "html": "74264f7ac26eb8e481b9cc8c67446d3cdac99a39c4e093a9ba850805813f484e",
+        "html": "c827fc3225821a4e502492721aa46d9204c31abc23bbb69a67cfe7259aa8afe1",
         "md": "20dd0e7c452aac1a18305a508f9b56d58d787dd9759036404bd46bb500f4a696"
       },
       "route": "/cli/reference/aac-tenant-revoke-domain/",
@@ -1062,7 +1069,7 @@
       "description": "Released command syntax and options for aac tenant revoke-trust-domain.",
       "metadata_sha256": "879b2e6cec9ed3dd1d12b3c50cf1756086735a4a9e9dcd74d27bc1bd03e85867",
       "output_sha256": {
-        "html": "eb261e3d1415663f25b1576148293222296ac20e09a525a586c656e9de00a6e4",
+        "html": "ab79aa8f5beedcbfa0fd516f4747aac62cee521fe91790585e84d5e6714685ce",
         "md": "4f432346fc96989eaf824e0724a66c8cbed8ef4fd492b72bc7cd09c7f2680952"
       },
       "route": "/cli/reference/aac-tenant-revoke-trust-domain/",
@@ -1076,7 +1083,7 @@
       "description": "Released command syntax and options for aac tenant rotate-admin-key.",
       "metadata_sha256": "6cd943a8ffdf0e2906a102390b1172e95ff09f11a9a7599a041463a918ea68ac",
       "output_sha256": {
-        "html": "712d6ef5c04f4c22af3e6d07259e85ff28f2df56314144bdadd648001d2dcd48",
+        "html": "68432d1b941a29824f244ff35649e3e86a3d35fc6e37027e682dc6f4f927278b",
         "md": "69ca40e778f7913a6ba8557f36b5d78bd468c8282642d548f4e68fcda11419ca"
       },
       "route": "/cli/reference/aac-tenant-rotate-admin-key/",
@@ -1090,7 +1097,7 @@
       "description": "Released command syntax and options for aac tenant update-workload.",
       "metadata_sha256": "0a9d494da83739d2ced20a798fd3f5b7f844efb0ba3575c235412ff384a2944b",
       "output_sha256": {
-        "html": "a7560a8e267e22d9409eb446b737d4348bc4522125eeb98cd9d40750ac029359",
+        "html": "5846eba571564a5c63463ec3b693bd2866e9288cb7c9db25dcff9d75e98fd0aa",
         "md": "ef870b7ba3f6938e8063cd4a2a1f8994f9febf57154343bef741126672c5cfce"
       },
       "route": "/cli/reference/aac-tenant-update-workload/",
@@ -1104,7 +1111,7 @@
       "description": "Released command syntax and options for aac tenant update.",
       "metadata_sha256": "b82af24f3fb39b18a36a2d9dc0ebe28f26ec34e38d48233bbb6021631e30797d",
       "output_sha256": {
-        "html": "c13279bae38cb0f119620ba5745a4d6b7a739e54193651722f83f11f89ef2ec2",
+        "html": "02d5a2f74e64697c4f589da131ad55e75d1660e375926f780fb58dcee402b3f1",
         "md": "b52ceb8124679ec029f3c29a73ecce58a45bfda9918c0fee504f760566691af9"
       },
       "route": "/cli/reference/aac-tenant-update/",
@@ -1118,7 +1125,7 @@
       "description": "Released command syntax and options for aac tenant verify-domain.",
       "metadata_sha256": "d721c838cf4470f9b7babef043296d05f7494943a0c35784c7df868b9bed4a9b",
       "output_sha256": {
-        "html": "c983e89eaa2b77053b6fa71202130ded474c1973236f829393861e5c53e5cd40",
+        "html": "fdce17b51e46b5e02c863e232c04e326995f5ce8e7972cec295c30b426ea4151",
         "md": "dd2bfff08d5b52f7e7bcccb61d6b4cff1b53fe4a41295e2ba582647c9396e0a4"
       },
       "route": "/cli/reference/aac-tenant-verify-domain/",
@@ -1132,7 +1139,7 @@
       "description": "Released command syntax and options for aac tenant.",
       "metadata_sha256": "db985bf121dffcba65c36984f2d692589c047ad46642376896fb3e2f8adcbab2",
       "output_sha256": {
-        "html": "b2d3b412fa4d297e63301487685aa7a286ad204e0fcaceffb23c8fc2d6d25583",
+        "html": "21acc9d770813576867b8ad1fefa4caa1b47c67272bccf1443c58b9464449e26",
         "md": "29f259596e92f46ce30ff47b25d689fa4bd44ceacac74dd88c556bfdac15d499"
       },
       "route": "/cli/reference/aac-tenant/",
@@ -1146,7 +1153,7 @@
       "description": "Released command syntax and options for aac trust-anchor describe.",
       "metadata_sha256": "4a893f2aacda0e6374e9865fe04481d5892b6a9b6bf0ab8c1540eb2760891090",
       "output_sha256": {
-        "html": "98edf88e8873605f4277d595dd74319464bc9c4822cf2aa1538e018245d6c074",
+        "html": "f77330943b116a950a12717f10aedf10644de8b999989e6c22d91b340e83b1c4",
         "md": "67d07d870086a093ecfd78400cb331f3e04aac2e083a187f4109c47ca49aef26"
       },
       "route": "/cli/reference/aac-trust-anchor-describe/",
@@ -1160,7 +1167,7 @@
       "description": "Released command syntax and options for aac trust-anchor ingest-history.",
       "metadata_sha256": "08111a5e37db791884d067b03373d09b1876278f0165a1283580a3257c12012f",
       "output_sha256": {
-        "html": "13a52fd79c70641771960a7a5e8ca59b670238b319f648aaec19f6de90bef250",
+        "html": "989c9c68b9f2b15c766827132889e13b45ff776b102591f4a83729f48c4329e6",
         "md": "84779e4a9a70d49fd489b98342ce1c1f98ba52f255b25427449a9510000892cc"
       },
       "route": "/cli/reference/aac-trust-anchor-ingest-history/",
@@ -1174,7 +1181,7 @@
       "description": "Released command syntax and options for aac trust-anchor list.",
       "metadata_sha256": "f424dcac0fe4b8dc9ae316c299e3d1137dcb88e566c0b2820cff48d8bd1bdbfd",
       "output_sha256": {
-        "html": "b229b8f2f9992f115bc1eebed2bc518e32af03ee9c59649d9bc5214bdb75360d",
+        "html": "ec131a87faa14b454d56c1bb267b6afdfebed18670d189b2694199c1b551ff61",
         "md": "53a2c234534445ea18b3a6acad55d9a90321959422254c20acb1a08b5593a11c"
       },
       "route": "/cli/reference/aac-trust-anchor-list/",
@@ -1188,7 +1195,7 @@
       "description": "Released command syntax and options for aac trust-anchor revoke.",
       "metadata_sha256": "cef3926c50a3c9ce06f1c1a79f62a35c180f6c5ad2bf78ac33692468fbdb8813",
       "output_sha256": {
-        "html": "279c048cbf75c73f5f661bc2005ece1f0654db2f3222b722f97f4d6bb31239a8",
+        "html": "5c644fae5747c91676137ebe3e7dcb4cd1d6d9c1cfd628362def1572bd94d3b6",
         "md": "b49954b1260f3f21c805566145d19d854d140245100caf193b74b8d0425f60d0"
       },
       "route": "/cli/reference/aac-trust-anchor-revoke/",
@@ -1202,7 +1209,7 @@
       "description": "Released command syntax and options for aac trust-anchor.",
       "metadata_sha256": "13d1d0d9d447d3f71a1196397ed26c12c0bfe37d2e0eeb816eeac1d4ad8d73ea",
       "output_sha256": {
-        "html": "6108e69bcebbb4e85e610efb115910c9d8b72d01cdfcef06dfa9e64246ac56eb",
+        "html": "db9dd65d776688bbb42cab2fb3dd31dffefd5943b884f902840656aa8cdb38c4",
         "md": "baea10864fcb7b5c6cb2eed55603c05207502e3efbe1b4a3d21e52f875e13dac"
       },
       "route": "/cli/reference/aac-trust-anchor/",
@@ -1212,12 +1219,12 @@
     },
     "/control-plane/": {
       "applicability": "Hosted AAC Control Plane \u00b7 developer beta",
-      "content_sha256": "8b4d6980432f95b76726480c6ea621ae93c49e314170cd578d985eaaa1a5be24",
+      "content_sha256": "9cc1dea410a3ac26d541d630446223eacc37d1f368041ed24232b329ce3d1c3d",
       "description": "Connect to AAC's shared API service for identity, public trust and execution queries.",
       "metadata_sha256": "c32e8541eb9be36bb4b272244595ef37179c1d3dc09de342571e68bd4a974b02",
       "output_sha256": {
-        "html": "3f0c54fe2e8efa27d37cf6d4283fd708cfcff6ebd43ad47b6839a0a4112c3d7e",
-        "md": "eedb82453f2bb3c5fb73454039517de93fe7428e16d552589f4f67d4890b1679"
+        "html": "46ef80f506892c51909b11893eb90b70f600bbf59bd148390eaeba4321489d99",
+        "md": "4fcc09d6e5cc189b562127b4905c732b06f9dee3e818852ed8a5c3333875513c"
       },
       "route": "/control-plane/",
       "section": "Control Plane",
@@ -1226,12 +1233,12 @@
     },
     "/examples/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "ca677f203e4cd78e458f29faaa6986022a3d9190455dba28bc9efd290f327dd3",
+      "content_sha256": "145210e43d2bb1791be5b29badc689eda94cdf5f0ce4f7bbaf5f57ffcc2e8c92",
       "description": "Public example repositories you clone and run against the developer beta.",
       "metadata_sha256": "920e44c7aa64e4627a2aa7d0cdf692af88daf662ea9a793b672d1a8ebc8ec700",
       "output_sha256": {
-        "html": "e2bce174a7a62b97a67fba7623f19d23bdc748cced1c790d8dd35661a0acdb71",
-        "md": "0c49b6db85d41824726215f4d6f14ae514328b848636e0fee21518da4edaddfb"
+        "html": "438f4a7999716f69fbe5526ed8ef34a48d6e23e3a38a4699c9dbc7c8987bde2e",
+        "md": "2c2bd7c87bac880d30d12739b3a54004a74d71d201e89db5f4fc36e538719abf"
       },
       "route": "/examples/",
       "section": "Examples",
@@ -1244,22 +1251,36 @@
       "description": "Run a first authenticated reservation with Docker.",
       "metadata_sha256": "edf8d3f0bf8f0b5df64efbcf4e821f274e789703c7a0b69b3e63734f9efde90b",
       "output_sha256": {
-        "html": "c01041d1add889315c92c84ea3fa55eff77568da6a41b985c894c7096b3654f0",
-        "md": "9a613ea9d6e38075f9260dbccf9d60d0936c27fd6bcbbb19bd86ce41ac2ed271"
+        "html": "170cd50822296d7cbff57c36117b06b1bb2b69bd198b035dc2d12d51c61e0050",
+        "md": "9e2472d8a12f3c179235559310645d105b0188bfe9c1b296f3c503731b24ed9f"
       },
       "route": "/get-started/",
       "section": "Get started",
       "source": "content/sidecar/get-started.md",
       "title": "Run your first authenticated agent journey"
     },
+    "/home/": {
+      "applicability": "AAC platform \u00b7 developer beta",
+      "content_sha256": "74d7ad14782d56993c891b88bd42ce8eda165748757797d1074fc169960c9797",
+      "description": "AAC, the Agent Authority Cloud from CascadeAuth: the authorization layer for networks of AI agents, and where to start.",
+      "metadata_sha256": "714a3458a52894690e006f204ce5351b1d9f52685d5379385b18617a09dc2761",
+      "output_sha256": {
+        "html": "da8ae59ab35391c34a08ac13f28c91150396dfd9c8ef2720cef48c674ea9fa3f",
+        "md": "1be312096b638892b0cf5e617ca052c94a1f931487a87c1108e23437ac752a40"
+      },
+      "route": "/home/",
+      "section": "Home",
+      "source": "content/sidecar/apex-home.md",
+      "title": "Authority that travels with the work"
+    },
     "/overview/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "d62eb96e97159ee0ea284958191a7167572f95ddb325602c090a1f7553b40ddd",
+      "content_sha256": "62832ae5bbe01a26090016cf60955807d057397db7e8015d11fbe8bd175cf099",
       "description": "Delegated authority, local verification and the limits of receipts.",
       "metadata_sha256": "070f83234ce4c5545745ffc0efeaac1819abd517e11d65b04424dbe2140c764b",
       "output_sha256": {
-        "html": "4a754874f0d84907cf58fdf0c4698df3f763d10b1e69ea68bfd36703a18ea3eb",
-        "md": "e44478cfaacdb6d79e339ae4c7cee383173f47e7b7401c828634fdbec07a8436"
+        "html": "fe30629d14fcdc3bc91b66e1a0b234a84a78b3ba3de1bbb12366a77b01510a0e",
+        "md": "a0003db562c1b049b10e628d18e541c8b75fdecb10b8325733be68e3dd6a2d04"
       },
       "route": "/overview/",
       "section": "Overview",
@@ -1272,8 +1293,8 @@
       "description": "Trust material, custody and lifecycle.",
       "metadata_sha256": "a9f6a5d6f1807ca5cddf8c0d3bf389f08da76ff7554929402d3054545ecae74f",
       "output_sha256": {
-        "html": "08ffa16f2502d54eb93eb36f40950c9821cce0f1d010225b32fb87421c4dfd1b",
-        "md": "16f2fd69318330425425517b257529f5ee35d8abe49a3866d45a546a7af296eb"
+        "html": "9aa30d102774ad7be9672c742025fd776ccb0ce95ef3983ae0ed05f9a248909a",
+        "md": "0abd016427c475ba1ceb2830214948e3b098eae9dfd0c4252816753b0e5522ab"
       },
       "route": "/overview/keys-and-certificates/",
       "section": "Overview",
@@ -1282,12 +1303,12 @@
     },
     "/privacy/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "feb2ca9686844c68b5c17122e666b83d13f55207c5a3ae9e61a555de1e8ee495",
+      "content_sha256": "7a83f7fd1d87d97fcade9465e93c1db3cb5ee70245f1b4693ae5547e9585b45f",
       "description": "What the documentation site records about a visit, why, and for how long.",
       "metadata_sha256": "1addef9451c8dd872cc120c0d8e11e3cbf2857eeedfa00cdd2b42eedc68f1277",
       "output_sha256": {
-        "html": "145d2dd2238861164b3fa0978bdf2149de5c1404ee3ad0473a92d53c4923f92e",
-        "md": "d049a722516da27edfb30e95229b9c4438b283fc52c3df1a9abd5b1307165f16"
+        "html": "40ff3c78616723bbc1c8757b4aac4363aa5b594384ef15c47f22f3ec3b5cf872",
+        "md": "4890e6f7535ad150a1b7637a943dc7df2991ced18ac03dda264de97d8499ecf4"
       },
       "route": "/privacy/",
       "section": "Privacy",
@@ -1300,8 +1321,8 @@
       "description": "Changes and upgrade guidance by component.",
       "metadata_sha256": "0e652f968db820eaba4257b3d41e76c0570caf54609b30053ed0ef566fd2cca7",
       "output_sha256": {
-        "html": "4110d89a84082cc908969f65a712478c1c9837545f2e4624f25d36e89ca7fc3d",
-        "md": "c54029e77046ce694fddbef88a47eae618a5939a8856d07adcfc837074600133"
+        "html": "84ce8acf18fe8c56177467cf07e3b811606f03ca78945df37697bdb206977e6b",
+        "md": "7b3ff3a67285bf432d3bb28e0d0482e9ab5dbab5f2f73ed1a46b85381ba42689"
       },
       "route": "/release-notes/",
       "section": "Release notes",
@@ -1314,8 +1335,8 @@
       "description": "Install a sidecar beside your agent and connect it to AAC.",
       "metadata_sha256": "75968d0bd0c792b0811b45ac4c9503e221e40e5329fe1a6aad1e96c6ec420794",
       "output_sha256": {
-        "html": "5face58dd2a8326cae2e3264c37828b4ad6209e796125c77ca1693d87df36999",
-        "md": "4e6f187569b308eaa822762a7a87a9597f000d1dd10399b216ca2f3da02a5407"
+        "html": "ee04903fba647ea3d82b26bde3847ba604b9fdedd3e4cb4088f5d1faff902436",
+        "md": "10e557b763764c7f3c313b5e817fb42465e46f58182dc513f1284f5ee6835799"
       },
       "route": "/sidecar/",
       "section": "Sidecar",
@@ -1328,8 +1349,8 @@
       "description": "Receive and send A2A messages under verified delegated authority.",
       "metadata_sha256": "d4174a0e4cdefafd1f2f50c024df78d57b4eddf200d96bbc429e373e94571de3",
       "output_sha256": {
-        "html": "cbc3e8f5a9d14351dd7cb0c951f799b91ead52ad09390b7ba56c3fa0e9116b06",
-        "md": "27291374e2feff7253bed39ae82064a95baf375274d9928191b1fee6fd0c1b41"
+        "html": "4eeb3c4868ad814f52c6e64e4ab16e9e5cbbe08ac56333e3a4f86ea097022d8d",
+        "md": "38d500476da03509a16808d12bea70fc0a2f72f7850b8cdf65e5a1d7fa401153"
       },
       "route": "/sidecar/a2a/",
       "section": "Sidecar",
@@ -1342,8 +1363,8 @@
       "description": "Configure agents, ingress, trust and durable state.",
       "metadata_sha256": "eb13b251bb455daccd94672989ca15ba79819b279f8694248045c6ba5d9b48d4",
       "output_sha256": {
-        "html": "651913d76896df4f9832dad7d6a26e4e30d48485a7c0aa8045553fe631b3be1e",
-        "md": "9c324877200346fdc8cdb3c139a1c99f51b47a475dad3f995cf708de44c2973f"
+        "html": "f31d7d61669871151ebd4baa818b4bcd84eca700f6509a134a4f4869f33ad5fd",
+        "md": "e769fdb5e10cb2c09cf0ab93f73d2f144f41f26e1b5d918e6ad6732c13c05f71"
       },
       "route": "/sidecar/configuration/",
       "section": "Sidecar",
@@ -1356,8 +1377,8 @@
       "description": "Get the sidecar container or standalone binary, then connect it to your agent.",
       "metadata_sha256": "3642a83da71a9885d984ac38843b988a4fb3aa982705efa83509075a81267d0b",
       "output_sha256": {
-        "html": "b21f23c7b401cfccb11cf29ca54f5ec6072fd73b8dd874faf68187cfc5b2357c",
-        "md": "699325d64dfa76165a61d6879764a9880522909bc9604f251cb28cb0ccdc6724"
+        "html": "eb01c7bc3a379b3d8c5a1df87431225c2b79ee9e5809c9f1ac568d0234b3ca4d",
+        "md": "fe58f0cfe10932ef3f0ad8edbf7667e5627657a2c8c21858bebd5912b1a72411"
       },
       "route": "/sidecar/install/",
       "section": "Sidecar",
@@ -1370,8 +1391,8 @@
       "description": "Native AAC delivery, agent decisions and pairing authentication.",
       "metadata_sha256": "e086ccdcf7e86a203d1fcf69a75cc2829bb043a2269320bcb2fa3d0339d69549",
       "output_sha256": {
-        "html": "8b7be74be7809865727a4846b8aec62875eb504f213af05bacf3d188d3bca1a0",
-        "md": "e73886515c9f18da32d9d9db6a405649425abcbce68fe86dd5ce5d991b7cd866"
+        "html": "04d161c51f190691a9655a764e7f515a34d0aaee7ea61895b9601e867c8dd5fe",
+        "md": "675b131ba212bb8ae871f29f6cfde56fca29dd28f204fe72d097f71b3ad4f96d"
       },
       "route": "/sidecar/integration/",
       "section": "Sidecar",
@@ -1384,8 +1405,8 @@
       "description": "Diagnostics, maintenance and evidence verification.",
       "metadata_sha256": "30349bbacf63b442ea3c76add8bd865e78da2ead980a5c486732859a65f4e850",
       "output_sha256": {
-        "html": "66511ba06bba8b25cd3c92af985d9692e8ea4dbbffc5cf7bf6b65c8d6dee6fc0",
-        "md": "b2f91e0089d6c97cdc6aab01dc17a1863559db1f9f54b429f4bdc5945483a493"
+        "html": "a7df9cbccda5272668cdeb0c8d94840310e2c948d531f56103b5169111d95e98",
+        "md": "be20fadb6f260c5bacad76b2ab4ecb1c855641fcdf3abdd90a1cf5b63806790f"
       },
       "route": "/sidecar/operations/",
       "section": "Sidecar",
@@ -1398,8 +1419,8 @@
       "description": "Optional signature, checksum and build-provenance checks.",
       "metadata_sha256": "a9b4b8841e8eaee6f5c603d91d3c090b278e21b9a3f9ecadd128682313f2728c",
       "output_sha256": {
-        "html": "392d436349cab6ee584eeefbab480f6dbe01639724a400c52008a7e631c7ac69",
-        "md": "84dc095d7387e8140f7580c854e97b825cb320a40a76ff0352dcf1be7e296614"
+        "html": "815633e910da89e10dfd3f9d245d911a2e148033534648ec32d2598e99763969",
+        "md": "7d999b440530cac1a522a766add53b90945ed281872e700b7f54ace3e68818b2"
       },
       "route": "/sidecar/reference/verification/",
       "section": "Sidecar",
@@ -1412,8 +1433,8 @@
       "description": "Install, configure and operate your tenant's public-trust publisher.",
       "metadata_sha256": "272274823eda0284c1c43101f26048c8fc31b0cd744a351abb5d0e40c929dba7",
       "output_sha256": {
-        "html": "e4b7c81e8d2feecd62dbc01837340c577debc00bd926148c242268f0a3326946",
-        "md": "e9d93151ab93ebbe2a563ab59b19d042427c13c5ce2e7822d71eb0265b1d4edb"
+        "html": "9389fb2baab9f29dae11f979864b9127c6027ef7b824c0a4d77657f272d23d05",
+        "md": "081a9253b11f144f705b51257019bc24ce63c9a4b50519657ae29554dae4ba3a"
       },
       "route": "/trust-anchor-publisher/",
       "section": "Trust anchor publisher",
@@ -1424,6 +1445,6 @@
   "preview": false,
   "publication_origin": "https://docs.cascadeauth.com",
   "schema_version": 2,
-  "template_revision": "0847606e02be8083c655dce1f92a76348e18d7e600a167e891762bb88c524da1",
+  "template_revision": "b44f889e53e31e420e1e06cdbf8f11ea095dbd5fe4cf1ac5cb41ced35f357eae",
   "updated_component": "site"
 }

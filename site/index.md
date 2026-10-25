@@ -2,11 +2,13 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: dbbcb603853d58f5604e07a0c45220ff745ab169
+Documentation revision: 1a92d1d7bc16aa0132fd9a698700bf7d3bb4f676
 
 ---
 
 # AAC documentation
+
+*AAC - Agent Authority Cloud - CascadeAuth*
 
 AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
 plus a sidecar you run beside each agent, together the authorization layer for

@@ -2,11 +2,13 @@ Canonical: https://docs.cascadeauth.com/control-plane/
 
 Applies to: Hosted AAC Control Plane · developer beta
 
-Documentation revision: dbbcb603853d58f5604e07a0c45220ff745ab169
+Documentation revision: 1a92d1d7bc16aa0132fd9a698700bf7d3bb4f676
 
 ---
 
 # Using Control Plane
+
+*Using AAC Control Plane*
 
 The AAC Control Plane is the shared API service that connects tenant
 administration, identity, public trust and execution queries. AAC hosts it

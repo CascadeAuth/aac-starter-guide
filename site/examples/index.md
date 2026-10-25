@@ -2,11 +2,13 @@ Canonical: https://docs.cascadeauth.com/examples/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: dbbcb603853d58f5604e07a0c45220ff745ab169
+Documentation revision: 1a92d1d7bc16aa0132fd9a698700bf7d3bb4f676
 
 ---
 
 # Examples
+
+*AAC examples, including Google A2A*
 
 Each example on this page is a public repository you clone and run against
 the AAC Developer Beta. Every one registers the tenants it needs with the AAC

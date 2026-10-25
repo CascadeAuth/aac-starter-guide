@@ -1,5 +1,7 @@
 # Examples
 
+*AAC examples, including Google A2A*
+
 Each example on this page is a public repository you clone and run against
 the AAC Developer Beta. Every one registers the tenants it needs with the AAC
 CLI, starts each agent beside its own sidecar with Docker Compose, lets the

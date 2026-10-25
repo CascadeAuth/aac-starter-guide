@@ -1,8 +1,10 @@
 # Privacy
 
 This page explains what the AAC documentation site records when you read it,
-why, and for how long. It applies to every page under `https://docs.cascadeauth.com/`
-and to the `https://docs.cascadeauth.dev/` address that forwards to it.
+why, and for how long. It applies to every page under `https://docs.cascadeauth.com/`, to the
+company home page at `https://cascadeauth.com/` (and `https://www.cascadeauth.com/`,
+which forwards to it), which the same edge serves, and to the
+`https://docs.cascadeauth.dev/` address that forwards to the documentation.
 
 ## What is recorded
 
@@ -14,8 +16,9 @@ writes one access-log entry per request. Each entry contains:
   number;
 - the browser or program identification string the client sent (the
   User-Agent);
-- the page or file requested, without any query string, the time and the
-  response status;
+- the site name you asked for (the documentation site or the company home
+  page) and the page or file requested, without any query string, the time
+  and the response status;
 - the referring address, if your browser sent one, exactly as it was sent.
   For a link followed within this site that is the full address of the
   previous page, including any query string it had;
