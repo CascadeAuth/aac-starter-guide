@@ -8,12 +8,27 @@
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
 <div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#aac-developer-beta-service" class="toc-h2">AAC Developer Beta service</a><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a><a href="#0-5-1" class="toc-h2">0.5.1</a><a href="#0-5-2" class="toc-h2">0.5.2</a><a href="#0-5-3" class="toc-h2">0.5.3</a><a href="#0-5-4" class="toc-h2">0.5.4</a><a href="#0-5-5" class="toc-h2">0.5.5</a><a href="#0-5-6" class="toc-h2">0.5.6</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
 <h1 id="release-notes">Release notes</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.6</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs 83b54022f755</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.6</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs 9916e371bd0b</span></div>
 <h2 id="aac-developer-beta-service">AAC Developer Beta service</h2>
 <p>Changes to the hosted service, <a href="/control-plane/#aac-developer-beta-free">AAC Developer Beta (free)</a>,
 are listed here, newest first. Tenant contacts also receive an email before a
 breaking change or a reset. Sidecar releases follow, by version.</p>
 <ul>
+<li><strong>2026-10-26:</strong> Control plane 0.2.6 is being deployed. A tenant can now
+connect its own Google Workspace (or Cloud Identity) organization as a sign-in
+provider beside the shared Google developer sign-in: several connections may
+share one identity provider, each selected by its own OAuth client, and a
+Workspace connection pins the organization's domain. A tenant can register a
+connection on a provider that other connections already use, as long as it
+uses its own OAuth client and has no connection to that provider yet; the
+same tenant or the same OAuth client is still answered &quot;already bound&quot;. A
+provider's signing keys and endpoints are shared by all of its connections,
+so a request may only repeat them unchanged; one that would change them is
+refused with <code>ERR_IDP_ISSUER_METADATA_CONFLICT</code>. Existing connections and
+sign-ins, including the shared Google sign-in, work exactly as before. The
+rollout is a planned maintenance window on 2026-10-26 (UTC) of about 15
+minutes, during which the service is unavailable while the database is
+updated and the service restarts; tenant data is kept.</li>
 <li><strong>2026-10-22:</strong> The commitments are clarified: recovery from a failed change
 is not a reset. The service may be restored from a backup taken before the
 change, and AAC takes reasonable measures to avoid losing tenant data in that

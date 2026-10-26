@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/reference/verification/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 83b54022f755bd55c23806bf02e235349150ebeb
+Documentation revision: 9916e371bd0b7789053171fb3a981376c061122c
 
 ---
 

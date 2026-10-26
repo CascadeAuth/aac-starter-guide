@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: 83b54022f755bd55c23806bf02e235349150ebeb
+Documentation revision: 9916e371bd0b7789053171fb3a981376c061122c
 
 ---
 
