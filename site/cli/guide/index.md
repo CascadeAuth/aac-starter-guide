@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/guide/
 
-Applies to: AAC CLI 0.2.16
+Applies to: AAC CLI 0.2.17
 
-Documentation revision: c081b45bc08b87d4439d966752c59d7e072cd442
+Documentation revision: c49d7e04b769c5ff9ed0c96de0a31a0a4cbfe556
 
 ---
 
@@ -113,7 +113,8 @@ See [`aac sso describe`](https://docs.cascadeauth.com/cli/reference/aac-sso-desc
 
 A tenant is one organization. Register it once, then add its workloads.
 Developer tenants use AAC's shared GitHub or Google connections; enterprise
-tenants use their own identity provider (Microsoft Entra ID, Okta or Auth0).
+tenants use their own identity provider (Microsoft Entra ID, Okta, Auth0 or
+Google Workspace).
 Registering a tenant is permanent. Use a separate unbound profile for a new tenant.
 
 ### Developer setup with shared GitHub
@@ -295,6 +296,44 @@ promptly, and run the sign-in again if the CLI reports an expired code. Save
 Any other namespace works as long as the Action and `groups_claim` name the
 same claim; Auth0 rejects its own domains as namespaces.
 
+#### Google Workspace
+
+Google Workspace (and a Cloud Identity organization) signs people in through
+the same Google issuer as personal Google accounts, so AAC tells your
+organization's tokens apart by two claims: `aud`, the OAuth client the token
+was minted for, which must be a client in your own Google Cloud project, and
+`hd`, your organization's primary domain, which the connection pins. In the
+Google Cloud console, create or pick a project under your organization, set
+the consent screen's user type to **Internal** (OAuth consent screen, or Google
+Auth Platform → Get started / Audience on newer consoles: only your
+organization's accounts can sign in, and no app verification is needed), then
+create an OAuth client of type **Desktop app** (APIs & Services → Credentials →
+Create credentials → OAuth client ID). Record its **Client ID** and **Client
+secret** at creation: Google's token endpoint requires the secret from this
+public client and documents it as non-confidential, so the connection stores
+it and the CLI sends it at sign-in. Google tokens carry no group claim, so AAC
+maps each administrator's Google-verified email address (lowercase, the
+primary address) to AAC roles; the person's identity remains Google's stable
+subject id, never the address. Save `connection.json`:
+
+```json
+{
+  "issuer": "https://accounts.google.com",
+  "family": "google",
+  "expected_audience": "<GOOGLE_CLIENT_ID>",
+  "public_client_secret": "<GOOGLE_CLIENT_SECRET>",
+  "binding_claims": {"hd": "<WORKSPACE_DOMAIN>"},
+  "groups_claim": "email",
+  "role_map": {"<ADMIN_EMAIL>": ["tenant-admin"]}
+}
+```
+
+Add one `role_map` entry per administrator. Google Workspace sign-in uses the
+browser PKCE flow (Google accepts any loopback port for Desktop clients, and
+its device flow does not serve this client type). A personal Google account,
+or an account from another organization, is refused by AAC even when Google
+signs it in, because its token carries no matching `hd`.
+
 #### Register the connection and sign in
 
 Operations enrolls the compared public recovery key before registering the
@@ -318,6 +357,7 @@ aac sso login --profile prod \
   --idp-url 'https://login.microsoftonline.com/<ENTRA_DIRECTORY_ID>/v2.0' --flow pkce --no-browser
 aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp-url 'https://<OKTA_ORG>.okta.com'
 aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp-url 'https://<AUTH0_DOMAIN>/'
+aac sso login --profile prod --tenant-id '<TENANT_ID>' --idp google
 aac sso whoami --profile prod --output table
 aac tenant describe --profile prod --output table
 ```
@@ -329,11 +369,14 @@ it offers to open the sign-in page when you press Enter, and `--no-browser`
 turns that offer off too.
 `aac sso list-idp --profile prod` shows safe connection handles even during a
 login failure. Once a tenant-admin session works, omit the bootstrap token
-when registering additional connections. GitHub/Google onboarding and both
-Entra flows have dated stage acceptance from September 2026, and the Okta
-and Auth0 device flows from October 2026; that evidence does not certify
-every directory's, org's or tenant's policies. Other providers are not claimed as
-field-validated here.
+when registering additional connections. `--idp google` selects your own
+Google Workspace connection when you have one; the shared developer Google
+sign-in is only picked when the tenant has no Google connection of its own.
+GitHub/Google onboarding and both Entra flows have dated stage acceptance from
+September 2026, and the Okta and Auth0 device flows and the Google Workspace
+PKCE flow from October 2026. That evidence does not certify every directory's,
+org's or tenant's policies. Other providers are not claimed as field-validated
+here.
 
 ### Optional manual registration and key preparation
 
@@ -743,6 +786,7 @@ and payment; it does not guarantee a price hold.
 | No cached session, `ERR_SESSION_TOKEN_MISSING`, expired session | Sign in to the intended tenant again. A command that needs a session stops locally with exit 3 when none is cached, before anything is sent, and prints the sign-in command for the same profile and endpoints; commands that also accept a bootstrap token name that alternative. |
 | `ERR_SESSION_TENANT_MISMATCH`, `ERR_SESSION_ROLE_FORBIDDEN` | Check profile, tenant and group-to-role mapping; an API key is not an admin session. |
 | `ERR_IDP_ALREADY_BOUND` | Registration is create-only; inspect and replace the connection with its current revision. |
+| `ERR_IDP_ISSUER_METADATA_CONFLICT` | The issuer already serves other connections (for example the shared Google sign-in beside your Google Workspace connection), so its signing keys, algorithm list and endpoints can only be re-affirmed unchanged; drop `jwks_static` and `allowed_algorithms` overrides and let discovery supply them. If the difference is in `jwks_uri` or an endpoint, the provider's published metadata has changed since the issuer was first registered and the platform operator has to update it. |
 | `ERR_TRACE_NOT_FOUND` | Check the root/token ID and participant visibility; missing telemetry is not proof no execution occurred. |
 | `AADSTS700016` | Entra audience must be the Application (client) ID GUID. |
 | `AADSTS50011` | Register the exact loopback callback path for PKCE. |

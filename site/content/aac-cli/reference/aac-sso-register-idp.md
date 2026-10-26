@@ -81,6 +81,19 @@ example connection.json (Auth0):
   The issuer keeps the trailing slash Auth0 declares; a post-login
   Action puts the person's Auth0 role names into the named claim.
 
+example connection.json (Google Workspace):
+  {
+    "issuer": "https://accounts.google.com",
+    "family": "google",
+    "expected_audience": "<Client ID of the Desktop app OAuth client>",
+    "public_client_secret": "<its client secret — Google requires it, non-confidential>",
+    "binding_claims": {"hd": "<your organization's primary domain>"},
+    "groups_claim": "email",
+    "role_map": {"<admin@your-domain>": ["tenant-admin"]}
+  }
+  Google tokens carry no groups: roles are keyed by each person's
+  Google-verified email under the hd (organization domain) pin.
+
 Sample files for every supported family: https://github.com/CascadeAuth/aac-idp-connection-examples
 
 First-IdP onboarding runs under the ops ceremony (--bootstrap-token / $AAC_BOOTSTRAP_TOKEN); adding further IdPs self-serve uses your session (aac sso login).
