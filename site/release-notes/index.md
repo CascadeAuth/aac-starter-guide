@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 9916e371bd0b7789053171fb3a981376c061122c
+Documentation revision: c4a0e85712ba4eee52d9b87e8d9f0c657cf96140
 
 ---
 
@@ -14,7 +14,7 @@ Changes to the hosted service, [AAC Developer Beta (free)](https://docs.cascadea
 are listed here, newest first. Tenant contacts also receive an email before a
 breaking change or a reset. Sidecar releases follow, by version.
 
-- **2026-10-26:** Control plane 0.2.6 is being deployed. A tenant can now
+- **2026-10-26:** Control plane 0.2.6 was deployed. A tenant can now
   connect its own Google Workspace (or Cloud Identity) organization as a sign-in
   provider beside the shared Google developer sign-in: several connections may
   share one identity provider, each selected by its own OAuth client, and a
@@ -26,9 +26,9 @@ breaking change or a reset. Sidecar releases follow, by version.
   so a request may only repeat them unchanged; one that would change them is
   refused with `ERR_IDP_ISSUER_METADATA_CONFLICT`. Existing connections and
   sign-ins, including the shared Google sign-in, work exactly as before. The
-  rollout is a planned maintenance window on 2026-10-26 (UTC) of about 15
-  minutes, during which the service is unavailable while the database is
-  updated and the service restarts; tenant data is kept.
+  rollout was a planned maintenance window on 2026-10-26 from 17:00 to 17:16
+  UTC, during which the service was unavailable while the database was
+  updated and the service restarted; tenant data was kept.
 - **2026-10-22:** The commitments are clarified: recovery from a failed change
   is not a reset. The service may be restored from a backup taken before the
   change, and AAC takes reasonable measures to avoid losing tenant data in that

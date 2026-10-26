@@ -515,7 +515,8 @@ messages.
 Prefer [aac init](https://docs.cascadeauth.com/cli/) for supported tenant registration and agent setup. It prepares
 the tenant-admin key, assigned domain, workload, certificates and configuration
 in CLI-managed directories. Start with the [CLI user guide](https://docs.cascadeauth.com/cli/)
-for shared GitHub, shared Google and enterprise Microsoft Entra ID, Okta or Auth0 onboarding;
+for shared GitHub, shared Google and enterprise Microsoft Entra ID, Okta, Auth0
+or Google Workspace onboarding;
 the enterprise first connection and recovery verifier are prerequisites to its
 normal `init` flow. The [complete command reference](https://docs.cascadeauth.com/cli/reference/)
 describes the latest supported released CLI.
