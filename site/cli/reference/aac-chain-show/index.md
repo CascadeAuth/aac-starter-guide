@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/cli/reference/aac-chain-show/
 
-Applies to: AAC CLI 0.2.17
+Applies to: AAC CLI 0.2.18
 
-Documentation revision: c49d7e04b769c5ff9ed0c96de0a31a0a4cbfe556
+Documentation revision: 8564c97b260e568730b3d02189ede78faa988ee7
 
 ---
 
