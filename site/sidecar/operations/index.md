@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/sidecar/operations/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 85eb938ffec63b0ba007a23b774d18c2b7c2628c
+Documentation revision: b655326328e82e8f4bacb002580c396564f0626c
 
 ---
 
@@ -56,6 +56,15 @@ diagnostics (`a2a_ingress`, `a2a_egress`) also remain local; the `mint`,
 `dispatch` and `receive` events an A2A dispatch records are forwarded like
 native ones. Local `sink: "none"` may be used
 with central forwarding when local retention is intentionally disabled.
+
+A successful native dispatch whose sender verified the receipt also forwards
+the boolean `receipt_verified: true` in its central audit metadata. The receipt
+itself stays local. Other outcomes omit the field; an HTTP success or A2A
+acknowledgement without a verified receipt does not establish activation.
+The control plane uses this tenant-authenticated observation with its
+30-day onboarding records; see [Privacy](https://docs.cascadeauth.com/privacy/#onboarding-and-first-execution).
+Upgrade the accepting control plane before enabling this forwarder version;
+older collectors reject the additional field.
 
 Forwarding uses a bounded background queue and never waits on the authorization
 path. Outages, queue saturation or shutdown can lose central events; retain

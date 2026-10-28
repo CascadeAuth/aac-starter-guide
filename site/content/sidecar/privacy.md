@@ -1,7 +1,8 @@
 # Privacy
 
-This page explains what the AAC documentation site records when you read it,
-why, and for how long. It applies to every page under `https://docs.cascadeauth.com/`, to the
+This page explains documentation access records and first-party onboarding
+measurement, why we use them, and how long we keep them. The website sections
+apply to every page under `https://docs.cascadeauth.com/`, to the
 company home page at `https://cascadeauth.com/` (and `https://www.cascadeauth.com/`,
 which forwards to it), which the same edge serves, and to the
 `https://docs.cascadeauth.dev/` address that forwards to the documentation.
@@ -53,6 +54,46 @@ Attribution 4.0 (CC BY 4.0) license, and are approximate.
 The edge and the log storage run on Amazon Web Services. The pages themselves
 are published from GitHub Pages, which serves the content to the edge; GitHub's
 own service records are governed by [GitHub's privacy statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+
+## Onboarding and first execution
+
+AAC CLI registration and setup automatically send a small set of first-party
+observations to the AAC control plane selected in your configuration. These
+let us understand whether setup reaches a first successful agent execution.
+They contain a random journey identifier shared by profiles in one CLI home,
+start/failure/cancellation categories, preparation status, and optional
+client-declared source/context labels. The server links newly created tenants
+to that journey. With central telemetry configured, the sender can report a
+successful dispatch whose receipt it verified. A graph view alone does not
+count as successful execution.
+
+The onboarding records contain no contact address, sign-in identity, IP,
+browser history, private key, credential or workflow payload. The private
+journey-update key is stored locally; only its hash is kept by the collector.
+Tenant identifiers are used internally to link progress and never appear in
+the aggregate reports. Receipt contents remain local. This measurement does
+not link your website browsing to CLI use, use cookies or fingerprinting,
+or send events to a third-party analytics service. Other operational records,
+including website access logs and API access/security logs, keep their existing
+purpose and retention. API logs can record request paths, including tenant
+identifiers in tenant-scoped routes. Observation keys and bodies are not added
+to application logs. The 30-day rule below applies to the dedicated onboarding
+tables, not to these separate operational records.
+
+Individual onboarding records expire **30 days after the first observation**;
+retries do not extend that period. Reports exclude expired records immediately.
+The admin service deletes them at startup and hourly; a service outage can
+delay physical cleanup. Existing database backup retention still applies,
+and expired records are purged after restoration before reporting. Aggregate
+reports contain counts and timing summaries only and may be kept longer.
+The CLI replaces expired local journey state on its next use; an inactive
+CLI home remains under your control.
+
+Collection is best effort and does not change registration or setup outcomes.
+A journey represents an installation and endpoint, not a verified person;
+the same person using another installation can count again. Source labels
+are client-declared, and missing source stays unknown. We do not treat
+internal tests or assisted runs as evidence of organic adoption.
 
 ## Contact
 

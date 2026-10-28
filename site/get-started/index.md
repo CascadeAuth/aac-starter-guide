@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/get-started/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: 85eb938ffec63b0ba007a23b774d18c2b7c2628c
+Documentation revision: b655326328e82e8f4bacb002580c396564f0626c
 
 ---
 
@@ -46,6 +46,15 @@ Allow outbound HTTPS to GitHub, PyPI, Docker Hub, GHCR and the
 [AAC stage endpoints](https://docs.cascadeauth.com/sidecar/configuration/#aac-stage-endpoints).
 You need a browser for interactive GitHub sign-in and real contact email addresses.
 The same human can own both tenants; a contact email does not select the sign-in account.
+
+The CLI automatically reports minimal onboarding progress to the selected AAC
+control plane; configured central telemetry reports verified execution status.
+The two profiles share one random journey in this CLI home, while their tenant
+counts stay separate. Individual onboarding records expire after 30 days;
+aggregate reports may be retained. See [Privacy](https://docs.cascadeauth.com/privacy/#onboarding-and-first-execution).
+For an internal test, set `AAC_ACTIVATION_ATTRIBUTION=internal` before
+registration; use `assisted` for a known assisted run. Otherwise attribution
+stays unknown. These labels describe the run, not the sign-in identity.
 
 The steps below create the tenants and prepare credentials. AAC assigns the
 trust domains; you do not need to own DNS, provision a CA or run Valkey for this

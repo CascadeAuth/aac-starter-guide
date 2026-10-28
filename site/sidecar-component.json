@@ -1,6 +1,6 @@
 {
   "component": "sidecar",
-  "documentation_revision": "85eb938ffec63b0ba007a23b774d18c2b7c2628c",
+  "documentation_revision": "b655326328e82e8f4bacb002580c396564f0626c",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "15028d9ac2d825ea391efd1adfee9dbbf9d3c49fc2796d34766b10fb694a2eaa",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -13,13 +13,13 @@
     "content/sidecar/control-plane.md": "9cc1dea410a3ac26d541d630446223eacc37d1f368041ed24232b329ce3d1c3d",
     "content/sidecar/deployment.md": "139fc581aabf6fc3aa049bf3c77eb415516b82bf11ddb1a2ded0f7132a7572b5",
     "content/sidecar/examples.md": "145210e43d2bb1791be5b29badc689eda94cdf5f0ce4f7bbaf5f57ffcc2e8c92",
-    "content/sidecar/get-started.md": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
+    "content/sidecar/get-started.md": "f400dee6c83663848f7c153309db01fcc019b27ec69c62585b4a70f6d12344de",
     "content/sidecar/home.md": "97f8e15224528308910a565080ac3ab554f298b1d54bb56c312a9211c67c3698",
     "content/sidecar/integration.md": "838f36cdbbc19784ce08d054f45d3fe20aa8f9844647e568735ba8056c3018c3",
     "content/sidecar/keys-and-certificates.md": "031be1ae066989fcb5da5ccd854a6adcc106d3bef5c3db4b4dfb1b4f88ec4cbc",
-    "content/sidecar/operations.md": "1c249e87c5f975b8e158c2dd995828b9aa4ddac19f4a8e64ee1fe93276c7077d",
+    "content/sidecar/operations.md": "8dd4c2f13616a53dab755bd47d14b5055f81eb075a0c4202e762de066cea272b",
     "content/sidecar/overview.md": "62832ae5bbe01a26090016cf60955807d057397db7e8015d11fbe8bd175cf099",
-    "content/sidecar/privacy.md": "7a83f7fd1d87d97fcade9465e93c1db3cb5ee70245f1b4693ae5547e9585b45f",
+    "content/sidecar/privacy.md": "09c9d52ce4fbfa307ed42a47c5f6dd4fa2792ce9629204ba7323beed10f85543",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
     "content/sidecar/release-notes.md": "08461326a8c28587c8c16404ce59acb96757258398406adbaa08eeedcd5b8376",
     "content/sidecar/released-components.json": "4073e71d1b4e9e9d2d5edbfe06f831accea93d55b5574ba6d13e368140bcb569",
@@ -60,7 +60,7 @@
     },
     "/get-started/": {
       "applicability": "AAC Sidecar v0.5.6",
-      "content_sha256": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
+      "content_sha256": "f400dee6c83663848f7c153309db01fcc019b27ec69c62585b4a70f6d12344de",
       "description": "Run a first authenticated reservation with Docker.",
       "metadata_sha256": "edf8d3f0bf8f0b5df64efbcf4e821f274e789703c7a0b69b3e63734f9efde90b",
       "route": "/get-started/",
@@ -100,7 +100,7 @@
     },
     "/privacy/": {
       "applicability": "AAC platform \u00b7 developer beta",
-      "content_sha256": "7a83f7fd1d87d97fcade9465e93c1db3cb5ee70245f1b4693ae5547e9585b45f",
+      "content_sha256": "09c9d52ce4fbfa307ed42a47c5f6dd4fa2792ce9629204ba7323beed10f85543",
       "description": "What the documentation site records about a visit, why, and for how long.",
       "metadata_sha256": "1addef9451c8dd872cc120c0d8e11e3cbf2857eeedfa00cdd2b42eedc68f1277",
       "route": "/privacy/",
@@ -170,7 +170,7 @@
     },
     "/sidecar/operations/": {
       "applicability": "AAC Sidecar v0.5.6",
-      "content_sha256": "1c249e87c5f975b8e158c2dd995828b9aa4ddac19f4a8e64ee1fe93276c7077d",
+      "content_sha256": "8dd4c2f13616a53dab755bd47d14b5055f81eb075a0c4202e762de066cea272b",
       "description": "Diagnostics, maintenance and evidence verification.",
       "metadata_sha256": "30349bbacf63b442ea3c76add8bd865e78da2ead980a5c486732859a65f4e850",
       "route": "/sidecar/operations/",
@@ -200,12 +200,12 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "33b005039583a87fa7658f17a8050360bc3adba9",
+  "previous_documentation_revision": "85eb938ffec63b0ba007a23b774d18c2b7c2628c",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
-    "documentation_revision": "85eb938ffec63b0ba007a23b774d18c2b7c2628c",
+    "documentation_revision": "b655326328e82e8f4bacb002580c396564f0626c",
     "documentation_source": "reviewed-source",
-    "guide_sha256": "55047be1a1e36ffed7a47e078c53a1a1891d3596d4f48ef900df16f6f2706ab7",
+    "guide_sha256": "f400dee6c83663848f7c153309db01fcc019b27ec69c62585b4a70f6d12344de",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:6486e1b4f78395d6e503b57d98bdc86058e33362e73e06b3673395ef92d5e974",
     "template_sha256": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
     "version": "v0.5.6"
