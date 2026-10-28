@@ -2,24 +2,24 @@
 
 *AAC - Agent Authority Cloud - CascadeAuth*
 
-AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
-plus a sidecar you run beside each agent, together the authorization layer for
-networks of AI agents. When agents hand work to one another, inside one
-organization and across company boundaries, from a simple two-agent exchange to
-a network of thousands of agents, AAC sends the authority with every
-agent-to-agent request: who authorized the work, what it permits, and which
-agent may act next. Each agent-to-agent hop can narrow that authority but never
-widen it, every receiving agent verifies the authority on the spot, and the
-work ends in a signed receipt and an execution graph you can inspect.
+AAC (Agent Authority Cloud) is an AI agent authorization platform from
+CascadeAuth. It lets you delegate and manage authority across collaborating
+agents, from a small workflow to a larger network.
 
-A sidecar beside each agent holds the agent's identity, signs the authority the
-agent passes on, and checks every agent-to-agent request before the agent sees
-it: that the sender is the agent the authority names, and that the authority
-itself is valid and was never widened along the way. The sidecar proves
-identity and verifies authority. Transport encryption stays with your
-deployment. Your agents, in any language or framework, keep their business
-logic and leave to AAC the proof of who is calling and what they are allowed to
-do.
+When agents hand work to one another, within an organization or across
+organizational boundaries, AAC carries authority with every agent-to-agent
+request. You can track and audit who authorized the work, what it permits,
+and which agent may act next. Each hop can narrow that authority but cannot
+widen it.
+
+AAC combines a hosted service with a sidecar that runs beside each agent.
+Each receiving sidecar verifies the authority's integrity and authenticity
+locally. Signed receipts, audit records and the Agent Execution Graph help
+operators and business owners trace and inspect recorded execution.
+
+Agents in any language or framework keep their business logic. The sidecar
+handles workload identity and authority verification; transport encryption
+remains the responsibility of your deployment.
 
 [See it work](#see-it-work-in-ten-minutes) · [Understand AAC](/overview/) ·
 [Start the AAC journey](/get-started/)
