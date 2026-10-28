@@ -1,8 +1,8 @@
 {
   "component": "sidecar",
-  "documentation_revision": "b655326328e82e8f4bacb002580c396564f0626c",
+  "documentation_revision": "46467479068ab1d38fbd03fe3da84f633f2b42d6",
   "files": {
-    "DOCKER_HUB_OVERVIEW.md": "15028d9ac2d825ea391efd1adfee9dbbf9d3c49fc2796d34766b10fb694a2eaa",
+    "DOCKER_HUB_OVERVIEW.md": "ad7d2d268eff79ef2657b020a1be44a7df3b725b3fd75981a14836454e2cd76d",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
     "THIRD_PARTY_NOTICES.md": "a4f1e6b14d4d8331664c8606b6e4099013075c35fbb7c2167268a5228a3a6a63",
     "assets/keys-and-certificates.svg": "14f9c234f04015d9d178217f216a69efe4291f26a84215cddff22fdbfcd96918",
@@ -21,7 +21,7 @@
     "content/sidecar/overview.md": "62832ae5bbe01a26090016cf60955807d057397db7e8015d11fbe8bd175cf099",
     "content/sidecar/privacy.md": "09c9d52ce4fbfa307ed42a47c5f6dd4fa2792ce9629204ba7323beed10f85543",
     "content/sidecar/publisher.md": "32eb427c5f7c06b3f58660513d077d64a778fbd60f8dc758a3a6048f1736998b",
-    "content/sidecar/release-notes.md": "08461326a8c28587c8c16404ce59acb96757258398406adbaa08eeedcd5b8376",
+    "content/sidecar/release-notes.md": "240249fb155b47bfb87bb8f47542984d88797bfcb09521137948678c429efbf9",
     "content/sidecar/released-components.json": "4073e71d1b4e9e9d2d5edbfe06f831accea93d55b5574ba6d13e368140bcb569",
     "content/sidecar/sidecar.md": "14960b4136774ac1ef305fc22d829fb327b6dcebe9772c929e2a6fda88e9dbbc",
     "content/sidecar/verification.md": "e2ee95b049df71920194311f439b6e85f9f3f8da6545e1835074b2460a1d3ebf",
@@ -110,7 +110,7 @@
     },
     "/release-notes/": {
       "applicability": "AAC Sidecar v0.5.6",
-      "content_sha256": "08461326a8c28587c8c16404ce59acb96757258398406adbaa08eeedcd5b8376",
+      "content_sha256": "240249fb155b47bfb87bb8f47542984d88797bfcb09521137948678c429efbf9",
       "description": "Changes and upgrade guidance by component.",
       "metadata_sha256": "0e652f968db820eaba4257b3d41e76c0570caf54609b30053ed0ef566fd2cca7",
       "route": "/release-notes/",
@@ -200,10 +200,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "85eb938ffec63b0ba007a23b774d18c2b7c2628c",
+  "previous_documentation_revision": "b655326328e82e8f4bacb002580c396564f0626c",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:59a6837abd43ab67f2220a617f2034587fd8d709fd8d236f72518e287e10352c",
-    "documentation_revision": "b655326328e82e8f4bacb002580c396564f0626c",
+    "documentation_revision": "46467479068ab1d38fbd03fe3da84f633f2b42d6",
     "documentation_source": "reviewed-source",
     "guide_sha256": "f400dee6c83663848f7c153309db01fcc019b27ec69c62585b4a70f6d12344de",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:6486e1b4f78395d6e503b57d98bdc86058e33362e73e06b3673395ef92d5e974",

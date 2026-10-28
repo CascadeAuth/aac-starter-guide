@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/release-notes/
 
 Applies to: AAC Sidecar v0.5.6
 
-Documentation revision: b655326328e82e8f4bacb002580c396564f0626c
+Documentation revision: 46467479068ab1d38fbd03fe3da84f633f2b42d6
 
 ---
 
@@ -178,6 +178,15 @@ dispatch whose
 message left but ended in a remote rejection, a timeout, an uncertain
 delivery or an invalid reply records a `dispatch` failure with that code. No
 change to routes, configuration, signed bytes or the verification verdicts.
+
+## 0.5.7
+
+With central forwarding configured, a successful dispatch whose sender
+verified the receipt now includes a boolean verification result in its central
+metadata. The receipt and business claims remain local. Other outcomes do not
+count as activation. This works with the control-plane onboarding report; see
+[Privacy](https://docs.cascadeauth.com/privacy/#onboarding-and-first-execution).
+Deploy the accepting control plane before using this forwarder version.
 
 ## 0.5.6
 

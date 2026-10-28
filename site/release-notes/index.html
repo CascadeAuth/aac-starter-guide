@@ -6,9 +6,9 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><div class="brand-lockup"><a class="company" href="https://cascadeauth.com/">CascadeAuth</a><span class="sep" aria-hidden="true">/</span><a class="brand" href="/">AAC Docs</a></div><nav class="primary" aria-label="Main navigation"><a href="/overview/">Overview</a><a href="/get-started/">Get started</a><a href="/examples/">Examples</a><a href="/cli/">AAC CLI</a><a href="/sidecar/">Sidecar</a><a href="/trust-anchor-publisher/">Trust anchor publisher</a><a href="/control-plane/">Control Plane</a><a href="/aeg/">AEG</a><a href="https://github.com/CascadeAuth">GitHub</a></nav>
 <div class="search"><label class="sr-only" for="site-search">Search AAC documentation</label><input id="site-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results"><div class="search-results" id="search-results" role="region" aria-label="Search results" aria-live="polite"></div></div></div></header>
-<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#aac-developer-beta-service" class="toc-h2">AAC Developer Beta service</a><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a><a href="#0-5-1" class="toc-h2">0.5.1</a><a href="#0-5-2" class="toc-h2">0.5.2</a><a href="#0-5-3" class="toc-h2">0.5.3</a><a href="#0-5-4" class="toc-h2">0.5.4</a><a href="#0-5-5" class="toc-h2">0.5.5</a><a href="#0-5-6" class="toc-h2">0.5.6</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
+<div class="layout single-page"><aside class="section-nav"><details class="section-menu" open><summary>On this page</summary><nav aria-label="Page contents"><a href="#aac-developer-beta-service" class="toc-h2">AAC Developer Beta service</a><a href="#0-4-0" class="toc-h2">0.4.0</a><a href="#configuration-upgrade-note" class="toc-h3">Configuration upgrade note</a><a href="#native-forwarding-upgrade-note" class="toc-h3">Native forwarding upgrade note</a><a href="#0-4-1" class="toc-h2">0.4.1</a><a href="#0-4-2" class="toc-h2">0.4.2</a><a href="#0-4-3" class="toc-h2">0.4.3</a><a href="#0-4-4" class="toc-h2">0.4.4</a><a href="#0-5-0" class="toc-h2">0.5.0</a><a href="#0-5-1" class="toc-h2">0.5.1</a><a href="#0-5-2" class="toc-h2">0.5.2</a><a href="#0-5-3" class="toc-h2">0.5.3</a><a href="#0-5-4" class="toc-h2">0.5.4</a><a href="#0-5-5" class="toc-h2">0.5.5</a><a href="#0-5-7" class="toc-h2">0.5.7</a><a href="#0-5-6" class="toc-h2">0.5.6</a></nav></details></aside><main id="content"><nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="/">AAC Docs</a> / <span aria-current="page">Release notes</span></nav>
 <h1 id="release-notes">Release notes</h1>
-<div class="page-actions"><span>AAC Sidecar v0.5.6</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs b655326328e8</span></div>
+<div class="page-actions"><span>AAC Sidecar v0.5.6</span><a href="/release-notes/index.md" download="release-notes.md">Markdown</a><span class="revision">Docs 46467479068a</span></div>
 <h2 id="aac-developer-beta-service">AAC Developer Beta service</h2>
 <p>Changes to the hosted service, <a href="/control-plane/#aac-developer-beta-free">AAC Developer Beta (free)</a>,
 are listed here, newest first. Tenant contacts also receive an email before a
@@ -152,6 +152,13 @@ dispatch whose
 message left but ended in a remote rejection, a timeout, an uncertain
 delivery or an invalid reply records a <code>dispatch</code> failure with that code. No
 change to routes, configuration, signed bytes or the verification verdicts.</p>
+<h2 id="0-5-7">0.5.7</h2>
+<p>With central forwarding configured, a successful dispatch whose sender
+verified the receipt now includes a boolean verification result in its central
+metadata. The receipt and business claims remain local. Other outcomes do not
+count as activation. This works with the control-plane onboarding report; see
+<a href="/privacy/#onboarding-and-first-execution">Privacy</a>.
+Deploy the accepting control plane before using this forwarder version.</p>
 <h2 id="0-5-6">0.5.6</h2>
 <p>A reply message no longer needs a <code>contextId</code>. The sidecar required one on
 every message in a peer's reply (the direct message, a task's status message

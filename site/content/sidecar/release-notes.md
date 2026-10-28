@@ -171,6 +171,15 @@ message left but ended in a remote rejection, a timeout, an uncertain
 delivery or an invalid reply records a `dispatch` failure with that code. No
 change to routes, configuration, signed bytes or the verification verdicts.
 
+## 0.5.7
+
+With central forwarding configured, a successful dispatch whose sender
+verified the receipt now includes a boolean verification result in its central
+metadata. The receipt and business claims remain local. Other outcomes do not
+count as activation. This works with the control-plane onboarding report; see
+[Privacy](https://docs.cascadeauth.com/privacy/#onboarding-and-first-execution).
+Deploy the accepting control plane before using this forwarder version.
+
 ## 0.5.6
 
 A reply message no longer needs a `contextId`. The sidecar required one on
