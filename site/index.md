@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: c4a0e85712ba4eee52d9b87e8d9f0c657cf96140
+Documentation revision: 33b005039583a87fa7658f17a8050360bc3adba9
 
 ---
 
@@ -64,8 +64,8 @@ and what it does not.
 
 ## Who it is for
 
-Developers and platform teams building AI agents that act for people and pass
-work to other agents, inside one organization or across several. Each agent
+Developers and platform teams building AI agents that act on behalf of people
+and pass work to other agents, inside one organization or across several. Each agent
 needs to check the authority it receives, and you need a signed record
 afterwards of what each agent was allowed to do and who passed the work on.
 AAC runs beside the agents you already have: each agent gets a sidecar that

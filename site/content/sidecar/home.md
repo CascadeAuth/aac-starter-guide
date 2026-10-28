@@ -56,8 +56,8 @@ and what it does not.
 
 ## Who it is for
 
-Developers and platform teams building AI agents that act for people and pass
-work to other agents, inside one organization or across several. Each agent
+Developers and platform teams building AI agents that act on behalf of people
+and pass work to other agents, inside one organization or across several. Each agent
 needs to check the authority it receives, and you need a signed record
 afterwards of what each agent was allowed to do and who passed the work on.
 AAC runs beside the agents you already have: each agent gets a sidecar that

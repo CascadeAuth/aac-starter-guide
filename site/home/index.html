@@ -6,14 +6,18 @@
 <body><a class="skip" href="#content">Skip to content</a>
 <header><div class="top"><a class="brand" href="https://cascadeauth.com/">CascadeAuth</a><nav class="primary" aria-label="Main navigation"><a href="https://docs.cascadeauth.com/">Docs</a><a href="https://docs.cascadeauth.com/get-started/">Get started</a><a href="https://github.com/CascadeAuth">GitHub</a></nav></div></header>
 <div class="layout apex"><main id="content">
-<h1 id="authority-that-travels-with-the-work">Authority that travels with the work</h1><p class="subtitle">AAC - Agent Authority Cloud - by CascadeAuth</p><p>AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
-plus a sidecar you run beside each agent, together the authorization layer for
-networks of AI agents. When agents hand work to one another, inside one
-organization and across company boundaries, AAC sends the authority with every
-agent-to-agent request: who authorized the work, what it permits, and which
-agent may act next. Each hop can narrow that authority but never widen it,
-every receiving agent verifies it on the spot, and the work ends in a signed
-receipt and an execution graph you can inspect.</p>
+<h1 id="authority-that-travels-with-the-work">Authority that travels with the work</h1><p class="subtitle">AAC - Agent Authority Cloud - by CascadeAuth</p><p>AAC (Agent Authority Cloud) is an AI agent authorization platform from
+CascadeAuth. It lets you delegate and manage authority across collaborating
+agents, from a small workflow to a larger network.</p>
+<p>When agents hand work to one another, within an organization or across
+organizational boundaries, AAC carries authority with every agent-to-agent
+request. You can track and audit who authorized the work, what it permits,
+and which agent may act next. Each hop can narrow that authority but cannot
+widen it.</p>
+<p>AAC combines a hosted service with a sidecar that runs beside each agent.
+Each receiving sidecar verifies the authority's integrity and authenticity
+locally. Signed receipts, audit records and the Agent Execution Graph help
+operators and business owners trace and inspect recorded execution.</p>
 <p><a href="https://docs.cascadeauth.com/">Read the documentation</a> ·
 <a href="https://docs.cascadeauth.com/get-started/">Get started</a> ·
 <a href="https://github.com/CascadeAuth/aac-compose-demo">Run the demo</a> ·
@@ -29,14 +33,14 @@ the whole chain locally, without calling back to the earlier agents or their
 identity providers. Your agents keep using OAuth and API keys for the ordinary
 APIs they call.</p>
 <p><a href="https://docs.cascadeauth.com/overview/">How AAC works</a></p>
-<h2 id="sign-in-with-the-identity-you-already-have">Sign in with the identity you already have</h2>
-<p>Self-serve tenant registration and sign-in use GitHub or Google. There is no
-AAC username or password anywhere; the CLI session is minted from the
-provider's identity token.</p>
-<p>A tenant can connect its own identity provider so its people sign in with
-their work identity. AAC supports the OpenID Connect protocol. Microsoft Entra
-ID, Okta, Auth0 and Google Workspace are supported out of the box. A sample
-connection file and a console walkthrough for each supported provider are in
+<h2 id="register-and-operate-with-the-identities-you-already-have">Register and operate with the identities you already have</h2>
+<p>You can register a developer tenant and sign in with your own GitHub or
+Google account. You do not need a separate AAC username or password.</p>
+<p>You can also connect your organization's own identity providers so members
+can sign in with their work identities to operate and use AAC. AAC supports
+the OpenID Connect protocol. Microsoft Entra ID, Okta, Auth0 and Google
+Workspace are supported out of the box. A sample connection file and a
+console walkthrough for each supported provider are in
 <a href="https://github.com/CascadeAuth/aac-idp-connection-examples">aac-idp-connection-examples</a>.</p>
 <h2 id="see-it-work-in-ten-minutes">See it work in ten minutes</h2>
 <p>The public Docker Compose demo runs a reservation between two companies'

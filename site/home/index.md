@@ -2,7 +2,7 @@ Canonical: https://cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: c4a0e85712ba4eee52d9b87e8d9f0c657cf96140
+Documentation revision: 33b005039583a87fa7658f17a8050360bc3adba9
 
 ---
 
@@ -10,14 +10,20 @@ Documentation revision: c4a0e85712ba4eee52d9b87e8d9f0c657cf96140
 
 *AAC - Agent Authority Cloud - by CascadeAuth*
 
-AAC is the Agent Authority Cloud, a platform from CascadeAuth: a hosted service
-plus a sidecar you run beside each agent, together the authorization layer for
-networks of AI agents. When agents hand work to one another, inside one
-organization and across company boundaries, AAC sends the authority with every
-agent-to-agent request: who authorized the work, what it permits, and which
-agent may act next. Each hop can narrow that authority but never widen it,
-every receiving agent verifies it on the spot, and the work ends in a signed
-receipt and an execution graph you can inspect.
+AAC (Agent Authority Cloud) is an AI agent authorization platform from
+CascadeAuth. It lets you delegate and manage authority across collaborating
+agents, from a small workflow to a larger network.
+
+When agents hand work to one another, within an organization or across
+organizational boundaries, AAC carries authority with every agent-to-agent
+request. You can track and audit who authorized the work, what it permits,
+and which agent may act next. Each hop can narrow that authority but cannot
+widen it.
+
+AAC combines a hosted service with a sidecar that runs beside each agent.
+Each receiving sidecar verifies the authority's integrity and authenticity
+locally. Signed receipts, audit records and the Agent Execution Graph help
+operators and business owners trace and inspect recorded execution.
 
 [Read the documentation](https://docs.cascadeauth.com/) ·
 [Get started](https://docs.cascadeauth.com/get-started/) ·
@@ -38,16 +44,16 @@ APIs they call.
 
 [How AAC works](https://docs.cascadeauth.com/overview/)
 
-## Sign in with the identity you already have
+## Register and operate with the identities you already have
 
-Self-serve tenant registration and sign-in use GitHub or Google. There is no
-AAC username or password anywhere; the CLI session is minted from the
-provider's identity token.
+You can register a developer tenant and sign in with your own GitHub or
+Google account. You do not need a separate AAC username or password.
 
-A tenant can connect its own identity provider so its people sign in with
-their work identity. AAC supports the OpenID Connect protocol. Microsoft Entra
-ID, Okta, Auth0 and Google Workspace are supported out of the box. A sample
-connection file and a console walkthrough for each supported provider are in
+You can also connect your organization's own identity providers so members
+can sign in with their work identities to operate and use AAC. AAC supports
+the OpenID Connect protocol. Microsoft Entra ID, Okta, Auth0 and Google
+Workspace are supported out of the box. A sample connection file and a
+console walkthrough for each supported provider are in
 [aac-idp-connection-examples](https://github.com/CascadeAuth/aac-idp-connection-examples).
 
 ## See it work in ten minutes
