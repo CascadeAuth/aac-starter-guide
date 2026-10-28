@@ -1,8 +1,8 @@
 Canonical: https://docs.cascadeauth.com/sidecar/
 
-Applies to: AAC Sidecar v0.5.6
+Applies to: AAC Sidecar v0.5.7
 
-Documentation revision: 46467479068ab1d38fbd03fe3da84f633f2b42d6
+Documentation revision: 90c8d3d535f9a306c4ae18dfc34156240a4a45be
 
 ---
 
@@ -19,8 +19,8 @@ Get the released container and its operating guide from
 [AAC Sidecar on Docker Hub](https://hub.docker.com/r/cascadeauth/aac-sidecar/):
 
 ```bash
-docker pull docker.io/cascadeauth/aac-sidecar:v0.5.6
-docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.6 -version
+docker pull docker.io/cascadeauth/aac-sidecar:v0.5.7
+docker run --rm docker.io/cascadeauth/aac-sidecar:v0.5.7 -version
 ```
 
 Continue with [download and installation options](https://docs.cascadeauth.com/sidecar/install/) for the
