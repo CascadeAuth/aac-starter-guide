@@ -2,7 +2,7 @@ Canonical: https://docs.cascadeauth.com/get-started/
 
 Applies to: AAC Sidecar v0.5.7
 
-Documentation revision: 90c8d3d535f9a306c4ae18dfc34156240a4a45be
+Documentation revision: da68729e34b2ed4a1b8d9089b562f844198ef575
 
 ---
 
@@ -20,6 +20,8 @@ and Tourfedia's sidecar verifies the whole chain locally before its booking
 agent sees the request. The booking ends in a signed receipt and an execution
 graph showing who authorized what, hop by hop. This page runs that journey on
 your machine.
+
+[Watch the three-minute AAC overview](https://cascadeauth.com/videos/pitch) before running the example.
 
 Run **AAC: two tenants, one reservation made** from a fresh machine with the
 public [Docker Compose demo](https://github.com/CascadeAuth/aac-compose-demo).

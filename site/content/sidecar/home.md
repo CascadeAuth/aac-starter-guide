@@ -2,23 +2,20 @@
 
 *AAC - Agent Authority Cloud - CascadeAuth*
 
-AAC (Agent Authority Cloud) is an AI agent authorization platform from
-CascadeAuth. It lets you delegate and manage authority across collaborating
-agents, from a small workflow to a larger network.
+AAC carries signed business authorizations with requests between agents.
+Each agent's paired sidecar verifies those authorizations before passing a
+request to the application. An agent can pass on a narrower authorization to the next agent,
+but cannot expand the one it received.
 
-When agents hand work to one another, within an organization or across
-organizational boundaries, AAC carries authority with every agent-to-agent
-request. You can track and audit who authorized the work, what it permits,
-and which agent may act next. Each hop can narrow that authority but cannot
-widen it.
+AAC (Agent Authority Cloud) is an AI agent authorization platform from CascadeAuth.
 
 AAC combines a hosted service with a sidecar that runs beside each agent.
-Each receiving sidecar verifies the authority's integrity and authenticity
+Each receiving sidecar verifies the authorization's integrity and authenticity
 locally. Signed receipts, audit records and the Agent Execution Graph help
 operators and business owners trace and inspect recorded execution.
 
 Agents in any language or framework keep their business logic. The sidecar
-handles workload identity and authority verification; transport encryption
+handles workload identity and authorization verification; transport encryption
 remains the responsibility of your deployment.
 
 [See it work](#see-it-work-in-ten-minutes) · [Understand AAC](/overview/) ·
@@ -58,10 +55,10 @@ and what it does not.
 
 Developers and platform teams building AI agents that act on behalf of people
 and pass work to other agents, inside one organization or across several. Each agent
-needs to check the authority it receives, and you need a signed record
+needs to check the authorizations it receives, and you need a signed record
 afterwards of what each agent was allowed to do and who passed the work on.
 AAC runs beside the agents you already have: each agent gets a sidecar that
-holds its identity and verifies incoming authority, and your application keeps
+holds its identity and verifies incoming authorizations, and your application keeps
 its own business rules. Agents in any language connect to their sidecar over
 local HTTP, natively or with A2A.
 

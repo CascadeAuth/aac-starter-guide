@@ -13,6 +13,8 @@ agent sees the request. The booking ends in a signed receipt and an execution
 graph showing who authorized what, hop by hop. This page runs that journey on
 your machine.
 
+[Watch the three-minute AAC overview](https://cascadeauth.com/videos/pitch) before running the example.
+
 Run **AAC: two tenants, one reservation made** from a fresh machine with the
 public [Docker Compose demo](https://github.com/CascadeAuth/aac-compose-demo).
 Vantis Equity's trip-planner delegates to Tourfedia's booking agent. You will

@@ -2,32 +2,36 @@ Canonical: https://cascadeauth.com/
 
 Applies to: AAC platform · developer beta
 
-Documentation revision: 90c8d3d535f9a306c4ae18dfc34156240a4a45be
+Documentation revision: da68729e34b2ed4a1b8d9089b562f844198ef575
 
 ---
 
-# Authority that travels with the work
+# Enforce business authorization across AI agents
 
 *AAC - Agent Authority Cloud - by CascadeAuth*
 
-AAC (Agent Authority Cloud) is an AI agent authorization platform from
-CascadeAuth. It lets you delegate and manage authority across collaborating
-agents, from a small workflow to a larger network.
+AAC carries signed business authorizations with requests between agents.
+Each agent's paired sidecar verifies those authorizations before passing a
+request to the application. An agent can pass on a narrower authorization to the next agent,
+but cannot expand the one it received.
 
-When agents hand work to one another, within an organization or across
-organizational boundaries, AAC carries authority with every agent-to-agent
-request. You can track and audit who authorized the work, what it permits,
-and which agent may act next. Each hop can narrow that authority but cannot
-widen it.
+![Demo: an $8,000 spending limit and a refused $9,500 delegation](https://cascadeauth.com/assets/cascadeauth-demo.png)
+
+[Get started](https://docs.cascadeauth.com/get-started/) ·
+[Run the demo](https://github.com/CascadeAuth/aac-compose-demo)
+
+## How AAC works
+
+[Watch the pitch video and read its transcript](https://cascadeauth.com/videos/pitch).
+
+AAC (Agent Authority Cloud) is an AI agent authorization platform from CascadeAuth.
 
 AAC combines a hosted service with a sidecar that runs beside each agent.
-Each receiving sidecar verifies the authority's integrity and authenticity
+Each receiving sidecar verifies the authorization's integrity and authenticity
 locally. Signed receipts, audit records and the Agent Execution Graph help
 operators and business owners trace and inspect recorded execution.
 
 [Read the documentation](https://docs.cascadeauth.com/) ·
-[Get started](https://docs.cascadeauth.com/get-started/) ·
-[Run the demo](https://github.com/CascadeAuth/aac-compose-demo) ·
 [CascadeAuth on GitHub](https://github.com/CascadeAuth)
 
 ## Why agents need more than OAuth and API keys

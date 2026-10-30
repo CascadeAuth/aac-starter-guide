@@ -1,0 +1,31 @@
+{
+  "asset": "company-site.tar.gz",
+  "files": {
+    "assets/company.css": "4839b95836217d91259dbceb881e2c5c81a3aa4b99678af8a3ea68f375ec1b12",
+    "assets/company.js": "a8068d7f487aa010b6f1883681607a047de3c0e1e34826ea04fb04348ee23f53",
+    "assets/fonts/font-2c32b9b3ee358c11.woff2": "2c32b9b3ee358c119e210f6f5195f9bd34894d78a785ff2e95d60e718e400af4",
+    "assets/fonts/font-734bd8e3e85d088a.woff2": "734bd8e3e85d088af9e6644bbed142b3703d903e48257e9f3a8f84c40309d501",
+    "assets/fonts/ibmplexsans-ofl-7e6b2818edbd8f6a.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
+    "assets/fonts/jetbrainsmono-ofl-b2fe5e8987594e9f.txt": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d",
+    "assets/media/pitch-c3f21c109da6630c.mp4": "c3f21c109da6630cb0f3ad2952ea6f6bd28cfaa8a35921bcc08c5c962b6251fa",
+    "assets/media/pitch-captions-2d26abedb67f9e0a.vtt": "2d26abedb67f9e0a9ec1c6528328b4e98a6593b72be2bfab26c52be7d9f76572",
+    "assets/media/pitch-poster-889fdc2d5e1c491a.png": "889fdc2d5e1c491a201d805fdbb49b365e43b08b706b22a5bec62a476dd1da3d",
+    "assets/slides/pitch-3cae8508f58661e4.pdf": "3cae8508f58661e4f75846a96d2600ef70c5d6e0381ed42dab17a5fd7ab8912d",
+    "assets/slides/quickstart-graph-9969652ddaa25947.png": "9969652ddaa259471d5cb2a73c4d13b9e4739edcbb00900bdb6eb836248ee9b2",
+    "assets/slides/wedge-b-graph-afa40509900ef003.png": "afa40509900ef0035b8fb3f129e49350ed3e66e9d4adeb6fb6bc127eb0a89657",
+    "assets/slides/wedge-c-graph-e2a6a513da71ba3e.png": "e2a6a513da71ba3e7bb982b7f28ee80f48de3a985313056e6d718e23092a1594",
+    "company-component.json": "becb4d1b7f0238343c51ad2a6279e2de3eea5cdf840816703572153bbacb21ab",
+    "company/robots.txt": "da494397276a3ee199738cfac316a338938531c891b220b3db9f3fa83e9b13cd",
+    "company/sitemap.xml": "0ae0238e6d3461242c638a239bcffac908d323f57262ee1bd165dcfbbbc15283",
+    "company/slides/index.html": "aa821461e776fa2c7f4d590aed099b573a85bb627c7c092040c7c2dc715e5f93",
+    "company/slides/pitch.pdf": "3cae8508f58661e4f75846a96d2600ef70c5d6e0381ed42dab17a5fd7ab8912d",
+    "company/slides/pitch/index.html": "69127a2b32f6f2f38e5d9ce3b0f65ca2f84f09c5eb2b522772f5863cadedf081",
+    "company/videos/index.html": "3bdaa4e2e9d9cffabe495ca7139300104c6f08bf012b18d28e74366634a56114",
+    "company/videos/pitch/index.html": "264f26ec268c13c707890034837a55f6361f4d1ecdebc14dea0c6993e9b5ee68",
+    "content/company/catalog.json": "fc13478c877237191dfe5c6069583112e4edaa79a315f9ea9fd21e63d11b14b6"
+  },
+  "repository": "CascadeAuth/aac-starter-guide",
+  "schema_version": 1,
+  "sha256": "758fe208aec7faff0300fd75ba6713a57e8ee0b4478688716a01834805155cff",
+  "tag": "company-site-758fe208aec7faff"
+}

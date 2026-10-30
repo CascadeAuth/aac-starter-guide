@@ -1,26 +1,23 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CascadeAuth - AAC, the Agent Authority Cloud</title>
-<meta name="description" content="AAC, the Agent Authority Cloud from CascadeAuth: the authorization layer for networks of AI agents, and where to start."><link rel="canonical" href="https://cascadeauth.com/">
-<link rel="stylesheet" href="/assets/docs.css"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"></head>
-<body><a class="skip" href="#content">Skip to content</a>
-<header><div class="top"><a class="brand" href="https://cascadeauth.com/">CascadeAuth</a><nav class="primary" aria-label="Main navigation"><a href="https://docs.cascadeauth.com/">Docs</a><a href="https://docs.cascadeauth.com/get-started/">Get started</a><a href="https://github.com/CascadeAuth">GitHub</a></nav></div></header>
+<title>AAC by CascadeAuth - Enforce business authorization across AI agents</title>
+<meta name="description" content="Enforce business authorization across AI agents. Carry signed authorizations with requests and verify them before applications act."><link rel="canonical" href="https://cascadeauth.com/">
+<link rel="stylesheet" href="/assets/docs.css?v=72bee2571ba6"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"></head>
+<body class="apex-page"><a class="skip" href="#content">Skip to content</a>
+<header><div class="top"><a class="brand" href="/">CascadeAuth</a><nav class="primary" aria-label="Main navigation"><a href="/slides">Slides</a><a href="/videos">Videos</a><a href="https://docs.cascadeauth.com/">Docs</a><a href="https://docs.cascadeauth.com/get-started/">Get started</a></nav></div></header>
 <div class="layout apex"><main id="content">
-<h1 id="authority-that-travels-with-the-work">Authority that travels with the work</h1><p class="subtitle">AAC - Agent Authority Cloud - by CascadeAuth</p><p>AAC (Agent Authority Cloud) is an AI agent authorization platform from
-CascadeAuth. It lets you delegate and manage authority across collaborating
-agents, from a small workflow to a larger network.</p>
-<p>When agents hand work to one another, within an organization or across
-organizational boundaries, AAC carries authority with every agent-to-agent
-request. You can track and audit who authorized the work, what it permits,
-and which agent may act next. Each hop can narrow that authority but cannot
-widen it.</p>
+<section class="apex-hero" aria-label="Introduction"><h1 id="enforce-business-authorization-across-ai-agents">Enforce business authorization across AI agents</h1><p class="subtitle">AAC - Agent Authority Cloud - by CascadeAuth</p><div class="hero-summary"><p>AAC carries signed business authorizations with requests between agents.
+Each agent's paired sidecar verifies those authorizations before passing a
+request to the application. An agent can pass on a narrower authorization to the next agent,
+but cannot expand the one it received.</p></div><div class="hero-media-grid"><div class="hero-media-item"><figure class="hero-media"><video controls playsinline preload="metadata" width="1280" height="720" poster="/assets/media/pitch-poster-889fdc2d5e1c491a.png" aria-label="AAC: business authorization across AI agents"><source src="/assets/media/pitch-c3f21c109da6630c.mp4" type="video/mp4"><track kind="captions" src="/assets/media/pitch-captions-2d26abedb67f9e0a.vtt" srclang="en" label="English">Your browser cannot play this video. <a href="/videos/pitch#transcript">Read the transcript</a>.</video></figure><p class="video-description">Two-agent trip demo. <a href="https://github.com/CascadeAuth/aac-compose-demo">Run the demo</a>.</p></div></div><nav class="hero-actions" aria-label="Start using AAC"><a class="hero-primary" href="https://docs.cascadeauth.com/get-started/">Get started</a><a class="hero-secondary" href="https://github.com/CascadeAuth/aac-compose-demo">Run the demo</a></nav></section>
+<h2 id="how-aac-works">How AAC works</h2>
+<p><a href="/videos/pitch">Watch the pitch video and read its transcript</a>.</p>
+<p>AAC (Agent Authority Cloud) is an AI agent authorization platform from CascadeAuth.</p>
 <p>AAC combines a hosted service with a sidecar that runs beside each agent.
-Each receiving sidecar verifies the authority's integrity and authenticity
+Each receiving sidecar verifies the authorization's integrity and authenticity
 locally. Signed receipts, audit records and the Agent Execution Graph help
 operators and business owners trace and inspect recorded execution.</p>
 <p><a href="https://docs.cascadeauth.com/">Read the documentation</a> ·
-<a href="https://docs.cascadeauth.com/get-started/">Get started</a> ·
-<a href="https://github.com/CascadeAuth/aac-compose-demo">Run the demo</a> ·
 <a href="https://github.com/CascadeAuth">CascadeAuth on GitHub</a></p>
 <h2 id="why-agents-need-more-than-oauth-and-api-keys">Why agents need more than OAuth and API keys</h2>
 <p>An API key tells a service which program is calling. An OAuth token tells a
