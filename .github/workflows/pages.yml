@@ -2,7 +2,7 @@ name: publish AAC documentation
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml']
+    paths: ['site/**', '.github/workflows/pages.yml', 'bin/hydrate-company.py', 'company-public-profiles.json', '.gitignore']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,6 +22,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      - name: Materialize checksum-pinned company exports
+        run: python3 bin/hydrate-company.py --site site
       - name: require public site and provenance
         run: |
           test -f site/index.html
