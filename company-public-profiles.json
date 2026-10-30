@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "decks": {
+    "pitch": ["cover", "problem", "whynow", "solution", "proof", "wedgeb", "wedgec", "how", "today"]
+  }
+}

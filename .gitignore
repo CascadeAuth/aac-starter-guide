@@ -1,0 +1,9 @@
+# Company exports are fetched from a checksum-pinned release during deployment.
+/site/company/
+/site/content/company/
+/site/assets/media/
+/site/assets/slides/
+/site/assets/fonts/
+/site/assets/company.css
+/site/assets/company.js
+/site/company-component.json
