@@ -94,11 +94,11 @@
     "content/sidecar/sidecar.md": "cecec092ba32f68d29ae40f51fdcb9e1bf914bc8e49579b4cccf611d5a61b4b5",
     "content/sidecar/verification.md": "e2505783fa4275e49b07a89a6051905e3111cddf0b85eda2f95a6f608b19e47b"
   },
-  "documentation_revision": "da68729e34b2ed4a1b8d9089b562f844198ef575",
+  "documentation_revision": "c91ba3fb10dec19862e58be3d2c1d9ae8ef08599",
   "documentation_source": "reviewed-source",
   "guide_sha256": "dd098447b8f6cdeb42db850df67ac20bdb2921290f42ab4d4479f8d2af1c28c0",
   "image": "docker.io/cascadeauth/aac-sidecar@sha256:f513816a2d0ed2a619820a1e5ce2f3d7b3ecf693dc7c0e30fa8383988947054e",
-  "template_revision": "e69ba31e7f9d2ebd4821bae0d7bb271f8f43e23e4e925ce6cfaa3346dfa4b2d9",
+  "template_revision": "9dd7b4f033fcb285bb0fcbefd56e92ce7f50b14bd3351acf7a02d95ab95f58cb",
   "template_sha256": "7bc04b387e679a6ea5e4ec7ca4c6d47c5c3f3e275bc29c43bead768111b8f29d",
   "version": "v0.5.7"
 }

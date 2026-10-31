@@ -33,6 +33,12 @@ table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;margin
 .brand-lockup{display:flex;align-items:baseline;gap:9px;white-space:nowrap}.brand-lockup .company{font-size:17px;font-weight:650;letter-spacing:-.4px;color:var(--muted);text-decoration:none}.brand-lockup .company:hover{color:var(--ink)}.brand-lockup .sep{color:var(--line);font-size:18px}
 .subtitle{font-size:19px;line-height:1.4;margin:-4px 0 18px;max-width:80ch}
 .apex-page .top{gap:20px}.apex-page .primary{order:0;flex-basis:auto}
+.apex-page .primary{align-items:center}
+.media-nav{position:relative}.media-nav summary{display:flex;align-items:center;gap:8px;padding:8px 0;color:var(--muted);cursor:pointer;list-style:none;white-space:nowrap}
+.media-nav summary::-webkit-details-marker{display:none}.media-nav summary::after{content:'';width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-top:-3px}
+.media-nav[open] summary{color:var(--ink)}.media-nav[open] summary::after{transform:rotate(225deg);margin-top:3px}
+.media-nav ul{position:absolute;right:0;top:100%;z-index:4;min-width:84px;margin:4px 0 0;padding:6px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px #0006}
+.media-nav li{margin:0}.apex-page .primary .media-nav a{display:block;padding:9px 8px;border:0;border-radius:4px;color:var(--ink);text-align:right}.apex-page .primary .media-nav a:hover{background:#303642}
 .layout.apex{display:block;max-width:1100px;padding-top:16px}
 .layout.apex .apex-hero h1{font-size:clamp(32px,3.4vw,44px);line-height:1.13;margin:0 0 8px}
 .layout.apex .subtitle{font-size:18px;line-height:1.4;margin:0 0 12px}

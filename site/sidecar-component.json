@@ -1,6 +1,6 @@
 {
   "component": "sidecar",
-  "documentation_revision": "da68729e34b2ed4a1b8d9089b562f844198ef575",
+  "documentation_revision": "c91ba3fb10dec19862e58be3d2c1d9ae8ef08599",
   "files": {
     "DOCKER_HUB_OVERVIEW.md": "97fe6403816bc79e831523bc9d31cef986d8f070a79a794a493367f1303f92c3",
     "LICENSE": "40e82aa30af59ab38ac497974a5c0a63ca8eb7be83df5a5da819e7c5045c6376",
@@ -201,10 +201,10 @@
     }
   },
   "preview": false,
-  "previous_documentation_revision": "90c8d3d535f9a306c4ae18dfc34156240a4a45be",
+  "previous_documentation_revision": "da68729e34b2ed4a1b8d9089b562f844198ef575",
   "release": {
     "bundle": "docker.io/cascadeauth/aac-sidecar@sha256:9bbd5ac596ea28a66359c1e2a0a256425f24bea5c1475c80535a5bd6ca12c663",
-    "documentation_revision": "da68729e34b2ed4a1b8d9089b562f844198ef575",
+    "documentation_revision": "c91ba3fb10dec19862e58be3d2c1d9ae8ef08599",
     "documentation_source": "reviewed-source",
     "guide_sha256": "dd098447b8f6cdeb42db850df67ac20bdb2921290f42ab4d4479f8d2af1c28c0",
     "image": "docker.io/cascadeauth/aac-sidecar@sha256:f513816a2d0ed2a619820a1e5ce2f3d7b3ecf693dc7c0e30fa8383988947054e",
